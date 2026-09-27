@@ -71,7 +71,7 @@ export function TimelineScreen() {
     fn();
   };
   const remove = () =>
-    Alert.alert(`Remove ${person.name}?`, 'Their dates and plans go. Events on other boards stay.', [
+    Alert.alert(`Remove ${person.name}?`, 'Their events and plans go. Events on other boards stay.', [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Remove', style: 'destructive', onPress: () => go(() => actions.removePerson(person.id)) },
     ]);
@@ -97,7 +97,7 @@ export function TimelineScreen() {
             <ListRow label="＋ New person" onPress={() => go(() => nav.navigate('Person', { mode: 'new' }))} />
             <ListRow
               label={`Link a person to ${person.name}`}
-              detail="A child, partner or parent, joined by the date that ties you"
+              detail="A child, partner or parent, joined by the event that ties you"
               onPress={() => go(() => nav.navigate('Person', { mode: 'link' }))}
             />
             <ListRow
@@ -120,7 +120,7 @@ export function TimelineScreen() {
       {plan.anchors.length === 0 ? (
         <EmptyState
           title={isMe ? 'Life Chapters' : person.name}
-          body="Two dates and it starts drawing."
+          body="Two events and it starts drawing."
           action={isMe ? 'When were you born?' : `When was ${person.name} born?`}
           onAction={() => nav.navigate('AnchorEdit', { kind: 'born' })}
         />
@@ -167,7 +167,7 @@ export function TimelineScreen() {
           </View>
 
           <Button
-            title="+ Add a date"
+            title="+ Add an event"
             kind="plain"
             onPress={() => nav.navigate('AnchorEdit')}
             style={styles.add}

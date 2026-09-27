@@ -1,18 +1,18 @@
 # Anchor editor
 
 Where a critical date goes in, with its notes. A modal over the page
-(`+ Add a date`, a past date, a chapter's `+ Add notes` / `Edit this date`),
+(`+ Add an event`, a past date, a chapter's `+ Add notes` / `Edit this event`),
 and the whole of first run. It edits the board on screen.
 
 ```
- ( Cancel )     Add a date        [[ Save ]]
+ ( Cancel )     Add an event        [[ Save ]]
  ──────────────────────────────────────────
  ╭────────────────────────────────────────╮
  │ What         Relocated to a country  › │
- │ Detail                        Canada   │  ← "Who" + chips for linked kinds
  │ Place     Toronto, Ontario, Canada   › │  ← "optional" when empty
  │ When          Sep 14, 2024           › │
  │ Precision     to the day             › │
+ │ Event name                    Canada   │  ← "Who" + chips for linked kinds
  ╰────────────────────────────────────────╯
   NOTES
  ╭────────────────────────────────────────╮
@@ -24,24 +24,26 @@ and the whole of first run. It edits the board on screen.
   [ ] Relocating · work or study · On…  ›
       26 steps · attaches on Save
  ──────────────────────────────────────────
-  [ Delete this date ]!                     ← edit mode only
+  [ Delete this event ]!                     ← edit mode only
 ```
 
-`Married` and `Child born` swap `Detail` for `Who`, with a chip per existing
+`Married` and `Child born` swap `Event name` for `Who`, with a chip per existing
 person — drawn in [`people.md`](people.md#who-in-the-anchor-editor).
 
 ## The `Place` picker
 
 Unfolds in place like `What`. Searches a bundled city list (GeoNames: every
-Canadian and Chinese town of 1,000+, cities of 50,000+ elsewhere), English or
-Chinese, biggest first; `london, ontario` narrows after the comma. Offline.
+Canadian and Chinese town of 1,000+, cities of 50,000+ elsewhere), biggest
+first; `london, ontario` narrows after the comma. Offline. Names show in the
+app's language, English (`Montreal`, `Sao Paulo`); Chinese places also match
+their Chinese name (`南昌`).
 
 ```
  │ Place     optional                   ⌄ │
  │ ┌────────────────────────────────────┐ │
  │ │ toro▌                              │ │
  │ └────────────────────────────────────┘ │
- │ Toronto  多伦多                         │
+ │ Toronto                                │
  │ Ontario, Canada                        │
  │ Katoro                                 │  ← "toro" inside the name ranks lower
  │ Geita, Tanzania                        │
@@ -81,17 +83,17 @@ person lives ([`people.md`](people.md#lives-in)).
 ## Moments
 
 A visit or a trip has paperwork but doesn't change the chapter you're in.
-`Detail` names who (a visit) or where (a trip); for a trip, `Place` is the
+`Event name` names who (a visit) or where (a trip); for a trip, `Place` is the
 destination, so the plan follows it.
 
 ```
- ( Cancel )     Add a date        [[ Save ]]
+ ( Cancel )     Add an event        [[ Save ]]
  ──────────────────────────────────────────
  ╭────────────────────────────────────────╮
  │ What          Visitors arrive        › │
- │ Detail                  Mom and Dad▌   │  ← "who: Mom and Dad…"
  │ Place     optional                   › │  ← empty: where you live
  │ When          Jun 12, 2027           › │
+ │ Event name              Mom and Dad▌   │  ← "who: Mom and Dad…"
  ╰────────────────────────────────────────╯
   PLANS THIS UNLOCKS
   [ ] Visitors to Canada · visa, supe…  ›
@@ -101,9 +103,9 @@ destination, so the plan follows it.
 ```
  ╭────────────────────────────────────────╮
  │ What          Trip abroad            › │
- │ Detail                        China▌   │  ← "a country"
  │ Place     Shanghai, China            › │  ← the destination
  │ When          Jan 20, 2027           › │
+ │ Event name                    China▌   │  ← "a country"
  ╰────────────────────────────────────────╯
   PLANS THIS UNLOCKS
   [ ] Travelling to China · visa and …  ›
@@ -122,9 +124,9 @@ it moves down. Nothing gets covered, so there's nothing to dismiss.
         tap What                  unfolded in place
  ╭────────────────────────╮   ╭────────────────────────╮
  │ What      Relocated  › │   │ What      Relocated  ⌄ │
- │ Detail    Canada       │   │┌──────────────────────┐│
- │ When      Sep 14     › │ → ││ ┌──────────────────┐ ││
- │ Precision to the day › │   ││ │ rel▌             │ ││ ← autofocused
+ │ When      Sep 14     › │   │┌──────────────────────┐│
+ │ Precision to the day › │ → ││ ┌──────────────────┐ ││
+ │ Event name   Canada    │   ││ │ rel▌             │ ││ ← autofocused
  ╰────────────────────────╯   ││ └──────────────────┘ ││
                               ││ MOVING               ││
   PLANS THIS UNLOCKS          ││ ✓ Relocated to a     ││
@@ -133,8 +135,8 @@ it moves down. Nothing gets covered, so there's nothing to dismiss.
                               ││   Permit or visa     ││
                               ││   granted          ▓ ││
                               │└──────────────────────┘│
-                              │ Detail    Canada       │
                               │ When      Sep 14     › │
+                              │ Precision to the day › │
                               ╰────────────────────────╯
                                 Save pushed below the fold
 ```
@@ -164,9 +166,9 @@ Three screens, no skip, because one anchor draws nothing.
 ## States
 
 ```
-unsaved, leaving   ┌──────────────────────────────┐
-                   │ Discard this date?           │
-                   │    ( Keep editing )          │
+changed, leaving   ┌──────────────────────────────┐
+(untouched: closes │ Discard this event?          │
+ with no prompt)   │    ( Keep editing )          │
                    │            [[ Discard ]]!    │
                    └──────────────────────────────┘
 
@@ -208,16 +210,16 @@ precision open     Precision  to the day         ⌄
 | `Notes` | type | free text; shows on the chapter screen, `✎` on the stem |
 | unlocked plan `[ ]` | tap | attaches it on Save, no second trip to the library |
 | `Save` | tap | reflow (linked copies too), then back to the page |
-| `Delete this date` | tap | confirm naming the plans that detach; linked copies go too |
+| `Delete this event` | tap | confirm naming the plans that detach; linked copies go too |
 
 ## Copy
 
 | Key | String |
 |---|---|
-| `anchor.title.add` | Add a date |
-| `anchor.title.edit` | Edit date |
+| `anchor.title.add` | Add an event |
+| `anchor.title.edit` | Edit event |
 | `anchor.field.what` | What |
-| `anchor.field.detail` | Detail |
+| `anchor.field.name` | Event name |
 | `anchor.field.when` | When |
 | `anchor.field.precision` | Precision |
 | `anchor.field.who` | Who |
@@ -238,7 +240,7 @@ precision open     Precision  to the day         ⌄
 day out of it makes every derived date falsely exact. A year-precision anchor
 schedules from mid-year and the Timeline prints `2013`, not `Jun 30, 2013`.
 
-`Detail` is free text, not just a place: "Xi'an", "BSc", "Ava". It reads into
+`Event name` is free text, not just a place: "Xi'an", "BSc", "Ava". It reads into
 the Timeline label per kind — `Relocated to Canada`, `Born · Xi'an`,
 `Ava born`, `Mom and Dad arrive`, `Trip to China`.
 

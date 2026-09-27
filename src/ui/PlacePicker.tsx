@@ -1,12 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { placeLabel, searchPlaces } from '../domain/places';
+import { countryName } from '../domain/regions';
+import { useStore } from '../state/store';
 import { space, type } from './theme';
 import { usePalette } from './usePalette';
 
 /**
- * The `Place` row unfolded: search the bundled city list in English or
- * Chinese, or keep whatever was typed — a village won't be listed.
+ * The `Place` row unfolded: search the bundled city list (shown in English,
+ * Chinese places also found by their Chinese name), or keep whatever was typed.
  */
 export function PlacePicker({
   value,
@@ -18,7 +20,8 @@ export function PlacePicker({
   const p = usePalette();
   const [q, setQ] = useState('');
   const typed = q.trim();
-  const matches = useMemo(() => searchPlaces(typed), [typed]);
+  const near = countryName(useStore(s => s.mine.where.country)) ?? 'Canada';
+  const matches = useMemo(() => searchPlaces(typed, 8, near), [typed, near]);
   const labels = matches.map(placeLabel);
   const exact = labels.some(l => l.toLowerCase() === typed.toLowerCase());
 
@@ -46,7 +49,6 @@ export function PlacePicker({
           <View style={styles.flex}>
             <Text style={[type.body, { color: p.text }]} numberOfLines={1}>
               {m.name}
-              {m.zh ? <Text style={{ color: p.dim }}>  {m.zh}</Text> : null}
             </Text>
             <Text style={[type.caption, { color: p.dim }]} numberOfLines={1}>
               {[m.admin !== m.name ? m.admin : '', m.country].filter(Boolean).join(', ')}

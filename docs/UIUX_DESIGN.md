@@ -43,7 +43,7 @@ The title, `Life Chapters ▾`, switches whose board the page shows.
   │ NOW card ─────────▶ Chapter detail      │
   │ life line ─● past ─▶ Anchor editor ◆    │
   │            ○ / (n) ─▶ Chapter detail    │
-  │ + Add a date ─────▶ Anchor editor ◆     │
+  │ + Add an event ─────▶ Anchor editor ◆     │
   │ Plans ─ step row ─▶ Step detail ─┐      │
   │       ─ expiring ─▶ Document ◀───┘      │
   │       ─ plan row ─▶ Playbook detail     │

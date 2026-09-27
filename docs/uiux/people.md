@@ -36,7 +36,7 @@ Picking a person folds the menu and redraws the whole page for them.
 ```
 remove     ┌──────────────────────────────┐
            │ Remove Ava?                  │
-           │ Their dates and plans go.    │
+           │ Their events and plans go.    │
            │ Events on other boards stay. │
            │  ( Cancel )   [[ Remove ]]!  │
            └──────────────────────────────┘
@@ -95,18 +95,19 @@ someone else's board reads `Link to Ava`, and the note says `Ava's timeline`.
 
 ## Who, in the anchor editor
 
-For `Married` and `Child born`, the `Detail` row becomes `Who`, with a chip for
+For `Married` and `Child born`, the `Event name` row becomes `Who`, with a chip for
 each other person.
 
 ```
- ( Cancel )     Add a date        [[ Save ]]
+ ( Cancel )     Add an event        [[ Save ]]
  ──────────────────────────────────────────
  ╭────────────────────────────────────────╮
  │ What          Child born             › │
- │ Who                            Ava▌    │  ← free text, or a chip
- │ ( Sam )  (( Ava ))                     │  ← (( )) = picked
+ │ Place     optional                   › │
  │ When          Mar 18, 2024           › │
  │ Precision     to the day             › │
+ │ Who                            Ava▌    │  ← free text, or a chip
+ │ ( Sam )  (( Ava ))                     │  ← (( )) = picked
  ╰────────────────────────────────────────╯
 ```
 
@@ -149,10 +150,10 @@ opens the step.
 | `people.me` | Me |
 | `people.new` | ＋ New person |
 | `people.link` | Link a person to {me \| name} |
-| `people.link.detail` | A child or partner, joined by the date that ties you |
+| `people.link.detail` | A child or partner, joined by the event that ties you |
 | `people.rename` | Rename {name} |
 | `people.remove` | Remove {name} |
-| `people.remove.body` | Their dates and plans go. Events on other boards stay. |
+| `people.remove.body` | Their events and plans go. Events on other boards stay. |
 | `person.title` | New person · Link to {you \| name} · Rename |
 | `person.new.note` | A separate board with its own dates and plans, not tied to anyone. |
 | `person.link.child` | "{name} born" goes on {your \| name's} timeline, and {name} get a board of their own that starts on that date. |

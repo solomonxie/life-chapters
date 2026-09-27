@@ -49,7 +49,7 @@ function shared() {
       <Stack.Screen
         name="AnchorEdit"
         component={S.AnchorEditScreen}
-        options={{ presentation: 'modal', title: 'Add a date' }}
+        options={{ presentation: 'modal', title: 'Add an event' }}
       />
     </>
   );

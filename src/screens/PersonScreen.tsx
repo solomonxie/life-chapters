@@ -76,7 +76,7 @@ function LivesIn({ route, navigation }: NativeStackScreenProps<Routes, 'Person'>
               : 'Set a place on Born or a move to work it out'
           }
           chevron={false}
-          accessibilityLabel="Work it out from the places on their dates"
+          accessibilityLabel="Work it out from the places on their events"
           selected={!person?.country}
           onPress={() => pick(undefined)}
         />

@@ -4,7 +4,7 @@ import { Card, space, type, usePalette } from '../ui';
 import { VERSION } from './SettingsSection';
 
 const PARAGRAPHS = [
-  'Enter the dates that matter and the app works out the rest: the chapter you are in, what is coming, and every step to start now for something years away to land on time.',
+  'Enter the events that matter and the app works out the rest: the chapter you are in, what is coming, and every step to start now for something years away to land on time.',
   'Playbooks describe paperwork. They are not legal, immigration, tax or financial advice, and every one shows when it was last reviewed. Rules change; check the official source before relying on a step.',
   'Everything stays on this iPhone. No account, no server, no analytics. Nothing leaves unless you send it: a file you export, a daily copy in your own iCloud Drive, or events in your own calendar, each only if you turn it on.',
   'Place names come from GeoNames (geonames.org), under the Creative Commons Attribution 4.0 licence.',

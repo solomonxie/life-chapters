@@ -64,7 +64,7 @@ export function FirstRunScreen() {
         <>
           <Text style={[type.title, styles.center, { color: p.text }]}>Life Chapters</Text>
           <Text style={[type.body, styles.center, { color: p.dim }]}>
-            Two dates and it starts drawing.
+            Two events and it starts drawing.
           </Text>
           <Text style={[type.headline, styles.q, { color: p.text }]}>When were you born?</Text>
           <Card style={styles.card}>
