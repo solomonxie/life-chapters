@@ -41,12 +41,13 @@ developer.apple.com → Certificates, Identifiers & Profiles → Identifiers →
 ## 4. Run on the iPhone
 
 - [ ] `make ios` → Release build on the paired iPhone. Smoke test:
-  - first run: born date → one more date → pick a track
-  - Radar: swipe a step left → **Done**; the toast says what moved; **Undo** puts it back
+  - first run: born date → one more date → pick a plan
+  - Plans (below the timeline): swipe a step left → **Done**; the toast says what moved; **Undo** puts it back
   - Step: long-press **Mark done** → pick a past date
-  - Journal: write a story, check it lands under the right chapter
-  - Docs: add a scan from Photos; **kept in** opens Files at the app's folder
-  - make any change → Settings → Backup → **On this iPhone** lists a snapshot; tap it → Restore
+  - a date → Notes: write some; the chapter shows them and the stem gets a ✎
+  - title **Life Chapters ▾** → **Link a person to me** → Child, a name, a date; her board opens with "Born"; move the date on either board and both move
+  - a step's document → add a scan from Photos; **kept in** opens Files at the app's folder
+  - make any change → Settings (bottom of the page) → Backup → **On this iPhone** lists a snapshot; tap it → Restore
   - turn **iCloud Drive** on → Files → iCloud Drive → **Life Chapters** holds today's file
   - Settings → Backup → **Export…** → save to Files → **Import…** the same file
   - allow notifications; Settings → Reminders shows `n/64` queued
@@ -128,25 +129,24 @@ make screenshots  SHOTS=/tmp/lifechapters-shots     # → docs/release/screensho
 ```
 
 `device-shots` relaunches the app once per shot with the `LC_QA` hook — a sample life
-(Xi'an → Australia, a visa track, a child starting school, four stories) in `qa.db`. Your
-real plan is never opened. Keep the phone unlocked and untouched while it runs; check the
+(Xi'an → Canada, Express Entry and citizenship plans, a wedding with Sam, Ava's birth with
+her early-years and school plans, notes on two dates) in `qa.db`. Your real plan is never
+opened. Keep the phone unlocked and untouched while it runs; check the
 status bar (battery, no banners) and re-run any shot that caught a notification.
 
-What sits in `docs/release/screenshots/` now: shots 1–6 and 8, captured from the iPhone on
-2026-09-26 with the sample plan. **7 (Docs) is missing** — the phone was taken over by
-another app mid-capture. Re-run `make device-shots` before uploading; it also picks up
-the expiring passport the sample now carries, which is what the Docs shot should show.
+**Stale:** what sits in `docs/release/screenshots/` now was captured before the one-page
+redesign — `02-radar` and `04-journal` show removed tabs, and the rest show Australian
+content. Re-run `make device-shots` + `make screenshots` before uploading, and drop the
+old `02-radar.jpg` / `04-journal.jpg`.
 
 Upload order (3 minimum, 10 maximum — the first two are what people actually see):
 
-1. **Timeline** — the life line, chapters, TODAY, what's ahead
-2. **Radar** — ACT NOW with a late step, the next 90 days
-3. **Step** — start-by / due-by / valid, documents, prep, how-to
-4. **Journal** — stories filed under chapters
-5. **Chapter** — a chapter's stories and its active steps
-6. **Playbook** — projected first and last dates, sources, not-advice line
-7. **Docs** — held, expiring, missing
-8. **Timeline, dark** — the same line at night
+1. **Timeline** (`01-timeline`) — the life line, chapters, TODAY, what's ahead
+2. **Plans** (`02-plans`) — expiring documents, your plans, ⚠ Act now with a late step
+3. **Step** (`03-step`) — start-by / due-by / valid, documents, prep, how-to
+4. **Chapter** (`05-chapter`) — a chapter's active steps and its notes
+5. **Playbook** (`06-playbook`) — who it's for, projected first and last dates, sources, not-advice line
+6. **Timeline, dark** (`08-timeline-dark`) — the same line at night
 
 App Preview video: skip for 1.0.
 
@@ -170,70 +170,77 @@ App Preview video: skip for 1.0.
 | Build | the uploaded build (step 9) |
 | App Review → Sign-In Required | Off |
 | App Review → Contact First / Last Name | TODO |
-| App Review → Phone | TODO (with country code, e.g. `+61 …`) |
+| App Review → Phone | TODO (with country code, e.g. `+1 …`) |
 | App Review → Email | TODO |
 | App Review → Notes | below |
 | App Review → Attachment | none |
 | Version Release | **Manually release this version** |
 
-Promotional Text (149/170):
+Promotional Text (155/170):
 
 ```
-Your past and your plans on one timeline. Write the stories behind you, and let the paperwork ahead schedule itself backward from the date it serves.
+Your past and your plans on one timeline. Keep notes on the dates behind you, and let the paperwork ahead schedule itself backward from the date it serves.
 ```
 
 Description:
 
 ```
-Life Chapters puts your whole life on one line. The dates that matter — born, graduated, migrated, a child's first day of school — cut it into chapters. Behind today, chapters hold your stories. Ahead of today, they hold the steps to get where you're going.
+Life Chapters puts your whole life on one line. The dates that matter — born, married, migrated, a child's birth — cut it into chapters. Behind today, dates hold your notes. Ahead of today, chapters hold the steps to get where you're going.
 
-No account. No subscription. Nothing leaves your iPhone unless you export it.
+No account. No subscription. Nothing leaves your iPhone unless you choose to: export a file, or turn on the iCloud Drive backup or the calendar mirror.
 
-YOUR STORY, IN CHAPTERS
+YOUR LIFE, IN CHAPTERS
 • A timeline you can walk: every date you enter, the chapter you're in now, and what's coming
-• A journal filed by chapter — write what happened and it lands in the right chapter by itself
-• Dates as precise as your memory: "2013" or "summer 2003" is enough; nothing pretends to know the day
-• Search every story you've written
+• Notes on any date — what happened, who was there, what it meant
+• Dates as precise as your memory: "2013" is enough; nothing pretends to know the day
+
+YOUR FAMILY
+• A timeline each for you, your partner, your children — switch with one tap
+• A wedding or a birth sits on both timelines; move the date on one and both move
+• A child's plans count from the child's own birthday
 
 A PLAN THAT RESCHEDULES ITSELF
-• Pick a track — skilled migration, citizenship, starting school — and it becomes dated steps
+• Pick a plan — Express Entry, citizenship, getting married, a new baby, school, retirement — and it becomes dated steps
+• Each plan says who it's for: an age range and "applies if" lines
 • Steps are scheduled backward from the event they serve, so a slow step shows up years early
 • Mark one done and everything after it moves, with a note saying what moved and from which date
-• Results that expire — a police check, an English test — are timed so they're still valid when needed
+• Results that expire — a police certificate, a language test — are timed so they're still valid when needed
 
-RADAR
-• What to start now, in the next 90 days, this year, later — grouped by when you must start, not when it's due
+WHAT TO START NOW
+• Right under your timeline: what to start now, in the next 90 days, this year, later — grouped by when you must start, not when it's due
 • Swipe to mark done, snooze, or set aside a step that isn't for you
 
 DOCUMENTS
-• Every document a step asks for, sorted by what expires first
+• Documents about to expire, at the top of your plans
 • A warning when something expires before the step that needs it — and a one-tap redo
 • Scans kept in the app's own folder in Files
 
 REMINDERS, ON YOUR TERMS
-• A local reminder before each start-by date, plus a weekly digest
+• A local reminder before each start-by date, for everyone in the family, plus a weekly digest
 • Optional: mirror start-by dates into a calendar of their own
 
 NOT ADVICE
-Tracks describe paperwork. They are not legal, immigration, tax or financial advice; each one shows when it was last reviewed and links its sources. Duplicate one, export it, edit it — it's your plan.
+Plans describe paperwork, for Canada (Ontario where rules are provincial); more countries are coming. They are not legal, immigration, tax, medical or financial advice; each one shows when it was last reviewed and links its sources. Duplicate one, export it, edit it — it's your plan.
 
-Backup is one file you export yourself. Free, with no ads and no analytics.
+Backed up on your iPhone after every change, and optionally to your own iCloud Drive. Free, with no ads and no analytics.
 ```
 
-Keywords (98/100 — "life", "story", "plan" are in the name and subtitle already):
+Keywords (96/100 — "life", "story", "plan" are in the name and subtitle already):
 
 ```
-timeline,journal,memoir,diary,chapters,visa,migration,paperwork,deadline,reminder,documents,expiry
+timeline,family,memoir,notes,chapters,visa,immigration,canada,paperwork,deadline,reminder,expiry
 ```
 
 App Review Notes:
 
 ```
-No account or login is needed. On first launch the app asks for a birth date, optionally one more past date, and offers a track; "Later" skips the track.
+No account or login is needed. On first launch the app asks for a birth date, optionally one more past date, and offers a plan; "Later" skips it.
 
-To see the planning side quickly: on the "Pick a track" screen choose "Skilled migration · AU", pick a date about a year ahead, and Attach. The Radar tab then shows dated steps; swipe one left to mark it done and a message states which later steps moved.
+The app is one scrolling page: the timeline, then Plans, then Settings at the bottom. To see the planning side quickly: on the "Pick a plan" screen choose "Skilled migration · CA", pick a date about a year ahead, and Attach. Plans, below the timeline, then shows dated steps; swipe one left to mark it done and a message states which later steps moved.
 
-The bundled tracks (Australian skilled migration, Australian citizenship, starting primary school in NSW) describe common paperwork steps. They are not legal or immigration advice: every track and step screen shows "Reviewed <month> · not official advice", and each track lists the official pages it was checked against, which open in Safari.
+Tapping the "Life Chapters" title switches between people (for example a partner or a child); each has their own timeline, stored on the device like everything else.
+
+The bundled plans (Canadian permanent residence through Express Entry, citizenship, retirement, and Ontario plans for marriage, a new baby, early years and school) describe common paperwork steps. They are not legal, immigration or medical advice: every plan and step screen shows "Reviewed <month> · not official advice", and each plan lists the official pages it was checked against, which open in Safari.
 
 Optional permissions, all user-initiated: notifications (reminders), calendar (off by default; Settings → Calendar export), camera / photo picker (adding a scan to a document). iCloud Drive backup is off by default (Settings → Backup) and writes to the user's own iCloud Drive.
 
@@ -250,13 +257,13 @@ What's New: not shown for a first version. From 1.1 on, write it here.
 | Subtitle | `Your story, and the plan ahead` (30/30) |
 | Category — Primary | Lifestyle |
 | Category — Secondary | Productivity |
-| Content Rights | **No**, it does not contain, show, or access third-party content — bundled tracks are written for the app; source links open in Safari |
+| Content Rights | **No**, it does not contain, show, or access third-party content — bundled plans are written for the app; source links open in Safari |
 | Age Rating | **Edit** → answers below → result **4+** |
 | License Agreement | Apple standard EULA (default) |
 | Privacy Policy URL | `https://github.com/solomonxie/life-chapters/blob/master/docs/release/privacy-policy.md` |
 
 If `Life Chapters: Story & Plan` is taken, in order of preference:
-`Life Chapters Journal & Plan` (28), `Life Chapters — Life Timeline` (29), `Life Chapters`.
+`Life Chapters: Notes & Plan` (27), `Life Chapters — Life Timeline` (29), `Life Chapters`.
 The name is what gets indexed; the subtitle can absorb whatever the name loses.
 
 Age rating questionnaire — every answer:
@@ -265,12 +272,12 @@ Age rating questionnaire — every answer:
 |---|---|
 | Parental controls / age assurance | No |
 | Unrestricted web access | **No** — there is no in-app browser; source links hand off to Safari |
-| User-generated content | No — stories are the user's own, private to the device, not shared or published anywhere |
+| User-generated content | No — notes are the user's own, private to the device, not shared or published anywhere |
 | Messaging and chat | No |
 | Advertising | No |
 | Violence, sexual content, profanity, horror, mature themes | None |
 | Alcohol, tobacco, drugs | None |
-| Medical or treatment information / health & wellness | None — the school track mentions an immunisation history statement as a document to collect; it gives no medical information |
+| Medical or treatment information / health & wellness | TODO, decide — the expecting-a-baby, newborn and early-years plans schedule prenatal visits, check-ups and routine vaccines as dated steps and link Ontario.ca pages; they give no treatment advice. "None" was right for the old content; re-read the current question before answering |
 | Gambling, simulated gambling, contests, loot boxes | None / No |
 | Made for Kids | No |
 
@@ -306,7 +313,7 @@ Skip for 1.0 rather than over-claim.
 
 | Field | Value |
 |---|---|
-| Base Country or Region | Australia (AUD) — or your own |
+| Base Country or Region | Canada (CAD) — or your own |
 | Price | **Free** |
 | Availability | All countries or regions |
 | Tax Category | App Store software (default) |

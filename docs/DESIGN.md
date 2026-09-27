@@ -29,33 +29,37 @@ done and its successors reflow from the real completion date, not the estimate.
 So this is a backward-scheduled dependency graph over life anchors — not a
 checklist app with a due-date field.
 
-The same anchors cut the life into **chapters**. Behind today, a chapter holds
-**stories** — dated journal entries in your own words. Ahead of today, it holds
+The same anchors cut the life into **chapters**. Behind today, a date carries
+**notes** — what happened, in your own words. Ahead of today, a chapter holds
 steps. One timeline, one set of dates, both halves.
 
 ## Goals
 
 - 5-20 anchor dates in, a walkable life timeline out, cut into chapters
-- A **journal**: text stories with fuzzy-able dates, filed into chapters
-  automatically
+- **Notes** on any date: what happened, who was there, what it meant
+- **People**: a board per person (me, a partner, a child), joined by the
+  events they share
 - Attach a **playbook** per life track; it instantiates into dated steps
 - Each step carries: prerequisites, documents to obtain, prep actions, how-to
   notes, lead time, and validity window
 - Completing a step, or editing an anchor, reflows every dependent date
-- **Radar**: what needs starting now, in 90 days, this year, later — the alarm
+- **Plans**: what needs starting now, in 90 days, this year, later — the alarm
   fires at *start-by*, not at the deadline
 - Local notification ahead of each step; weekly digest
 - Fully offline, no account, no server
 
 ## Non-goals
 
-- **No media in the journal.** Photos and video already live in the user's
-  photo library; duplicating them costs storage and a sync problem for no gain.
+- **No media in notes.** Photos and video already live in the user's photo
+  library; duplicating them costs storage and a sync problem for no gain.
+- **No journal.** A separate list of stories duplicated the timeline; one notes
+  field per date says the same with no second place to look.
 - **Not advice.** Not legal, immigration, tax, or financial advice. Playbooks
   are user-owned content with a visible "last reviewed" date.
 - No backend, accounts, or sync service — backup is a file you export
 - iPhone only. No Android, no iPad-specific layout, no web
-- No shared/collaborative plans in v1
+- No shared/collaborative plans in v1 — other people are boards on this
+  phone, not accounts
 - Not a general task manager — an undated task has no place here
 - No live requirement lookup or scraping of government sites in v1
 
@@ -78,17 +82,62 @@ keeping content as data — not code — means a playbook can be written, edited
 and shared as a file without an app release, which is the only way a one-person
 app covers more than one country's paperwork.
 
+## Product decisions
+
+**One page, no tabs.** Life line, then Plans, then Settings, in one scroll.
+- Tabs split one idea (dates → steps) into five apps; the late-steps line on
+  the stem and the plans under it are the same fact at two zoom levels.
+- Radar and Tracks were two views of the same plans; merged into one section.
+- Expiring documents join Plans — they run out on their own schedule, next to
+  the steps they threaten. The rest stay on the steps that ask for them.
+- Settings sit at the bottom: visited twice a year, not worth a tab or a ⚙.
+
+**Per-person boards, linked by events.**
+- A family's paperwork is several lives, each with its own clock. A child's
+  school plan counts from *her* birth; mixing it into mine breaks "age", "Fits
+  your dates" and the chapters.
+- Each person is a namespace: dates, plans, steps, documents. The page shows
+  one board; the title switches.
+- The tie between two people is the event they share, not a relation field.
+  "Ava born" on mine is "Born" on hers; a wedding is on both. Copies share a
+  `linkId`: moving one moves all and reflows every plan on them; deleting one
+  deletes all, people stay.
+- Reminders, backups and the calendar mirror cover every board — a reminder
+  switches to the step's owner.
+
+**Canada first.**
+- Content is the product and each country is real research. One country done
+  properly beats three done thinly.
+- Federal plans (Express Entry, citizenship, retirement) plus Ontario for
+  provincial ones (marriage, school, high school). A life-course set — expecting,
+  newborn, early years, school, high school, growing up, retirement — so one
+  family has plans from due date to pension.
+- The Library shows the United States and China as "Coming soon". The earlier
+  Australian playbooks are gone.
+
+**Ages and conditions.**
+- Playbooks and steps may carry `ages` (`{from, to?}`) and `conditions` —
+  plain "applies if" lines.
+- Shown, not enforced: eligibility is exactly the advice the app refuses to
+  give. The user reads "Only if they plan to go to university in Ontario" and
+  swipes the step away if it isn't them.
+- One filter uses them: "Fits your dates" hides a birth-counted plan the person
+  has aged past. A 35-year-old isn't offered the newborn plan; Ava is.
+
 ## Data & integrations
 
 ```
-Anchor      a dated fact the user entered       born · graduated · migrated
-Event       a dated point, entered or derived   turns 18 · visa expires · term 1 starts
-Chapter     the interval between two events     "Pre-migration" · "Settling in"
-Playbook    template for one life track         "Skilled migration AU" · "Start school"
-Step        template node in a playbook         offset, deps, docs, prep, how-to
+Person      a board: one life's namespace       Me · Sam · Ava
+Anchor      a dated fact the user entered       born · married · baby due; note;
+                                                location; personId, withPersonId, linkId
+Event       a dated point, entered or derived   turns 40 · visa lodged
+Chapter     the interval between two events     "Settling in" · "Young family"
+Playbook    template for one life track         "Skilled migration · CA"; ages,
+            (a "plan" in the UI)                conditions, reviewedAt, sources
+Step        template node in a playbook         offset, deps, docs, prep, how-to,
+                                                ages, conditions
 Instance    a Step bound to real dates          status, startBy, dueBy, notes
 Document    a thing you must hold               issued, expires, where it lives
-Entry       a story, dated like an anchor       title, body, optional linked date
 ```
 
 Scheduling, per step:
@@ -109,6 +158,9 @@ paying twice" explainer rather than as a date the app picks.
 
 - **Storage**: SQLite on device, single source of truth. Dates are civil dates
   (`YYYY-MM-DD`), never instants — no timezone drift on a birthday.
+- **Ownership**: anchors, tracks and documents may carry `personId`; absent
+  means Me, so data from before people needs no rewrite. Migrations dropped the
+  `entries` table and added `people`.
 - **Backup**, three layers, all the same JSON file format:
   - *Snapshots on the phone* — written after every change into the app's
     Files-visible `Backups` folder, never overwritten. Each day keeps its
@@ -119,6 +171,8 @@ paying twice" explainer rather than as a date the app picks.
     lost phone. It is the user's storage under their Apple account; the app
     talks to the file system, iOS does the syncing, and nothing reaches us.
   - *Export* — the same file out via the share sheet, in by the picker.
+  - The file carries `people`. An older file still imports: its stories are
+    ignored and everything belongs to Me.
 - **Notifications**: local only, one per instance at `startBy − leadDays`, plus
   a weekly digest. Rescheduled on every reflow.
 - **Cost**: zero. No service, no API key, no subscription.
@@ -128,7 +182,7 @@ paying twice" explainer rather than as a date the app picks.
 - **iOS allows 64 pending local notifications.** A 30-year plan has thousands,
   so the scheduler registers only a rolling nearest-N window and refills it as
   time passes and on every app foreground.
-- One-handed use: the Radar's primary action sits within thumb reach.
+- One-handed use: a step's Done / Snooze is a swipe on its row in Plans.
 
 ## Risks / open questions
 
@@ -142,7 +196,7 @@ paying twice" explainer rather than as a date the app picks.
   readable error rather than silently producing dates.
 - A life anchor changing (a date the user got wrong) can reflow hundreds of
   instances. Completed instances must keep their real dates, not be recomputed.
-- **Dependencies.** Runtime deps: navigation (3), safe-area, screens, zustand,
+- **Dependencies.** Runtime deps: navigation (2 — no tabs), safe-area, screens, zustand,
   and `@op-engineering/op-sqlite` — taken because SQLite is the store and a
   hand-rolled binding is not a hundred lines. Everything else that touches iOS
   is hand-rolled Swift in `ios/LifeChapters/Native/` (~400 lines): local

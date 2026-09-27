@@ -1,38 +1,12 @@
-# Docs
+# Document detail
 
-Every document any step ever asked for, in one list, sorted by what dies first.
-Fourth tab — the one screen you open without a step in mind.
-
-```
-  Docs                          🔍 Search
- ──────────────────────────────────────────
-  ⚠ EXPIRING                            (2)
- ╭────────────────────────────────────────╮
- │ AFP police check                       │
- │ expires Dec 26, 2026 · in 91 days    ! │
- │ needed by Lodge EOI · Jan 12          ›│  ← the conflict, stated
- ├────────────────────────────────────────┤
- │ IELTS result                           │
- │ expires Mar 02, 2027 · in 157 days     │
- │ not needed again                      ›│
- ╰────────────────────────────────────────╯
-
-  HELD                                  (6)
-  Passport · CN         exp 2031-08    ›
-  Birth certificate     no expiry      ›
-  Driver licence · AU   exp 2029-01    ›
-  ⋮
- ──────────────────────────────────────────
-  MISSING                               (4)
-  [ ] Overseas police cert · China   ›
-  [ ] Skills assessment              ›
-  ⋮
-```
-
-## Document detail
+One document a step asked for: its scan, dates, number, and the steps that
+need it. Pushed from a step's document row, or an `⚠ Expiring` row in Plans
+([`plans.md`](plans.md)). There is no documents list of its own — expiring
+ones surface in Plans, the rest live on the steps that ask for them.
 
 ```
- ‹ Docs        AFP police check          ⋯
+ ‹       Police certificate · Canada      ⋯
  ──────────────────────────────────────────
   ┌────────────────────────────────────┐
   │        [ scan · 1 page ]           │     ← thumbnail, tap to view
@@ -43,24 +17,18 @@ Fourth tab — the one screen you open without a step in mind.
   number     ••••••••  👁              ›     ← masked by default
   kept in    Files › Life Chapters      ›
  ──────────────────────────────────────────
-  ⚠ Expires 17 days before "Lodge EOI"
-    needs it.                            ›
+  ⚠ Expires 17 days before "Submit
+    application" needs it.               ›
     ( Plan a redo )
  ──────────────────────────────────────────
   ASKED FOR BY
-  Police check          ✓ done Sep 26  ›
-  Lodge EOI             Jan 12         ›
+  Police certificates   ✓ done Sep 26  ›
+  Submit application    Jan 12         ›
 ```
 
 ## States
 
 ```
-empty        ┌────────────────────────────────────────┐
-             │       Nothing to keep track of         │
-             │  Documents appear as steps ask for      │
-             │  them.                                  │
-             └────────────────────────────────────────┘
-
 no scan      ┌────────────────────────────────────┐
              │   ( + Add a scan or photo )        │
              └────────────────────────────────────┘
@@ -70,8 +38,8 @@ no expiry    expires    doesn't expire           ›
 expired      ⚠ Expired Aug 01, 2026
              [[ Plan a redo ]]
 
-clash        ⚠ Expires 17 days before "Lodge EOI"
-               needs it.                 ›
+clash        ⚠ Expires 17 days before "Submit
+               application" needs it.    ›
                ( Plan a redo )                     ← inserts a repeat step
 
 long name    Overseas police certificate · Chi…  ›
@@ -81,7 +49,7 @@ long name    Overseas police certificate · Chi…  ›
 
 | Target | Action | Result |
 |---|---|---|
-| `⚠ EXPIRING` row | tap | → detail, scrolled to the clash |
+| clash line | tap | → the step that needs it |
 | `( Plan a redo )` | tap | inserts a repeat of the originating step, dated to land inside the validity window, then reflows |
 | `👁` | tap | reveals the number; re-masks on leaving the screen |
 | `kept in` | tap | `[ Files app ]` at the app's own folder |
@@ -92,23 +60,20 @@ long name    Overseas police certificate · Chi…  ›
 
 | Key | String |
 |---|---|
-| `docs.group.expiring` | ⚠ EXPIRING |
-| `docs.group.held` | HELD |
-| `docs.group.missing` | MISSING |
 | `docs.expires` | expires {Mon d, yyyy} · in {n} days |
 | `docs.noExpiry` | doesn't expire |
-| `docs.neededBy` | needed by {step} · {Mon d} |
-| `docs.notNeeded` | not needed again |
+| `docs.neededBy` | needed by {step} |
 | `docs.clash` | ⚠ Expires {n} days before "{step}" needs it. |
 | `docs.planRedo` | Plan a redo |
-| `docs.empty` | Documents appear as steps ask for them. |
 
 ## Notes
 
 The clash line — *expires before the step that needs it* — is the single most
 useful sentence in the app, and it is only computable because steps carry
-validity windows. It belongs at the top of the screen, not in a settings-like
-detail row.
+validity windows. It sits at the top of the detail and, in short, on the
+`⚠ Expiring` row in Plans.
+
+Documents belong to one person's board, like dates and plans.
 
 Scans are files in the app's own folder, visible in Files. No vault, no
 encryption promise the app can't keep: see [`../DESIGN.md`](../DESIGN.md) — no

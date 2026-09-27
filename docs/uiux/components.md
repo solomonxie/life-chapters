@@ -4,19 +4,19 @@ Anything drawn twice. Variants in one block so they can be compared.
 
 ## Step row
 
-Used in Radar groups, chapter detail, track detail.
+Used in Plans buckets, chapter detail, attached playbook detail.
 
 ```
  normal     Police check            Nov 12   ›
- late     ⚠ Book IELTS sitting  5 days late  ›
- blocked    Lodge EOI              blocked   ›
- done     ✓ Choose visa subclass  Aug 02     ›
+ late     ⚠ Book a language test 5 days late ›
+ blocked    Submit PR application  blocked   ›
+ done     ✓ Receive an ITA        Aug 02     ›
  moved      Renew passport         Dec 20 ▼  ›
  snoozed    Address history    snoozed 2w    ›
  skipped    Skills assessment   not for me   ›
  truncated  Overseas police certific…  Dec 01 ›
 
- ACT NOW  ⚠ Book IELTS sitting
+ ACT NOW  ⚠ Book a language test
             start by Sep 20 · 5 days late  ›     ← two-line form, red only here
 
  props: step · now · move(▲▼, tap → "was Jan 12" popover) · subtitle · detailed
@@ -27,7 +27,7 @@ A step whose prerequisites are merely unfinished still shows its projected date.
 
 ## Swipe row
 
-Radar only. Horizontal once the finger has clearly chosen horizontal.
+Plans buckets only. Horizontal once the finger has clearly chosen horizontal.
 
 ```
  ← swipe    Police check      Nov 12 [ Done ][ Snooze ]
@@ -52,9 +52,11 @@ highlight band on the chosen row. Columns follow precision.
 ```
  past      1991  ● Born                     ›
  past      2013  ● Graduated                ›
+ noted     2024  ● Migrated to Canada     ✎ ›   ← the date has notes
  current         ┃
  today     ══════ TODAY · Sep 26, 2026 ══════
- future    2027  ○ Citizenship eligible (6) ›
+ late            ┃  ⚠ 2 steps are late     ›   ← scrolls to Plans
+ future    2028  ○ Lodge a visa app…  (15) ›   ← (15) opens the chapter
  more            ⋮
  fuzzy     2013  ◍ Graduated · 2013         ›   ← year-precision anchor
 ```
@@ -79,6 +81,33 @@ Everywhere a date shows. Absolute and relative, always both.
  far       Feb 2030       ·  in 3 years
  fuzzy     2013           ·  13 years ago
  none      —              ·  blocked
+```
+
+## Applies if
+
+Who a playbook or step is for. On playbook detail, step detail, and (ages
+only) Library rows. Hidden when there's neither.
+
+```
+ both      For ages 14–19
+           • For a young person living in
+             Ontario, from 14 to 19
+ ages      For age 18+
+ one age   For age 1
+ library   from "Born" · ages 1–4               ← second line of the row
+```
+
+Plain text the user judges. The app filters on `ages.to` in one place only:
+`Fits your dates` hides a birth-counted plan the person has outgrown.
+
+## Person chips
+
+Under `Who` in the anchor editor, for `Married` and `Child born`. One per
+person other than the board's owner.
+
+```
+ none      ( Sam )  ( Ava )
+ picked    ( Sam )  (( Ava ))                   ← (( )) = tinted, selected
 ```
 
 ## Inline explainer
@@ -110,7 +139,7 @@ Row doesn't move, everything below does, one open at a time, no Cancel/Done.
 
 ```
  earlier   ⌐ Done. 3 later steps moved
-             earlier.        ( Undo ) ¬     ← dark pill above the tab bar, 5s
+             earlier.        ( Undo ) ¬     ← dark pill at the bottom, 5s
  later     ⌐ 41 steps rescheduled.
                              ( Undo ) ¬
  none      ⌐ Done.                      ¬
@@ -136,7 +165,7 @@ On every playbook and step surface. Never dismissible, never a modal.
      the scheduler can't use.
 
  ✗   [ ACT NOW | 90 DAYS | YEAR | LATER ]
-     Radar's groups as a segmented control:
+     Plans buckets as a segmented control:
      hides three of the four buckets, and the
      one thing you must see is that ACT NOW
      has something in it.
