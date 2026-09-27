@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar, View, useColorScheme } from 'react-native';
+import { Appearance, StatusBar, View, useColorScheme } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { seedSample } from './src/content/sample';
 import { EMPTY_PLAN } from './src/data/plan';
@@ -59,7 +59,9 @@ function Shell({ repository, qa }: { repository: Repository; qa?: string }) {
   useEffect(() => {
     actions.load(repository).then(() => {
       if (!qa) return;
-      const [seed, jump] = qa.split('>');
+      const [spec, scheme] = qa.split('@');
+      if (scheme === 'light' || scheme === 'dark') Appearance.setColorScheme(scheme);
+      const [seed, jump] = spec.split('>');
       if (seed === 'sample') {
         actions.replacePlan(EMPTY_PLAN);
         actions.updateSettings({ firstRunDone: true });

@@ -66,7 +66,7 @@ export function TimelineStem({
           <Text style={{ color: p.faint }}>›</Text>
         </Pressable>
       ) : cut < nodes.length ? (
-        <View style={styles.row}>
+        <View style={[styles.row, styles.spacer]}>
           <View style={styles.year} />
           <Rail top="thick" bottom="thick" />
         </View>
@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.lg,
     minHeight: 60,
   },
+  spacer: { minHeight: 20 },
   year: { width: YEAR_W },
   flex: { flex: 1 },
   rail: { width: RAIL_W, alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center' },
