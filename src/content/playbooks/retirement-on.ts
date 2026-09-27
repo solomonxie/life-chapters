@@ -1,11 +1,13 @@
 import type { Playbook } from '../../domain/types';
 
-export const retirementCa: Playbook = {
-  id: 'retirement-ca',
-  title: 'Retirement · CA',
+export const retirementOn: Playbook = {
+  id: 'retirement-on',
+  title: 'Retirement · Ontario',
   summary:
     'Paperwork plan for public pensions, registered savings and senior benefits from 55 to 72. Federal rules, with Ontario health programs.',
-  region: 'Canada',
+  region: 'Ontario, Canada',
+  province: 'ON',
+  family: 'retirement',
   anchorKind: 'born',
   ages: { from: 55, to: 72 },
   conditions: [

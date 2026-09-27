@@ -3,10 +3,11 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatPrecise } from '../domain/format';
 import { ME } from '../domain/people';
+import { PROVINCES, provinceName } from '../domain/provinces';
 import type { Routes } from '../navigation/routes';
 import { haptic } from '../platform';
 import { actions, useStore } from '../state/store';
-import { Card, DateWheel, ListRow, SectionHeader, UnfoldingPicker, space, type, usePalette } from '../ui';
+import { Card, DateWheel, ListRow, Rows, SectionHeader, UnfoldingPicker, space, type, usePalette } from '../ui';
 
 type Relation = 'child' | 'partner' | 'parent';
 
@@ -16,8 +17,68 @@ const RELATIONS = [
   { value: 'parent', label: 'Parent' },
 ];
 
-/** New person, a person linked to whoever is on screen, or a rename. */
-export function PersonScreen({ route, navigation }: NativeStackScreenProps<Routes, 'Person'>) {
+/** New person, a person linked to whoever is on screen, a rename, or where they live. */
+export function PersonScreen(props: NativeStackScreenProps<Routes, 'Person'>) {
+  return props.route.params.mode === 'province' ? <LivesIn {...props} /> : <PersonForm {...props} />;
+}
+
+/** Provincial plans follow this; "from their events" reads the latest event's place. */
+function LivesIn({ route, navigation }: NativeStackScreenProps<Routes, 'Person'>) {
+  const p = usePalette();
+  const personId = route.params.personId ?? ME;
+  const person = useStore(s => s.plan.people.find(x => x.id === personId));
+  const inferred = useStore(s => (s.mine.person.id === personId && !s.mine.person.province ? s.mine.province : undefined));
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Lives in',
+      headerLeft: () => (
+        <Pressable onPress={() => navigation.goBack()} hitSlop={12} accessibilityRole="button">
+          <Text style={[type.body, { color: p.accent }]}>Done</Text>
+        </Pressable>
+      ),
+    });
+  });
+
+  const pick = (code: string | undefined) => {
+    actions.setProvince(personId, code);
+    haptic('selection');
+    navigation.goBack();
+  };
+
+  return (
+    <ScrollView style={{ backgroundColor: p.bg }} contentContainerStyle={styles.content}>
+      <Text style={[type.caption, styles.note, { color: p.dim }]}>
+        Provincial plans — school, health cards, licences, marriage — follow the province{' '}
+        {personId === ME ? 'you live' : `${person?.name ?? 'they'} lives`} in.
+      </Text>
+      <Card>
+        <Rows>
+          <ListRow
+            label={`${!person?.province ? '✓ ' : '   '}From ${personId === ME ? 'my' : 'their'} events`}
+            detail={inferred ? `Now: ${provinceName(inferred)}, from the latest place` : 'Set a place on a date to work it out'}
+            chevron={false}
+            accessibilityLabel="Work it out from the places on their dates"
+            selected={!person?.province}
+            onPress={() => pick(undefined)}
+          />
+          {PROVINCES.map(x => (
+            <ListRow
+              key={x.code}
+              label={`${person?.province === x.code ? '✓ ' : '   '}${x.name}`}
+              chevron={false}
+              accessibilityLabel={x.name}
+              selected={person?.province === x.code}
+              onPress={() => pick(x.code)}
+            />
+          ))}
+        </Rows>
+      </Card>
+    </ScrollView>
+  );
+}
+
+function PersonForm({ route, navigation }: NativeStackScreenProps<Routes, 'Person'>) {
   const p = usePalette();
   const { mode, personId } = route.params;
   const now = useStore(s => s.now);

@@ -6,6 +6,8 @@ export const schoolYearsOn: Playbook = {
   summary:
     'Registration, records, assessments, school vaccines and the move to high school for a child at an Ontario public elementary school. Many dates are set by each school board.',
   region: 'Ontario, Canada',
+  province: 'ON',
+  family: 'school-years',
   anchorKind: 'born',
   ages: { from: 3, to: 14 },
   conditions: [

@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { formatDate, formatMonth, formatRelative, formatShort } from '../domain/format';
 import { documentViews, groupDocuments, type PlannedStep } from '../domain/plan';
+import { provinceName } from '../domain/provinces';
 import { isOpen } from '../domain/radar';
 import type { Nav } from '../navigation/routes';
 import { useStore } from '../state/store';
@@ -33,6 +34,7 @@ const open = (navigation: Nav, trackId: string, playbookId: string) =>
 export function RunningPlans({ navigation }: { navigation: Nav }) {
   const p = usePalette();
   const now = useStore(s => s.now);
+  const province = useStore(s => s.mine.province);
   const { running } = usePlans();
   if (!running.length) return null;
   return (
@@ -60,6 +62,11 @@ export function RunningPlans({ navigation }: { navigation: Nav }) {
                   </View>
                   <Text style={[type.caption, { color: p.dim }]}>{nextLabel(x.next, now)}</Text>
                 </View>
+                {x.playbook?.province && province && x.playbook.province !== province ? (
+                  <Text style={[type.caption, { color: p.late }]}>
+                    {provinceName(x.playbook.province)} rules · lives in {provinceName(province)}
+                  </Text>
+                ) : null}
               </View>
               <Text style={{ color: p.faint }}>›</Text>
             </Pressable>

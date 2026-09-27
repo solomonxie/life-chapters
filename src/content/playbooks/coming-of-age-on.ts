@@ -1,11 +1,13 @@
 import type { Playbook } from '../../domain/types';
 
-export const comingOfAgeCa: Playbook = {
-  id: 'coming-of-age-ca',
-  title: 'Growing up · ages 14–19 · CA',
+export const comingOfAgeOn: Playbook = {
+  id: 'coming-of-age-on',
+  title: 'Growing up · ages 14–19 · Ontario',
   summary:
     'IDs, first job, driving, voting and first accounts from 14 to 19. Federal rules apply across Canada; provincial rules are Ontario\'s.',
   region: 'Ontario, Canada',
+  province: 'ON',
+  family: 'coming-of-age',
   anchorKind: 'born',
   ages: { from: 14, to: 19 },
   conditions: [

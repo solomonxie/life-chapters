@@ -3,6 +3,7 @@ import { BUNDLED_PLAYBOOKS } from '../content';
 import { resolve, today } from '../domain/dates';
 import { docId, planView, trackAnchorDate, type PlanView } from '../domain/plan';
 import { LINKED_KINDS, ME, ME_PERSON, isLinkedKind, mirrorOf, ownerOf, scopeTo, type Scoped } from '../domain/people';
+import { livesIn } from '../domain/provinces';
 import { recordMoves, summarize, type Moves } from '../domain/radar';
 import { planRedo } from '../domain/schedule';
 import type {
@@ -36,6 +37,8 @@ interface Snapshot {
 /** The board on screen: one person's dates, plans, steps and documents. */
 export interface Mine extends Scoped {
   person: Person;
+  /** Two-letter code: set on the person, or inferred from their events. */
+  province?: string;
   view: PlanView;
 }
 
@@ -71,12 +74,22 @@ function derive(plan: Plan, now: CivilDate, personId: string) {
     mine: {
       ...scoped,
       person,
+      province: livesIn(person.province, scoped.anchors, now),
       view: planView(playbooks, scoped.tracks, scoped.anchors, scoped.instances, now),
     },
   };
 }
 
 const personIdNow = () => get().settings.personId;
+
+/** Bundled playbooks that changed id once they became provincial. */
+const RENAMED: Record<string, string> = {
+  'pregnancy-ca': 'pregnancy-on',
+  'newborn-ca': 'newborn-on',
+  'early-years-ca': 'early-years-on',
+  'coming-of-age-ca': 'coming-of-age-on',
+  'retirement-ca': 'retirement-on',
+};
 
 let repo: Repository | null = null;
 let toastSeq = 0;
@@ -205,7 +218,7 @@ export const actions = {
           people: stored.people?.length ? stored.people : [ME_PERSON],
           anchors: stored.anchors,
           playbooks: stored.playbooks,
-          tracks: stored.tracks,
+          tracks: stored.tracks.map(t => ({ ...t, playbookId: RENAMED[t.playbookId] ?? t.playbookId })),
           instances: stored.instances,
           documents: stored.documents,
         }
@@ -643,6 +656,33 @@ export const actions = {
       name,
     );
     return get().plan.anchors.find(a => a.id === id)?.withPersonId ?? null;
+  },
+
+  /** Undefined goes back to inferring it from their events. */
+  setProvince(id: string, province: string | undefined) {
+    const { plan } = get();
+    commit(
+      { ...plan, people: plan.people.map(p => (p.id === id ? { ...p, province } : p)) },
+      { cause: 'Province changed', toast: () => null },
+    );
+  },
+
+  /** Swap a plan for its twin in another province, on the same date; progress doesn't carry over. */
+  switchTrack(trackId: string, playbookId: string) {
+    const { plan, playbooks } = get();
+    const track = plan.tracks.find(t => t.id === trackId);
+    const playbook = playbooks.find(p => p.id === playbookId);
+    if (!track || !playbook) return null;
+    const next: Track = { ...track, id: newId(), playbookId, extraSteps: undefined, extraDependsOn: undefined };
+    commit(
+      {
+        ...plan,
+        tracks: plan.tracks.map(t => (t.id === trackId ? next : t)),
+        instances: [...plan.instances.filter(i => i.trackId !== trackId), ...instancesFor(next, playbook)],
+      },
+      { cause: `Switched to ${playbook.title}`, toast: () => `Switched to ${playbook.title}.` },
+    );
+    return next.id;
   },
 
   renamePerson(id: string, name: string) {

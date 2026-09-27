@@ -1,11 +1,13 @@
 import type { Playbook } from '../../domain/types';
 
-export const earlyYearsCa: Playbook = {
-  id: 'early-years-ca',
+export const earlyYearsOn: Playbook = {
+  id: 'early-years-on',
   title: 'Early years · ages 1–4 · Ontario',
   summary:
     'Child care, family programs, health coverage and check-ups for a child from 1 to 4 in Ontario. Child care is run locally; details vary by municipality.',
   region: 'Ontario, Canada',
+  province: 'ON',
+  family: 'early-years',
   anchorKind: 'born',
   ages: { from: 1, to: 4 },
   conditions: [

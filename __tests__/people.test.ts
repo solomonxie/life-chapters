@@ -24,7 +24,7 @@ describe('people', () => {
   });
 
   it('keeps each board to its own plans', () => {
-    actions.attachTrack('newborn-ca', state().mine.anchors[0].id);
+    actions.attachTrack('newborn-on', state().mine.anchors[0].id);
     expect(state().mine.tracks).toHaveLength(1);
     actions.switchPerson(ME);
     expect(state().mine.tracks).toHaveLength(0);

@@ -4,7 +4,9 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { resolve } from '../domain/dates';
 import { formatDuration, formatMonth, formatPrecise } from '../domain/format';
 import { kindLabel } from '../domain/kinds';
+import { ME } from '../domain/people';
 import { anchorDisplay } from '../domain/plan';
+import { provinceName, twinFor } from '../domain/provinces';
 import { schedule, topoSort } from '../domain/schedule';
 import type { StepTemplate } from '../domain/types';
 import type { Routes } from '../navigation/routes';
@@ -17,6 +19,7 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
   const p = usePalette();
   const { playbookId, trackId } = route.params;
   const playbook = useStore(s => s.playbooks.find(x => x.id === playbookId));
+  const playbooks = useStore(s => s.playbooks);
   const plan = useStore(s => s.mine);
   const view = useStore(s => s.mine.view);
   const moves = useStore(s => s.moves);
@@ -52,6 +55,7 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
   const depth = useMemo(() => (playbook ? depths(playbook.steps) : new Map<string, number>()), [playbook]);
 
   if (!playbook) return null;
+  const twin = twinFor(playbook, plan.province, playbooks);
 
   const trackSteps = track ? view.steps.filter(s => s.trackId === track.id) : [];
   const ordered = topoSort(playbook.steps);
@@ -129,6 +133,29 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
         <AppliesIf ages={playbook.ages} conditions={playbook.conditions} />
         <Disclaimer playbook={playbook} now={now} />
       </View>
+
+      {playbook.province && plan.province && playbook.province !== plan.province ? (
+        <Card style={[styles.needs, { backgroundColor: p.lateSoft }]}>
+          <Text style={[type.body, styles.flex, { color: p.text }]}>
+            ⚠ {provinceName(playbook.province)} rules. {plan.person.id === ME ? 'You live' : `${plan.person.name} lives`} in{' '}
+            {provinceName(plan.province)}.
+          </Text>
+          {twin ? (
+            <Button
+              title={track ? `Switch to ${provinceName(plan.province)}` : `See ${provinceName(plan.province)}`}
+              kind="plain"
+              onPress={() => {
+                if (track) {
+                  const id = actions.switchTrack(track.id, twin.id);
+                  navigation.replace('Playbook', { playbookId: twin.id, trackId: id ?? undefined });
+                } else {
+                  navigation.replace('Playbook', { playbookId: twin.id });
+                }
+              }}
+            />
+          ) : null}
+        </Card>
+      ) : null}
 
       {!track ? (
         <View style={styles.attach}>
