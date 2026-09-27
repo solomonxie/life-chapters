@@ -109,7 +109,16 @@ paying twice" explainer rather than as a date the app picks.
 
 - **Storage**: SQLite on device, single source of truth. Dates are civil dates
   (`YYYY-MM-DD`), never instants — no timezone drift on a birthday.
-- **Backup**: one JSON file out via the share sheet; same file back in.
+- **Backup**, three layers, all the same JSON file format:
+  - *Snapshots on the phone* — written after every change into the app's
+    Files-visible `Backups` folder, never overwritten. Each day keeps its
+    latest 20; anything older than 7 days is cleared. Undo for mistakes the
+    in-app Undo can't reach.
+  - *iCloud Drive* — opt-in. One file a day in the user's own iCloud Drive
+    (`Life Chapters` folder), replaced on every change that day. Survives a
+    lost phone. It is the user's storage under their Apple account; the app
+    talks to the file system, iOS does the syncing, and nothing reaches us.
+  - *Export* — the same file out via the share sheet, in by the picker.
 - **Notifications**: local only, one per instance at `startBy − leadDays`, plus
   a weekly digest. Rescheduled on every reflow.
 - **Cost**: zero. No service, no API key, no subscription.

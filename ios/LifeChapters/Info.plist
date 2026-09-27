@@ -45,6 +45,18 @@
 	<string>Take a photo of a document to keep with the step that needs it.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Pick a photo of a document to keep with the step that needs it.</string>
+	<key>NSUbiquitousContainers</key>
+	<dict>
+		<key>iCloud.$(PRODUCT_BUNDLE_IDENTIFIER)</key>
+		<dict>
+			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
+			<true/>
+			<key>NSUbiquitousContainerName</key>
+			<string>Life Chapters</string>
+			<key>NSUbiquitousContainerSupportedFolderLevels</key>
+			<string>Any</string>
+		</dict>
+	</dict>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIFileSharingEnabled</key>

@@ -31,8 +31,12 @@ App Store Connect paths start at **Apps → Life Chapters → Distribution →**
 
 Created by automatic signing on the first device build. Verify at
 developer.apple.com → Certificates, Identifiers & Profiles → Identifiers →
-`com.example.lifechapters`. No capabilities to tick: local notifications,
-the calendar and the document picker need none.
+`com.example.lifechapters`:
+
+- [ ] **iCloud** checked (iCloud Documents), container `iCloud.com.example.lifechapters`
+  assigned. Automatic signing created both on the first device build; this is a check,
+  not a step. Nothing else to tick — notifications, calendar and pickers need no
+  capability.
 
 ## 4. Run on the iPhone
 
@@ -42,6 +46,8 @@ the calendar and the document picker need none.
   - Step: long-press **Mark done** → pick a past date
   - Journal: write a story, check it lands under the right chapter
   - Docs: add a scan from Photos; **kept in** opens Files at the app's folder
+  - make any change → Settings → Backup → **On this iPhone** lists a snapshot; tap it → Restore
+  - turn **iCloud Drive** on → Files → iCloud Drive → **Life Chapters** holds today's file
   - Settings → Backup → **Export…** → save to Files → **Import…** the same file
   - allow notifications; Settings → Reminders shows `n/64` queued
 
@@ -86,7 +92,7 @@ Fallback, Xcode GUI: open `ios/LifeChapters.xcworkspace` → destination **Any i
 
 - [ ] App Store Connect → **TestFlight** → the build shows no "Missing Compliance" (see [Export compliance](#export-compliance)).
 - [ ] Internal Testing → **+** group `Me` → add your Apple ID → install via the TestFlight app on the iPhone.
-- [ ] Same smoke test as step 4, on the TestFlight build (this is the exact binary Apple reviews). Check reminders specifically: set lead time to **same day** on a step starting tomorrow and confirm the notification opens that step.
+- [ ] Same smoke test as step 4, on the TestFlight build (this is the exact binary Apple reviews). iCloud is the production environment now: turn it on, confirm the Life Chapters folder appears in iCloud Drive, delete and reinstall, restore today's file from Settings › Backup › On this iPhone › iCloud Drive. Check reminders specifically: set lead time to **same day** on a step starting tomorrow and confirm the notification opens that step.
 
 ## 9. Submit
 
@@ -229,9 +235,9 @@ To see the planning side quickly: on the "Pick a track" screen choose "Skilled m
 
 The bundled tracks (Australian skilled migration, Australian citizenship, starting primary school in NSW) describe common paperwork steps. They are not legal or immigration advice: every track and step screen shows "Reviewed <month> · not official advice", and each track lists the official pages it was checked against, which open in Safari.
 
-Optional permissions, all user-initiated: notifications (reminders), calendar (off by default; Settings → Calendar export), camera / photo picker (adding a scan to a document).
+Optional permissions, all user-initiated: notifications (reminders), calendar (off by default; Settings → Calendar export), camera / photo picker (adding a scan to a document). iCloud Drive backup is off by default (Settings → Backup) and writes to the user's own iCloud Drive.
 
-The app makes no network requests. Everything is stored in a local SQLite database and local files. We operate no server and receive no user data.
+The app makes no network requests of its own. Everything is stored in a local SQLite database and local files. We operate no server and receive no user data.
 ```
 
 What's New: not shown for a first version. From 1.1 on, write it here.
@@ -288,7 +294,8 @@ grep -rnE "fetch\(|XMLHttpRequest|WebSocket" src
 ```
 
 Data leaves the device only as files the user hands to the share sheet, and — if they
-turn it on — as events in their own calendar. Neither reaches us, so neither is
+turn them on — as a daily file in their own iCloud Drive and events in their own
+calendar. Neither reaches us, so neither is
 "collected" in Apple's sense.
 
 ### `App Store → Trust & Safety → App Accessibility`

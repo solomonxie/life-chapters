@@ -6,6 +6,7 @@ import { EMPTY_PLAN } from './src/data/plan';
 import { createSqliteRepository } from './src/data/sqlite';
 import type { Repository } from './src/data/repository';
 import { RootNavigator, navRef } from './src/navigation';
+import { startAutoBackup } from './src/state/autobackup';
 import { startSync } from './src/state/sync';
 import { actions, useStore } from './src/state/store';
 import { ToastHost, usePalette } from './src/ui';
@@ -27,7 +28,7 @@ function openTarget(target: string) {
 function qaJump(target: string) {
   const [screen, arg] = target.split(':');
   const tabOf: Record<string, string> = {
-    Timeline: 'TimelineTab', Chapter: 'TimelineTab', Settings: 'TimelineTab', Reminders: 'TimelineTab',
+    Timeline: 'TimelineTab', Chapter: 'TimelineTab', Settings: 'TimelineTab', Reminders: 'TimelineTab', Backups: 'TimelineTab',
     AnchorEdit: 'TimelineTab', Sources: 'TimelineTab', About: 'TimelineTab',
     Journal: 'JournalTab', Entry: 'JournalTab',
     Radar: 'RadarTab', Step: 'RadarTab',
@@ -79,6 +80,11 @@ function Shell({ repository, qa }: { repository: Repository; qa?: string }) {
   useEffect(() => {
     if (ready && navReady) return startSync(openTarget);
   }, [ready, navReady]);
+
+  // QA runs write sample data; keep it out of the real Backups folder.
+  useEffect(() => {
+    if (ready && !qa) return startAutoBackup();
+  }, [ready, qa]);
 
   if (!ready) return <View style={{ flex: 1, backgroundColor: p.bg }} />;
 

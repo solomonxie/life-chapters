@@ -76,6 +76,7 @@ function TimelineFlow() {
       />
       <Stack.Screen name="Settings" component={S.SettingsScreen} />
       <Stack.Screen name="Reminders" component={S.RemindersScreen} />
+      <Stack.Screen name="Backups" component={S.BackupsScreen} />
       <Stack.Screen name="Sources" component={S.SourcesScreen} options={{ title: 'Playbooks' }} />
       <Stack.Screen name="About" component={S.AboutScreen} />
       {shared()}
