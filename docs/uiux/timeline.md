@@ -1,15 +1,15 @@
 # Timeline
 
-The life line: anchors behind you, events ahead, the phase you're in between
+The life line: anchors behind you, events ahead, the chapter you're in between
 them. First tab, app's home.
 
 ```
-             Life Planner                 ⚙
+             Life Chapters                 ⚙
  ──────────────────────────────────────────
   NOW · age 34                              ← computed from the Born anchor
  ╭────────────────────────────────────────╮
  │ Settling in · Australia                │
- │ Sep 2024 ───────●────────────  Sep 2029│  ← ● = today's position in phase
+ │ Sep 2024 ───────●────────────  Sep 2029│  ← ● = today's position in chapter
  │ 4 steps running · next starts in 12d  ›│
  ╰────────────────────────────────────────╯
 
@@ -20,7 +20,7 @@ them. First tab, app's home.
   2019  ● First job · Shenzhen            ›
         │
   2024  ● Migrated to Australia           ›
-        ┃                                    ← thick stem = current phase
+        ┃                                    ← thick stem = current chapter
   ══════ TODAY · Sep 26, 2026 ═════════════
         ┃
   2027  ○ Citizenship eligible        (6) ›
@@ -38,7 +38,7 @@ Reached from: launch · back from any pushed page · tab bar
 
 ```
 first run  ┌────────────────────────────────────────┐
-           │            Life Planner                │
+           │            Life Chapters                │
            │                                        │
            │   Two dates and it starts drawing.     │
            │                                        │
@@ -61,7 +61,7 @@ long label  2029  ○ Ava starts primary sch…  (11) ›
                                                     ← truncate, never wrap
 ```
 
-## Phase detail
+## Chapter detail
 
 Pushed from the NOW card or any stem segment.
 
@@ -71,7 +71,7 @@ Pushed from the NOW card or any stem segment.
   Sep 2024 ───────●────────────── Sep 2029
   year 2 of 5                              ← from the two bounding events
  ──────────────────────────────────────────
-  OPENS                                     ← what this phase makes possible
+  OPENS                                     ← what this chapter makes possible
   Permanent residency held           ✓
   Citizenship clock running          ✓
  ──────────────────────────────────────────
@@ -89,9 +89,9 @@ Pushed from the NOW card or any stem segment.
 
 | Target | Action | Result |
 |---|---|---|
-| NOW card | tap | → phase detail |
+| NOW card | tap | → chapter detail |
 | anchor row `●` | tap | → [`anchors.md`](anchors.md) editor |
-| event row `○` | tap | → phase detail scoped to that event; `( Edit this date )` at its foot |
+| event row `○` | tap | → chapter detail scoped to that event; `( Edit this date )` at its foot |
 | `(6)` badge | tap | → [`radar.md`](radar.md), filtered to that event (a removable `Only …` chip) |
 | `⚠ 2 steps are late` | tap | → [`radar.md`](radar.md) |
 | `+ Add a date` | tap | → anchor editor, blank |
@@ -107,7 +107,7 @@ Every other row is a date the user entered.
 |---|---|
 | `timeline.now` | NOW · age {n} |
 | `timeline.today` | TODAY · {Mon d, yyyy} |
-| `timeline.phase.progress` | year {n} of {total} |
+| `timeline.chapter.progress` | year {n} of {total} |
 | `timeline.firstRun.body` | Two dates and it starts drawing. |
 | `timeline.firstRun.cta` | When were you born? |
 | `timeline.noTrack` | Dates, but no plan yet. |
@@ -118,5 +118,5 @@ Every other row is a date the user entered.
 
 The stem is the design. A list of dated rows would read as a table; the
 continuous `│`/`┃` line is what makes a 40-year span feel like one object you're
-standing inside. `┃` is the only place the current phase is marked — no badge,
+standing inside. `┃` is the only place the current chapter is marked — no badge,
 no colour needed.

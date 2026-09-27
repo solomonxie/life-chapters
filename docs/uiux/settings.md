@@ -29,7 +29,7 @@ skill (`references/mobile.md`) — the controls stay above the fold.
   Haptics                             ─●
  ──────────────────────────────────────────
   About                                ›
-  Life Planner 0.1.0 · not advice
+  Life Chapters 0.1.0 · not advice
 ```
 
 ## Reminders child
@@ -104,7 +104,7 @@ stale playbooks
 | `Export…` | tap | writes JSON, then `[ share sheet ]` |
 | `Import…` | tap | `[ document picker ]` → confirm → reflow |
 | `Rebuild the queue` | tap | clears and re-registers the nearest 64 |
-| `Calendar export` | toggle on | asks calendar permission, then mirrors start-by dates into a `Life Planner` calendar |
+| `Calendar export` | toggle on | asks calendar permission, then mirrors start-by dates into a `Life Chapters` calendar |
 | `Dates` / `Tracks` / `Documents` | tap | the matching tab, unfiltered |
 
 ## Copy
@@ -119,7 +119,7 @@ stale playbooks
 | `settings.reminders.denied` | Turned off in iOS Settings. |
 | `settings.backup.never` | Nothing is backed up. |
 | `settings.import.replace` | This file has {n} dates and {m} tracks. Your current {n2} dates and {m2} tracks are overwritten. |
-| `settings.about.tagline` | Life Planner {version} · not advice |
+| `settings.about.tagline` | Life Chapters {version} · not advice |
 
 ## Notes
 

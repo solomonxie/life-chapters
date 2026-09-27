@@ -1,7 +1,7 @@
 // Placeholders for a fresh clone. Put your own values in ios/Local.xcconfig (gitignored):
 //   DEVELOPMENT_TEAM = ABCDE12345
-//   PRODUCT_BUNDLE_IDENTIFIER = com.yourname.lifeplanner
+//   PRODUCT_BUNDLE_IDENTIFIER = com.yourname.lifechapters
 DEVELOPMENT_TEAM =
-PRODUCT_BUNDLE_IDENTIFIER = com.example.lifeplanner
+PRODUCT_BUNDLE_IDENTIFIER = com.example.lifechapters
 
 #include? "Local.xcconfig"

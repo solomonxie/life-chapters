@@ -6,7 +6,7 @@ import { actions, useStore } from '../state/store';
 export async function exportBackup(): Promise<boolean> {
   const { plan, now } = useStore.getState();
   const text = serializePlan(plan, now);
-  const path = await files.writeTemp(`Life Planner backup ${now}.json`, text);
+  const path = await files.writeTemp(`Life Chapters backup ${now}.json`, text);
   const shared = await files.share(path);
   if (shared) actions.updateSettings({ lastExport: { on: now, bytes: text.length } });
   return shared;

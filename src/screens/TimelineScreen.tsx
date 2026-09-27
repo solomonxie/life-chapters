@@ -2,7 +2,8 @@ import React, { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { diffDays } from '../domain/dates';
 import { formatMonth } from '../domain/format';
-import { ageOn, lateSteps, lifePhases, openSteps, timelineNodes } from '../domain/plan';
+import { storiesIn } from '../domain/journal';
+import { ageOn, lateSteps, lifeChapters, openSteps, timelineNodes } from '../domain/plan';
 import { goTab, useNav } from '../navigation/routes';
 import { useStore } from '../state/store';
 import { Button, Card, EmptyState, TimelineStem, space, type, usePalette } from '../ui';
@@ -14,11 +15,15 @@ export function TimelineScreen() {
   const view = useStore(s => s.view);
   const now = useStore(s => s.now);
 
-  const nodes = useMemo(
-    () => timelineNodes(plan.anchors, plan.tracks, view.steps, now),
-    [plan.anchors, plan.tracks, view.steps, now],
-  );
-  const phase = useMemo(() => lifePhases(nodes, now).find(x => x.isCurrent), [nodes, now]);
+  const nodes = useMemo(() => {
+    const all = timelineNodes(plan.anchors, plan.tracks, view.steps, now);
+    const chapters = lifeChapters(all, now);
+    return all.map(n => {
+      const c = chapters.find(x => x.eventId === n.id);
+      return c ? { ...n, stories: storiesIn(c, plan.entries).length } : n;
+    });
+  }, [plan.anchors, plan.tracks, plan.entries, view.steps, now]);
+  const chapter = useMemo(() => lifeChapters(nodes, now).find(x => x.isCurrent), [nodes, now]);
   const age = ageOn(plan.anchors, now);
   const open = openSteps(view.steps);
   const running = open.filter(s => s.startBy <= now).length;
@@ -31,7 +36,7 @@ export function TimelineScreen() {
     return (
       <View style={[styles.fill, { backgroundColor: p.bg }]}>
         <EmptyState
-          title="Life Planner"
+          title="Life Chapters"
           body="Two dates and it starts drawing."
           action="When were you born?"
           onAction={() => nav.navigate('AnchorEdit', { kind: 'born' })}
@@ -45,20 +50,20 @@ export function TimelineScreen() {
       style={{ backgroundColor: p.bg }}
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={styles.content}>
-      {phase ? (
+      {chapter ? (
         <>
           <Text style={[type.heading, styles.now, { color: p.dim }]}>
             NOW{age !== null ? ` · AGE ${age}` : ''}
           </Text>
           <Pressable
-            onPress={() => nav.navigate('Phase', { eventId: phase.eventId })}
+            onPress={() => nav.navigate('Chapter', { eventId: chapter.eventId })}
             accessibilityRole="button"
-            accessibilityLabel={`Current phase: ${phase.label}`}>
+            accessibilityLabel={`Current chapter: ${chapter.label}`}>
             <Card style={styles.nowCard}>
               <Text style={[type.headline, { color: p.text }]} numberOfLines={1}>
-                {phase.label}
+                {chapter.label}
               </Text>
-              <PhaseBar start={phase.start} end={phase.end} now={now} />
+              <ChapterBar start={chapter.start} end={chapter.end} now={now} />
               <View style={styles.nowFoot}>
                 <Text style={[type.caption, styles.fill, { color: p.dim }]}>
                   {stepsLine(running, next ? diffDays(now, next.startBy) : null, plan.tracks.length)}
@@ -79,7 +84,7 @@ export function TimelineScreen() {
           onPressNode={n =>
             n.source === 'anchor' && n.date <= now
               ? nav.navigate('AnchorEdit', { anchorId: n.id })
-              : nav.navigate('Phase', { eventId: n.id })
+              : nav.navigate('Chapter', { eventId: n.id })
           }
           onPressBadge={n => goTab(nav, 'RadarTab', 'Radar', { anchorId: n.id })}
         />
@@ -110,7 +115,7 @@ const stepsLine = (running: number, nextIn: number | null, tracks: number) => {
 };
 
 /** Sep 2024 ───●──── Sep 2029, ● at today. */
-export function PhaseBar({ start, end, now }: { start: string; end: string | null; now: string }) {
+export function ChapterBar({ start, end, now }: { start: string; end: string | null; now: string }) {
   const p = usePalette();
   const ratio = end ? Math.min(1, Math.max(0, diffDays(start, now) / diffDays(start, end))) : 0.5;
   return (

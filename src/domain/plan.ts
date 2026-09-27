@@ -1,6 +1,6 @@
 import { addDays, diffDays, resolve, yearsBetween } from './dates';
 import { anchorTitle, kindById } from './kinds';
-import { derivePhases } from './phases';
+import { deriveChapters } from './chapters';
 import { isOpen } from './radar';
 import { effectiveSteps, expiryClashes, schedule, type ExpiryClash } from './schedule';
 import type {
@@ -8,7 +8,7 @@ import type {
   CivilDate,
   DocumentRecord,
   LifeEvent,
-  Phase,
+  Chapter,
   Playbook,
   ScheduledStep,
   StepInstance,
@@ -120,7 +120,7 @@ export function timelineNodes(
       date: resolve(a.date, a.precision),
       source: 'anchor',
       anchorId: a.id,
-      phaseLabel: kind ? (a.place ? `${kind.phase} · ${a.place}` : kind.phase) : undefined,
+      chapterLabel: kind ? (a.place ? `${kind.chapter} · ${a.place}` : kind.chapter) : undefined,
       precision: a.precision,
       pendingSteps: openSteps(steps).filter(s => trackIds.has(s.trackId)).length,
     };
@@ -146,8 +146,8 @@ export function timelineNodes(
   return nodes.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
 }
 
-export const lifePhases = (nodes: TimelineNode[], now: CivilDate): Phase[] =>
-  derivePhases(
+export const lifeChapters = (nodes: TimelineNode[], now: CivilDate): Chapter[] =>
+  deriveChapters(
     nodes.filter(n => n.source === 'anchor'),
     now,
   );
@@ -157,10 +157,10 @@ export function ageOn(anchors: Anchor[], now: CivilDate): number | null {
   return born ? yearsBetween(resolve(born.date, born.precision), now) : null;
 }
 
-/** Steps whose due date falls inside the phase. */
-export function phaseSteps(phase: Phase, steps: PlannedStep[]): PlannedStep[] {
+/** Steps whose due date falls inside the chapter. */
+export function chapterSteps(chapter: Chapter, steps: PlannedStep[]): PlannedStep[] {
   return steps.filter(
-    s => s.dueBy >= phase.start && (phase.end === null || s.dueBy < phase.end),
+    s => s.dueBy >= chapter.start && (chapter.end === null || s.dueBy < chapter.end),
   );
 }
 

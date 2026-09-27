@@ -77,7 +77,7 @@ export function SettingsScreen({ navigation }: NativeStackScreenProps<Routes, 'S
 
       <SectionHeader
         title="Backup"
-        info="The whole plan as one JSON file, out through the share sheet — save it to Files, AirDrop it, anywhere. Nothing is uploaded by the app. Import the same file to restore. Scans aren't included; they live in Files › Life Planner."
+        info="The whole plan as one JSON file, out through the share sheet — save it to Files, AirDrop it, anywhere. Nothing is uploaded by the app. Import the same file to restore. Scans aren't included; they live in Files › Life Chapters."
       />
       <Card>
         <ListRow
@@ -135,7 +135,7 @@ export function SettingsScreen({ navigation }: NativeStackScreenProps<Routes, 'S
             detail={
               rem.calendarDenied && settings.calendarMirror
                 ? 'Calendar access is off in iOS Settings.'
-                : 'Start-by dates in a "Life Planner" calendar'
+                : 'Start-by dates in a "Life Chapters" calendar'
             }
             chevron={false}
             right={
@@ -165,7 +165,7 @@ export function SettingsScreen({ navigation }: NativeStackScreenProps<Routes, 'S
         <ListRow label="About" onPress={() => navigation.navigate('About')} />
       </Card>
       <Text style={[type.caption, styles.tagline, { color: p.dim }]}>
-        Life Planner {VERSION} · not advice
+        Life Chapters {VERSION} · not advice
       </Text>
     </ScrollView>
   );

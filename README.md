@@ -1,7 +1,11 @@
-# A life plan that reschedules itself
+# Life Chapters
+
+The life behind you and the plan ahead, on one line. Past chapters hold your
+stories; future ones hold the steps to get there — and the plan reschedules
+itself.
 
 Enter the dates that actually matter — born, graduated, migrated, a child's
-birth — and the app works out the rest: the phase you're in, what's coming, and
+birth — and the app works out the rest: the chapter you're in, what's coming, and
 every step you need to start *now* for something years away to land on time.
 
 Mark one step done and the whole downstream series moves with it.
@@ -41,7 +45,8 @@ real date, not the estimate.
 
 ## What's in it
 
-- **Timeline** — the life line, anchors behind you and events ahead
+- **Timeline** — the life line, anchors behind you and events ahead, cut into chapters
+- **Journal** — stories in your own words, filed into the chapter they happened in
 - **Radar** — what to start now / in 90 days / this year / later
 - **Tracks** — playbooks you attach, each one a life track turned into dated steps
 - **Docs** — every document a step asked for, sorted by what expires first
@@ -70,12 +75,12 @@ npm run typecheck
 npm run ios           # physical device
 ```
 
-`ios/LifePlanner.xcworkspace` for Xcode. Signing is not committed — put your
+`ios/LifeChapters.xcworkspace` for Xcode. Signing is not committed — put your
 team and bundle id in a gitignored `ios/Local.xcconfig`:
 
 ```
 DEVELOPMENT_TEAM = ABCDE12345
-PRODUCT_BUNDLE_IDENTIFIER = com.yourname.lifeplanner
+PRODUCT_BUNDLE_IDENTIFIER = com.yourname.lifechapters
 ```
 
 ### Physical device only

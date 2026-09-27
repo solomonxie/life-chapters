@@ -9,7 +9,7 @@ import { space, type } from './theme';
 import { usePalette } from './usePalette';
 
 /**
- * The app's most reused row: Radar groups, phase detail, track detail. One
+ * The app's most reused row: Radar groups, chapter detail, track detail. One
  * trailing value per state — date, "5 days late", "blocked", "not for me".
  */
 export function StepRow({

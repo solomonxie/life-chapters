@@ -233,7 +233,7 @@ export function DocumentScreen({ route, navigation }: NativeStackScreenProps<Rou
               ) : undefined
             }
           />
-          <ListRow label="kept in" value="Files › Life Planner" onPress={() => files.openFolder()} />
+          <ListRow label="kept in" value="Files › Life Chapters" onPress={() => files.openFolder()} />
         </Rows>
       </Card>
 

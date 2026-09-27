@@ -19,11 +19,11 @@ export interface LifeEvent {
   date: CivilDate;
   source: 'anchor' | 'derived';
   anchorId?: string;
-  /** What the phase that starts here is called, if not the event label. */
-  phaseLabel?: string;
+  /** What the chapter that starts here is called, if not the event label. */
+  chapterLabel?: string;
 }
 
-export interface Phase {
+export interface Chapter {
   eventId: string;
   label: string;
   start: CivilDate;
@@ -125,4 +125,17 @@ export interface DocumentRecord {
   noExpiry?: boolean;
   /** File name inside the app's Documents/Scans folder. */
   scanPath?: string;
+}
+
+/** A story: what happened, in the user's words. Text only. */
+export interface Entry {
+  id: string;
+  date: CivilDate;
+  precision: DatePrecision;
+  title?: string;
+  body: string;
+  /** One of the user's dates this story is about. */
+  anchorId?: string;
+  createdOn: CivilDate;
+  updatedOn: CivilDate;
 }

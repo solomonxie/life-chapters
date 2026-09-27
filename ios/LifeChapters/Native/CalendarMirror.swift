@@ -9,7 +9,7 @@ class CalendarMirror: NSObject {
   @objc static func requiresMainQueueSetup() -> Bool { false }
 
   private let store = EKEventStore()
-  private let title = "Life Planner"
+  private let title = "Life Chapters"
 
   private func access(_ done: @escaping (Bool) -> Void) {
     if #available(iOS 17.0, *) {
@@ -41,7 +41,7 @@ class CalendarMirror: NSObject {
     access { granted in
       guard granted else { return resolve(-1) }
       guard let cal = self.calendar(create: true) else {
-        return reject("CALENDAR", "Couldn't create the Life Planner calendar", nil)
+        return reject("CALENDAR", "Couldn't create the Life Chapters calendar", nil)
       }
       let from = Date().addingTimeInterval(-86400 * 400)
       let to = Date().addingTimeInterval(86400 * 365 * 4)

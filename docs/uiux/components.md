@@ -4,7 +4,7 @@ Anything drawn twice. Variants in one block so they can be compared.
 
 ## Step row
 
-Used in Radar groups, phase detail, track detail.
+Used in Radar groups, chapter detail, track detail.
 
 ```
  normal     Police check            Nov 12   ›

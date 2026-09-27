@@ -41,7 +41,7 @@ Fourth tab — the one screen you open without a step in mind.
   issued     Sep 26, 2026             ›
   expires    Dec 26, 2026             ›
   number     ••••••••  👁              ›     ← masked by default
-  kept in    Files › Life Planner      ›
+  kept in    Files › Life Chapters      ›
  ──────────────────────────────────────────
   ⚠ Expires 17 days before "Lodge EOI"
     needs it.                            ›

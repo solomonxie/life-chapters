@@ -1,7 +1,7 @@
 import { NativeModules } from 'react-native';
 
 /**
- * The app's own Swift modules (ios/LifePlanner/Native). Each falls back to a
+ * The app's own Swift modules (ios/LifeChapters/Native). Each falls back to a
  * harmless no-op when absent, so tests and a JS-only run don't crash.
  */
 const N = NativeModules as Record<string, any>;

@@ -58,7 +58,7 @@ to read them from. The 64-pending cap makes this a scheduler of its own, not a
 one-line call.
 
 - [x] T4.1 Notifier interface + no-op implementation — see `src/notify/notifier.ts` — depends: none
-- [ ] T4.2 Local notifications, hand-rolled `UNUserNotificationCenter` module (no notifee — see `DESIGN.md` Risks) — permission request, deep link into `uiux/radar.md` / the step — see `src/notify`, `ios/LifePlanner/Native` — depends: T4.1, T3.5
+- [ ] T4.2 Local notifications, hand-rolled `UNUserNotificationCenter` module (no notifee — see `DESIGN.md` Risks) — permission request, deep link into `uiux/radar.md` / the step — see `src/notify`, `ios/LifeChapters/Native` — depends: T4.1, T3.5
 - [ ] T4.3 Rolling 64-window queue — register nearest N, refill on foreground and on every reflow, expose the `18/64` counter (drawing: `uiux/settings.md` → Reminders child) — see `src/notify` — depends: T4.2, T2.6
 - [ ] T4.4 Weekly digest notification — one summary at the configured day/time — see `src/notify` — depends: T4.2
 - [ ] T4.5 Permission-denied banner in Radar and disabled rows in Settings (drawings: `uiux/radar.md`, `uiux/settings.md`) — see `src/screens` — depends: T4.2, T3.9
@@ -73,18 +73,30 @@ is needed for the app to be useful on one device.
 - [ ] T5.2 Document scans — camera/photo/Files picker into the app's own Files-visible folder — see `src/screens/DocumentScreen.tsx` — depends: T3.8
 - [ ] T5.3 Plan-a-redo action — insert a repeat of a step so its output lands inside the validity window, then reflow (drawing: `uiux/documents.md`) — see `src/domain/schedule.ts` — depends: T1.6, T3.8
 - [ ] T5.4 Playbook file import + export via the share sheet — see `src/screens/TracksScreen.tsx` — depends: T2.2, T3.7
-- [ ] T5.5 Optional calendar mirror of `startBy` dates into a `Life Planner` calendar, off by default — see `src/integrations` — depends: T3.9
+- [ ] T5.5 Optional calendar mirror of `startBy` dates into a `Life Chapters` calendar, off by default — see `src/integrations` — depends: T3.9
 
-## Phase 6: Ship it
+## Phase 6: Chapters and the journal
+
+The rebrand to Life Chapters widens the app from plan-ahead to the whole life:
+the intervals between dates become chapters, and past chapters hold stories.
+Stories are text only (photos stay in the photo library — `DESIGN.md`).
+
+- [ ] T6.1 Rename to Life Chapters — display name, bundle id, Xcode target, repo, folder; phase → chapter in code and copy — see everything — depends: none
+- [ ] T6.2 `Entry` type, chapter filing, search — pure, tested — see `src/domain/journal.ts` — depends: T1.5
+- [ ] T6.3 Journal tab + story entry modal (drawing: `uiux/journal.md`) — see `src/screens/JournalScreen.tsx`, `EntryScreen.tsx` — depends: T6.2, T2.6
+- [ ] T6.4 Stories on the Timeline (`✎ n`) and in chapter detail (drawings: `uiux/journal.md`, `uiux/timeline.md`) — depends: T6.3
+- [ ] T6.5 Entries in the backup file — see `src/data/plan.ts` — depends: T6.2, T5.1
+
+## Phase 7: Ship it
 
 Only meaningful once there's an app to sign. Grouped last because every item
 here is a release chore, not a capability.
 
-- [ ] T6.1 App icon and launch screen — see `ios/LifePlanner/Images.xcassets` — depends: none
-- [ ] T6.2 Signing without secrets in tracked files — placeholder `DEVELOPMENT_TEAM`, gitignored `Local.xcconfig`, per the `security` skill — see `ios` — depends: none
-- [ ] T6.3 Physical-device QA pass over every drawing in `uiux/`, smallest supported width included — see `docs/uiux` — depends: Phase 3, Phase 4
-- [ ] T6.4 Accessibility pass — Dynamic Type at largest setting, VoiceOver labels on every glyph-only control — see `src/ui` — depends: Phase 3
-- [ ] T6.5 TestFlight build, local `xcodebuild` only, no cloud builds — see `docs` — depends: T6.1, T6.2, T6.3
+- [ ] T7.1 App icon and launch screen — see `ios/LifeChapters/Images.xcassets` — depends: none
+- [ ] T7.2 Signing without secrets in tracked files — placeholder `DEVELOPMENT_TEAM`, gitignored `Local.xcconfig`, per the `security` skill — see `ios` — depends: none
+- [ ] T7.3 Physical-device QA pass over every drawing in `uiux/`, smallest supported width included — see `docs/uiux` — depends: Phase 3, Phase 4
+- [ ] T7.4 Accessibility pass — Dynamic Type at largest setting, VoiceOver labels on every glyph-only control — see `src/ui` — depends: Phase 3
+- [ ] T7.5 TestFlight build, local `xcodebuild` only, no cloud builds — see `docs` — depends: T7.1, T7.2, T7.3
 
 ## Running this in parallel
 

@@ -39,6 +39,11 @@ export function seedSample() {
     actions.toggleDocument(english.instanceId, english.template.documents[0]);
   }
   actions.saveDocument({ id: 'passport', name: 'Passport', issuedOn: '2019-08-02', expiresOn: '2029-08-01', number: 'E12345678' });
-  void migrated;
+  const story = (date: string, precision: 'day' | 'month' | 'year', title: string, body: string, anchorId?: string) =>
+    actions.saveEntry({ date, precision, title, body, anchorId });
+  story('2003-07-01', 'month', 'The summer of the bicycle', 'Rode to the city wall every evening that July. Dad fixed the chain twice.');
+  story('2013-07-01', 'year', 'Graduation', 'Rain all morning, sun for the photo. Nobody could find the gowns.');
+  story(`${year - 2}-09-14`, 'day', 'Landing day', 'Two suitcases and a borrowed car. The first night we slept on the floor of an empty flat.', migrated);
+  story(`${year}-07-20`, 'day', 'First winter', 'Nobody warned us the houses have no heating.');
   actions.dismissToast();
 }

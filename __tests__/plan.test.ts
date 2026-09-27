@@ -3,7 +3,7 @@ import { addDays } from '../src/domain/dates';
 import {
   documentViews,
   groupDocuments,
-  lifePhases,
+  lifeChapters,
   planView,
   timelineNodes,
 } from '../src/domain/plan';
@@ -53,8 +53,8 @@ describe('timeline', () => {
     expect(nodes.find(n => n.id === 'm')!.pendingSteps).toBe(0);
   });
 
-  it('names the current phase after the kind that opened it', () => {
-    const current = lifePhases(nodes, NOW).find(p => p.isCurrent)!;
+  it('names the current chapter after the kind that opened it', () => {
+    const current = lifeChapters(nodes, NOW).find(p => p.isCurrent)!;
     expect(current.label).toBe('Settling in · Australia');
   });
 });

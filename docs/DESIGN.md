@@ -1,9 +1,13 @@
-# Design: a life plan that reschedules itself
+# Design: Life Chapters — the life behind you, and the plan ahead
 
 Product/business reasoning only. Interface lives in [`UIUX_DESIGN.md`](UIUX_DESIGN.md),
 build order in [`IMPLEMENT_PLAN.md`](IMPLEMENT_PLAN.md).
 
 ## Problem
+
+A life has two halves that nobody keeps in one place. Behind you: what
+happened, when, and what it was like — scattered across memory, chat logs and
+old documents. Ahead of you: transitions with paperwork attached.
 
 Big life transitions — migrating, starting a school year, buying a home,
 retiring — have long lead times and ordered prerequisites with their own
@@ -18,16 +22,22 @@ step finishes early, every downstream date should move with it.
 ## Core idea
 
 You enter a handful of **anchors** (born, graduated, migrated, child born).
-Everything else is computed: phases, upcoming events, and each step's
+Everything else is computed: chapters, upcoming events, and each step's
 *start-by* date, scheduled **backward** from the event it serves. Mark a step
 done and its successors reflow from the real completion date, not the estimate.
 
 So this is a backward-scheduled dependency graph over life anchors — not a
 checklist app with a due-date field.
 
+The same anchors cut the life into **chapters**. Behind today, a chapter holds
+**stories** — dated journal entries in your own words. Ahead of today, it holds
+steps. One timeline, one set of dates, both halves.
+
 ## Goals
 
-- 5-20 anchor dates in, a walkable life timeline out
+- 5-20 anchor dates in, a walkable life timeline out, cut into chapters
+- A **journal**: text stories with fuzzy-able dates, filed into chapters
+  automatically
 - Attach a **playbook** per life track; it instantiates into dated steps
 - Each step carries: prerequisites, documents to obtain, prep actions, how-to
   notes, lead time, and validity window
@@ -39,6 +49,8 @@ checklist app with a due-date field.
 
 ## Non-goals
 
+- **No media in the journal.** Photos and video already live in the user's
+  photo library; duplicating them costs storage and a sync problem for no gain.
 - **Not advice.** Not legal, immigration, tax, or financial advice. Playbooks
   are user-owned content with a visible "last reviewed" date.
 - No backend, accounts, or sync service — backup is a file you export
@@ -71,11 +83,12 @@ app covers more than one country's paperwork.
 ```
 Anchor      a dated fact the user entered       born · graduated · migrated
 Event       a dated point, entered or derived   turns 18 · visa expires · term 1 starts
-Phase       the interval between two events     "Pre-migration" · "Settling in"
+Chapter     the interval between two events     "Pre-migration" · "Settling in"
 Playbook    template for one life track         "Skilled migration AU" · "Start school"
 Step        template node in a playbook         offset, deps, docs, prep, how-to
 Instance    a Step bound to real dates          status, startBy, dueBy, notes
 Document    a thing you must hold               issued, expires, where it lives
+Entry       a story, dated like an anchor       title, body, optional linked date
 ```
 
 Scheduling, per step:
@@ -123,7 +136,7 @@ paying twice" explainer rather than as a date the app picks.
 - **Dependencies.** Runtime deps: navigation (3), safe-area, screens, zustand,
   and `@op-engineering/op-sqlite` — taken because SQLite is the store and a
   hand-rolled binding is not a hundred lines. Everything else that touches iOS
-  is hand-rolled Swift in `ios/LifePlanner/Native/` (~400 lines): local
+  is hand-rolled Swift in `ios/LifeChapters/Native/` (~400 lines): local
   notifications (instead of notifee — its RN 0.87 support is unproven and the
   API we use is four calls), document/photo/camera pickers and the share sheet,
   the EventKit calendar mirror, haptics. Date entry is JS wheels, not a native
