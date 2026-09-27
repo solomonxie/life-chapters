@@ -1,0 +1,202 @@
+import type { Playbook } from '../../domain/types';
+
+export const retirementCn: Playbook = {
+  id: 'retirement-cn',
+  title: 'Retirement · China',
+  summary:
+    'Paperwork plan for the basic pension in mainland China from 50 to 65: the rising retirement age and contribution years, flexible retirement, the pension claim, yearly certification, the housing fund and medical insurance.',
+  region: 'China',
+  country: 'CN',
+  family: 'retirement',
+  anchorKind: 'born',
+  ages: { from: 50, to: 65 },
+  conditions: [
+    'You are insured in mainland China, in the employee basic pension (职工基本养老保险) or the urban and rural residents\' pension',
+    'Retirement ages differ for men and women and by original job type; the dates here assume 60, so move them to your own',
+  ],
+  reviewedAt: '2026-09-27',
+  version: 1,
+  sources: [
+    {
+      title: 'NPC Standing Committee decision on gradually raising the statutory retirement age, with the State Council measures — gov.cn',
+      url: 'https://www.gov.cn/yaowen/liebiao/202409/content_6974294.htm',
+    },
+    {
+      title: 'NPC Standing Committee decision on gradually raising the statutory retirement age — Ministry of Human Resources and Social Security',
+      url: 'https://www.mohrss.gov.cn/SYrlzyhshbzb/ztzl/zt202409/qwfb/202409/t20240913_525781.html',
+    },
+    {
+      title: 'Interim Measures for Flexible Retirement (人社部发〔2024〕94号) — gov.cn',
+      url: 'https://www.gov.cn/zhengce/zhengceku/202501/content_6995747.htm',
+    },
+    {
+      title: 'Statutory retirement age calculator — National Social Insurance Public Service Platform',
+      url: 'https://si.12333.gov.cn/osptb/index.html',
+    },
+    {
+      title: 'Pension qualification certification can be done any time within a year of the last one — gov.cn',
+      url: 'https://www.gov.cn/xinwen/2023-01/30/content_5739289.htm',
+    },
+    {
+      title: 'State Council opinions on a unified urban and rural residents\' basic pension (国发〔2014〕8号) — gov.cn',
+      url: 'https://www.gov.cn/zhengce/content/2014-02/26/content_8656.htm',
+    },
+    {
+      title: 'Housing Provident Fund Regulations (住房公积金管理条例), as amended in 2026 — gov.cn',
+      url: 'https://www.gov.cn/zhengce/zhengceku/202608/content_7078478.htm',
+    },
+    {
+      title: 'Housing Provident Fund Regulations, consolidated text — Ministry of Justice regulations database',
+      url: 'https://xzfg.moj.gov.cn/front/law/detail?LawID=1822',
+    },
+    {
+      title: 'Employee medical insurance personal accounts can be used for close relatives — gov.cn',
+      url: 'https://www.gov.cn/zhengce/202408/content_6965884.htm',
+    },
+    {
+      title: 'National Healthcare Security Administration',
+      url: 'https://www.nhsa.gov.cn/',
+    },
+    {
+      title: 'Civil Code of the PRC (中华人民共和国民法典) — National People\'s Congress',
+      url: 'http://www.npc.gov.cn/npc/c2/c30834/202006/t20200602_306457.html',
+    },
+    {
+      title: 'Order of statutory succession (Civil Code, Article 1127) — Shenzhen Justice Bureau',
+      url: 'https://sf.sz.gov.cn/ydmh/cjwt_152766/content/mpost_10569494.html',
+    },
+  ],
+  steps: [
+    {
+      id: 'record',
+      title: 'Check your social insurance contribution record',
+      offsetDays: 18263,
+      durationDays: 14,
+      ages: { from: 50, to: 50 },
+      dependsOn: [],
+      documents: ['Social insurance contribution record'],
+      prepare: [
+        'Resident ID card',
+        'Social security card or electronic social security card',
+        'A list of employers and cities you paid in, with dates',
+      ],
+      howTo:
+        '1. Look up your contribution record (参保缴费记录) on the National Social Insurance Public Service Platform (国家社会保险公共服务平台) or the 掌上12333 app, or at the local social insurance office.\n2. Compare each year with your work history; gaps and years paid in other cities are easier to fix now than at retirement.\n3. If you paid in several places, ask about transferring the pension record (转移接续) so it is counted together.\n4. The 14 days is an estimate.',
+    },
+    {
+      id: 'retire-age',
+      title: 'Look up your statutory retirement age',
+      offsetDays: 18293,
+      durationDays: 7,
+      ages: { from: 50, to: 50 },
+      dependsOn: [],
+      documents: [],
+      prepare: ['Your birth year and month', 'Whether your original retirement age was 50, 55 or 60'],
+      howTo:
+        '1. From January 1, 2025, the statutory retirement age (法定退休年龄) rises gradually over 15 years: men from 60 to 63, and women from 50 to 55 or from 55 to 58.\n2. For men and women whose original age was 55, it rises 1 month every 4 months; for women whose original age was 50, 1 month every 2 months.\n3. The official retirement age calculator on the national platform and 掌上12333 gives your exact age and month from your birth month, sex and original type.\n4. Every date in this plan assumes 60; move them to the month the calculator gives.',
+    },
+    {
+      id: 'min-years',
+      title: 'Check you will reach the minimum contribution years',
+      offsetDays: 18353,
+      durationDays: 30,
+      ages: { from: 50, to: 50 },
+      dependsOn: ['record', 'retire-age'],
+      documents: ['Social insurance contribution record'],
+      prepare: ['Years paid so far', 'Years left until your statutory retirement age'],
+      howTo:
+        '1. A monthly basic pension needs a minimum number of contribution years, now 15.\n2. From January 1, 2030, the minimum rises by 6 months each year until it reaches 20 years; the calculator shows the minimum for your retirement year.\n3. If you reach retirement age short of the minimum, you can extend contributions or pay a lump sum as the rules allow.\n4. Not financial advice; the local social insurance office can confirm your count.',
+    },
+    {
+      id: 'medical',
+      title: 'Check your medical insurance years for retirement',
+      offsetDays: 20089,
+      durationDays: 30,
+      ages: { from: 55, to: 55 },
+      conditions: ['Only if you have employee medical insurance'],
+      dependsOn: ['record'],
+      documents: ['Medical insurance contribution record'],
+      prepare: ['Your medical insurance contribution years', 'The local medical insurance office\'s rule'],
+      howTo:
+        '1. Retirees with enough employee medical insurance years stop paying premiums and keep coverage for life.\n2. The minimum number of years is set locally, not nationally; ask the local medical insurance office for its rule.\n3. If you will fall short, ask the local medical insurance office (医保局) whether you can keep paying after retirement or pay the gap in one sum.\n4. Age 55 here is only a prompt, to leave time to close a gap.',
+    },
+    {
+      id: 'flexible',
+      title: 'Decide on flexible early or late retirement',
+      offsetDays: 21550,
+      durationDays: 30,
+      ages: { from: 59, to: 59 },
+      dependsOn: ['min-years'],
+      documents: [],
+      prepare: ['Your statutory retirement date', 'Contribution years', 'Health, work and family plans'],
+      howTo:
+        '1. Flexible retirement (弹性退休) is voluntary, and employers may not force a choice.\n2. Early: once you reach the minimum contribution years, you can retire up to 3 years early, but not below the original age of 60 for men, or 50 or 55 for women. Tell your employer in writing at least 3 months before the date you choose.\n3. Late: with your employer\'s agreement, you can retire up to 3 years late; agree the date in writing at least 1 month ahead.\n4. For early retirement, move this step to at least 3 months before your chosen date. Not financial advice.',
+    },
+    {
+      id: 'apply',
+      title: 'Apply for the basic pension',
+      offsetDays: 21915,
+      durationDays: 30,
+      ages: { from: 60, to: 63 },
+      dependsOn: ['flexible'],
+      documents: ['Resident ID card', 'Social security card', 'Pension approval'],
+      prepare: [
+        'Bank account on your social security card for payments',
+        'Personnel file (档案) and proof of any special job type, if your employer keeps them',
+        'Confirm with HR who submits the claim',
+      ],
+      howTo:
+        '1. For employees, the employer applies to the social insurance agency for the basic pension (基本养老金) no later than the month of the retirement date.\n2. Without an employer, e.g. as a flexible worker, ask the local social insurance office how to apply.\n3. The pension starts the month after the approved retirement date.\n4. The 30 days is an estimate; this date assumes retirement at 60.',
+    },
+    {
+      id: 'hpf',
+      title: 'Withdraw the housing provident fund',
+      offsetDays: 21976,
+      durationDays: 14,
+      ages: { from: 60, to: 63 },
+      conditions: ['Only if you have a housing provident fund account'],
+      dependsOn: ['apply'],
+      documents: ['Resident ID card', 'Retirement proof', 'Bank card'],
+      prepare: ['Provident fund account number', 'Any outstanding provident fund loan'],
+      howTo:
+        '1. Retirement is one of the grounds for withdrawing the whole housing provident fund (住房公积金) balance, and the account can be closed at the same time.\n2. The fund centre decides within 3 days of accepting the application (as amended from September 20, 2026).\n3. Apply online or at the local fund centre; ask how any outstanding provident fund loan is handled.\n4. The date is an estimate, once retirement is approved.',
+    },
+    {
+      id: 'certify',
+      title: 'Complete the yearly pension qualification check',
+      offsetDays: 22280,
+      durationDays: 14,
+      ages: { from: 61, to: 65 },
+      dependsOn: ['apply'],
+      documents: [],
+      prepare: ['Smartphone with the 掌上12333 app or the national platform', 'Resident ID card'],
+      howTo:
+        '1. Pension recipients confirm their eligibility (领取资格认证) once in each 12-month period, at any time within 12 calendar months of the last one.\n2. Face recognition works on the national platform or 掌上12333; people abroad can use the 中国领事 app; older or housebound people can ask for a home visit.\n3. Many people are now confirmed automatically by data matching; check the app to see if you are.\n4. If the check lapses, payment is suspended until you complete it.',
+    },
+    {
+      id: 'resident-pension',
+      title: 'Claim the residents\' pension at 60',
+      offsetDays: 21915,
+      durationDays: 30,
+      ages: { from: 60, to: 60 },
+      conditions: ['Only if you have no employee basic pension'],
+      dependsOn: [],
+      documents: ['Resident ID card', 'Hukou book'],
+      prepare: ['Your residents\' pension contribution years', 'Bank card for payments'],
+      howTo:
+        '1. The urban and rural residents\' pension (城乡居民养老保险) is paid monthly from age 60 to people who have paid in for at least 15 years in total and get no other state basic pension.\n2. It has a basic part set by government and a personal account part; the account balance can be inherited.\n3. Apply through the village or community service point, or the local social insurance office.\n4. If you also paid into the employee pension, ask how the two records are combined.',
+    },
+    {
+      id: 'estate',
+      title: 'Make a will and choose a guardian in advance',
+      offsetDays: 21946,
+      durationDays: 30,
+      ages: { from: 60, to: 60 },
+      dependsOn: [],
+      documents: ['Will', 'Voluntary guardianship agreement'],
+      prepare: ['Who should inherit', 'Who should decide for you if you cannot', 'A notary office (公证处) near you'],
+      howTo:
+        '1. Without a will, the Civil Code gives the estate first to the spouse, children and parents (Article 1127).\n2. A will (遗嘱) can change that; the Civil Code allows handwritten, witnessed, printed, audio or video, and notarised wills.\n3. Voluntary guardianship (意定监护) lets an adult choose in writing, in advance, who will be their guardian if they lose capacity.\n4. For information only, not legal advice; age 60 here is only a prompt.',
+    },
+  ],
+};
