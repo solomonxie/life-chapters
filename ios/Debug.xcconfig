@@ -1,0 +1,2 @@
+#include "Pods/Target Support Files/Pods-LifePlanner/Pods-LifePlanner.debug.xcconfig"
+#include "Signing.xcconfig"
