@@ -8,7 +8,7 @@ Life Chapters does not collect, transmit, or store your personal data on any ser
 Your dates and the notes on them, the people you add (a name each) and their dates, plans and their steps, document details (issue and expiry dates, numbers you type), scans and photos of documents you add, and settings are kept in a database and in files on your device. They stay there unless you choose to export them.
 
 ## Automatic backups
-- **On the device** — after every change, a copy of your plan is saved in the app's own Backups folder (visible in the Files app). Each day keeps its latest 20 copies; copies older than 7 days are deleted.
+- **On the device** — one copy of your plan a day, updated on every change, in the app's own Backups folder (visible in the Files app); copies older than 30 days are deleted. Alongside it, a change log records each change as one line of text (when, whose timeline, what changed); it is only ever added to, and stays on your device.
 - **iCloud Drive** — off by default. If you turn it on, one copy a day is saved in your own iCloud Drive, in a "Life Chapters" folder, under your Apple account and storage quota. iOS does the syncing; we have no access to it. Turning it off stops new copies; the ones already there stay in your iCloud Drive until you delete them.
 
 ## What leaves your device, and only if you ask

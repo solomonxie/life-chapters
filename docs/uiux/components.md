@@ -8,7 +8,8 @@ Used in Plans buckets, chapter detail, attached playbook detail.
 
 ```
  normal     Police check            Nov 12   ›
- late     ⚠ Book a language test 5 days late ›
+ start now  Book a language test  start now  ›   ← start-by passed; calm
+ late     ⚠ Book a language test 5 days late ›   ← past due-by; red
  blocked    Submit PR application  blocked   ›
  done     ✓ Receive an ITA        Aug 02     ›
  moved      Renew passport         Dec 20 ▼  ›
@@ -16,8 +17,10 @@ Used in Plans buckets, chapter detail, attached playbook detail.
  skipped    Skills assessment   not for me   ›
  truncated  Overseas police certific…  Dec 01 ›
 
- ACT NOW  ⚠ Book a language test
-            start by Sep 20 · 5 days late  ›     ← two-line form, red only here
+ ACT NOW    Book a language test
+            start now · due Oct 30         ›     ← two-line form, calm
+          ⚠ Book a language test
+            due Sep 20 · 5 days late       ›     ← red only past due
 
  props: step · now · move(▲▼, tap → "was Jan 12" popover) · subtitle · detailed
 ```
@@ -52,11 +55,12 @@ highlight band on the chosen row. Columns follow precision.
 ```
  past      1991  ● Born                     ›
  past      2013  ● Graduated                ›
- noted     2024  ● Migrated to Canada     ✎ ›   ← the date has notes
+ noted     2024  ● Relocated to Canada    ✎ ›   ← the date has notes
  current         ┃
  today     ══════ TODAY · Sep 26, 2026 ══════
  late            ┃  ⚠ 2 steps are late     ›   ← scrolls to Plans
- future    2028  ○ Lodge a visa app…  (15) ›   ← (15) opens the chapter
+ moment    2027  ○ Mom and Dad arrive (14) ›   ← same row; cuts no chapter
+ future    2028  ○ Apply for perma…  (19) ›   ← (19) opens the chapter
  more            ⋮
  fuzzy     2013  ◍ Graduated · 2013         ›   ← year-precision anchor
 ```

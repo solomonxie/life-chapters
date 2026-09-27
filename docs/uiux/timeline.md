@@ -21,20 +21,22 @@ line, Plans, Settings. No tab bar, no ⚙. Everything else pushes on top.
         │
   2024  ● Ava born                        ›
         │
-  2024  ● Migrated to Canada            ✎ ›
+  2024  ● Relocated to Canada           ✎ ›
         ┃                                    ← thick stem = current chapter
   ══════ TODAY · Sep 26, 2026 ═════════════
         ┃  ⚠ 2 steps are late             ›  ← scrolls down to Plans
         ┃
-  2028  ○ Lodge a visa application   (15) ›
+  2027  ○ Mom and Dad arrive         (14) ›  ← a moment: the ┃ runs on
+        ┃
+  2028  ○ Apply for permanent resid… (19) ›
         │
   2031  ○ Turns 40                        ›
         ⋮
         ( + Add a date )
  ──────────────────────────────────────────
   PLANS                                     → plans.md
-  ⚠ Expiring · Your plans · ⚠ Act now ·
-  Next 90 days · This year · Later · Done
+  ⚠ Expiring · Your plans · Act now ·
+  Next steps · This year · Later · Done
   ( + Add a plan )
  ──────────────────────────────────────────
   Settings                                  → settings.md
@@ -73,12 +75,12 @@ dates only  1991  ● Born · Xi'an                  ›
             PLANS
             [[ Browse plans ]]             → plans.md
 
-late        2024  ● Migrated to Canada            ›
+late        2024  ● Relocated to Canada           ›
                   ┃
             ══════ TODAY ═══════════════════════════
                   ┃  ⚠ 2 steps are late          ›
 
-long label  2028  ○ Lodge a visa applicat…  (15) ›
+long label  2028  ○ Apply for permanent re…  (19) ›
                                                     ← truncate, never wrap
 ```
 
@@ -110,12 +112,17 @@ Pushed from the NOW card, any future event, or a node's `(n)` badge.
  ╰────────────────────────────────────────╯
  ──────────────────────────────────────────
   ENDS WITH
-  ○ Lodge a visa application   Apr 2028  ›
+  ○ Apply for permanent resi…  Apr 2028  ›
  ──────────────────────────────────────────
   ( Edit this date )
 ```
 
 ```
+moment      ‹         Mom and Dad arrive
+            no chapter bar; "starts Jun 12,
+            2027 · Vancouver, British Columbia,
+            Canada", then OPENS, the steps of
+            its plans, NOTES
 no notes    NOTES
             ( + Add notes )                → anchors.md, Notes field
 past        no ACTIVE STEPS header when nothing is open
@@ -129,11 +136,17 @@ nothing     Nothing to start in this stretch.
 | `Life Chapters ▾` | tap | unfolds the person dropdown in place — [`people.md`](people.md) |
 | NOW card | tap | → chapter detail |
 | past date `●` | tap | → [`anchors.md`](anchors.md) editor |
-| future event `○` | tap | → chapter detail for that event |
+| future event `○` | tap | → chapter detail for that event; a moment's page has no chapter bar |
 | `(15)` badge | tap | → that event's chapter detail |
 | `⚠ 2 steps are late` | tap | scrolls the page down to Plans |
 | `+ Add a date` | tap | → anchor editor, blank |
 | list | flick, then touch | page stops, row does **not** open — `uiux` skill, mobile: brake-not-tap |
+
+**Moments** (`Visitors arrive`, `Trip abroad`) sit on the stem like any date
+and carry their plans' `(n)`, but don't cut the line: the chapter before them
+runs on through, with the same stem, and the NOW card doesn't change. Their
+page is the event and its plans, with no chapter bar
+([`anchors.md`](anchors.md#moments)).
 
 Derived events: only the next round birthday (`Turns 40`) from the Born date.
 Every other row is a date the user entered, or the linked copy of one

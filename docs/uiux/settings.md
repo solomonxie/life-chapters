@@ -89,34 +89,44 @@ board.
 
 ## Backups child
 
-Every change writes a snapshot. Nothing to press.
+Every change updates today's copy and adds a line to the change log. Nothing
+to press.
 
 ```
  ‹               Backups
  ──────────────────────────────────────────
-  ON THIS IPHONE  ⓘ                    (38)
-  Today                                (14) ⌄
-    21:05:33                                ›
-    20:58:10                                ›   ← counts shown on tap, in the confirm
-    ⋮
-  Yesterday                            (20) ›
-  Thu, Sep 24                           (4) ›
+  ON THIS IPHONE  ⓘ                    (31)
+  Today                                 (2) ⌄
+    latest                                  ›
+    before restore                          ›   ← counts shown on tap, in the confirm
+  Yesterday                             (1) ›
+  Thu, Sep 24                           (1) ›
  ──────────────────────────────────────────
   ICLOUD DRIVE  ⓘ                       (5)
   Today          one copy, replaced all day ›
   Yesterday                                 ›
   ⋮
  ──────────────────────────────────────────
+  CHANGE LOG  ⓘ                 (latest 30)
+ ╭────────────────────────────────────────╮
+ │ 2026-09-27 14:03 · Me                  │
+ │ Ava born moved · 3 steps rescheduled.  │
+ │ 2026-09-27 13:40 · Ava                 │
+ │ 12-month vaccines done                 │
+ │ ⋮                                      │
+ ╰────────────────────────────────────────╯
   ( Show in Files )
 ```
 
-`ⓘ` on this iPhone: "A copy after every change, never overwritten. Each day
-keeps its latest 20; days older than a week are cleared." `ⓘ` iCloud: "One
+`ⓘ` on this iPhone: "One copy a day, replaced on every change that day and
+kept 30 days. What changed, and when, goes into a change log that is only ever
+added to." `ⓘ` change log: "Every change, one line each: when, whose board,
+what happened. Added to, never rewritten or cleared — one file a year." `ⓘ` iCloud: "One
 file a day in iCloud Drive › Life Chapters, replaced on every change that day.
 Survives losing the phone."
 
-Tap a row → confirm, then the plan is replaced with that copy — and the plan
-you had a moment ago is itself already a snapshot, so a restore can be undone
+Tap a row → confirm, then the plan is replaced with that copy — after the plan
+you had a moment ago is saved as `before restore`, so a restore can be undone
 from the same list.
 
 ```
@@ -155,7 +165,7 @@ icloud unavailable
                          ( Open Settings )
 
 never exported
-  Last export       never                      ← no warning: snapshots
+  Last export       never                      ← no warning: daily copies
                                                  already cover the phone
 
 stale playbooks

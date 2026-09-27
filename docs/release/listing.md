@@ -43,11 +43,13 @@ developer.apple.com → Certificates, Identifiers & Profiles → Identifiers →
 - [ ] `make ios` → Release build on the paired iPhone. Smoke test:
   - first run: born date → one more date → pick a plan
   - Plans (below the timeline): swipe a step left → **Done**; the toast says what moved; **Undo** puts it back
-  - Step: long-press **Mark done** → pick a past date
+  - Step: long-press **Mark done** → pick a past date; then **Change ›** on the done date, and on **due by** → move it → **Reset**
+  - title **Life Chapters ▾** → **Lives in** → China; the Library leads with **China**; back to **From my events**
+  - add **Visitors arrive** (Detail: who) → it sits on the stem, the chapter doesn't change, **Visitors to Canada** is offered
   - a date → Notes: write some; the chapter shows them and the stem gets a ✎
   - title **Life Chapters ▾** → **Link a person to me** → Child, a name, a date; her board opens with "Born"; move the date on either board and both move
   - a step's document → add a scan from Photos; **kept in** opens Files at the app's folder
-  - make any change → Settings (bottom of the page) → Backup → **On this iPhone** lists a snapshot; tap it → Restore
+  - make any change → Settings (bottom of the page) → Backup → **On this iPhone** lists today's copy and **Change log** has a line for it; tap the copy → Restore; a **before restore** copy appears
   - turn **iCloud Drive** on → Files → iCloud Drive → **Life Chapters** holds today's file
   - Settings → Backup → **Export…** → save to Files → **Import…** the same file
   - allow notifications; Settings → Reminders shows `n/64` queued
@@ -129,7 +131,7 @@ make screenshots  SHOTS=/tmp/lifechapters-shots     # → docs/release/screensho
 ```
 
 `device-shots` relaunches the app once per shot with the `LC_QA` hook — a sample life
-(Xi'an → Canada, Express Entry and citizenship plans, a wedding with Sam, Ava's birth with
+(Xi'an → Vancouver, the BC relocation and Express Entry plans, a wedding with Sam, Ava's birth with
 her early-years and school plans, notes on two dates) in `qa.db`. Your real plan is never
 opened. Keep the phone unlocked and untouched while it runs; check the
 status bar (battery, no banners) and re-run any shot that caught a notification.
@@ -142,7 +144,7 @@ old `02-radar.jpg` / `04-journal.jpg`.
 Upload order (3 minimum, 10 maximum — the first two are what people actually see):
 
 1. **Timeline** (`01-timeline`) — the life line, chapters, TODAY, what's ahead
-2. **Plans** (`02-plans`) — expiring documents, your plans, ⚠ Act now with a late step
+2. **Plans** (`02-plans`) — expiring documents, your plans, Act now and Next steps
 3. **Step** (`03-step`) — start-by / due-by / valid, documents, prep, how-to
 4. **Chapter** (`05-chapter`) — a chapter's active steps and its notes
 5. **Playbook** (`06-playbook`) — who it's for, projected first and last dates, sources, not-advice line
@@ -179,13 +181,13 @@ App Preview video: skip for 1.0.
 Promotional Text (155/170):
 
 ```
-Your past and your plans on one timeline. Keep notes on the dates behind you, and let the paperwork ahead schedule itself backward from the date it serves.
+Your past and your plans on one timeline. Notes on the dates behind you; paperwork ahead, for Canada and China, scheduled backward from the date it serves.
 ```
 
 Description:
 
 ```
-Life Chapters puts your whole life on one line. The dates that matter — born, married, migrated, a child's birth — cut it into chapters. Behind today, dates hold your notes. Ahead of today, chapters hold the steps to get where you're going.
+Life Chapters puts your whole life on one line. The dates that matter — born, married, relocated, a child's birth — cut it into chapters. Behind today, dates hold your notes. Ahead of today, chapters hold the steps to get where you're going.
 
 No account. No subscription. Nothing leaves your iPhone unless you choose to: export a file, or turn on the iCloud Drive backup or the calendar mirror.
 
@@ -198,16 +200,20 @@ YOUR FAMILY
 • A timeline each for you, your partner, your children — switch with one tap
 • A wedding or a birth sits on both timelines; move the date on one and both move
 • A child's plans count from the child's own birthday
+• Visits and trips sit on the line with their own plans, without starting a new chapter
 
 A PLAN THAT RESCHEDULES ITSELF
-• Pick a plan — Express Entry, citizenship, getting married, a new baby, school, retirement — and it becomes dated steps
+• Pick a plan — relocating on a work or study permit, Express Entry, provincial nomination, citizenship, getting married, a new baby, school, retirement — and it becomes dated steps
+• Plans for Canada (Ontario and British Columbia where rules are provincial) and China, plus the paperwork between them: visitors to Canada, travelling to China, a child born in Canada to a Chinese parent, relocating to China
+• Plans follow where each person lives; a date with its own place, like a wedding in another province, follows that place
 • Each plan says who it's for: an age range and "applies if" lines
 • Steps are scheduled backward from the event they serve, so a slow step shows up years early
 • Mark one done and everything after it moves, with a note saying what moved and from which date
 • Results that expire — a police certificate, a language test — are timed so they're still valid when needed
 
 WHAT TO START NOW
-• Right under your timeline: what to start now, in the next 90 days, this year, later — grouped by when you must start, not when it's due
+• Right under your timeline: what to start now, the next few steps, this year, later — grouped by when you must start, not when it's due
+• Calm by default: red only for a step past its due date or a document that expires before it's needed
 • Swipe to mark done, snooze, or set aside a step that isn't for you
 
 DOCUMENTS
@@ -220,15 +226,15 @@ REMINDERS, ON YOUR TERMS
 • Optional: mirror start-by dates into a calendar of their own
 
 NOT ADVICE
-Plans describe paperwork, for Canada (Ontario where rules are provincial); more countries are coming. They are not legal, immigration, tax, medical or financial advice; each one shows when it was last reviewed and links its sources. Duplicate one, export it, edit it — it's your plan.
+Plans describe paperwork for Canada and China. China plans are in English, with the Chinese terms you'll see on forms. Plans that touch nationality describe what each route involves; they never recommend one. None of it is legal, immigration, tax, medical or financial advice; each plan shows when it was last reviewed and links its sources. Duplicate one, export it, edit it — it's your plan.
 
-Backed up on your iPhone after every change, and optionally to your own iCloud Drive. Free, with no ads and no analytics.
+Backed up on your iPhone: a copy each day, updated on every change, and a change log with a line for each change. Optionally, a daily copy in your own iCloud Drive. Free, with no ads and no analytics.
 ```
 
-Keywords (96/100 — "life", "story", "plan" are in the name and subtitle already):
+Keywords (97/100 — "life", "story", "plan" are in the name and subtitle already):
 
 ```
-timeline,family,memoir,notes,chapters,visa,immigration,canada,paperwork,deadline,reminder,expiry
+timeline,family,memoir,visa,immigration,canada,china,relocation,visitor,paperwork,deadline,expiry
 ```
 
 App Review Notes:
@@ -240,7 +246,7 @@ The app is one scrolling page: the timeline, then Plans, then Settings at the bo
 
 Tapping the "Life Chapters" title switches between people (for example a partner or a child); each has their own timeline, stored on the device like everything else.
 
-The bundled plans (Canadian permanent residence through Express Entry, citizenship, retirement, and Ontario plans for marriage, a new baby, early years and school) describe common paperwork steps. They are not legal, immigration or medical advice: every plan and step screen shows "Reviewed <month> · not official advice", and each plan lists the official pages it was checked against, which open in Safari.
+The bundled plans describe common paperwork steps: for Canada, relocating on a work or study permit, permanent residence through Express Entry or provincial nomination, citizenship, visitors to Canada, and life stages from marriage to retirement for Ontario and British Columbia; for China, the same life stages, travelling to China, relocating to China, and a child born in Canada to a Chinese parent. China plans are in English with Chinese terms in parentheses. Plans touching nationality describe the routes and never recommend one. None of it is legal, immigration or medical advice: every plan and step screen shows "Reviewed <month> · not official advice", and each plan lists the official pages it was checked against, which open in Safari.
 
 Optional permissions, all user-initiated: notifications (reminders), calendar (off by default; Settings → Calendar export), camera / photo picker (adding a scan to a document). iCloud Drive backup is off by default (Settings → Backup) and writes to the user's own iCloud Drive.
 
@@ -277,7 +283,7 @@ Age rating questionnaire — every answer:
 | Advertising | No |
 | Violence, sexual content, profanity, horror, mature themes | None |
 | Alcohol, tobacco, drugs | None |
-| Medical or treatment information / health & wellness | TODO, decide — the expecting-a-baby, newborn and early-years plans schedule prenatal visits, check-ups and routine vaccines as dated steps and link Ontario.ca pages; they give no treatment advice. "None" was right for the old content; re-read the current question before answering |
+| Medical or treatment information / health & wellness | TODO, decide — the expecting-a-baby, newborn and early-years plans schedule prenatal visits, check-ups and routine vaccines as dated steps and link provincial and Chinese health-authority pages; they give no treatment advice. "None" was right for the old content; re-read the current question before answering |
 | Gambling, simulated gambling, contests, loot boxes | None / No |
 | Made for Kids | No |
 

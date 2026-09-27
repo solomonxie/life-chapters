@@ -22,22 +22,23 @@ Code calls a plan a *track*; the user never sees that word.
  │ Citizenship · CA                       │
  │ [███░░░░░░░░░░░░░] 2/14    next Nov 12│›
  ╰────────────────────────────────────────╯
-  ⚠ ACT NOW                             (2)
+  ACT NOW                               (2)  ← calm; no ⚠, no red
  ╭────────────────────────────────────────╮
  │ Book a language test                   │
- │ start by Sep 21 · 5 days late        ! │
+ │ start now · due Oct 30                 │  ← red only once past due
  │ Skilled migration · CA                ›│
  ├────────────────────────────────────────┤
  │ Record days spent outside Canada       │
  │ start by Sep 28 · in 2 days            │
  │ Citizenship · CA                      ›│
  ╰────────────────────────────────────────╯
-  NEXT 90 DAYS                          (3) ⌄
+  NEXT STEPS                            (5) ⌄  ← within 90 days
  ╭────────────────────────────────────────╮
  │ Police certificates     Nov 12        ›│
  │ Address history, 10 yr  Dec 01        ›│
  │ Renew passport          Dec 20    ▼   ›│  ← ▼ = moved later by a reflow
  ╰────────────────────────────────────────╯
+  ( Show all 5 )                            ← the nearest 3 by default
   THIS YEAR                             (9) ›
   LATER                                (37) ›
     Swipe a step left for Done or Snooze,
@@ -74,48 +75,63 @@ stage (`ages.from`); playbooks with no age range sort last.
  ‹              Library
   🔍 Search
  ──────────────────────────────────────────
-  FITS YOUR DATES  ⓘ                    (4)  ← their date kinds, their
-  Skilled migration · CA      ✓ attached ›     province, not aged past
-  from "Lodge a visa application" · age 18+
-  Citizenship · CA            ✓ attached ›
-  from "Migrated to a country" · age 18+
-  Getting married · British C… 14 steps ›
-  Retirement · British Colum…  12 steps ›
+  FITS YOUR DATES  ⓘ                    (4)  ← their date kinds, fit where
+  Skilled migration · CA      ✓ attached ›     each date happened, not
+  from "Apply for permanent residence"         aged past
+  · age 18+
+  Relocating · work or s…    ✓ attached ›
+  from "Relocated to a country" · age 18+
+  Getting married · British C… 15 steps ›
+  Retirement · British Colum…  14 steps ›
   from "Born" · ages 55–72
  ──────────────────────────────────────────
-  CANADA AND BRITISH COLUMBIA          (10)
+  CANADA AND BRITISH COLUMBIA          (14)  ← country-wide + the province
   Newborn · first year · Bri…  17 steps ›
   from "Born" · ages 0–1
-  Early years · ages 1–4 · B…  10 steps ›
+  Early years · ages 1–4 · B…  12 steps ›
   ⋮
-  Expecting a baby · British…  14 steps ›
-  from "Baby due"
+  Visitors to Canada · visa, … 14 steps ›
+  from "Visitors arrive"
   Lives in British Columbia            ›  ← accent; opens Lives in
-  Plans for other provinces are below
+  Plans for other places are below
  ──────────────────────────────────────────
-  OTHER PROVINCES                  (8) ›  ← collapsed; opens on search
+  OTHER PLACES                     (20) ›  ← collapsed; opens on search
  ──────────────────────────────────────────
-  COMING SOON  ⓘ                            ← "Playbooks for Canada only,
+  COMING SOON  ⓘ                            ← "Plans for Canada and China,
   United States                               for now."
-  China
  ──────────────────────────────────────────
   ( Import a playbook file… )
 ```
 
-Provincial plans carry a `province` and a `family` (the same life stage in
-every province). With the province unknown, everything shows under
-`Everything` and the row reads `Which province?`.
+Each plan carries a `country`, a `province` when provincial, and a `family`
+(the same life stage elsewhere — Ontario, British Columbia, China). The first
+section is named for where the person lives: `Canada and British Columbia`,
+`China`, or `Everything` when it's unknown — then the row reads `Where do they
+live?` · `Pick a place to see only the plans that apply`. China plans are in
+English with the Chinese term in parentheses (`Secondary school · 中考 and 高考
+· China`).
 
-A plan attached for another province — after a move, say — says so on its row
-(`Ontario rules · lives in British Columbia`, red) and on its detail:
+Rules follow the date a plan hangs on, not only the person: a wedding follows
+where it happens, a Born date follows where they live now. A plan whose rules
+don't match says so on its row, in red, naming why:
+
+```
+  Ontario rules · Married in British Columbia
+  Ontario rules · lives in China
+```
+
+and on its detail:
 
 ```
  ╭────────────────────────────────────────╮
- │ ⚠ Ontario rules. You live in British   │
+ │ ⚠ Ontario rules; Married in British    │
  │ Columbia.       ( Switch to British    │  ← replaces the plan with its
  │                   Columbia )           │    twin on the same date; one
  ╰────────────────────────────────────────╯    undo; progress doesn't carry
 ```
+
+With no twin for that place, the flag stays and the button doesn't show.
+Unattached, the button reads `See British Columbia`.
 
 `Fits your dates` hides a plan that counts from a birth once the person on
 screen is past its `ages.to` — the newborn plan doesn't fit a 35-year-old, but
@@ -124,29 +140,31 @@ fits Ava on her own board.
 ## Playbook detail
 
 ```
- ‹           Citizenship · CA            ⋯
+ ‹                                       ⋯  ← nav bar empty
  ──────────────────────────────────────────
-  14 steps · anchored on "Migrated to a
-  country" · Canada
-  Paperwork track for citizenship by grant
+  Citizenship · CA                          ← full title, wraps
+  13 steps · anchored on "Became a
+  permanent resident" · Canada
+  Paperwork plan for citizenship by grant
   as an adult permanent resident, from
-  landing to the oath.
+  becoming one to the oath.
   For age 18+                               ← AppliesIf, components.md
-  • You're a permanent resident
+  • You became a permanent resident
   • 1,095 days physically in Canada in the
     5 years before you apply
   Reviewed Sep 2026 · not official advice
  ──────────────────────────────────────────
   [[ Attach to my plan ]]                   ← hidden once attached
  ──────────────────────────────────────────
-  Anchored on        Sep 14, 2024        ›
-  Migrated to Canada
+  Anchored on        Mar 01, 2025        ›
+  Became a permanent resident
   First step         would start Sep 2024
   Last step          would finish Oct 2027
  ──────────────────────────────────────────
-  STEPS                                (14)
-  1  Record the permanent residence date
-     └  Track days spent outside Canada
+  STEPS                                (13)
+  1  Start a log of days spent outside
+     Canada
+     └  Work out the earliest date
         └  Gather language proof
      ⋮
  ──────────────────────────────────────────
@@ -162,8 +180,8 @@ Attached, the steps list turns into dated step rows and `would start` /
 
 ```
 can't attach  [[ Attach to my plan ]]·
-              ⌐ Needs a "Migrated to a country"
-                date first.         ( Add it ) ¬
+              ⌐ Needs a "Became a permanent
+                resident" date first. ( Add it ) ¬
 
 stale         Reviewed Mar 2023 · not official advice
               ⚠ Over 2 years old. Check the steps
@@ -190,7 +208,7 @@ detaching     │ Detach "Retirement · CA"?    │
 | step row | tap | → [`step.md`](step.md) |
 | step row | swipe ← | `[ Done ]` `[ Snooze ]` |
 | step row | swipe → | `[ Not for me ]` — detaches just this step |
-| bucket header | tap | collapse / expand, remembered; `⚠ ACT NOW` never collapses |
+| bucket header | tap | collapse / expand, remembered; `ACT NOW` never collapses |
 | `▲` / `▼` | tap | popover: what moved it, and from which date |
 | expiring row | tap | → [`documents.md`](documents.md) detail |
 | plan row | tap | → playbook detail, steps dated |
@@ -207,8 +225,8 @@ detaching     │ Detach "Retirement · CA"?    │
 | `plans.title` | Plans |
 | `plans.expiring` | ⚠ Expiring |
 | `plans.yours` | Your plans |
-| `plans.group.now` | ⚠ Act now |
-| `plans.group.d90` | Next 90 days |
+| `plans.group.now` | Act now |
+| `plans.group.d90` | Next steps (3 shown, then "Show all n") |
 | `plans.group.year` | This year |
 | `plans.group.later` | Later |
 | `plans.done` | Done |
@@ -220,9 +238,15 @@ detaching     │ Detach "Retirement · CA"?    │
 | `plans.add` | + Add a plan · Browse plans |
 | `plans.notif.denied` | Reminders are off, so nothing will warn you. |
 | `library.fits` | Fits your dates |
-| `library.fitsInfo` | Plans that hang off a kind of date this person already has, and that they haven't aged past. |
+| `library.fitsInfo` | Plans that hang off a kind of date this person already has, fit where that date happened, and that they haven't aged past. |
+| `library.here` | {Country} and {Province} · {Country} · Everything |
+| `library.livesIn` | Lives in {place} · Plans for other places are below |
+| `library.livesIn.unknown` | Where do they live? · Pick a place to see only the plans that apply |
+| `library.others` | Other places |
 | `library.soon` | Coming soon |
-| `library.soonInfo` | Playbooks for Canada only, for now. |
+| `library.soonInfo` | Plans for Canada and China, for now. |
+| `plan.flag` | {Rules} rules · {Kind} in {place} · {Rules} rules · lives in {place} |
+| `plan.flag.switch` | Switch to {place} · See {place} |
 | `playbook.reviewed` | Reviewed {Mon yyyy} · not official advice |
 | `playbook.stale` | Over {n} years old. Check the steps against the current rules. |
 | `playbook.needsAnchor` | Needs a "{kind}" date first. |
@@ -237,8 +261,10 @@ Grouping is by **start-by**, not due date — the point is being warned while
 there's still time. A step due in 2 years whose paperwork takes 14 months
 belongs in ACT NOW, and that's the case a due-date sort gets wrong.
 
-Red appears only in ACT NOW, Expiring and Can't schedule. If every group had a
-colour, none would mean anything.
+Nothing is urgent by default. A passed start-by reads "start now", in plain
+text; red is kept for what is actually special — a step past its due date, a
+document expiring before it's needed, a plan that can't schedule. If every
+group had a colour, none would mean anything.
 
 The detail screen shows the projected first and last dates **before**
 attaching. Committing to a plan without seeing that it runs until 2030 is the

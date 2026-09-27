@@ -4,14 +4,16 @@ One node of a playbook, bound to real dates. The screen where work gets marked
 done and the reflow becomes visible.
 
 ```
- ‹        Order police certificates       ⋯
+ ‹                                       ⋯  ← nav bar empty
  ──────────────────────────────────────────
-  Skilled migration · CA · step 13 of 15
+  Order police certificates                 ← full title, wraps if long
+  Skilled migration · CA · step 14 of 19
                                            ← AppliesIf lines here, if any
   Reviewed Sep 2026 · not official advice
 
   start by   Nov 12, 2026   ·  in 47 days
-  due by     Jan 10, 2027
+  due by     Jan 10, 2027 · suggested
+                                 Change ›   ← date wheel unfolds here
   valid      6 months from issue        ⓘ    ← popover: why not earlier
  ──────────────────────────────────────────
   [[ Mark done ]]        ( Snooze… )
@@ -50,7 +52,7 @@ another step's Blocks / Waits-for · a reminder (switching to its owner first)
 blocked     start by   — blocked                ← no date until the blocker lands
             [[ Mark done ]]·  ← waiting on "Receive an ITA"
 
-done        ✓ Done · Sep 26, 2026     ( Undo )
+done        ✓ Done · Sep 26, 2026  Change ›  ( Undo )
             valid until Dec 26, 2026            ← from validForDays
             ⌐ 3 later steps moved earlier. ( Undo ) ¬
 
@@ -98,6 +100,10 @@ no how-to   HOW TO
 | `step.of` | {playbook} · step {n} of {total} |
 | `step.startBy` | start by |
 | `step.dueBy` | due by |
+| `step.dueBy.source` | · suggested · · moved by you |
+| `step.change` | Change › |
+| `step.move` | Move the due date to · Move it · Reset |
+| `step.doneOn` | Done on · Save |
 | `step.valid` | valid |
 | `step.markDone` | Mark done |
 | `step.blockedBy` | waiting on "{step}" |
@@ -124,3 +130,22 @@ guesses eligibility.
 
 `PREPARE` deliberately does not gate anything. If prep items blocked successors,
 every playbook author would be forced to model "think about it" as a dependency.
+
+## Title and dates
+
+```
+  due by     Mar 01, 2027 · moved by you
+                                 Change ›
+ ╭────────────────────────────────────────╮
+ │ Move the due date to                   │
+ │   ░ March ░    ░ 01 ░    ░ 2027 ░      │
+ │ ( Cancel )   ( Reset )   [[ Move it ]] │  ← Reset only when moved
+ ╰────────────────────────────────────────╯
+```
+
+The step's full title is the first line of the page, wrapping as needed; the
+nav bar stays empty so nothing is cut off. `due by` shows `· suggested` or
+`· moved by you` and `Change ›`: tapping unfolds the date wheel under the dates
+(`Move it`, `Reset` when moved). The new date replaces the suggestion, the
+step's start-by and every step waiting on it reflow, and the lists follow. A
+done step's `✓ Done · date  Change ›` corrects when it was really done.

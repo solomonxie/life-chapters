@@ -22,8 +22,9 @@ line down — not a sheet, per the `uiux` skill (`references/mobile.md`).
  │ Link a person to Ava                 › │
  │ A child, partner or parent, joined by  │
  │ the date that ties you                 │
- │ Lives in          British Columbia   › │  ← "from the latest place" when
- │ Rename Ava                           › │    inferred  ← Me too, e.g. to a real name
+ │ Lives in          British Columbia   › │  ← a province, or China;
+ │ from the latest place                  │    shown when inferred
+ │ Rename Ava                           › │  ← Me too, e.g. to a real name
  │ Remove Ava                           ! │  ← not for Me
  ╰────────────────────────────────────────╯
   NOW · AGE 2
@@ -157,6 +158,8 @@ opens the step.
 | `person.link.child` | "{name} born" goes on {your \| name's} timeline, and {name} get a board of their own that starts on that date. |
 | `person.link.partner` | The wedding goes on both timelines. Moving the date on one moves it on the other. |
 | `anchor.field.who` | Who |
+| `people.livesIn` | Lives in · {place \| not set} · from the latest place · Picks the plans for where they live |
+| `livesIn.inferred` | Now: {place}, from where {you \| they} last moved · Set a place on Born or a move to work it out |
 
 ## Notes
 
@@ -173,22 +176,37 @@ one birth event.
 
 ## Lives in
 
-Provincial plans follow it. The first row keeps it inferred: the province of
-the latest past date whose Place is in Canada. Any other row pins it.
+Decides whose rules a person's plans follow — country, and in Canada the
+province. The first row keeps it inferred: the latest past *residence* date
+with a Place (Born, Relocated, Moved city, Bought a home — not a wedding or a
+trip). A Place typed in Chinese with no country counts as China. Any other row
+pins it.
 
 ```
  ( Done )          Lives in
  ──────────────────────────────────────────
-  Provincial plans — school, health cards,
-  licences, marriage — follow the province
-  you live in.
+  School, health cards, licences, marriage
+  and pensions follow where you live. A
+  date with a place of its own — a wedding
+  abroad, say — follows that place instead.
  ╭────────────────────────────────────────╮
  │ ✓ From my events                       │
- │   Now: British Columbia, from the      │
- │   latest place                         │
+ │   Now: British Columbia, from where    │  ← "Set a place on Born or a
+ │   you last moved                       │    move to work it out"
+ ╰────────────────────────────────────────╯
+  CANADA
+ ╭────────────────────────────────────────╮
  │   Alberta                              │
  │   British Columbia                     │
  │   ⋮                                    │
  │   Yukon                                │
  ╰────────────────────────────────────────╯
+  CHINA
+ ╭────────────────────────────────────────╮
+ │   China                                │
+ ╰────────────────────────────────────────╯
 ```
+
+Changing it re-sorts the Library and re-checks every attached plan: one whose
+rules no longer match gets the flag and a switch to its twin
+([`plans.md`](plans.md#playbook-library)). Nothing is swapped on its own.
