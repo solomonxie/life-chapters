@@ -1,159 +1,219 @@
-import React from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import React, { useMemo } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
+  createNavigationContainerRef,
 } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useColorScheme } from 'react-native';
-import {
-  AnchorEditScreen,
-  DocsScreen,
-  DocumentScreen,
-  RadarScreen,
-  SettingsScreen,
-  StepScreen,
-  TimelineScreen,
-  TracksScreen,
-} from '../screens';
-import { usePalette } from '../ui';
+import * as S from '../screens';
+import { usePalette, type Palette } from '../ui';
+import type { Routes } from './routes';
+import { useStore } from '../state/store';
 
-export type TimelineStackParams = {
-  Timeline: undefined;
-  AnchorEdit: { anchorId?: string } | undefined;
-  Settings: undefined;
-  Step: { instanceId: string };
-};
-
-export type RadarStackParams = {
-  Radar: undefined;
-  Step: { instanceId: string };
-};
-
-export type TracksStackParams = {
-  Tracks: undefined;
-  Step: { instanceId: string };
-};
-
-export type DocsStackParams = {
-  Docs: undefined;
-  Document: { documentId: string };
-};
-
-const TimelineStack = createNativeStackNavigator<TimelineStackParams>();
-const RadarStack = createNativeStackNavigator<RadarStackParams>();
-const TracksStack = createNativeStackNavigator<TracksStackParams>();
-const DocsStack = createNativeStackNavigator<DocsStackParams>();
+const Stack = createNativeStackNavigator<Routes>();
+const Root = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 
-function TimelineFlow() {
-  const palette = usePalette();
+export const navRef = createNavigationContainerRef<any>();
+
+/** Detail screens every tab can push. */
+function shared() {
   return (
-    <TimelineStack.Navigator>
-      <TimelineStack.Screen
+    <>
+      <Stack.Screen name="Step" component={S.StepScreen} options={{ title: '' }} />
+      <Stack.Screen name="Document" component={S.DocumentScreen} options={{ title: '' }} />
+      <Stack.Screen name="Playbook" component={S.PlaybookScreen} options={{ title: '' }} />
+      <Stack.Screen name="Library" component={S.LibraryScreen} options={{ title: 'Library' }} />
+      <Stack.Screen name="Phase" component={S.PhaseScreen} options={{ title: '' }} />
+      <Stack.Screen
+        name="AnchorEdit"
+        component={S.AnchorEditScreen}
+        options={{ presentation: 'modal', title: 'Add a date' }}
+      />
+    </>
+  );
+}
+
+const stackOptions = (p: Palette) => ({
+  headerLargeTitleShadowVisible: false,
+  headerShadowVisible: false,
+  headerStyle: { backgroundColor: p.bg },
+  headerTintColor: p.accent,
+  headerTitleStyle: { color: p.text },
+  headerLargeTitleStyle: { color: p.text },
+  contentStyle: { backgroundColor: p.bg },
+  headerBackButtonDisplayMode: 'minimal' as const,
+});
+
+function TimelineFlow() {
+  const p = usePalette();
+  return (
+    <Stack.Navigator screenOptions={stackOptions(p)}>
+      <Stack.Screen
         name="Timeline"
-        component={TimelineScreen}
+        component={S.TimelineScreen}
         options={({ navigation }) => ({
           title: 'Life Planner',
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate('Settings')}
+              hitSlop={12}
               accessibilityRole="button"
               accessibilityLabel="Settings">
-              <Text style={[styles.gear, { color: palette.accent }]}>⚙</Text>
+              <Text style={[styles.gear, { color: p.accent }]}>⚙︎</Text>
             </Pressable>
           ),
         })}
       />
-      <TimelineStack.Screen
-        name="AnchorEdit"
-        component={AnchorEditScreen}
-        options={{ title: 'Add a date', presentation: 'modal' }}
-      />
-      <TimelineStack.Screen name="Settings" component={SettingsScreen} />
-      <TimelineStack.Screen name="Step" component={StepScreen} />
-    </TimelineStack.Navigator>
+      <Stack.Screen name="Settings" component={S.SettingsScreen} />
+      <Stack.Screen name="Reminders" component={S.RemindersScreen} />
+      <Stack.Screen name="Sources" component={S.SourcesScreen} options={{ title: 'Playbooks' }} />
+      <Stack.Screen name="About" component={S.AboutScreen} />
+      {shared()}
+    </Stack.Navigator>
   );
 }
 
 function RadarFlow() {
+  const p = usePalette();
   return (
-    <RadarStack.Navigator>
-      <RadarStack.Screen name="Radar" component={RadarScreen} />
-      <RadarStack.Screen name="Step" component={StepScreen} />
-    </RadarStack.Navigator>
+    <Stack.Navigator screenOptions={stackOptions(p)}>
+      <Stack.Screen name="Radar" component={S.RadarScreen} />
+      {shared()}
+    </Stack.Navigator>
   );
 }
 
 function TracksFlow() {
+  const p = usePalette();
   return (
-    <TracksStack.Navigator>
-      <TracksStack.Screen name="Tracks" component={TracksScreen} />
-      <TracksStack.Screen name="Step" component={StepScreen} />
-    </TracksStack.Navigator>
+    <Stack.Navigator screenOptions={stackOptions(p)}>
+      <Stack.Screen name="Tracks" component={S.TracksScreen} />
+      {shared()}
+    </Stack.Navigator>
   );
 }
 
 function DocsFlow() {
+  const p = usePalette();
   return (
-    <DocsStack.Navigator>
-      <DocsStack.Screen name="Docs" component={DocsScreen} />
-      <DocsStack.Screen name="Document" component={DocumentScreen} />
-    </DocsStack.Navigator>
+    <Stack.Navigator screenOptions={stackOptions(p)}>
+      <Stack.Screen name="Docs" component={S.DocsScreen} />
+      {shared()}
+    </Stack.Navigator>
   );
 }
 
-const TAB_GLYPH: Record<string, string> = {
-  TimelineTab: '│',
-  RadarTab: '◎',
-  TracksTab: '≡',
-  DocsTab: '🗎',
-};
+/** Drawn tab icons: a stem, a radar ring, stacked tracks, a page. */
+function TabIcon({ name, color }: { name: string; color: string }) {
+  if (name === 'TimelineTab') {
+    return (
+      <View style={styles.icon}>
+        <View style={[styles.stemLine, { backgroundColor: color }]} />
+        <View style={[styles.stemDot, { top: 3, borderColor: color, backgroundColor: color }]} />
+        <View style={[styles.stemDot, { top: 14, borderColor: color }]} />
+      </View>
+    );
+  }
+  if (name === 'RadarTab') {
+    return (
+      <View style={styles.icon}>
+        <View style={[styles.ring, { borderColor: color }]} />
+        <View style={[styles.ringInner, { borderColor: color }]} />
+        <View style={[styles.ringDot, { backgroundColor: color }]} />
+      </View>
+    );
+  }
+  if (name === 'TracksTab') {
+    return (
+      <View style={[styles.icon, styles.bars]}>
+        {[22, 16, 19].map((w, i) => (
+          <View key={i} style={[styles.bar, { width: w, backgroundColor: color }]} />
+        ))}
+      </View>
+    );
+  }
+  return (
+    <View style={styles.icon}>
+      <View style={[styles.page, { borderColor: color }]}>
+        {[10, 10, 6].map((w, i) => (
+          <View key={i} style={[styles.pageLine, { width: w, backgroundColor: color }]} />
+        ))}
+      </View>
+    </View>
+  );
+}
 
-export function RootNavigator() {
+function MainTabs() {
+  const p = usePalette();
+  const lateCount = useStore(
+    s => s.view.steps.filter(x => x.status === 'pending' && x.startBy < s.now).length,
+  );
+  return (
+    <Tabs.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarActiveTintColor: p.accent,
+        tabBarInactiveTintColor: p.dim,
+        tabBarStyle: { backgroundColor: p.card, borderTopColor: p.hairline },
+        tabBarIcon: ({ color }) => <TabIcon name={route.name} color={color} />,
+      })}>
+      <Tabs.Screen name="TimelineTab" component={TimelineFlow} options={{ title: 'Timeline' }} />
+      <Tabs.Screen
+        name="RadarTab"
+        component={RadarFlow}
+        options={{
+          title: 'Radar',
+          tabBarBadge: lateCount > 0 ? lateCount : undefined,
+          tabBarBadgeStyle: { backgroundColor: p.late },
+        }}
+      />
+      <Tabs.Screen name="TracksTab" component={TracksFlow} options={{ title: 'Tracks' }} />
+      <Tabs.Screen name="DocsTab" component={DocsFlow} options={{ title: 'Docs' }} />
+    </Tabs.Navigator>
+  );
+}
+
+export function RootNavigator({ onReady }: { onReady?: () => void }) {
   const scheme = useColorScheme();
-  const palette = usePalette();
+  const p = usePalette();
+  const needsFirstRun = useStore(s => s.plan.anchors.length === 0 && !s.settings.firstRunDone);
+  const base = scheme === 'dark' ? DarkTheme : DefaultTheme;
+  const theme = useMemo(
+    () => ({
+      ...base,
+      colors: { ...base.colors, primary: p.accent, background: p.bg, card: p.card, text: p.text, border: p.hairline },
+    }),
+    [base, p],
+  );
 
   return (
-    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Tabs.Navigator
-        screenOptions={({ route }) => ({
-          headerShown: false,
-          tabBarActiveTintColor: palette.accent,
-          tabBarIcon: ({ color }) => (
-            <Text style={[styles.tabGlyph, { color }]}>
-              {TAB_GLYPH[route.name] ?? '•'}
-            </Text>
-          ),
-        })}>
-        <Tabs.Screen
-          name="TimelineTab"
-          component={TimelineFlow}
-          options={{ title: 'Timeline' }}
-        />
-        <Tabs.Screen
-          name="RadarTab"
-          component={RadarFlow}
-          options={{ title: 'Radar' }}
-        />
-        <Tabs.Screen
-          name="TracksTab"
-          component={TracksFlow}
-          options={{ title: 'Tracks' }}
-        />
-        <Tabs.Screen
-          name="DocsTab"
-          component={DocsFlow}
-          options={{ title: 'Docs' }}
-        />
-      </Tabs.Navigator>
+    <NavigationContainer theme={theme} ref={navRef} onReady={onReady}>
+      <Root.Navigator screenOptions={{ headerShown: false }}>
+        {needsFirstRun ? (
+          <Root.Screen name="FirstRun" component={S.FirstRunScreen} />
+        ) : (
+          <Root.Screen name="Main" component={MainTabs} />
+        )}
+      </Root.Navigator>
     </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  gear: { fontSize: 18 },
-  tabGlyph: { fontSize: 16 },
+  gear: { fontSize: 22 },
+  icon: { width: 26, height: 24, alignItems: 'center', justifyContent: 'center' },
+  stemLine: { position: 'absolute', width: 2, top: 2, bottom: 2, borderRadius: 1 },
+  stemDot: { position: 'absolute', width: 8, height: 8, borderRadius: 4, borderWidth: 1.5 },
+  ring: { position: 'absolute', width: 22, height: 22, borderRadius: 11, borderWidth: 1.5 },
+  ringInner: { position: 'absolute', width: 12, height: 12, borderRadius: 6, borderWidth: 1.5 },
+  ringDot: { width: 4, height: 4, borderRadius: 2 },
+  bars: { gap: 4, alignItems: 'flex-start' },
+  bar: { height: 3, borderRadius: 1.5 },
+  page: { width: 18, height: 22, borderRadius: 3, borderWidth: 1.5, padding: 3, gap: 3 },
+  pageLine: { height: 1.5, borderRadius: 1 },
 });

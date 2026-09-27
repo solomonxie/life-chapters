@@ -1,76 +1,118 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import type { ScheduledStep } from '../domain/types';
-import { DatePair } from './DatePair';
+import { formatDate, formatMonth, formatRelative, formatShort, formatSpan } from '../domain/format';
+import { diffDays } from '../domain/dates';
+import type { Move } from '../domain/radar';
+import type { CivilDate, ScheduledStep } from '../domain/types';
+import { InfoPopover } from './InfoPopover';
 import { space, type } from './theme';
 import { usePalette } from './usePalette';
 
-export type Delta = 'earlier' | 'later' | null;
-
-/** The app's most reused row: Radar groups, phase detail, track detail. */
+/**
+ * The app's most reused row: Radar groups, phase detail, track detail. One
+ * trailing value per state — date, "5 days late", "blocked", "not for me".
+ */
 export function StepRow({
   step,
-  playbook,
-  delta = null,
+  now,
+  subtitle,
+  move,
+  detailed = false,
+  lateRed = false,
   onPress,
 }: {
-  step: ScheduledStep;
-  playbook?: string;
-  delta?: Delta;
+  step: ScheduledStep & { completedOn?: CivilDate };
+  now: CivilDate;
+  subtitle?: string;
+  move?: Move;
+  /** Two-line form for ACT NOW: "start by Sep 20 · 5 days late". */
+  detailed?: boolean;
+  /** Red is reserved for ACT NOW; elsewhere late reads in the normal dim. */
+  lateRed?: boolean;
   onPress?: () => void;
 }) {
-  const palette = usePalette();
-  const blocked = step.blockedBy.length > 0 && step.status === 'pending';
-  const mark =
-    step.status === 'done' ? '✓' : step.atRisk || blocked ? '⚠' : ' ';
+  const p = usePalette();
+  const open = step.status === 'pending' || step.status === 'snoozed';
+  const blocked = open && step.blockedByLate.length > 0;
+  const late = open && !blocked && !step.snoozedUntil && step.startBy < now;
+  const mark = step.status === 'done' ? '✓' : late || step.atRisk ? '⚠' : '';
+  const markColor = step.status === 'done' ? p.done : lateRed ? p.late : p.warn;
+
+  let trailing: string;
+  if (step.status === 'done') trailing = formatShort(step.startBy);
+  else if (step.status === 'skipped') trailing = 'not for me';
+  else if (step.snoozedUntil && step.snoozedUntil > now)
+    trailing = `snoozed ${formatSpan(diffDays(now, step.snoozedUntil))}`;
+  else if (blocked) trailing = 'blocked';
+  else if (late) trailing = formatRelative(step.startBy, now);
+  else trailing = sameYear(step.startBy, now) ? formatShort(step.startBy) : formatMonth(step.startBy);
+
+  const a11y = [
+    step.title,
+    step.status === 'done' ? `done ${formatDate(step.startBy)}` : trailing,
+    move ? `moved ${move.to < move.from ? 'earlier' : 'later'}, was ${formatDate(move.from)}` : '',
+  ]
+    .filter(Boolean)
+    .join(', ');
 
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={`${step.title}, ${step.status}`}
-      style={styles.row}>
-      <Text style={[type.body, { color: markColor(step, palette) }]}>
-        {mark}
-      </Text>
+      accessibilityLabel={a11y}
+      style={({ pressed }) => [styles.row, pressed && { backgroundColor: p.hairline }]}>
+      <Text style={[type.body, styles.mark, { color: markColor }]}>{mark}</Text>
       <View style={styles.body}>
         <Text
-          numberOfLines={1}
+          numberOfLines={detailed ? 2 : 1}
           style={[
             type.label,
             {
-              color: step.status === 'done' ? palette.dim : palette.text,
-              textDecorationLine:
-                step.status === 'skipped' ? 'line-through' : 'none',
+              color: step.status === 'done' || step.status === 'skipped' ? p.dim : p.text,
+              textDecorationLine: step.status === 'skipped' ? 'line-through' : 'none',
             },
           ]}>
           {step.title}
         </Text>
-        {playbook ? (
-          <Text style={[type.caption, { color: palette.dim }]}>{playbook}</Text>
-        ) : null}
-      </View>
-      <View style={styles.trailing}>
-        <DatePair date={blocked ? null : step.startBy} />
-        {delta ? (
-          <Text style={[type.caption, { color: palette.dim }]}>
-            {delta === 'earlier' ? '▲' : '▼'}
+        {detailed && open ? (
+          <Text style={[type.caption, { color: late && lateRed ? p.late : p.dim }]}>
+            {blocked
+              ? 'blocked · waiting on a late step'
+              : `start by ${formatShort(step.startBy)} · ${formatRelative(step.startBy, now)}`}
           </Text>
         ) : null}
-        <Text style={[type.body, { color: palette.dim }]}>›</Text>
+        {subtitle ? (
+          <Text numberOfLines={1} style={[type.caption, { color: p.dim }]}>
+            {subtitle}
+          </Text>
+        ) : null}
       </View>
+      {!detailed || !open ? (
+        <Text
+          style={[
+            type.caption,
+            styles.trailing,
+            { color: late && lateRed ? p.late : p.dim },
+          ]}>
+          {trailing}
+        </Text>
+      ) : null}
+      {move ? (
+        <InfoPopover
+          label={`Moved ${move.to < move.from ? 'earlier' : 'later'}, why`}
+          title={`Was ${formatDate(move.from)}`}
+          text={`Now ${formatDate(move.to)}. Moved because: ${move.cause}.`}>
+          <Text style={[type.caption, { color: p.accent }]}>
+            {move.to < move.from ? '▲' : '▼'}
+          </Text>
+        </InfoPopover>
+      ) : null}
+      <Text style={[type.body, { color: p.faint }]}>›</Text>
     </Pressable>
   );
 }
 
-const markColor = (
-  step: ScheduledStep,
-  palette: ReturnType<typeof usePalette>,
-) => {
-  if (step.status === 'done') return palette.done;
-  if (step.atRisk) return palette.late;
-  return palette.dim;
-};
+const sameYear = (a: CivilDate, b: CivilDate) => a.slice(0, 4) === b.slice(0, 4);
 
 const styles = StyleSheet.create({
   row: {
@@ -79,7 +121,9 @@ const styles = StyleSheet.create({
     gap: space.sm,
     paddingVertical: space.md,
     paddingHorizontal: space.lg,
+    minHeight: 48,
   },
+  mark: { width: 18, textAlign: 'center' },
   body: { flex: 1, gap: 2 },
-  trailing: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+  trailing: { flexShrink: 0, maxWidth: 120, textAlign: 'right' },
 });
