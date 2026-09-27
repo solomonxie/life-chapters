@@ -208,7 +208,12 @@ export function documentViews(
       .filter(s => s.template.documents.some(n => docId(n) === id))
       .sort((a, b) => (a.dueBy < b.dueBy ? -1 : 1));
     const producer = askedBy.find(s => s.status === 'done' && s.expiresOn);
-    const expiresOn = record?.expiresOn ?? producer?.expiresOn;
+    const validity = askedBy.find(s => s.template.validForDays)?.template.validForDays;
+    const issued = record?.issuedOn ?? producer?.startBy;
+    const expiresOn =
+      record?.expiresOn ??
+      producer?.expiresOn ??
+      (issued && validity && !record?.noExpiry ? addDays(issued, validity) : undefined);
     const held = !!record?.issuedOn || checked.has(id) || !!producer;
     const neededBy = askedBy.find(s => isOpen(s) && s !== producer);
 

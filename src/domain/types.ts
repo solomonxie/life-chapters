@@ -121,6 +121,8 @@ export interface DocumentRecord {
   issuedOn?: CivilDate;
   expiresOn?: CivilDate;
   number?: string;
+  /** The user said it never expires; don't infer one from a step. */
+  noExpiry?: boolean;
   /** File name inside the app's Documents/Scans folder. */
   scanPath?: string;
 }
