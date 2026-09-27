@@ -4,17 +4,18 @@ export const citizenshipCa: Playbook = {
   id: 'citizenship-ca',
   title: 'Citizenship · CA',
   summary:
-    'Paperwork plan for citizenship by grant as an adult permanent resident, from landing to the oath.',
+    'Paperwork plan for citizenship by grant as an adult permanent resident, from the day of becoming a permanent resident to the oath.',
   region: 'Canada',
-  anchorKind: 'migrated',
+  country: 'CA',
+  anchorKind: 'pr-landed',
   ages: { from: 18 },
   conditions: [
-    "You're a permanent resident",
-    '1,095 days physically in Canada in the 5 years before you apply',
+    'You became a permanent resident and are applying as an adult',
+    '1,095 days physically in Canada in the 5 years before you apply; days there before permanent residence count as half, up to 365',
     'Taxes filed for 3 of those 5 years, if you had to file',
   ],
-  reviewedAt: '2026-09-26',
-  version: 1,
+  reviewedAt: '2026-09-27',
+  version: 2,
   sources: [
     {
       title: 'Canadian citizenship: Who can apply',
@@ -57,29 +58,33 @@ export const citizenshipCa: Playbook = {
     {
       id: 'travel-log',
       title: 'Start a log of days spent outside Canada',
-      offsetDays: 30,
+      offsetDays: 7,
       durationDays: 7,
       dependsOn: [],
       documents: ['Travel history'],
-      prepare: ['Departure and return dates', 'Keep boarding passes or passport stamps'],
+      prepare: ['Departure and return dates', 'Keep boarding passes or passport stamps', 'Save the Confirmation of Permanent Residence'],
       howTo:
-        '1. The requirement is at least 1,095 days physically in Canada in the 5 years before applying.\n2. IRCC offers an optional travel journal for trips outside Canada; it is not sent with the application.',
+        '1. Days in Canada as a permanent resident count in full; days outside Canada do not count.\n2. IRCC offers an optional travel journal for trips outside Canada; it is not sent with the application.',
     },
     {
-      id: 'pr-date',
-      title: 'Record the permanent residence date',
-      offsetDays: 60,
-      durationDays: 1,
-      dependsOn: [],
-      documents: ['Confirmation of Permanent Residence'],
-      prepare: ['Save the COPR', 'Move this date to the real date permanent residence began'],
+      id: 'presence-check',
+      title: 'Work out the earliest date with the IRCC physical presence calculator',
+      offsetDays: 700,
+      durationDays: 14,
+      dependsOn: ['travel-log'],
+      documents: ['Physical presence calculation'],
+      prepare: [
+        'Date permanent residence began',
+        'All absences in the 5 years',
+        'Dates as a temporary resident or protected person before that',
+      ],
       howTo:
-        '1. Days as a permanent resident count in full.\n2. Days in Canada as a temporary resident or protected person in the 5 years count as half days, up to 365 days of credit.',
+        '1. The requirement is at least 1,095 days physically in Canada in the 5 years right before applying.\n2. Each day in Canada as a temporary resident or protected person in those 5 years, before becoming a permanent resident, counts as half a day, up to 365 days of credit.\n3. So with 730 or more such days, the earliest date can be up to a year sooner than 1,095 days after landing; with none, it is 1,095 days as a permanent resident.\n4. The calculator (in the IRCC online account, or the standalone one for paper applications) does the counting; move the application date to the date it shows.\n5. Absences change the result, so the calculation is run again at application time; an application without it is returned.',
     },
     {
       id: 'tax-check',
       title: 'Check tax returns are filed for 3 of the last 5 years',
-      offsetDays: 1100,
+      offsetDays: 1080,
       durationDays: 14,
       dependsOn: [],
       documents: ['Notice of assessment'],
@@ -88,20 +93,9 @@ export const citizenshipCa: Playbook = {
         '1. Filing Canadian income taxes for at least 3 of the 5 years before applying is part of the requirement, if the applicant had to file.',
     },
     {
-      id: 'presence-check',
-      title: 'Run the IRCC physical presence calculator',
-      offsetDays: 1110,
-      durationDays: 7,
-      dependsOn: ['travel-log', 'pr-date'],
-      documents: ['Physical presence calculation'],
-      prepare: ['Permanent residence date', 'All absences in the 5 years', 'Any time as a temporary resident'],
-      howTo:
-        '1. The calculator is in the IRCC online account; online applications use it there.\n2. Paper applications include the calculator printout or form CIT 0407.\n3. An application without the calculation is returned.',
-    },
-    {
       id: 'language-proof',
       title: 'Gather language proof (ages 18 to 54)',
-      offsetDays: 1110,
+      offsetDays: 1080,
       durationDays: 30,
       dependsOn: [],
       documents: ['Language proof'],
@@ -112,7 +106,7 @@ export const citizenshipCa: Playbook = {
     {
       id: 'identity-docs',
       title: 'Gather passports, ID and photos',
-      offsetDays: 1110,
+      offsetDays: 1080,
       durationDays: 30,
       dependsOn: [],
       documents: ['Passport', 'Second piece of identification', 'Citizenship photos'],
@@ -128,7 +122,7 @@ export const citizenshipCa: Playbook = {
     {
       id: 'apply',
       title: 'Apply for citizenship online',
-      offsetDays: 1125,
+      offsetDays: 1110,
       durationDays: 3,
       dependsOn: ['tax-check', 'presence-check', 'language-proof', 'identity-docs'],
       documents: [
@@ -140,12 +134,12 @@ export const citizenshipCa: Playbook = {
       ],
       prepare: ['Check the current fees', 'IRCC account login'],
       howTo:
-        '1. IRCC encourages online applications; paper is for specific cases.\n2. Fees include a processing fee and a right of citizenship fee.\n3. This date assumes 1,095 days in Canada since becoming a permanent resident, plus a buffer; move it if absences push it later.',
+        '1. IRCC encourages online applications; paper is for specific cases.\n2. Fees include a processing fee and a right of citizenship fee.\n3. This date is an estimate: 1,095 days as a permanent resident plus a short buffer, with no absences and no credit for earlier time in Canada; move it to the date the calculator shows.\n4. The physical presence calculation is included with the application.',
     },
     {
       id: 'aor',
       title: 'Watch for the acknowledgement of receipt',
-      offsetDays: 1185,
+      offsetDays: 1170,
       durationDays: 60,
       dependsOn: ['apply'],
       documents: ['Acknowledgement of receipt'],
@@ -156,7 +150,7 @@ export const citizenshipCa: Playbook = {
     {
       id: 'study',
       title: 'Study Discover Canada for the test',
-      offsetDays: 1245,
+      offsetDays: 1230,
       durationDays: 60,
       dependsOn: ['aor'],
       documents: [],
@@ -167,7 +161,7 @@ export const citizenshipCa: Playbook = {
     {
       id: 'test',
       title: 'Take the online citizenship test',
-      offsetDays: 1275,
+      offsetDays: 1260,
       durationDays: 1,
       dependsOn: ['study'],
       documents: ['Test invitation'],
@@ -178,7 +172,7 @@ export const citizenshipCa: Playbook = {
     {
       id: 'decision',
       title: 'Watch for the application decision',
-      offsetDays: 1395,
+      offsetDays: 1380,
       durationDays: 90,
       dependsOn: ['test'],
       documents: [],
@@ -189,7 +183,7 @@ export const citizenshipCa: Playbook = {
     {
       id: 'ceremony',
       title: 'Take the oath at the citizenship ceremony',
-      offsetDays: 1455,
+      offsetDays: 1440,
       durationDays: 30,
       dependsOn: ['decision'],
       documents: ['Citizenship certificate'],
@@ -200,7 +194,7 @@ export const citizenshipCa: Playbook = {
     {
       id: 'vote',
       title: 'Register to vote with Elections Canada',
-      offsetDays: 1470,
+      offsetDays: 1455,
       durationDays: 7,
       dependsOn: ['ceremony'],
       documents: [],
@@ -211,7 +205,7 @@ export const citizenshipCa: Playbook = {
     {
       id: 'ca-passport',
       title: 'Apply for a Canadian passport',
-      offsetDays: 1500,
+      offsetDays: 1485,
       durationDays: 30,
       validForDays: 3652,
       dependsOn: ['ceremony'],

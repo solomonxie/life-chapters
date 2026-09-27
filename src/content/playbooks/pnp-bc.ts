@@ -1,0 +1,240 @@
+import type { Playbook } from '../../domain/types';
+
+export const pnpBc: Playbook = {
+  id: 'pnp-bc',
+  title: 'Provincial nomination · British Columbia',
+  summary:
+    'Paperwork plan for a BC PNP Skills Immigration nomination, from registration and the invitation to the nomination and the permanent residence application.',
+  region: 'British Columbia, Canada',
+  country: 'CA',
+  province: 'BC',
+  family: 'pnp',
+  anchorKind: 'visa-lodge',
+  ages: { from: 18 },
+  conditions: [
+    'You work in British Columbia, or plan to, and want permanent residence through the BC PNP',
+    'You have, or expect, a full-time job offer from an eligible B.C. employer',
+    'This is a planning aid, not immigration advice; the BC PNP program guide and IRCC are the reference',
+  ],
+  reviewedAt: '2026-09-27',
+  version: 1,
+  sources: [
+    {
+      title: 'Immigrate to B.C. as a worker — WelcomeBC',
+      url: 'https://www.welcomebc.ca/immigrate-to-b-c/for-workers',
+    },
+    {
+      title: 'BC PNP Skills Immigration Program Guide (effective June 10, 2026) — WelcomeBC',
+      url: 'https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-si-program-guide-pdf',
+    },
+    {
+      title: 'BC PNP Skills Immigration Post-Nomination Guide — WelcomeBC',
+      url: 'https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-si-post-nomination-guide-pdf',
+    },
+    {
+      title: 'BC PNP Invitations to Apply — WelcomeBC',
+      url: 'https://www.welcomebc.ca/immigrate-to-b-c/about-the-bc-provincial-nominee-program/invitations-to-apply',
+    },
+    {
+      title: 'BC PNP Online User Portal — WelcomeBC',
+      url: 'https://www.welcomebc.ca/immigrate-to-b-c/about-the-bc-provincial-nominee-program/bc-pnp-online-user-portal',
+    },
+    {
+      title: 'Provincial Nominee Program: How it works — Canada.ca',
+      url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/provincial-nominees/works.html',
+    },
+    {
+      title: 'Canadian Experience Class — Canada.ca',
+      url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/eligibility/canadian-experience-class.html',
+    },
+    {
+      title: 'Check processing times — Canada.ca',
+      url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/application/check-processing-times.html',
+    },
+  ],
+  steps: [
+    {
+      id: 'eligibility',
+      title: 'Check stream eligibility and the job offer',
+      offsetDays: -420,
+      durationDays: 14,
+      dependsOn: [],
+      documents: ['Job offer letter'],
+      prepare: [
+        'Find the NOC code and TEER of the job',
+        'Skilled Worker: TEER 0 to 3 and 2 years of full-time skilled work experience',
+        'Health Authority: a job with a B.C. public health authority',
+        'Check the job is not on the ineligible occupations list',
+      ],
+      howTo:
+        '1. The current Skills Immigration streams are Skilled Worker and Health Authority; both have an Express Entry BC (EEBC) option.\n2. Both need a full-time, indeterminate job offer from an eligible B.C. employer, with a few listed occupations eligible on limited-term offers.\n3. The earlier graduate streams are not in the June 2026 program guide; check the guide for the current list.\n4. EEBC also needs eligibility for a federal Express Entry program: Federal Skilled Worker, Federal Skilled Trades or Canadian Experience Class.',
+      conditions: ['Only with a full-time job offer from an eligible B.C. employer'],
+    },
+    {
+      id: 'language',
+      title: 'Get valid language test results',
+      offsetDays: -360,
+      durationDays: 45,
+      validForDays: 730,
+      dependsOn: ['eligibility'],
+      documents: ['Language test result'],
+      prepare: ['Check which tests the BC PNP accepts', 'Book a sitting', 'Practice papers'],
+      howTo:
+        '1. Results count for 2 years from the date of issue.\n2. For registration points, results are valid when registering; they are also valid when applying.\n3. Express Entry needs its own approved test; one test can serve both if it is on both lists.',
+    },
+    {
+      id: 'ee-profile',
+      title: 'Create the Express Entry profile for the EEBC option',
+      offsetDays: -330,
+      durationDays: 14,
+      validForDays: 365,
+      dependsOn: ['eligibility', 'language'],
+      documents: ['Express Entry profile number', 'Job seeker validation code'],
+      prepare: ['Indicate interest in settling in B.C.', 'Note the profile expiry date', 'See the Skilled migration · CA plan'],
+      howTo:
+        '1. EEBC needs a valid Express Entry profile number and job seeker validation code.\n2. The profile stays valid for 12 months; if it expires, or IRCC invites you first, the BC PNP can no longer nominate through EEBC.\n3. The Express Entry steps are in the Skilled migration · CA plan.',
+      conditions: ['Only for the Express Entry BC option'],
+    },
+    {
+      id: 'employer',
+      title: 'Line up the employer\'s support',
+      offsetDays: -330,
+      durationDays: 30,
+      dependsOn: ['eligibility'],
+      documents: ['Employer declaration', 'Employer business licence'],
+      prepare: ['Confirm the employer meets the BC PNP employer requirements', 'Agree the wage and job title', 'Health Authority: the health authority support letter'],
+      howTo:
+        '1. Streams with a job offer need the employer\'s support throughout.\n2. Organisations that provide immigration services are ineligible employers.\n3. The employer\'s details go into the registration and the application.',
+    },
+    {
+      id: 'register',
+      title: 'Register in BC PNP Online and get a score',
+      offsetDays: -300,
+      durationDays: 7,
+      validForDays: 365,
+      dependsOn: ['language', 'ee-profile', 'employer'],
+      documents: ['BC PNP registration number'],
+      prepare: ['BCPNP Online user portal account', 'Job, wage, location and work history', 'Keep entries consistent with later documents'],
+      howTo:
+        '1. Registering is free; the registration gets a score from the published scoring factors.\n2. A registration stays in the pool for up to 12 months, or until invited.\n3. Only one active registration or application is allowed at a time.\n4. Health Authority applicants skip registration and apply directly.',
+      conditions: ['Only for the Skilled Worker stream'],
+    },
+    {
+      id: 'ita',
+      title: 'Receive an invitation to apply (ITA)',
+      offsetDays: -210,
+      durationDays: 90,
+      validForDays: 30,
+      dependsOn: ['register'],
+      documents: ['BC PNP invitation to apply'],
+      prepare: ['Watch the portal', 'Check recent draws on the invitations page', 'Note the 30-day window'],
+      howTo:
+        '1. Invitations are issued periodically and may target occupations, wages, regions or priorities.\n2. After an invitation there are 30 calendar days to submit a complete application; this cannot be extended.\n3. Timing is not predictable; move this date to the real invitation date.',
+      conditions: ['Only for the Skilled Worker stream'],
+    },
+    {
+      id: 'documents',
+      title: 'Gather application documents',
+      offsetDays: -200,
+      durationDays: 10,
+      dependsOn: ['ita'],
+      documents: ['Passport', 'Language test result', 'Employment references', 'Degree certificates and transcripts'],
+      prepare: ['Use the document list in the Skills Immigration Application Guide', 'Employer documents', 'Translations where needed'],
+      howTo:
+        '1. The application guide lists the documents per stream.\n2. Details that differ from the registration can lead to a refusal if the score drops below the draw.',
+    },
+    {
+      id: 'apply-bcpnp',
+      title: 'Submit the BC PNP application',
+      offsetDays: -185,
+      durationDays: 5,
+      dependsOn: ['ita', 'documents'],
+      documents: ['BC PNP application receipt'],
+      prepare: ['Check the current fee', 'Re-check every entry against the registration'],
+      howTo:
+        '1. The application and fee go through BCPNP Online.\n2. Changes in job, wage or family after applying are reported within 15 calendar days.',
+    },
+    {
+      id: 'nomination',
+      title: 'Get the BC PNP decision and nomination',
+      offsetDays: -120,
+      durationDays: 60,
+      validForDays: 180,
+      dependsOn: ['apply-bcpnp'],
+      documents: ['Confirmation of Nomination'],
+      prepare: ['Watch the portal', 'Note the nomination expiry date', 'Read the conditions of nomination'],
+      howTo:
+        '1. Processing times are on the BC PNP Process page; the 2 months here is a planning estimate.\n2. A nomination is valid for 180 days; the PR application to IRCC is made before it expires.\n3. A refusal can be reviewed if requested within 30 days in Canada, or 60 days outside.',
+    },
+    {
+      id: 'work-permit-support',
+      title: 'Request a work permit support letter',
+      offsetDays: -90,
+      durationDays: 30,
+      dependsOn: ['nomination'],
+      documents: ['Work permit support letter'],
+      prepare: ['Check the permit expiry date', 'Request through BCPNP Online'],
+      howTo:
+        '1. The BC PNP may issue a support letter to get or renew a work permit while PR is processed.\n2. A nominee without a valid work permit usually applies for one within 3 months of nomination.',
+      conditions: ['Only if your work permit is expiring or you have none'],
+    },
+    {
+      id: 'eebc-accept',
+      title: 'Accept the nomination in the Express Entry profile',
+      offsetDays: -110,
+      durationDays: 7,
+      dependsOn: ['nomination'],
+      documents: ['Express Entry profile'],
+      prepare: ['Log in to the IRCC account', 'Accept the nomination', 'Check the CRS score updates'],
+      howTo:
+        '1. An EEBC nomination adds 600 points to the Comprehensive Ranking System score.\n2. This normally ranks the profile high enough for an invitation from IRCC.',
+      conditions: ['Only for the Express Entry BC option'],
+    },
+    {
+      id: 'ircc-ita',
+      title: 'Receive the IRCC invitation to apply',
+      offsetDays: -60,
+      durationDays: 45,
+      validForDays: 60,
+      dependsOn: ['eebc-accept'],
+      documents: ['Invitation to apply'],
+      prepare: ['Watch the IRCC account', 'Note the 60-day window'],
+      howTo:
+        '1. IRCC invites from the pool in rounds.\n2. After the invitation there are 60 days to submit the PR application.\n3. Move this date to the real invitation date.',
+      conditions: ['Only for the Express Entry BC option'],
+    },
+    {
+      id: 'ircc-docs',
+      title: 'Order police certificates and the medical exam',
+      offsetDays: -15,
+      durationDays: 30,
+      dependsOn: ['nomination'],
+      documents: ['Police certificate', 'Medical exam confirmation'],
+      prepare: ['Each country lived in 6 months or more since age 18', 'Book a panel physician', 'Colour scans'],
+      howTo:
+        '1. IRCC gives a personalised document checklist with the application.\n2. The Skilled migration · CA plan has the details for police certificates and medicals.',
+    },
+    {
+      id: 'apply-pr',
+      title: 'Apply to IRCC for permanent residence',
+      offsetDays: 0,
+      durationDays: 3,
+      dependsOn: ['nomination', 'ircc-docs', 'ircc-ita'],
+      documents: ['PR application receipt', 'Confirmation of Nomination'],
+      prepare: ['Check the nomination is not expired', 'Check the current fees'],
+      howTo:
+        '1. EEBC nominees apply through Express Entry within 60 days of the IRCC invitation.\n2. Otherwise, the base PNP application goes to IRCC outside Express Entry with the nomination; processing usually takes longer.\n3. IRCC processing times are estimates; check the processing times page.',
+    },
+    {
+      id: 'keep-conditions',
+      title: 'Keep to the conditions of nomination until landing',
+      offsetDays: 180,
+      durationDays: 150,
+      dependsOn: ['apply-pr'],
+      documents: ['Conditions of nomination'],
+      prepare: ['Stay with the supporting employer, in the same occupation and wage', 'Keep a valid permit', 'Report changes to the BC PNP'],
+      howTo:
+        '1. Conditions apply from nomination until becoming a permanent resident or a refusal by IRCC.\n2. Breaking them can lead to the nomination being cancelled, which affects the PR application.\n3. The 6 months here is a placeholder for IRCC processing.',
+    },
+  ],
+};
