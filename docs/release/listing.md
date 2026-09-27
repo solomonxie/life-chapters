@@ -126,6 +126,11 @@ make screenshots  SHOTS=/tmp/lifechapters-shots     # → docs/release/screensho
 real plan is never opened. Keep the phone unlocked and untouched while it runs; check the
 status bar (battery, no banners) and re-run any shot that caught a notification.
 
+What sits in `docs/release/screenshots/` now: shots 1–6 and 8, captured from the iPhone on
+2026-09-26 with the sample plan. **7 (Docs) is missing** — the phone was taken over by
+another app mid-capture. Re-run `make device-shots` before uploading; it also picks up
+the expiring passport the sample now carries, which is what the Docs shot should show.
+
 Upload order (3 minimum, 10 maximum — the first two are what people actually see):
 
 1. **Timeline** — the life line, chapters, TODAY, what's ahead

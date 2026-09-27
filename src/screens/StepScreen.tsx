@@ -44,7 +44,7 @@ export function StepScreen({ route, navigation }: NativeStackScreenProps<Routes,
       headerRight: () =>
         step ? (
           <Pressable onPress={menu} hitSlop={12} accessibilityRole="button" accessibilityLabel="More">
-            <Text style={[type.headline, { color: p.accent }]}>⋯</Text>
+            <Text maxFontSizeMultiplier={1.3} style={[type.headline, { color: p.accent }]}>⋯</Text>
           </Pressable>
         ) : null,
     });

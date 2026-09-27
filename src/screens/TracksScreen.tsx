@@ -24,7 +24,7 @@ export function TracksScreen({ navigation }: NativeStackScreenProps<Routes, 'Tra
           hitSlop={12}
           accessibilityRole="button"
           accessibilityLabel="Add a track">
-          <Text style={[type.headline, { color: p.accent }]}>＋</Text>
+          <Text maxFontSizeMultiplier={1.3} style={[type.headline, { color: p.accent }]}>＋</Text>
         </Pressable>
       ),
     });

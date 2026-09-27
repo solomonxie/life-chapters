@@ -15,7 +15,7 @@ export function seedSample() {
     ['citizenship-au'],
   );
   actions.saveAnchor(
-    { kind: 'visa-lodge', label: 'Lodge a visa application', place: 'Partner 820', date: addDays(now, 560), precision: 'day' },
+    { kind: 'visa-lodge', label: 'Lodge a visa application', place: 'Subclass 189', date: addDays(now, 560), precision: 'day' },
     ['skilled-migration-au'],
   );
   actions.saveAnchor(
@@ -38,7 +38,7 @@ export function seedSample() {
   if (english) {
     actions.toggleDocument(english.instanceId, english.template.documents[0]);
   }
-  actions.saveDocument({ id: 'passport', name: 'Passport', issuedOn: '2019-08-02', expiresOn: '2029-08-01', number: 'E12345678' });
+  actions.saveDocument({ id: 'passport', name: 'Passport', issuedOn: '2016-08-02', expiresOn: addDays(now, 150), number: 'E12345678' });
   const story = (date: string, precision: 'day' | 'month' | 'year', title: string, body: string, anchorId?: string) =>
     actions.saveEntry({ date, precision, title, body, anchorId });
   story('2003-07-01', 'month', 'The summer of the bicycle', 'Rode to the city wall every evening that July. Dad fixed the chain twice.');
