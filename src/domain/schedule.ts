@@ -1,4 +1,4 @@
-import { addDays, maxDate } from './dates';
+import { addDays, diffDays, maxDate } from './dates';
 import type {
   CivilDate,
   Playbook,
@@ -47,6 +47,16 @@ export function topoSort(steps: StepTemplate[]): StepTemplate[] {
   return out;
 }
 
+/** The playbook as this track sees it: its own steps plus any the user added. */
+export function effectiveSteps(playbook: Playbook, track: Track): StepTemplate[] {
+  const extraDeps = track.extraDependsOn ?? {};
+  return [...playbook.steps, ...(track.extraSteps ?? [])].map(step =>
+    extraDeps[step.id]
+      ? { ...step, dependsOn: [...step.dependsOn, ...extraDeps[step.id]] }
+      : step,
+  );
+}
+
 /**
  * Schedules a track backward from its anchor event.
  *
@@ -56,20 +66,25 @@ export function topoSort(steps: StepTemplate[]): StepTemplate[] {
  *   startBy       = max(latestStart, when every dependency actually finishes)
  *
  * A done step is pinned to the date it really happened, so its successors
- * reflow off reality rather than off the original estimate.
+ * reflow off reality rather than off the original estimate. A skipped step
+ * holds nothing up.
  */
 export function schedule(
   playbook: Playbook,
   track: Track,
   instances: StepInstance[],
+  now?: CivilDate,
 ): ScheduledStep[] {
   const byStepId = new Map(instances.map(i => [i.stepId, i]));
   const finishOf = new Map<string, CivilDate>();
+  const lateIds = new Set<string>();
   const result: ScheduledStep[] = [];
 
-  for (const step of topoSort(playbook.steps)) {
+  for (const step of topoSort(effectiveSteps(playbook, track))) {
     const instance = byStepId.get(step.id);
-    const dueBy = addDays(track.anchorEventDate, step.offsetDays);
+    const status = instance?.status ?? 'pending';
+    const dueBy =
+      instance?.dueOverride ?? addDays(track.anchorEventDate, step.offsetDays);
     const latestStart = addDays(dueBy, -step.durationDays);
     const earliestStart =
       step.validForDays === undefined
@@ -81,50 +96,121 @@ export function schedule(
       .filter((d): d is CivilDate => d !== undefined);
     const startBy = maxDate(latestStart, ...depFinishes);
 
-    const done = instance?.status === 'done' && instance.completedOn;
-    const finish = done ? instance!.completedOn! : addDays(startBy, step.durationDays);
-    finishOf.set(step.id, finish);
+    const doneOn =
+      status === 'done' && instance?.completedOn ? instance.completedOn : null;
+    if (status !== 'skipped') {
+      finishOf.set(step.id, doneOn ?? addDays(startBy, step.durationDays));
+    }
+
+    const open = (id: string) => {
+      const s = byStepId.get(id)?.status;
+      return s !== 'done' && s !== 'skipped';
+    };
+    const blockedBy = step.dependsOn.filter(open);
+    if (!doneOn && status !== 'skipped' && now !== undefined && startBy < now) {
+      lateIds.add(step.id);
+    }
 
     result.push({
       stepId: step.id,
       instanceId: instance?.id ?? `unbound:${step.id}`,
       title: step.title,
-      status: instance?.status ?? 'pending',
+      status,
       dueBy,
-      startBy: done ? instance!.completedOn! : startBy,
+      startBy: doneOn ?? startBy,
       earliestStart,
       atRisk: startBy > latestStart,
-      blockedBy: step.dependsOn.filter(
-        id => byStepId.get(id)?.status !== 'done',
-      ),
+      blockedBy,
+      blockedByLate: blockedBy.filter(id => lateIds.has(id)),
       expiresOn:
-        done && step.validForDays !== undefined
-          ? addDays(instance!.completedOn!, step.validForDays)
+        doneOn && step.validForDays !== undefined
+          ? addDays(doneOn, step.validForDays)
           : undefined,
+      snoozedUntil: status === 'snoozed' ? instance?.snoozedUntil : undefined,
     });
   }
 
   return result;
 }
 
-/** A held document that dies before the step needing it comes due. */
+export interface ExpiryClash {
+  source: ScheduledStep;
+  consumer: ScheduledStep;
+  /** Days between the result expiring and the consumer's due date. */
+  gapDays: number;
+}
+
+/**
+ * A held result that dies before the step needing it comes due. Settled once
+ * the consumer is finished, or once a redo of the source is planned for it.
+ */
 export function expiryClashes(
   scheduled: ScheduledStep[],
   playbook: Playbook,
-): Array<{ source: ScheduledStep; consumer: ScheduledStep }> {
+  track?: Track,
+): ExpiryClash[] {
+  const steps = track ? effectiveSteps(playbook, track) : playbook.steps;
+  const templates = new Map(steps.map(s => [s.id, s]));
   const byId = new Map(scheduled.map(s => [s.stepId, s]));
-  const clashes: Array<{ source: ScheduledStep; consumer: ScheduledStep }> = [];
+  const clashes: ExpiryClash[] = [];
 
-  for (const step of playbook.steps) {
+  for (const step of steps) {
     const consumer = byId.get(step.id);
-    if (!consumer) continue;
+    if (!consumer || consumer.status === 'done' || consumer.status === 'skipped') {
+      continue;
+    }
     for (const depId of step.dependsOn) {
       const source = byId.get(depId);
-      if (source?.expiresOn && source.expiresOn < consumer.dueBy) {
-        clashes.push({ source, consumer });
+      const redone = step.dependsOn.some(
+        id => templates.get(id)?.redoOf === depId,
+      );
+      if (source?.expiresOn && source.expiresOn < consumer.dueBy && !redone) {
+        clashes.push({
+          source,
+          consumer,
+          gapDays: diffDays(source.expiresOn, consumer.dueBy),
+        });
       }
     }
   }
 
   return clashes;
+}
+
+/**
+ * Inserts a repeat of `sourceId` that finishes by the time `consumerId` needs
+ * to start, and makes the consumer wait for it. Returns the new track; the
+ * caller reflows.
+ */
+export function planRedo(
+  playbook: Playbook,
+  track: Track,
+  sourceId: string,
+  consumerId: string,
+  scheduled: ScheduledStep[],
+): Track {
+  const steps = effectiveSteps(playbook, track);
+  const source = steps.find(s => s.id === sourceId);
+  const consumer = scheduled.find(s => s.stepId === consumerId);
+  if (!source || !consumer) return track;
+
+  const base = source.redoOf ?? source.id;
+  const taken = new Set(steps.map(s => s.id));
+  let n = 1;
+  while (taken.has(`${base}~redo${n}`)) n++;
+  const id = `${base}~redo${n}`;
+
+  const redo: StepTemplate = {
+    ...source,
+    id,
+    title: `${source.title} (redo)`,
+    offsetDays: diffDays(track.anchorEventDate, consumer.startBy),
+    redoOf: sourceId,
+  };
+  const deps = track.extraDependsOn?.[consumerId] ?? [];
+  return {
+    ...track,
+    extraSteps: [...(track.extraSteps ?? []), redo],
+    extraDependsOn: { ...track.extraDependsOn, [consumerId]: [...deps, id] },
+  };
 }
