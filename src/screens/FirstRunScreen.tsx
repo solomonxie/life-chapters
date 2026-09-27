@@ -62,7 +62,7 @@ export function FirstRunScreen() {
 
       {step === 1 ? (
         <>
-          <Text style={[type.title, styles.center, { color: p.text }]}>Life Planner</Text>
+          <Text style={[type.title, styles.center, { color: p.text }]}>Life Chapters</Text>
           <Text style={[type.body, styles.center, { color: p.dim }]}>
             Two dates and it starts drawing.
           </Text>

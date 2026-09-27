@@ -6,26 +6,26 @@ export interface AnchorKind {
   id: string;
   label: string;
   group: 'Life' | 'Moving' | 'Family' | 'School' | 'Work';
-  /** What the phase starting at this date is called on the Timeline. */
-  phase: string;
+  /** What the chapter starting at this date is called on the Timeline. */
+  chapter: string;
   /** How a place or detail reads with this kind; `{}` is the detail. */
   withDetail?: string;
 }
 
 export const ANCHOR_KINDS: AnchorKind[] = [
-  { id: 'born', label: 'Born', group: 'Life', phase: 'Growing up' },
-  { id: 'graduated', label: 'Graduated', group: 'School', phase: 'Early career' },
-  { id: 'school-start', label: 'Starts primary school', group: 'School', phase: 'School years', withDetail: '{} starts primary school' },
-  { id: 'first-job', label: 'First job', group: 'Work', phase: 'Working' },
-  { id: 'new-job', label: 'New job', group: 'Work', phase: 'New role' },
-  { id: 'retire', label: 'Retire', group: 'Work', phase: 'Retirement' },
-  { id: 'migrated', label: 'Migrated to a country', group: 'Moving', phase: 'Settling in', withDetail: 'Migrated to {}' },
-  { id: 'moved-city', label: 'Moved city', group: 'Moving', phase: 'New city', withDetail: 'Moved to {}' },
-  { id: 'visa-granted', label: 'Visa granted', group: 'Moving', phase: 'On a visa' },
-  { id: 'visa-lodge', label: 'Lodge a visa application', group: 'Moving', phase: 'Applying' },
-  { id: 'married', label: 'Married', group: 'Family', phase: 'Married life' },
-  { id: 'child-born', label: 'Child born', group: 'Family', phase: 'Young family', withDetail: '{} born' },
-  { id: 'home-bought', label: 'Bought a home', group: 'Family', phase: 'Homeowner' },
+  { id: 'born', label: 'Born', group: 'Life', chapter: 'Growing up' },
+  { id: 'graduated', label: 'Graduated', group: 'School', chapter: 'Early career' },
+  { id: 'school-start', label: 'Starts primary school', group: 'School', chapter: 'School years', withDetail: '{} starts primary school' },
+  { id: 'first-job', label: 'First job', group: 'Work', chapter: 'Working' },
+  { id: 'new-job', label: 'New job', group: 'Work', chapter: 'New role' },
+  { id: 'retire', label: 'Retire', group: 'Work', chapter: 'Retirement' },
+  { id: 'migrated', label: 'Migrated to a country', group: 'Moving', chapter: 'Settling in', withDetail: 'Migrated to {}' },
+  { id: 'moved-city', label: 'Moved city', group: 'Moving', chapter: 'New city', withDetail: 'Moved to {}' },
+  { id: 'visa-granted', label: 'Visa granted', group: 'Moving', chapter: 'On a visa' },
+  { id: 'visa-lodge', label: 'Lodge a visa application', group: 'Moving', chapter: 'Applying' },
+  { id: 'married', label: 'Married', group: 'Family', chapter: 'Married life' },
+  { id: 'child-born', label: 'Child born', group: 'Family', chapter: 'Young family', withDetail: '{} born' },
+  { id: 'home-bought', label: 'Bought a home', group: 'Family', chapter: 'Homeowner' },
 ];
 
 export const kindById = (id: string): AnchorKind | undefined =>

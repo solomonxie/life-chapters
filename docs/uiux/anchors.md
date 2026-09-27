@@ -58,7 +58,7 @@ Three screens, no skip, because one anchor draws nothing.
 ```
   ①                      ②                      ③
  ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
- │ Life Planner │      │ One more.    │      │ Pick a track │
+ │ Life Chapters │      │ One more.    │      │ Pick a track │
  │              │      │              │      │              │
  │ When were    │      │ Anything big │      │ Skilled      │
  │ you born?    │      │ already      │      │ migration ›  │

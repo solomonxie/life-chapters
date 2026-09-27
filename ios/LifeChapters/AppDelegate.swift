@@ -26,10 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     window = UIWindow(frame: UIScreen.main.bounds)
 
-    // LP_QA opens a throwaway qa.db with a sample plan; the real plan is untouched.
-    let qa = ProcessInfo.processInfo.environment["LP_QA"]
+    // LC_QA opens a throwaway qa.db with a sample plan; the real plan is untouched.
+    let qa = ProcessInfo.processInfo.environment["LC_QA"]
     factory.startReactNative(
-      withModuleName: "LifePlanner",
+      withModuleName: "LifeChapters",
       in: window,
       initialProperties: qa.map { ["qa": $0] },
       launchOptions: launchOptions

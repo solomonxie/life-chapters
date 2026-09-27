@@ -92,7 +92,7 @@ class Reminders: NSObject {
       content.body = item["body"] as? String ?? ""
       content.sound = .default
       content.userInfo = ["target": item["target"] as? String ?? "radar"]
-      content.threadIdentifier = "life-planner"
+      content.threadIdentifier = "life-chapters"
 
       let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: repeats)
       group.enter()

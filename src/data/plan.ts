@@ -3,6 +3,7 @@ import type {
   Anchor,
   CivilDate,
   DocumentRecord,
+  Entry,
   Playbook,
   StepInstance,
   Track,
@@ -16,6 +17,7 @@ export interface Plan {
   tracks: Track[];
   instances: StepInstance[];
   documents: DocumentRecord[];
+  entries: Entry[];
 }
 
 export interface Settings {
@@ -57,10 +59,11 @@ export const EMPTY_PLAN: Plan = {
   tracks: [],
   instances: [],
   documents: [],
+  entries: [],
 };
 
-export const BACKUP_FORMAT = 'life-planner-backup';
-export const BACKUP_VERSION = 1;
+export const BACKUP_FORMAT = 'life-chapters-backup';
+export const BACKUP_VERSION = 2;
 
 export function serializePlan(plan: Plan, now: CivilDate): string {
   return JSON.stringify(
@@ -84,7 +87,7 @@ export function parseBackup(text: string): ParsedBackup {
   }
   const o = raw as Record<string, unknown>;
   if (!o || o.format !== BACKUP_FORMAT) {
-    return { ok: false, error: "This isn't a Life Planner backup." };
+    return { ok: false, error: "This isn't a Life Chapters backup." };
   }
   if (typeof o.version !== 'number' || o.version > BACKUP_VERSION) {
     return { ok: false, error: 'This backup is from a newer version of the app.' };
@@ -100,6 +103,7 @@ export function parseBackup(text: string): ParsedBackup {
       tracks: o.tracks as Track[],
       instances: o.instances as StepInstance[],
       documents: o.documents as DocumentRecord[],
+      entries: isArr(o.entries) ? (o.entries as Entry[]) : [],
     },
   };
 }

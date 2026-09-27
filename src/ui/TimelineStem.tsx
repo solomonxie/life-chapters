@@ -12,6 +12,8 @@ export interface StemNode {
   precision: DatePrecision;
   source: 'anchor' | 'derived';
   pendingSteps?: number;
+  /** Stories filed in the chapter this node opens. */
+  stories?: number;
 }
 
 const YEAR_W = 44;
@@ -23,7 +25,7 @@ type Seg = 'none' | 'thin' | 'thick' | 'dots';
 /**
  * The continuous life line. A plain dated list would read as a table — the
  * unbroken stem is what makes forty years feel like one object. The thick
- * stretch either side of TODAY is the phase you're in; nothing else marks it.
+ * stretch either side of TODAY is the chapter you're in; nothing else marks it.
  */
 export function TimelineStem({
   nodes,
@@ -101,6 +103,13 @@ export function TimelineStem({
                 style={[type.label, styles.flex, { color: past ? p.dim : p.text }]}>
                 {node.label}
               </Text>
+              {node.stories ? (
+                <Text
+                  style={[type.caption, { color: p.dim }]}
+                  accessibilityLabel={`${node.stories} stories`}>
+                  ✎ {node.stories}
+                </Text>
+              ) : null}
               {node.pendingSteps ? (
                 <Pressable
                   onPress={() => onPressBadge?.(node)}

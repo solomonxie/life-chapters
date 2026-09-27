@@ -2,15 +2,18 @@ import { open, type DB } from '@op-engineering/op-sqlite';
 import { EMPTY_PLAN, DEFAULT_SETTINGS, type Stored } from './plan';
 import type { Repository } from './repository';
 
-const TABLES = ['anchors', 'playbooks', 'tracks', 'instances', 'documents'] as const;
+const TABLES = ['anchors', 'playbooks', 'tracks', 'instances', 'documents', 'entries'] as const;
 type Table = (typeof TABLES)[number];
 
 /** Each migration runs once, in order, recorded in `migrations`. */
 const MIGRATIONS: string[][] = [
   [
-    ...TABLES.map(t => `CREATE TABLE IF NOT EXISTS ${t} (id TEXT PRIMARY KEY, json TEXT NOT NULL)`),
+    ...['anchors', 'playbooks', 'tracks', 'instances', 'documents'].map(
+      t => `CREATE TABLE IF NOT EXISTS ${t} (id TEXT PRIMARY KEY, json TEXT NOT NULL)`,
+    ),
     'CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, json TEXT NOT NULL)',
   ],
+  ['CREATE TABLE IF NOT EXISTS entries (id TEXT PRIMARY KEY, json TEXT NOT NULL)'],
 ];
 
 async function migrate(db: DB) {
@@ -31,7 +34,7 @@ async function migrate(db: DB) {
 }
 
 /** One row per entity, JSON body. The plan is small; the diff keeps writes smaller. */
-export function createSqliteRepository(name = 'life-planner.db'): Repository {
+export function createSqliteRepository(name = 'life-chapters.db'): Repository {
   let db: DB | null = null;
   let ready: Promise<DB> | null = null;
   const written = new Map<string, string>();

@@ -8,6 +8,7 @@ import type {
   Anchor,
   CivilDate,
   DocumentRecord,
+  Entry,
   Playbook,
   StepInstance,
   Track,
@@ -149,6 +150,7 @@ export const actions = {
           tracks: stored.tracks,
           instances: stored.instances,
           documents: stored.documents,
+          entries: stored.entries ?? [],
         }
       : EMPTY_PLAN;
     const now = today();
@@ -233,6 +235,7 @@ export const actions = {
         anchors: plan.anchors.filter(a => a.id !== id),
         tracks: plan.tracks.filter(t => !gone.has(t.id)),
         instances: plan.instances.filter(i => !gone.has(i.trackId)),
+        entries: plan.entries.map(e => (e.anchorId === id ? { ...e, anchorId: undefined } : e)),
       },
       { cause: 'A date was deleted', toast: () => 'Date deleted.' },
     );
@@ -460,6 +463,38 @@ export const actions = {
         })),
       },
       { cause: 'Document forgotten', toast: () => `${name ?? 'Document'} forgotten.` },
+    );
+  },
+
+  // ── Journal ──────────────────────────────────────────────────────────────
+
+  /** Stories don't move any dates, so no reflow toast — just keep them. */
+  saveEntry(entry: Omit<Entry, 'id' | 'createdOn' | 'updatedOn'> & { id?: string }) {
+    const { plan, now } = get();
+    const existing = plan.entries.find(e => e.id === entry.id);
+    const saved: Entry = {
+      ...entry,
+      id: entry.id ?? newId(),
+      createdOn: existing?.createdOn ?? now,
+      updatedOn: now,
+    };
+    commit(
+      {
+        ...plan,
+        entries: existing
+          ? plan.entries.map(e => (e.id === saved.id ? saved : e))
+          : [...plan.entries, saved],
+      },
+      { cause: 'Story', toast: () => null },
+    );
+    return saved.id;
+  },
+
+  deleteEntry(id: string) {
+    const { plan } = get();
+    commit(
+      { ...plan, entries: plan.entries.filter(e => e.id !== id) },
+      { cause: 'Story deleted', toast: () => 'Story deleted.' },
     );
   },
 

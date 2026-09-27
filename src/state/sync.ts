@@ -28,7 +28,7 @@ export async function syncNow() {
     const events = view.steps.filter(isOpen).map(s => ({
       title: `Start: ${s.title}`,
       date: s.startBy,
-      notes: `${s.playbook.title} · due ${formatShort(s.dueBy)}. From Life Planner — a plan, not advice.`,
+      notes: `${s.playbook.title} · due ${formatShort(s.dueBy)}. From Life Chapters — a plan, not advice.`,
     }));
     const n = await calendar.sync(events).catch(() => 0);
     useReminders.setState({ calendarDenied: n < 0 });

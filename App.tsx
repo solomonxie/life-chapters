@@ -27,8 +27,9 @@ function openTarget(target: string) {
 function qaJump(target: string) {
   const [screen, arg] = target.split(':');
   const tabOf: Record<string, string> = {
-    Timeline: 'TimelineTab', Phase: 'TimelineTab', Settings: 'TimelineTab', Reminders: 'TimelineTab',
+    Timeline: 'TimelineTab', Chapter: 'TimelineTab', Settings: 'TimelineTab', Reminders: 'TimelineTab',
     AnchorEdit: 'TimelineTab', Sources: 'TimelineTab', About: 'TimelineTab',
+    Journal: 'JournalTab', Entry: 'JournalTab',
     Radar: 'RadarTab', Step: 'RadarTab',
     Tracks: 'TracksTab', Library: 'TracksTab', Playbook: 'TracksTab',
     Docs: 'DocsTab', Document: 'DocsTab',
@@ -39,7 +40,8 @@ function qaJump(target: string) {
     Step: { instanceId: open[Number(arg ?? 0)]?.instanceId },
     Document: { documentId: arg ?? 'passport' },
     Playbook: { playbookId: arg ?? 'skilled-migration-au', trackId: s.plan.tracks.find(t => t.playbookId === (arg ?? 'skilled-migration-au'))?.id },
-    Phase: { eventId: s.plan.anchors.find(a => a.kind === (arg ?? 'migrated'))?.id },
+    Chapter: { eventId: s.plan.anchors.find(a => a.kind === (arg ?? 'migrated'))?.id },
+    Entry: arg === 'new' ? undefined : { entryId: s.plan.entries[Number(arg ?? 0)]?.id },
     AnchorEdit: arg ? { anchorId: s.plan.anchors.find(a => a.kind === arg)?.id } : undefined,
   };
   const tab = tabOf[screen] ?? 'TimelineTab';

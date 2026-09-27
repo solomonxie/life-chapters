@@ -1,4 +1,4 @@
-# Interface: walking a life as a timeline
+# Interface: Life Chapters — walking a life as a timeline
 
 Every screen is drawn in [`uiux/`](uiux/) — this file is the map, the flows, and
 the rules that cross screens. Product reasoning is in [`DESIGN.md`](DESIGN.md).
@@ -12,19 +12,22 @@ gestures, in-place pickers, and the ⓘ rule.
 | Surface | Kind | Drawing |
 |---|---|---|
 | Timeline | tab, home | [`uiux/timeline.md`](uiux/timeline.md) |
+| Journal | tab | [`uiux/journal.md`](uiux/journal.md) |
+| Story entry | modal | [`uiux/journal.md`](uiux/journal.md) |
 | Radar | tab | [`uiux/radar.md`](uiux/radar.md) |
 | Tracks | tab | [`uiux/tracks.md`](uiux/tracks.md) |
 | Docs | tab | [`uiux/documents.md`](uiux/documents.md) |
 | Anchor editor | pushed page | [`uiux/anchors.md`](uiux/anchors.md) |
-| Phase detail | pushed page | [`uiux/timeline.md`](uiux/timeline.md) |
+| Chapter detail | pushed page | [`uiux/timeline.md`](uiux/timeline.md) |
 | Step detail | pushed page | [`uiux/step.md`](uiux/step.md) |
 | Playbook library / detail | pushed page | [`uiux/tracks.md`](uiux/tracks.md) |
 | Settings | pushed from Timeline ⚙ | [`uiux/settings.md`](uiux/settings.md) |
 | Components | reused parts | [`uiux/components.md`](uiux/components.md) |
 
-Four tabs, not five: Settings earns a ⚙ in the Timeline nav bar, not a tab —
-nobody navigates to it twice a month. Docs earns a tab because an expiring
-document is the one thing you check without having a step in mind.
+Five tabs. Journal earns one because stories are half the product — writing
+one shouldn't be three taps deep. Settings still earns only a ⚙ in the Timeline
+nav bar — nobody navigates to it twice a month. Docs keeps a tab because an
+expiring document is the one thing you check without having a step in mind.
 
 ## Screen map
 
@@ -32,9 +35,10 @@ document is the one thing you check without having a step in mind.
       Launch ──first run──▶ Anchors (empty) ──▶ Playbook library
         │
         ▼
-  ┌───────────┬─────────┬──────────┬────────┐
-  │ Timeline  │  Radar  │  Tracks  │  Docs  │
-  └───────────┴─────────┴──────────┴────────┘
+  ┌───────────┬─────────┬─────────┬──────────┬────────┐
+  │ Timeline  │ Journal │  Radar  │  Tracks  │  Docs  │
+  └───────────┴─────────┴─────────┴──────────┴────────┘
+        │          │  └─▶ Story entry
         │          │          │         │
         │          │          │         └─▶ Document detail
         │          │          │
@@ -44,7 +48,7 @@ document is the one thing you check without having a step in mind.
         │          └────────────────────────────▶ Step detail ─┐
         │                                            │  ▲      │
         ├─▶ Anchor editor                             │  └──────┘
-        ├─▶ Phase detail ────────────────────────────▶┘   (blocks → next step)
+        ├─▶ Chapter detail ────────────────────────────▶┘   (blocks → next step)
         │
         └─▶ ⚙ Settings ──▶ Notifications
                        ├──▶ Backup ──▶ [share sheet]

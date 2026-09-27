@@ -28,7 +28,12 @@ function shared() {
       <Stack.Screen name="Document" component={S.DocumentScreen} options={{ title: '' }} />
       <Stack.Screen name="Playbook" component={S.PlaybookScreen} options={{ title: '' }} />
       <Stack.Screen name="Library" component={S.LibraryScreen} options={{ title: 'Library' }} />
-      <Stack.Screen name="Phase" component={S.PhaseScreen} options={{ title: '' }} />
+      <Stack.Screen name="Chapter" component={S.ChapterScreen} options={{ title: '' }} />
+      <Stack.Screen
+        name="Entry"
+        component={S.EntryScreen}
+        options={{ presentation: 'modal', title: 'A story' }}
+      />
       <Stack.Screen
         name="AnchorEdit"
         component={S.AnchorEditScreen}
@@ -57,7 +62,7 @@ function TimelineFlow() {
         name="Timeline"
         component={S.TimelineScreen}
         options={({ navigation }) => ({
-          title: 'Life Planner',
+          title: 'Life Chapters',
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate('Settings')}
@@ -73,6 +78,16 @@ function TimelineFlow() {
       <Stack.Screen name="Reminders" component={S.RemindersScreen} />
       <Stack.Screen name="Sources" component={S.SourcesScreen} options={{ title: 'Playbooks' }} />
       <Stack.Screen name="About" component={S.AboutScreen} />
+      {shared()}
+    </Stack.Navigator>
+  );
+}
+
+function JournalFlow() {
+  const p = usePalette();
+  return (
+    <Stack.Navigator screenOptions={stackOptions(p)}>
+      <Stack.Screen name="Journal" component={S.JournalScreen} />
       {shared()}
     </Stack.Navigator>
   );
@@ -116,6 +131,15 @@ function TabIcon({ name, color }: { name: string; color: string }) {
         <View style={[styles.stemLine, { backgroundColor: color }]} />
         <View style={[styles.stemDot, { top: 3, borderColor: color, backgroundColor: color }]} />
         <View style={[styles.stemDot, { top: 14, borderColor: color }]} />
+      </View>
+    );
+  }
+  if (name === 'JournalTab') {
+    return (
+      <View style={styles.icon}>
+        <View style={[styles.book, { borderColor: color }]}>
+          <View style={[styles.spine, { backgroundColor: color }]} />
+        </View>
       </View>
     );
   }
@@ -163,6 +187,7 @@ function MainTabs() {
         tabBarIcon: ({ color }) => <TabIcon name={route.name} color={color} />,
       })}>
       <Tabs.Screen name="TimelineTab" component={TimelineFlow} options={{ title: 'Timeline' }} />
+      <Tabs.Screen name="JournalTab" component={JournalFlow} options={{ title: 'Journal' }} />
       <Tabs.Screen
         name="RadarTab"
         component={RadarFlow}
@@ -214,6 +239,8 @@ const styles = StyleSheet.create({
   ringDot: { width: 4, height: 4, borderRadius: 2 },
   bars: { gap: 4, alignItems: 'flex-start' },
   bar: { height: 3, borderRadius: 1.5 },
+  book: { width: 20, height: 22, borderRadius: 3, borderWidth: 1.5, borderLeftWidth: 4 },
+  spine: { position: 'absolute', left: 3, right: 3, top: 5, height: 1.5, borderRadius: 1 },
   page: { width: 18, height: 22, borderRadius: 3, borderWidth: 1.5, padding: 3, gap: 3 },
   pageLine: { height: 1.5, borderRadius: 1 },
 });

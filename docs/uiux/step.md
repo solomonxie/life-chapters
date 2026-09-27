@@ -39,7 +39,7 @@ done and the reflow becomes visible.
   ✓ Choose visa subclass    done Aug 02  ›
 ```
 
-Reached from: [`radar.md`](radar.md) · phase detail · another step's Blocks /
+Reached from: [`radar.md`](radar.md) · chapter detail · another step's Blocks /
 Waits-for · a notification
 
 ## States
