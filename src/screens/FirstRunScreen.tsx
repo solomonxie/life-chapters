@@ -15,7 +15,7 @@ export function FirstRunScreen() {
   const insets = useSafeAreaInsets();
   const now = useStore(s => s.now);
   const playbooks = useStore(s => s.playbooks);
-  const anchors = useStore(s => s.plan.anchors);
+  const anchors = useStore(s => s.mine.anchors);
   const thisYear = Number(now.slice(0, 4));
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -88,6 +88,7 @@ export function FirstRunScreen() {
                   onPress={() => setKind(x => (x === k ? null : k))}
                   style={styles.option}
                   accessibilityRole="radio"
+                  accessibilityLabel={kindLabel(k)}
                   accessibilityState={{ selected: kind === k }}>
                   <Text style={[styles.tick, { color: p.accent }]}>{kind === k ? '✓' : ''}</Text>
                   <Text style={[type.body, { color: p.text }]}>{kindLabel(k)}</Text>
@@ -112,9 +113,9 @@ export function FirstRunScreen() {
 
       {step === 3 ? (
         <>
-          <Text style={[type.title, styles.center, { color: p.text }]}>Pick a track</Text>
+          <Text style={[type.title, styles.center, { color: p.text }]}>Pick a plan</Text>
           <Text style={[type.body, styles.center, { color: p.dim }]}>
-            A track turns a date into dated steps. Each one is a plan, not advice.
+            A plan turns a date into dated steps. It's guidance, not advice.
           </Text>
           <Card>
             <Rows>
@@ -127,6 +128,7 @@ export function FirstRunScreen() {
                       onPress={() => (has ? attach(pb.id) : setPicked(open ? null : pb.id))}
                       style={styles.option}
                       accessibilityRole="button"
+                      accessibilityLabel={`${pb.title}. ${pb.summary ?? ''}`}
                       accessibilityState={{ expanded: has ? undefined : open }}>
                       <View style={styles.flex}>
                         <Text style={[type.label, { color: p.text }]}>{pb.title}</Text>

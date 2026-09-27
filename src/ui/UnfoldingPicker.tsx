@@ -57,6 +57,7 @@ export function UnfoldingPicker({
                 onPress={() => onSelect(option.value)}
                 style={styles.option}
                 accessibilityRole="radio"
+                accessibilityLabel={option.label}
                 accessibilityState={{ selected: option.value === value }}>
                 <Text style={[styles.tick, { color: palette.accent }]}>
                   {option.value === value ? '✓' : ''}

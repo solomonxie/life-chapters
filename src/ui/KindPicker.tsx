@@ -51,6 +51,7 @@ export function KindPicker({
             onPress={() => onPick(k.id, k.label)}
             style={styles.option}
             accessibilityRole="radio"
+            accessibilityLabel={k.label}
             accessibilityState={{ selected: k.id === value }}>
             <Text style={[styles.tick, { color: p.accent }]}>{k.id === value ? '✓' : ''}</Text>
             <Text style={[type.body, { color: p.text }]}>{k.label}</Text>

@@ -19,7 +19,14 @@ export function Disclaimer({
   const p = usePalette();
   const stale = isStale(playbook, now);
   return (
-    <Pressable onPress={onPress} disabled={!onPress} style={styles.wrap} accessibilityRole="text">
+    <Pressable
+      onPress={onPress}
+      disabled={!onPress}
+      style={styles.wrap}
+      accessibilityRole={onPress ? 'button' : 'text'}
+      accessibilityLabel={`Reviewed ${formatMonth(playbook.reviewedAt)}, not official advice.${
+        stale ? ` Over ${reviewAgeYears(playbook.reviewedAt, now)} years old. Check the steps against the current rules.` : ''
+      }`}>
       <Text style={[type.caption, { color: p.dim }]}>
         Reviewed {formatMonth(playbook.reviewedAt)} · not official advice
       </Text>
