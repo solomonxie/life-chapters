@@ -62,6 +62,7 @@ plan you maintain.
 - [`docs/UIUX_DESIGN.md`](docs/UIUX_DESIGN.md) — screen map and flows
 - [`docs/uiux/`](docs/uiux/) — every screen and state, drawn
 - [`docs/IMPLEMENT_PLAN.md`](docs/IMPLEMENT_PLAN.md) — build order, task by task
+- [`docs/release/`](docs/release/) — App Store listing, privacy policy, screenshots
 
 ## Development
 
@@ -73,7 +74,11 @@ npm run pods          # bundle install first, once
 npm test              # engine, store, reminder queue, content
 npm run typecheck
 npm run ios           # physical device
+make help             # release build, App Store upload, screenshots
 ```
+
+Releasing: [`docs/release/`](docs/release/) — every App Store Connect field ready to
+paste, the privacy policy, and `make release` to archive and upload.
 
 `ios/LifeChapters.xcworkspace` for Xcode. Signing is not committed — put your
 team and bundle id in a gitignored `ios/Local.xcconfig`:

@@ -1,6 +1,6 @@
 {
   "name": "life-chapters",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "react-native start",
@@ -8,7 +8,10 @@
     "pods": "cd ios && bundle exec pod install",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "jest"
+    "test": "jest",
+    "check": "npm run typecheck && npm run lint -- --quiet && npm test -- --silent",
+    "release:ios": "scripts/release-ios.sh",
+    "screenshots": "scripts/store-screenshots.sh"
   },
   "dependencies": {
     "@op-engineering/op-sqlite": "^18.2.5",
