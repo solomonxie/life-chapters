@@ -8,6 +8,7 @@ import type { Routes } from '../navigation/routes';
 import { haptic } from '../platform';
 import { actions, useStore } from '../state/store';
 import {
+  AppliesIf,
   Button,
   Card,
   CheckRow,
@@ -149,6 +150,7 @@ export function StepScreen({ route, navigation }: NativeStackScreenProps<Routes,
         <Text style={[type.caption, { color: p.dim }]}>
           {step.playbook.title} · step {step.index} of {step.total}
         </Text>
+        <AppliesIf ages={step.template.ages} conditions={step.template.conditions} />
         <Disclaimer playbook={step.playbook} now={now} />
       </View>
 
@@ -229,7 +231,8 @@ export function StepScreen({ route, navigation }: NativeStackScreenProps<Routes,
                 instanceId: trackSteps.find(s => s.stepId === clash.consumer.stepId)!.instanceId,
               })
             }
-            accessibilityRole="button">
+            accessibilityRole="button"
+            accessibilityLabel={`Warning: expires ${formatDate(step.expiresOn!)}, ${clash.gapDays} days before ${clash.consumer.title} needs it. Open that step`}>
             <Text style={[type.body, { color: p.text }]}>
               ⚠ Expires {formatDate(step.expiresOn!)} — {clash.gapDays} days before {clash.consumer.title} needs it. ›
             </Text>

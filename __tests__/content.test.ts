@@ -19,7 +19,12 @@ describe.each(BUNDLED_PLAYBOOKS.map(p => [p.id, p] as const))('%s', (_, playbook
 
   it('never phrases a step as advice', () => {
     const text = JSON.stringify(playbook.steps);
-    expect(text).not.toMatch(/\byou must\b|\brequired by law\b|\bguarantee/i);
+    expect(text).not.toMatch(/\byou must\b|\brequired by law\b|\bguarantee(?!d Income Supplement)/i);
+  });
+
+  it('says who it is for, with an age range when it counts from a birth', () => {
+    expect(playbook.conditions?.length).toBeGreaterThan(0);
+    if (['born', 'child-born'].includes(playbook.anchorKind)) expect(playbook.ages).toBeDefined();
   });
 
   it('carries a review date and sources', () => {
