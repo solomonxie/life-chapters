@@ -91,11 +91,15 @@ Pushed from the NOW card or any stem segment.
 |---|---|---|
 | NOW card | tap | → phase detail |
 | anchor row `●` | tap | → [`anchors.md`](anchors.md) editor |
-| event row `○` | tap | → phase detail scoped to that event |
-| `(6)` badge | tap | → [`radar.md`](radar.md), filtered to that event |
+| event row `○` | tap | → phase detail scoped to that event; `( Edit this date )` at its foot |
+| `(6)` badge | tap | → [`radar.md`](radar.md), filtered to that event (a removable `Only …` chip) |
+| `⚠ 2 steps are late` | tap | → [`radar.md`](radar.md) |
 | `+ Add a date` | tap | → anchor editor, blank |
 | ⚙ | tap | → [`settings.md`](settings.md) |
 | list | flick, then touch | page stops, row does **not** open — `uiux` skill, mobile: brake-not-tap |
+
+Derived events: only the next round birthday (`Turns 40`) from the Born date.
+Every other row is a date the user entered.
 
 ## Copy
 

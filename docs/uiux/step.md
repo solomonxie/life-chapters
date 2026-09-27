@@ -61,8 +61,8 @@ expired     ⚠ Expired Aug 01. Redo this step.
 snoozed     start by   Nov 12  ·  snoozed 2 weeks
                                        ( Clear )
 
-skipped     Not for me · Sep 26      ( Restore )
-            2 steps downstream detached too.
+skipped     Not for me                ( Restore )
+            2 later steps no longer wait for it.
 
 no how-to   HOW TO
             Nothing written yet.   ( Add a note )
@@ -79,7 +79,9 @@ no how-to   HOW TO
 | prepare `[ ]` | tap | checks it, no reflow — prep isn't a dependency |
 | `ⓘ` beside `valid` | tap | popover: validity window, why starting early wastes it |
 | `Blocks` row | tap | → that step, and its dates now reflect this one |
-| `⋯` | tap | menu: `Not for me` `Add a note` `Move due date…` `View in playbook` |
+| `⋯` | tap | action sheet: `Not for me` `Add a note` `Move due date…` `View in playbook` |
+| `( Snooze… )` | tap | action sheet: 1 week · 2 weeks · 1 month · 3 months |
+| `Move due date…` | pick | date wheels unfold under the buttons; `( Reset )` drops the override |
 
 ## Copy
 
@@ -95,6 +97,7 @@ no how-to   HOW TO
 | `step.reflowedLater` | {n} later steps moved later. |
 | `step.expiring` | ⚠ Expires {Mon d, yyyy} — {n} days before {step} needs it. |
 | `step.skip` | Not for me |
+| `step.skipped` | {n} later steps no longer wait for it. |
 | `step.validInfo` | A police check is only accepted for 3 months. Starting sooner means paying for it twice. |
 | `step.howToEmpty` | Nothing written yet. |
 

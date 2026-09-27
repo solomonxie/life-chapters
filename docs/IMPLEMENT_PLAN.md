@@ -58,7 +58,7 @@ to read them from. The 64-pending cap makes this a scheduler of its own, not a
 one-line call.
 
 - [x] T4.1 Notifier interface + no-op implementation — see `src/notify/notifier.ts` — depends: none
-- [ ] T4.2 Local notifications via `@notifee/react-native` — permission request, iOS category, deep link into `uiux/radar.md` — see `src/notify` — depends: T4.1, T3.5
+- [ ] T4.2 Local notifications, hand-rolled `UNUserNotificationCenter` module (no notifee — see `DESIGN.md` Risks) — permission request, deep link into `uiux/radar.md` / the step — see `src/notify`, `ios/LifePlanner/Native` — depends: T4.1, T3.5
 - [ ] T4.3 Rolling 64-window queue — register nearest N, refill on foreground and on every reflow, expose the `18/64` counter (drawing: `uiux/settings.md` → Reminders child) — see `src/notify` — depends: T4.2, T2.6
 - [ ] T4.4 Weekly digest notification — one summary at the configured day/time — see `src/notify` — depends: T4.2
 - [ ] T4.5 Permission-denied banner in Radar and disabled rows in Settings (drawings: `uiux/radar.md`, `uiux/settings.md`) — see `src/screens` — depends: T4.2, T3.9

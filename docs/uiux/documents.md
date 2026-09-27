@@ -4,7 +4,7 @@ Every document any step ever asked for, in one list, sorted by what dies first.
 Fourth tab — the one screen you open without a step in mind.
 
 ```
-  Docs                             Filter…
+  Docs                          🔍 Search
  ──────────────────────────────────────────
   ⚠ EXPIRING                            (2)
  ╭────────────────────────────────────────╮

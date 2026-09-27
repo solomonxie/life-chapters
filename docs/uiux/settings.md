@@ -45,7 +45,9 @@ skill (`references/mobile.md`) — the controls stay above the fold.
  │ (•) 14 days before                      │
  │ ( ) 30 days before                      │
  ╰────────────────────────────────────────╯
-  Weekly digest                  Sun 9am  ›
+  Weekly digest                        ─●
+  Day                            Sunday  ›   ← unfold in place, like above
+  Time                              9am  ›
  ──────────────────────────────────────────
   QUEUED WITH IOS                     18/64
   [██████░░░░░░░░░░░░░░]                    ⓘ

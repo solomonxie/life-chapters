@@ -91,6 +91,11 @@ filter open
 
 ## Notes
 
+`ACT NOW` is anything to start within 14 days, late ones included; it never
+collapses. `THIS YEAR` and `LATER` start collapsed. A snoozed step groups by
+the day its snooze ends. The Radar tab carries a red badge with the count of
+late steps — the one place outside ACT NOW where red appears.
+
 Grouping is by **start-by**, not due date — the whole point is being warned
 while there's still time to act. A step due in 2 years whose paperwork takes 14
 months belongs in ACT NOW, and that's the case a due-date sort gets wrong.
