@@ -59,16 +59,17 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
   const [attach, setAttach] = useState<string[]>([]);
   const saved = useRef(false);
 
-  const dirty =
-    !existing ||
-    existing.kind !== kind ||
-    existing.label !== label ||
-    (existing.place ?? '') !== place ||
-    (existing.note ?? '') !== note ||
-    existing.location !== location ||
-    existing.date !== date ||
-    existing.precision !== precision ||
+  const [start] = useState({ kind, label, place, note, location, date, precision });
+  const changed =
+    start.kind !== kind ||
+    start.label !== label ||
+    start.place !== place ||
+    start.note !== note ||
+    start.location !== location ||
+    start.date !== date ||
+    start.precision !== precision ||
     attach.length > 0;
+  const dirty = !existing || changed;
 
   const linked = isLinkedKind(kind);
   const toggle = (row: Open) => setOpen(o => (o === row ? null : row));
@@ -84,7 +85,7 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
       {
         id: existing?.id,
         kind,
-        label: label.trim() || 'A date',
+        label: label.trim() || 'An event',
         place: place.trim() || undefined,
         note: note.trim() || undefined,
         location,
@@ -127,7 +128,7 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
       .map(a => people.find(x => x.id === (a.personId ?? 'me'))?.name)
       .filter(Boolean);
     const detail = [
-      n ? `${n} plan${n === 1 ? '' : 's'} lose${n === 1 ? 's' : ''} their date and detach.` : '',
+      n ? `${n} plan${n === 1 ? '' : 's'} lose${n === 1 ? 's' : ''} their event and detach.` : '',
       alsoOn.length ? `Also removed from ${alsoOn.join(' and ')}'s timeline.` : '',
     ].filter(Boolean).join(' ');
     Alert.alert(
@@ -150,7 +151,7 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: existing ? 'Edit date' : 'Add a date',
+      title: existing ? 'Edit event' : 'Add an event',
       headerLeft: () => (
         <Pressable onPress={() => navigation.goBack()} hitSlop={12} accessibilityRole="button">
           <Text style={[type.body, { color: p.accent }]}>Cancel</Text>
@@ -169,14 +170,14 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
   useEffect(
     () =>
       navigation.addListener('beforeRemove', e => {
-        if (saved.current || !dirty) return;
+        if (saved.current || !changed) return;
         e.preventDefault();
-        Alert.alert(existing ? 'Discard your changes?' : 'Discard this date?', undefined, [
+        Alert.alert(existing ? 'Discard your changes?' : 'Discard this event?', undefined, [
           { text: 'Keep editing', style: 'cancel' },
           { text: 'Discard', style: 'destructive', onPress: () => navigation.dispatch(e.data.action) },
         ]);
       }),
-    [navigation, dirty, existing],
+    [navigation, changed, existing],
   );
 
   const future = resolve(date, precision) > now;
@@ -201,34 +202,6 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
               haptic('selection');
             }}
           />
-        ) : null}
-        <View style={[styles.divider, { backgroundColor: p.hairline }]} />
-        <View style={styles.inputRow}>
-          <Text style={[type.body, { color: p.text }]}>{linked ? 'Who' : 'Detail'}</Text>
-          <TextInput
-            value={place}
-            onChangeText={setPlace}
-            onFocus={() => setOpen(null)}
-            placeholder={placeholderFor(kind)}
-            placeholderTextColor={p.faint}
-            style={[type.body, styles.input, { color: p.dim }]}
-            returnKeyType="done"
-            accessibilityLabel={linked ? 'Who' : 'Detail'}
-          />
-        </View>
-        {linked && others.length ? (
-          <View style={styles.chips}>
-            {others.map(x => (
-              <Pressable
-                key={x.id}
-                onPress={() => setPlace(x.name)}
-                style={[styles.chip, { backgroundColor: place === x.name ? p.accentSoft : p.bg }]}
-                accessibilityRole="button"
-                accessibilityState={{ selected: place === x.name }}>
-                <Text style={[type.caption, { color: p.accent }]}>{x.name}</Text>
-              </Pressable>
-            ))}
-          </View>
         ) : null}
         <View style={[styles.divider, { backgroundColor: p.hairline }]} />
         <ListRow
@@ -275,6 +248,34 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
             setOpen(null);
           }}
         />
+        <View style={[styles.divider, { backgroundColor: p.hairline }]} />
+        <View style={styles.inputRow}>
+          <Text style={[type.body, { color: p.text }]}>{linked ? 'Who' : 'Event name'}</Text>
+          <TextInput
+            value={place}
+            onChangeText={setPlace}
+            onFocus={() => setOpen(null)}
+            placeholder={placeholderFor(kind)}
+            placeholderTextColor={p.faint}
+            style={[type.body, styles.input, { color: p.dim }]}
+            returnKeyType="done"
+            accessibilityLabel={linked ? 'Who' : 'Event name'}
+          />
+        </View>
+        {linked && others.length ? (
+          <View style={styles.chips}>
+            {others.map(x => (
+              <Pressable
+                key={x.id}
+                onPress={() => setPlace(x.name)}
+                style={[styles.chip, { backgroundColor: place === x.name ? p.accentSoft : p.bg }]}
+                accessibilityRole="button"
+                accessibilityState={{ selected: place === x.name }}>
+                <Text style={[type.caption, { color: p.accent }]}>{x.name}</Text>
+              </Pressable>
+            ))}
+          </View>
+        ) : null}
       </Card>
 
       <SectionHeader title="Notes" />
@@ -326,7 +327,7 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
 
       {existing ? (
         <View style={styles.delete}>
-          <Button title="Delete this date" destructive onPress={remove} />
+          <Button title="Delete this event" destructive onPress={remove} />
         </View>
       ) : null}
     </ScrollView>

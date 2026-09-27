@@ -57,7 +57,7 @@ export function BackupsScreen() {
     const { anchors, tracks } = parsed.plan;
     Alert.alert(
       `Restore from ${label}?`,
-      `It has ${anchors.length} dates, ${tracks.length} plans. What you have now stays in Backups.`,
+      `It has ${anchors.length} events, ${tracks.length} plans. What you have now stays in Backups.`,
       [
         { text: 'Cancel', style: 'cancel' },
         {

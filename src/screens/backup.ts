@@ -24,7 +24,7 @@ export async function importBackup() {
   const next = parsed.plan;
   Alert.alert(
     'Replace your plan?',
-    `This file has ${next.anchors.length} dates and ${next.tracks.length} plans. Your current ${cur.anchors.length} dates and ${cur.tracks.length} plans are overwritten.`,
+    `This file has ${next.anchors.length} events and ${next.tracks.length} plans. Your current ${cur.anchors.length} events and ${cur.tracks.length} plans are overwritten.`,
     [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Replace', style: 'destructive', onPress: () => actions.replacePlan(next) },

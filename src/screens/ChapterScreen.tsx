@@ -152,7 +152,7 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
       {anchor ? (
         <View style={styles.edit}>
           <Button
-            title="Edit this date"
+            title="Edit this event"
             onPress={() => navigation.navigate('AnchorEdit', { anchorId: anchor.id })}
           />
         </View>

@@ -83,9 +83,9 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
       {suggested.length ? (
         <>
           <SectionHeader
-            title="Fits your dates"
+            title="Fits your events"
             count={suggested.length}
-            info="Plans that hang off a kind of date this person already has, fit where that date happened, and that they haven't aged past."
+            info="Plans that hang off a kind of event this person already has, fit where that event happened, and that they haven't aged past."
           />
           <Card>
             <Rows>{suggested.map(row)}</Rows>

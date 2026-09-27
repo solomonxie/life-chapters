@@ -370,7 +370,7 @@ export const actions = {
         tracks: plan.tracks.filter(t => !gone.has(t.id)),
         instances: plan.instances.filter(i => !gone.has(i.trackId)),
       },
-      { cause: 'A date was deleted', toast: () => 'Date deleted.' },
+      { cause: 'An event was deleted', toast: () => 'Event deleted.' },
     );
   },
 

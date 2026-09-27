@@ -102,7 +102,7 @@ only) Library rows. Hidden when there's neither.
 ```
 
 Plain text the user judges. The app filters on `ages.to` in one place only:
-`Fits your dates` hides a birth-counted plan the person has outgrown.
+`Fits your events` hides a birth-counted plan the person has outgrown.
 
 ## Person chips
 

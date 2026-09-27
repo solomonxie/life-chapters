@@ -38,13 +38,15 @@ export const placeShort = (label: string) => label.split(',')[0].trim();
 
 /**
  * Prefix matches first, then word starts, then anywhere; bigger places first
- * within each. "london, on" narrows by region or country after the comma.
+ * within each, those in `near` (a country name) ahead of the rest.
+ * "london, on" narrows by region or country after the comma.
  */
-export function searchPlaces(query: string, limit = 8): Place[] {
+export function searchPlaces(query: string, limit = 8, near?: string): Place[] {
   const [head, ...rest] = query.split(',');
   const needle = fold(head.trim());
   const within = fold(rest.join(' ').trim());
   if (!needle) return [];
+  const away = (p: Place) => (near && p.country !== near ? 1 : 0);
   const scored: { p: Indexed; score: number }[] = [];
   for (const p of places()) {
     if (within && !p.where.includes(within)) continue;
@@ -55,7 +57,7 @@ export function searchPlaces(query: string, limit = 8): Place[] {
     if (score >= 0) scored.push({ p, score });
   }
   return scored
-    .sort((a, b) => a.score - b.score || a.p.rank - b.p.rank)
+    .sort((a, b) => a.score - b.score || away(a.p) - away(b.p) || a.p.rank - b.p.rank)
     .slice(0, limit)
     .map(({ p }) => ({ name: p.name, zh: p.zh, admin: p.admin, country: p.country, rank: p.rank }));
 }

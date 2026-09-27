@@ -40,7 +40,7 @@ export function KindPicker({
           else onPick('custom', q.trim());
         }}
         style={[type.body, styles.input, { color: p.text, backgroundColor: p.bg }]}
-        accessibilityLabel="Search kinds of date"
+        accessibilityLabel="Search kinds of event"
       />
       {matches.map((k, i) => (
         <React.Fragment key={k.id}>

@@ -2,6 +2,7 @@
 // Builds src/content/cities.ts from a GeoNames dump (CC BY 4.0, geonames.org).
 // Usage: node scripts/build-cities.mjs <dir with cities1000.txt, admin1CodesASCII.txt, countryInfo.txt>
 // Keeps: every Canadian and Chinese town of 1,000+, and cities of 50,000+ elsewhere.
+// Names are GeoNames' ASCII English forms; the Chinese name, for Chinese places only, is kept for search.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -15,20 +16,21 @@ const countries = new Map(lines('countryInfo.txt').map(l => {
   return [c[0], c[4]];
 }));
 const admins = new Map(lines('admin1CodesASCII.txt').map(l => {
-  const [code, name] = l.split('\t');
-  return [code, name];
+  const [code, , ascii] = l.split('\t');
+  return [code, ascii];
 }));
 
 const SKIP = new Set(['PPLX', 'PPLH', 'PPLQ', 'PPLW', 'PPLCH']);
 const CJK = /[一-鿿]/;
+const CHINESE = new Set(['CN', 'TW', 'HK', 'MO']);
 const keep = (cc, pop) => (cc === 'CA' || cc === 'CN' ? pop >= 1000 : pop >= 50000);
 
 const rows = [];
 for (const l of lines('cities1000.txt')) {
   const c = l.split('\t');
-  const [name, alt, fclass, fcode, cc, a1, pop] = [c[1], c[3], c[6], c[7], c[8], c[10], Number(c[14])];
+  const [name, alt, fclass, fcode, cc, a1, pop] = [c[2], c[3], c[6], c[7], c[8], c[10], Number(c[14])];
   if (fclass !== 'P' || SKIP.has(fcode) || !keep(cc, pop)) continue;
-  const zh = alt.split(',').find(n => CJK.test(n)) ?? '';
+  const zh = CHINESE.has(cc) ? alt.split(',').find(n => CJK.test(n)) ?? '' : '';
   rows.push({ name, zh, cc, admin: admins.get(`${cc}.${a1}`) ?? '', pop });
 }
 rows.sort((a, b) => b.pop - a.pop);

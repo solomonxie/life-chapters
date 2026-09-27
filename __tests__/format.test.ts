@@ -13,7 +13,7 @@ describe('spoken', () => {
   it('drops decorative glyphs but keeps meaning', () => {
     expect(spoken('⚠ Act now, 3')).toBe('Act now, 3');
     expect(spoken('Passport, ✓ attached')).toBe('Passport, attached');
-    expect(spoken('+ Add a date')).toBe('Add a date');
+    expect(spoken('+ Add an event')).toBe('Add an event');
     expect(spoken('from "Born" · age 16+')).toBe('from "Born" · age 16 and over');
     expect(spoken('○ Turns 40 ›')).toBe('Turns 40');
   });
