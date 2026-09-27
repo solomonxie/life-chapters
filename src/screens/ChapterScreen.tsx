@@ -1,12 +1,10 @@
 import React, { useLayoutEffect, useMemo } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { diffDays } from '../domain/dates';
 import { formatPrecise } from '../domain/format';
 import { lifeChapters, openSteps, chapterSteps, timelineNodes } from '../domain/plan';
-import { storiesByChapter, storiesIn } from '../domain/journal';
 import type { Routes } from '../navigation/routes';
-import { StoryRow } from './JournalScreen';
 import { useStore } from '../state/store';
 import { Button, Card, ListRow, Rows, SectionHeader, StepRow, space, type, usePalette } from '../ui';
 import { ChapterBar } from './TimelineScreen';
@@ -14,8 +12,8 @@ import { ChapterBar } from './TimelineScreen';
 export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Routes, 'Chapter'>) {
   const p = usePalette();
   const { eventId } = route.params;
-  const plan = useStore(s => s.plan);
-  const view = useStore(s => s.view);
+  const plan = useStore(s => s.mine);
+  const view = useStore(s => s.mine.view);
   const playbooks = useStore(s => s.playbooks);
   const moves = useStore(s => s.moves);
   const now = useStore(s => s.now);
@@ -42,9 +40,6 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
     ),
   ).sort((a, b) => (a.startBy < b.startBy ? -1 : 1));
   const past = !!chapter?.end && chapter.end <= now;
-  const stories = chapter
-    ? storiesByChapter(storiesIn(chapter, plan.entries), [chapter]).flatMap(g => g.entries)
-    : [];
   const unlocks = anchor ? playbooks.filter(pb => pb.anchorKind === anchor.kind) : [];
   const years = chapter?.end ? Math.max(1, Math.round(diffDays(chapter.start, chapter.end) / 365.25)) : null;
   const yearN = chapter ? Math.floor(diffDays(chapter.start, now) / 365.25) + 1 : null;
@@ -62,6 +57,7 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
             : node.date > now
             ? `starts ${formatPrecise(node.date, node.precision)}`
             : `since ${formatPrecise(node.date, node.precision)}`}
+          {anchor?.location ? ` · ${anchor.location}` : ''}
         </Text>
       </Card>
 
@@ -115,34 +111,27 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
         <Text style={[type.body, styles.empty, { color: p.dim }]}>Nothing to start in this stretch.</Text>
       ) : null}
 
-      {chapter ? (
+      {anchor ? (
         <>
-          <SectionHeader title="Stories" count={stories.length} />
-          {stories.length ? (
+          <SectionHeader title="Notes" />
+          {anchor.note ? (
             <Card>
-              <Rows>
-                {stories.map(e => (
-                  <StoryRow
-                    key={e.id}
-                    entry={e}
-                    about={plan.anchors.find(a => a.id === e.anchorId)}
-                    onPress={() => navigation.navigate('Entry', { entryId: e.id })}
-                  />
-                ))}
-              </Rows>
+              <Pressable
+                onPress={() => navigation.navigate('AnchorEdit', { anchorId: anchor.id })}
+                style={styles.note}
+                accessibilityRole="button"
+                accessibilityHint="Edits the notes">
+                <Text style={[type.body, { color: p.text }]}>{anchor.note}</Text>
+              </Pressable>
             </Card>
-          ) : null}
-          <Button
-            title="+ Write a story"
-            kind="plain"
-            style={styles.write}
-            onPress={() =>
-              navigation.navigate('Entry', {
-                date: chapter.isCurrent ? now : chapter.start,
-                anchorId: anchor?.id,
-              })
-            }
-          />
+          ) : (
+            <Button
+              title="+ Add notes"
+              kind="plain"
+              style={styles.write}
+              onPress={() => navigation.navigate('AnchorEdit', { anchorId: anchor.id })}
+            />
+          )}
         </>
       ) : null}
 
@@ -176,5 +165,6 @@ const styles = StyleSheet.create({
   head: { padding: space.lg, gap: space.sm, marginTop: space.sm },
   empty: { paddingHorizontal: space.lg },
   edit: { padding: space.lg, paddingTop: space.xl },
+  note: { padding: space.lg },
   write: { alignSelf: 'flex-start', marginLeft: space.lg, marginTop: space.sm },
 });

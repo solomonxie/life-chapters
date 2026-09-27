@@ -1,3 +1,4 @@
+export { AppliesIf } from './AppliesIf';
 export { Button } from './Button';
 export { CheckRow } from './CheckRow';
 export { DatePair, formatDate, formatRelative } from './DatePair';
@@ -16,3 +17,4 @@ export { UnfoldingPicker, type Option } from './UnfoldingPicker';
 export { dark, light, radius, space, type, type Palette } from './theme';
 export { usePalette } from './usePalette';
 export { KindPicker } from './KindPicker';
+export { PlacePicker } from './PlacePicker';

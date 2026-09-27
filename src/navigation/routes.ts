@@ -1,23 +1,18 @@
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 
-/** One route table for every tab's stack, so any screen can push any detail. */
+/** One route table for the one stack. */
 export type Routes = {
   Timeline: undefined;
   Chapter: { eventId: string };
   AnchorEdit: { anchorId?: string; kind?: string } | undefined;
-  Settings: undefined;
   Reminders: undefined;
   Backups: undefined;
   Sources: undefined;
   About: undefined;
-  Journal: undefined;
-  Entry: { entryId?: string; date?: string; anchorId?: string } | undefined;
-  Radar: { anchorId?: string } | undefined;
-  Tracks: undefined;
+  Person: { mode: 'new' | 'link' | 'rename'; personId?: string };
   Library: undefined;
   Playbook: { playbookId: string; trackId?: string };
-  Docs: undefined;
   Document: { documentId: string };
   Step: { instanceId: string };
   FirstRun: undefined;
@@ -26,13 +21,3 @@ export type Routes = {
 export type Nav = NativeStackNavigationProp<Routes>;
 
 export const useNav = () => useNavigation<Nav>();
-
-/** Jump to a tab's root, optionally pushing a screen on top. */
-export function goTab(
-  nav: { navigate: (...args: any[]) => void },
-  tab: 'TimelineTab' | 'JournalTab' | 'RadarTab' | 'TracksTab' | 'DocsTab',
-  screen?: keyof Routes,
-  params?: object,
-) {
-  nav.navigate(tab, screen ? { screen, params, initial: false } : undefined);
-}

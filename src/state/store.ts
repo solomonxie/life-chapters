@@ -2,13 +2,14 @@ import { create } from 'zustand';
 import { BUNDLED_PLAYBOOKS } from '../content';
 import { resolve, today } from '../domain/dates';
 import { docId, planView, trackAnchorDate, type PlanView } from '../domain/plan';
+import { LINKED_KINDS, ME, ME_PERSON, isLinkedKind, mirrorOf, ownerOf, scopeTo, type Scoped } from '../domain/people';
 import { recordMoves, summarize, type Moves } from '../domain/radar';
 import { planRedo } from '../domain/schedule';
 import type {
   Anchor,
   CivilDate,
+  Person,
   DocumentRecord,
-  Entry,
   Playbook,
   StepInstance,
   Track,
@@ -32,8 +33,15 @@ interface Snapshot {
   moves: Moves;
 }
 
+/** The board on screen: one person's dates, plans, steps and documents. */
+export interface Mine extends Scoped {
+  person: Person;
+  view: PlanView;
+}
+
 export interface AppState {
   ready: boolean;
+  mine: Mine;
   now: CivilDate;
   plan: Plan;
   settings: Settings;
@@ -49,17 +57,26 @@ const newId = () =>
 
 const instanceId = (trackId: string, stepId: string) => `${trackId}:${stepId}`;
 
-function derive(plan: Plan, now: CivilDate) {
+function derive(plan: Plan, now: CivilDate, personId: string) {
   const userIds = new Set(plan.playbooks.map(p => p.id));
   const playbooks = [
     ...BUNDLED_PLAYBOOKS.filter(p => !userIds.has(p.id)),
     ...plan.playbooks,
   ];
+  const person = plan.people.find(p => p.id === personId) ?? plan.people[0] ?? ME_PERSON;
+  const scoped = scopeTo(person.id, plan);
   return {
     playbooks,
     view: planView(playbooks, plan.tracks, plan.anchors, plan.instances, now),
+    mine: {
+      ...scoped,
+      person,
+      view: planView(playbooks, scoped.tracks, scoped.anchors, scoped.instances, now),
+    },
   };
 }
+
+const personIdNow = () => get().settings.personId;
 
 let repo: Repository | null = null;
 let toastSeq = 0;
@@ -72,7 +89,7 @@ export const useStore = create<AppState>(() => ({
   plan: EMPTY_PLAN,
   settings: DEFAULT_SETTINGS,
   moves: {},
-  ...derive(EMPTY_PLAN, initialNow),
+  ...derive(EMPTY_PLAN, initialNow, ME),
   toast: null,
   undoSnapshot: null,
 }));
@@ -96,7 +113,7 @@ interface CommitOptions {
 /** Every plan change goes through here: reflow, record what moved, persist. */
 function commit(next: Plan, opts: CommitOptions) {
   const s = get();
-  const derived = derive(next, s.now);
+  const derived = derive(next, s.now, s.settings.personId);
   const exclude = opts.exclude ?? [];
   const summary = summarize(s.view.steps, derived.view.steps, exclude);
   const message = opts.toast
@@ -139,28 +156,69 @@ function instancesFor(track: Track, playbook: Playbook): StepInstance[] {
   }));
 }
 
+function linkParent(name: string, date: CivilDate, precision: Anchor['precision']) {
+  const { plan, mine } = get();
+  const childId = mine.person.id;
+  let anchors = plan.anchors;
+  let people = plan.people;
+  let born = mine.anchors.find(a => a.kind === 'born');
+  const linkId = born?.linkId ?? newId();
+  if (born) {
+    anchors = anchors.map(a => (a.id === born!.id ? { ...a, linkId } : a));
+  } else {
+    born = { id: newId(), kind: 'born', label: 'Born', date, precision, personId: childId, linkId };
+    anchors = [...anchors, born];
+  }
+  let parent = people.find(p => p.id !== childId && p.name.toLowerCase() === name.trim().toLowerCase());
+  if (!parent) {
+    parent = { id: newId(), name: name.trim() };
+    people = [...people, parent];
+  }
+  const childName = mine.person.name;
+  const already = anchors.some(a => a.linkId === linkId && ownerOf(a) === parent!.id);
+  if (!already) {
+    anchors = [
+      ...anchors,
+      {
+        id: newId(),
+        kind: 'child-born',
+        label: 'Child born',
+        place: childName,
+        date: born.date,
+        precision: born.precision,
+        personId: parent.id,
+        withPersonId: childId,
+        linkId,
+      },
+    ];
+  }
+  commit({ ...plan, people, anchors }, { cause: `${parent.name} linked`, toast: () => null });
+  return parent.id;
+}
+
 export const actions = {
   async load(repository: Repository) {
     repo = repository;
     const stored = await repository.load();
     const plan = stored
       ? {
+          people: stored.people?.length ? stored.people : [ME_PERSON],
           anchors: stored.anchors,
           playbooks: stored.playbooks,
           tracks: stored.tracks,
           instances: stored.instances,
           documents: stored.documents,
-          entries: stored.entries ?? [],
         }
       : EMPTY_PLAN;
     const now = today();
+    const settings = stored?.settings ?? DEFAULT_SETTINGS;
     set({
       ready: true,
       now,
       plan,
-      settings: stored?.settings ?? DEFAULT_SETTINGS,
+      settings,
       moves: stored?.moves ?? {},
-      ...derive(plan, now),
+      ...derive(plan, now, settings.personId),
     });
   },
 
@@ -168,7 +226,7 @@ export const actions = {
   refreshToday() {
     const now = today();
     if (now === get().now) return;
-    set({ now, ...derive(get().plan, now) });
+    set({ now, ...derive(get().plan, now, personIdNow()) });
   },
 
   dismissToast() {
@@ -181,7 +239,7 @@ export const actions = {
     set({
       plan: snap.plan,
       moves: snap.moves,
-      ...derive(snap.plan, get().now),
+      ...derive(snap.plan, get().now, personIdNow()),
       undoSnapshot: null,
       toast: { id: ++toastSeq, message: 'Undone.', undoable: false },
     });
@@ -190,33 +248,75 @@ export const actions = {
 
   // ── Anchors ──────────────────────────────────────────────────────────────
 
-  saveAnchor(anchor: Omit<Anchor, 'id'> & { id?: string }, attach: string[] = []) {
+  /**
+   * `withName` on a spouse or child event links that person: found by name or
+   * created, and given the same event on their own board.
+   */
+  saveAnchor(anchor: Omit<Anchor, 'id'> & { id?: string }, attach: string[] = [], withName?: string) {
     const { plan, playbooks } = get();
-    const isNew = !anchor.id;
-    const saved: Anchor = { ...anchor, id: anchor.id ?? newId() };
-    const date = resolve(saved.date, saved.precision);
+    const existing = plan.anchors.find(a => a.id === anchor.id);
+    const personId = anchor.personId ?? existing?.personId ?? personIdNow();
+    let saved: Anchor = {
+      ...existing,
+      ...anchor,
+      id: anchor.id ?? newId(),
+      personId,
+    };
+    let people = plan.people;
+    let anchors = plan.anchors;
 
-    let tracks = plan.tracks.map(t =>
-      t.anchorId === saved.id ? { ...t, anchorEventDate: date } : t,
+    const name = withName?.trim();
+    if (isLinkedKind(saved.kind) && name) {
+      let other = people.find(p => p.id !== personId && p.name.toLowerCase() === name.toLowerCase());
+      if (!other) {
+        other = { id: newId(), name };
+        people = [...people, other];
+      }
+      saved = { ...saved, withPersonId: other.id, place: other.name, linkId: saved.linkId ?? newId() };
+      const ownName = people.find(p => p.id === personId)?.name ?? 'Me';
+      const mirrorKind = LINKED_KINDS[saved.kind];
+      const mirror = anchors.find(
+        a =>
+          a.linkId === saved.linkId &&
+          a.id !== saved.id &&
+          a.kind === mirrorKind &&
+          (mirrorKind === 'born' || ownerOf(a) !== personId),
+      );
+      const next = mirrorOf(saved, mirror?.id ?? newId(), other.id, ownName);
+      anchors = mirror
+        ? anchors.map(a =>
+            a.id === mirror.id ? { ...a, ...next, place: next.place ?? a.place, location: next.location } : a,
+          )
+        : [...anchors, next];
+    } else if (saved.linkId) {
+      anchors = anchors.map(a =>
+        a.linkId === saved.linkId && a.id !== saved.id
+          ? { ...a, date: saved.date, precision: saved.precision, location: saved.location }
+          : a,
+      );
+    }
+    anchors = existing ? anchors.map(a => (a.id === saved.id ? saved : a)) : [...anchors, saved];
+
+    const moved = new Map(
+      anchors.filter(a => a.linkId && a.linkId === saved.linkId).map(a => [a.id, a]),
     );
+    moved.set(saved.id, saved);
+    let tracks = plan.tracks.map(t => {
+      const a = t.anchorId ? moved.get(t.anchorId) : undefined;
+      return a ? { ...t, anchorEventDate: resolve(a.date, a.precision) } : t;
+    });
     let instances = plan.instances;
+    const date = resolve(saved.date, saved.precision);
     for (const playbookId of attach) {
       const playbook = playbooks.find(p => p.id === playbookId);
       if (!playbook) continue;
-      const track: Track = { id: newId(), playbookId, anchorId: saved.id, anchorEventDate: date };
+      const track: Track = { id: newId(), playbookId, personId, anchorId: saved.id, anchorEventDate: date };
       tracks = [...tracks, track];
       instances = [...instances, ...instancesFor(track, playbook)];
     }
 
     commit(
-      {
-        ...plan,
-        anchors: isNew
-          ? [...plan.anchors, saved]
-          : plan.anchors.map(a => (a.id === saved.id ? saved : a)),
-        tracks,
-        instances,
-      },
+      { ...plan, people, anchors, tracks, instances },
       {
         cause: `${saved.label} moved`,
         toast: ({ moved }) =>
@@ -226,16 +326,18 @@ export const actions = {
     return saved.id;
   },
 
+  /** Takes the other person's copy of a linked event with it; the person stays. */
   deleteAnchor(id: string) {
     const { plan } = get();
-    const gone = new Set(plan.tracks.filter(t => t.anchorId === id).map(t => t.id));
+    const linkId = plan.anchors.find(a => a.id === id)?.linkId;
+    const ids = new Set(plan.anchors.filter(a => a.id === id || (linkId && a.linkId === linkId)).map(a => a.id));
+    const gone = new Set(plan.tracks.filter(t => t.anchorId && ids.has(t.anchorId)).map(t => t.id));
     commit(
       {
         ...plan,
-        anchors: plan.anchors.filter(a => a.id !== id),
+        anchors: plan.anchors.filter(a => !ids.has(a.id)),
         tracks: plan.tracks.filter(t => !gone.has(t.id)),
         instances: plan.instances.filter(i => !gone.has(i.trackId)),
-        entries: plan.entries.map(e => (e.anchorId === id ? { ...e, anchorId: undefined } : e)),
       },
       { cause: 'A date was deleted', toast: () => 'Date deleted.' },
     );
@@ -251,6 +353,7 @@ export const actions = {
     const track: Track = {
       id: newId(),
       playbookId,
+      personId: ownerOf(anchor),
       anchorId,
       anchorEventDate: resolve(anchor.date, anchor.precision),
     };
@@ -288,7 +391,7 @@ export const actions = {
   detachTrack(trackId: string) {
     const { plan, playbooks } = get();
     const track = plan.tracks.find(t => t.id === trackId);
-    const title = playbooks.find(p => p.id === track?.playbookId)?.title ?? 'Track';
+    const title = playbooks.find(p => p.id === track?.playbookId)?.title ?? 'Plan';
     commit(
       {
         ...plan,
@@ -428,8 +531,9 @@ export const actions = {
         : i.checkedDocuments.filter(x => x !== name),
     }));
     const key = docId(name);
-    if (checking && !next.documents.some(d => d.id === key)) {
-      next = { ...next, documents: [...next.documents, { id: key, name, issuedOn: s.now }] };
+    const personId = s.mine.person.id;
+    if (checking && !next.documents.some(d => d.id === key && ownerOf(d) === personId)) {
+      next = { ...next, documents: [...next.documents, { id: key, name, issuedOn: s.now, personId }] };
     }
     commit(next, { cause: 'Document', exclude: [id], toast: () => null });
   },
@@ -437,64 +541,36 @@ export const actions = {
   // ── Documents ────────────────────────────────────────────────────────────
 
   saveDocument(doc: DocumentRecord) {
-    const { plan } = get();
-    const exists = plan.documents.some(d => d.id === doc.id);
+    const { plan, mine } = get();
+    const saved = { ...doc, personId: mine.person.id };
+    const same = (d: DocumentRecord) => d.id === doc.id && ownerOf(d) === saved.personId;
     commit(
       {
         ...plan,
-        documents: exists
-          ? plan.documents.map(d => (d.id === doc.id ? doc : d))
-          : [...plan.documents, doc],
+        documents: plan.documents.some(same)
+          ? plan.documents.map(d => (same(d) ? saved : d))
+          : [...plan.documents, saved],
       },
       { cause: `${doc.name} updated`, toast: () => null },
     );
   },
 
   forgetDocument(id: string) {
-    const { plan } = get();
-    const name = plan.documents.find(d => d.id === id)?.name;
+    const { plan, mine } = get();
+    const same = (d: DocumentRecord) => d.id === id && ownerOf(d) === mine.person.id;
+    const name = plan.documents.find(same)?.name;
+    const own = new Set(mine.tracks.map(t => t.id));
     commit(
       {
         ...plan,
-        documents: plan.documents.filter(d => d.id !== id),
-        instances: plan.instances.map(i => ({
-          ...i,
-          checkedDocuments: i.checkedDocuments.filter(n => docId(n) !== id),
-        })),
+        documents: plan.documents.filter(d => !same(d)),
+        instances: plan.instances.map(i =>
+          own.has(i.trackId)
+            ? { ...i, checkedDocuments: i.checkedDocuments.filter(n => docId(n) !== id) }
+            : i,
+        ),
       },
       { cause: 'Document forgotten', toast: () => `${name ?? 'Document'} forgotten.` },
-    );
-  },
-
-  // ── Journal ──────────────────────────────────────────────────────────────
-
-  /** Stories don't move any dates, so no reflow toast — just keep them. */
-  saveEntry(entry: Omit<Entry, 'id' | 'createdOn' | 'updatedOn'> & { id?: string }) {
-    const { plan, now } = get();
-    const existing = plan.entries.find(e => e.id === entry.id);
-    const saved: Entry = {
-      ...entry,
-      id: entry.id ?? newId(),
-      createdOn: existing?.createdOn ?? now,
-      updatedOn: now,
-    };
-    commit(
-      {
-        ...plan,
-        entries: existing
-          ? plan.entries.map(e => (e.id === saved.id ? saved : e))
-          : [...plan.entries, saved],
-      },
-      { cause: 'Story', toast: () => null },
-    );
-    return saved.id;
-  },
-
-  deleteEntry(id: string) {
-    const { plan } = get();
-    commit(
-      { ...plan, entries: plan.entries.filter(e => e.id !== id) },
-      { cause: 'Story deleted', toast: () => 'Story deleted.' },
     );
   },
 
@@ -529,5 +605,74 @@ export const actions = {
   updateSettings(patch: Partial<Settings>) {
     set({ settings: { ...get().settings, ...patch } });
     persist();
+  },
+
+  // ── People ───────────────────────────────────────────────────────────────
+
+  switchPerson(personId: string) {
+    const s = get();
+    const settings = { ...s.settings, personId };
+    set({ settings, ...derive(s.plan, s.now, personId) });
+    persist();
+  },
+
+  /** A board of their own, not tied to anyone. */
+  addPerson(name: string) {
+    const { plan } = get();
+    const person: Person = { id: newId(), name: name.trim() || 'Someone' };
+    commit({ ...plan, people: [...plan.people, person] }, { cause: `${person.name} added`, toast: () => null });
+    actions.switchPerson(person.id);
+    return person.id;
+  },
+
+  /**
+   * A child, partner or parent of whoever is on screen, joined by the event
+   * that ties them. A parent gets "<name> born" tied to this person's Born.
+   */
+  linkPerson(
+    name: string,
+    relation: 'child' | 'partner' | 'parent',
+    date: CivilDate,
+    precision: Anchor['precision'],
+  ) {
+    if (relation === 'parent') return linkParent(name, date, precision);
+    const kind = relation === 'child' ? 'child-born' : 'married';
+    const id = actions.saveAnchor(
+      { kind, label: relation === 'child' ? 'Child born' : 'Married', date, precision },
+      [],
+      name,
+    );
+    return get().plan.anchors.find(a => a.id === id)?.withPersonId ?? null;
+  },
+
+  renamePerson(id: string, name: string) {
+    const { plan } = get();
+    if (!name.trim()) return;
+    commit(
+      { ...plan, people: plan.people.map(p => (p.id === id ? { ...p, name: name.trim() } : p)) },
+      { cause: 'Renamed', toast: () => null },
+    );
+  },
+
+  /** Their board goes; events on other boards stay, no longer linked. */
+  removePerson(id: string) {
+    const { plan } = get();
+    if (id === ME) return;
+    const name = plan.people.find(p => p.id === id)?.name ?? 'Person';
+    const gone = new Set(plan.tracks.filter(t => ownerOf(t) === id || plan.anchors.some(a => a.id === t.anchorId && ownerOf(a) === id)).map(t => t.id));
+    if (get().settings.personId === id) actions.switchPerson(ME);
+    commit(
+      {
+        ...plan,
+        people: plan.people.filter(p => p.id !== id),
+        anchors: plan.anchors
+          .filter(a => ownerOf(a) !== id)
+          .map(a => (a.withPersonId === id ? { ...a, withPersonId: undefined, linkId: undefined } : a)),
+        tracks: plan.tracks.filter(t => !gone.has(t.id)),
+        instances: plan.instances.filter(i => !gone.has(i.trackId)),
+        documents: plan.documents.filter(d => ownerOf(d) !== id),
+      },
+      { cause: `${name} removed`, toast: () => `${name} removed.` },
+    );
   },
 };

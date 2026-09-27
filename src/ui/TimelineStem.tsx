@@ -12,8 +12,10 @@ export interface StemNode {
   precision: DatePrecision;
   source: 'anchor' | 'derived';
   pendingSteps?: number;
-  /** Stories filed in the chapter this node opens. */
-  stories?: number;
+  /** The event has the user's own notes. */
+  noted?: boolean;
+  /** Town it happened in, shown dim after the label. */
+  where?: string;
 }
 
 const YEAR_W = 44;
@@ -59,7 +61,7 @@ export function TimelineStem({
           onPress={onPressLate}
           style={({ pressed }) => [styles.row, pressed && { backgroundColor: p.hairline }]}
           accessibilityRole="button"
-          accessibilityLabel={`${lateCount} steps are late. Open Radar`}>
+          accessibilityLabel={`${lateCount} steps are late. Show in Plans`}>
           <View style={styles.year} />
           <Rail top="thick" bottom={cut < nodes.length ? 'thick' : 'none'} />
           <Text style={[type.label, styles.flex, { color: p.late }]}>
@@ -88,9 +90,10 @@ export function TimelineStem({
               style={({ pressed }) => [styles.row, pressed && { backgroundColor: p.hairline }]}
               accessibilityRole="button"
               accessibilityLabel={`${node.label}, ${formatPrecise(node.date, node.precision)}${
-                node.pendingSteps ? `, ${node.pendingSteps} open steps` : ''
-              }`}>
-              <Text style={[type.caption, styles.year, { color: p.dim }]}>
+                node.where ? `, ${node.where}` : ''
+              }${node.noted ? ', has notes' : ''
+              }${node.pendingSteps ? `, ${node.pendingSteps} open steps` : ''}`}>
+              <Text maxFontSizeMultiplier={1.4} style={[type.caption, styles.year, { color: p.dim }]}>
                 {node.date.slice(0, 4)}
               </Text>
               <Rail
@@ -102,12 +105,11 @@ export function TimelineStem({
                 numberOfLines={1}
                 style={[type.label, styles.flex, { color: past ? p.dim : p.text }]}>
                 {node.label}
+                {node.where ? <Text style={{ color: p.faint }}> · {node.where}</Text> : null}
               </Text>
-              {node.stories ? (
-                <Text
-                  style={[type.caption, { color: p.dim }]}
-                  accessibilityLabel={`${node.stories} stories`}>
-                  ✎ {node.stories}
+              {node.noted ? (
+                <Text style={[type.caption, { color: p.dim }]} accessibilityElementsHidden>
+                  ✎
                 </Text>
               ) : null}
               {node.pendingSteps ? (

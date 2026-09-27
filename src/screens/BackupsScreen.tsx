@@ -47,10 +47,10 @@ export function BackupsScreen() {
       Alert.alert("Can't restore", parsed.error);
       return;
     }
-    const { anchors, tracks, entries } = parsed.plan;
+    const { anchors, tracks } = parsed.plan;
     Alert.alert(
       `Restore from ${label}?`,
-      `It has ${anchors.length} dates, ${tracks.length} tracks, ${entries.length} stories. What you have now stays in Backups.`,
+      `It has ${anchors.length} dates, ${tracks.length} plans. What you have now stays in Backups.`,
       [
         { text: 'Cancel', style: 'cancel' },
         {

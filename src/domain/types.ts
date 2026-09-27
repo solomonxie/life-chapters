@@ -9,8 +9,23 @@ export interface Anchor {
   kind: string;
   label: string;
   place?: string;
+  /** Where it happened: a listed city ("Toronto, Ontario, Canada") or free text. */
+  location?: string;
   date: CivilDate;
   precision: DatePrecision;
+  /** The user's own words about what happened. */
+  note?: string;
+  /** Whose board this sits on; absent means "me". */
+  personId?: string;
+  /** The other person in a linked event (spouse, child, parent). */
+  withPersonId?: string;
+  /** Shared by the two copies of a linked event, one per person. */
+  linkId?: string;
+}
+
+export interface Person {
+  id: string;
+  name: string;
 }
 
 export interface LifeEvent {
@@ -31,6 +46,12 @@ export interface Chapter {
   isCurrent: boolean;
 }
 
+/** Whole years of age of the person the anchor is about; `to` inclusive, open if absent. */
+export interface AgeRange {
+  from: number;
+  to?: number;
+}
+
 export interface StepTemplate {
   id: string;
   title: string;
@@ -44,6 +65,9 @@ export interface StepTemplate {
   documents: string[];
   prepare: string[];
   howTo?: string;
+  ages?: AgeRange;
+  /** Plain-language "applies if…" lines; a step that doesn't apply gets "Not for me". */
+  conditions?: string[];
   /** Set on a step the user inserted, e.g. a redo; names the original. */
   redoOf?: string;
 }
@@ -60,6 +84,9 @@ export interface Playbook {
   summary?: string;
   region?: string;
   anchorKind: string;
+  ages?: AgeRange;
+  /** Who this is for, in plain language. */
+  conditions?: string[];
   reviewedAt: CivilDate;
   version?: number;
   sources?: Source[];
@@ -85,6 +112,7 @@ export interface StepInstance {
 export interface Track {
   id: string;
   playbookId: string;
+  personId?: string;
   /** The anchor this track hangs off; its date wins over `anchorEventDate`. */
   anchorId?: string;
   anchorEventDate: CivilDate;
@@ -118,6 +146,7 @@ export interface ScheduledStep {
 export interface DocumentRecord {
   id: string;
   name: string;
+  personId?: string;
   issuedOn?: CivilDate;
   expiresOn?: CivilDate;
   number?: string;
@@ -127,15 +156,3 @@ export interface DocumentRecord {
   scanPath?: string;
 }
 
-/** A story: what happened, in the user's words. Text only. */
-export interface Entry {
-  id: string;
-  date: CivilDate;
-  precision: DatePrecision;
-  title?: string;
-  body: string;
-  /** One of the user's dates this story is about. */
-  anchorId?: string;
-  createdOn: CivilDate;
-  updatedOn: CivilDate;
-}

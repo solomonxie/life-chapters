@@ -9,7 +9,7 @@ describe('store', () => {
   it('attaches the tracks picked while saving a date, and schedules them', () => {
     const id = actions.saveAnchor(
       { kind: 'visa-lodge', label: 'Lodge a visa application', date: '2028-06-01', precision: 'day' },
-      ['skilled-migration-au'],
+      ['skilled-migration-ca'],
     );
     const s = useStore.getState();
     expect(s.plan.tracks).toHaveLength(1);

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Linking, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Linking, StyleSheet, Switch, Text, View } from 'react-native';
 import { formatDate } from '../domain/format';
 import { isStale } from '../domain/playbook';
-import { goTab, type Routes } from '../navigation/routes';
+import type { Nav } from '../navigation/routes';
 import { weekdayName } from '../notify/queue';
 import { useBackups } from '../state/autobackup';
 import { useReminders } from '../state/reminders';
@@ -24,7 +23,8 @@ export const VERSION = '1.0';
 export const CAP_INFO = (wanted: number) =>
   `iOS holds at most 64 pending reminders per app. Your plan has ${wanted} open steps, so only the nearest ones are handed over; the queue refills each time you open the app or the plan changes. Nothing is lost — a step years out just has no alarm set yet.`;
 
-export function SettingsScreen({ navigation }: NativeStackScreenProps<Routes, 'Settings'>) {
+/** The bottom of the one page. Its sub-pages still push. */
+export function SettingsSection({ navigation }: { navigation: Nav }) {
   const p = usePalette();
   const settings = useStore(s => s.settings);
   const plan = useStore(s => s.plan);
@@ -44,14 +44,14 @@ export function SettingsScreen({ navigation }: NativeStackScreenProps<Routes, 'S
   const [exporting, setExporting] = useState(false);
   const denied = rem.permission === 'denied';
   const stale = playbooks.filter(pb => isStale(pb, now)).length;
-  const docCount = new Set([
-    ...plan.documents.map(d => d.id),
-  ]).size;
 
   const hour = (h: number) => (h === 12 ? '12pm' : h > 12 ? `${h - 12}pm` : `${h}am`);
 
   return (
-    <ScrollView style={{ backgroundColor: p.bg }} contentContainerStyle={styles.content}>
+    <>
+      <Text style={[type.title, styles.title, { color: p.text }]} accessibilityRole="header">
+        Settings
+      </Text>
       <SectionHeader title="Reminders" info={CAP_INFO(rem.wanted)} />
       {denied ? (
         <Card style={[styles.denied, { backgroundColor: p.lateSoft }]}>
@@ -82,15 +82,6 @@ export function SettingsScreen({ navigation }: NativeStackScreenProps<Routes, 'S
             value={`${rem.queued}/64`}
             onPress={() => navigation.navigate('Reminders')}
           />
-        </Rows>
-      </Card>
-
-      <SectionHeader title="Your plan" />
-      <Card>
-        <Rows>
-          <ListRow label="Dates" value={String(plan.anchors.length)} onPress={() => goTab(navigation, 'TimelineTab')} />
-          <ListRow label="Tracks" value={String(plan.tracks.length)} onPress={() => goTab(navigation, 'TracksTab')} />
-          <ListRow label="Documents" value={String(docCount)} onPress={() => goTab(navigation, 'DocsTab')} />
         </Rows>
       </Card>
 
@@ -208,12 +199,12 @@ export function SettingsScreen({ navigation }: NativeStackScreenProps<Routes, 'S
       <Text style={[type.caption, styles.tagline, { color: p.dim }]}>
         Life Chapters {VERSION} · not advice
       </Text>
-    </ScrollView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  content: { paddingBottom: 80 },
+  title: { paddingHorizontal: space.lg, paddingTop: space.xxl },
   flex: { flex: 1 },
   oneLine: { paddingHorizontal: space.lg, paddingBottom: space.sm },
   denied: { flexDirection: 'row', alignItems: 'center', padding: space.md, paddingHorizontal: space.lg, marginBottom: space.sm },

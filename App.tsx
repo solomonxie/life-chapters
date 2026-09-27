@@ -8,49 +8,39 @@ import type { Repository } from './src/data/repository';
 import { RootNavigator, navRef } from './src/navigation';
 import { startAutoBackup } from './src/state/autobackup';
 import { startSync } from './src/state/sync';
+import { trackOwner } from './src/domain/people';
 import { actions, useStore } from './src/state/store';
 import { ToastHost, usePalette } from './src/ui';
 
-/** A notification's target: "radar" or "step:<instanceId>". */
+/** A notification's target: "plans" or "step:<instanceId>". A step opens on its owner's board. */
 function openTarget(target: string) {
   if (!navRef.isReady()) return;
   const [kind, id] = target.split(/:(.+)/);
-  navRef.navigate('Main', {
-    screen: 'RadarTab',
-    params:
-      kind === 'step' && id
-        ? { screen: 'Step', params: { instanceId: id }, initial: false }
-        : { screen: 'Radar' },
-  });
+  const s = useStore.getState();
+  const track = s.plan.tracks.find(t => id?.startsWith(`${t.id}:`));
+  if (track) actions.switchPerson(trackOwner(track, s.plan.anchors));
+  navRef.navigate('Main', kind === 'step' && id ? { screen: 'Step', params: { instanceId: id } } : { screen: 'Timeline' });
 }
 
-/** "Radar", "Step:3" (nth open step), "Document:passport" … after seeding. */
+/** "Timeline", "Timeline:Ava" (her board), "Step:3" (nth open step), "Document:passport" … after seeding. */
 function qaJump(target: string) {
   const [screen, arg] = target.split(':');
-  const tabOf: Record<string, string> = {
-    Timeline: 'TimelineTab', Chapter: 'TimelineTab', Settings: 'TimelineTab', Reminders: 'TimelineTab', Backups: 'TimelineTab',
-    AnchorEdit: 'TimelineTab', Sources: 'TimelineTab', About: 'TimelineTab',
-    Journal: 'JournalTab', Entry: 'JournalTab',
-    Radar: 'RadarTab', Step: 'RadarTab',
-    Tracks: 'TracksTab', Library: 'TracksTab', Playbook: 'TracksTab',
-    Docs: 'DocsTab', Document: 'DocsTab',
-  };
   const s = useStore.getState();
-  const open = s.view.steps.filter(x => x.status === 'pending').sort((a, b) => (a.startBy < b.startBy ? -1 : 1));
+  if (screen === 'Timeline' && arg) {
+    const person = s.plan.people.find(x => x.name === arg);
+    if (person) actions.switchPerson(person.id);
+  }
+  const mine = useStore.getState().mine;
+  const open = mine.view.steps.filter(x => x.status === 'pending').sort((a, b) => (a.startBy < b.startBy ? -1 : 1));
   const params: Record<string, object | undefined> = {
     Step: { instanceId: open[Number(arg ?? 0)]?.instanceId },
     Document: { documentId: arg ?? 'passport' },
-    Playbook: { playbookId: arg ?? 'skilled-migration-au', trackId: s.plan.tracks.find(t => t.playbookId === (arg ?? 'skilled-migration-au'))?.id },
-    Chapter: { eventId: s.plan.anchors.find(a => a.kind === (arg ?? 'migrated'))?.id },
-    Entry: arg === 'new' ? undefined : { entryId: s.plan.entries[Number(arg ?? 0)]?.id },
-    AnchorEdit: arg ? { anchorId: s.plan.anchors.find(a => a.kind === arg)?.id } : undefined,
+    Playbook: { playbookId: arg ?? 'skilled-migration-ca', trackId: mine.tracks.find(t => t.playbookId === (arg ?? 'skilled-migration-ca'))?.id },
+    Chapter: { eventId: mine.anchors.find(a => a.kind === (arg ?? 'migrated'))?.id },
+    AnchorEdit: arg ? { anchorId: mine.anchors.find(a => a.kind === arg)?.id } : undefined,
   };
-  const tab = tabOf[screen] ?? 'TimelineTab';
-  const root = tab.replace('Tab', '');
-  navRef.navigate('Main', {
-    screen: tab,
-    params: screen === root ? { screen } : { screen, params: params[screen], initial: false },
-  });
+  const known = ['Chapter', 'AnchorEdit', 'Reminders', 'Backups', 'Sources', 'About', 'Step', 'Library', 'Playbook', 'Document'];
+  navRef.navigate('Main', known.includes(screen) ? { screen, params: params[screen] } : { screen: 'Timeline' });
 }
 
 function Shell({ repository, qa }: { repository: Repository; qa?: string }) {

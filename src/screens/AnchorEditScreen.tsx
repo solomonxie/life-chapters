@@ -4,6 +4,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { resolve } from '../domain/dates';
 import { formatPrecise } from '../domain/format';
 import { kindById } from '../domain/kinds';
+import { isLinkedKind } from '../domain/people';
 import type { DatePrecision } from '../domain/types';
 import type { Routes } from '../navigation/routes';
 import { haptic } from '../platform';
@@ -14,6 +15,7 @@ import {
   CheckRow,
   DateWheel,
   KindPicker,
+  PlacePicker,
   ListRow,
   Rows,
   SectionHeader,
@@ -23,7 +25,7 @@ import {
   usePalette,
 } from '../ui';
 
-type Open = 'what' | 'when' | 'precision' | null;
+type Open = 'what' | 'where' | 'when' | 'precision' | null;
 
 const PRECISIONS = [
   { value: 'year', label: 'just the year' },
@@ -34,16 +36,22 @@ const PRECISIONS = [
 export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<Routes, 'AnchorEdit'>) {
   const p = usePalette();
   const anchorId = route.params?.anchorId;
-  const plan = useStore(s => s.plan);
+  const plan = useStore(s => s.mine);
   const playbooks = useStore(s => s.playbooks);
-  const view = useStore(s => s.view);
+  const view = useStore(s => s.mine.view);
   const now = useStore(s => s.now);
+  const people = useStore(s => s.plan.people);
+  const me = useStore(s => s.mine.person.id);
+  const others = people.filter(x => x.id !== me);
+  const allAnchors = useStore(s => s.plan.anchors);
   const existing = plan.anchors.find(a => a.id === anchorId);
 
   const startKind = existing?.kind ?? route.params?.kind ?? 'migrated';
   const [kind, setKind] = useState(startKind);
   const [label, setLabel] = useState(existing?.label ?? kindById(startKind)?.label ?? '');
   const [place, setPlace] = useState(existing?.place ?? '');
+  const [note, setNote] = useState(existing?.note ?? '');
+  const [location, setLocation] = useState(existing?.location);
   const [date, setDate] = useState(existing?.date ?? (startKind === 'born' ? '1990-01-01' : now));
   const [precision, setPrecision] = useState<DatePrecision>(existing?.precision ?? 'day');
   const [open, setOpen] = useState<Open>(existing ? null : 'what');
@@ -55,10 +63,13 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
     existing.kind !== kind ||
     existing.label !== label ||
     (existing.place ?? '') !== place ||
+    (existing.note ?? '') !== note ||
+    existing.location !== location ||
     existing.date !== date ||
     existing.precision !== precision ||
     attach.length > 0;
 
+  const linked = isLinkedKind(kind);
   const toggle = (row: Open) => setOpen(o => (o === row ? null : row));
   const unlocks = playbooks.filter(pb => pb.anchorKind === kind);
   const attachedHere = new Set(
@@ -68,8 +79,18 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
   const doSave = () => {
     saved.current = true;
     actions.saveAnchor(
-      { id: existing?.id, kind, label: label.trim() || 'A date', place: place.trim() || undefined, date, precision },
+      {
+        id: existing?.id,
+        kind,
+        label: label.trim() || 'A date',
+        place: place.trim() || undefined,
+        note: note.trim() || undefined,
+        location,
+        date,
+        precision,
+      },
       attach,
+      linked ? place : undefined,
     );
     haptic('success');
     navigation.goBack();
@@ -99,9 +120,17 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
   const remove = () => {
     if (!existing) return;
     const n = plan.tracks.filter(t => t.anchorId === existing.id).length;
+    const alsoOn = allAnchors
+      .filter(a => existing.linkId && a.linkId === existing.linkId && a.id !== existing.id)
+      .map(a => people.find(x => x.id === (a.personId ?? 'me'))?.name)
+      .filter(Boolean);
+    const detail = [
+      n ? `${n} plan${n === 1 ? '' : 's'} lose${n === 1 ? 's' : ''} their date and detach.` : '',
+      alsoOn.length ? `Also removed from ${alsoOn.join(' and ')}'s timeline.` : '',
+    ].filter(Boolean).join(' ');
     Alert.alert(
       `Delete "${existing.label}"?`,
-      n ? `${n} track${n === 1 ? '' : 's'} lose${n === 1 ? 's' : ''} their anchor and detach.` : undefined,
+      detail || undefined,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -173,7 +202,7 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
         ) : null}
         <View style={[styles.divider, { backgroundColor: p.hairline }]} />
         <View style={styles.inputRow}>
-          <Text style={[type.body, { color: p.text }]}>Detail</Text>
+          <Text style={[type.body, { color: p.text }]}>{linked ? 'Who' : 'Detail'}</Text>
           <TextInput
             value={place}
             onChangeText={setPlace}
@@ -182,9 +211,40 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
             placeholderTextColor={p.faint}
             style={[type.body, styles.input, { color: p.dim }]}
             returnKeyType="done"
-            accessibilityLabel="Detail"
+            accessibilityLabel={linked ? 'Who' : 'Detail'}
           />
         </View>
+        {linked && others.length ? (
+          <View style={styles.chips}>
+            {others.map(x => (
+              <Pressable
+                key={x.id}
+                onPress={() => setPlace(x.name)}
+                style={[styles.chip, { backgroundColor: place === x.name ? p.accentSoft : p.bg }]}
+                accessibilityRole="button"
+                accessibilityState={{ selected: place === x.name }}>
+                <Text style={[type.caption, { color: p.accent }]}>{x.name}</Text>
+              </Pressable>
+            ))}
+          </View>
+        ) : null}
+        <View style={[styles.divider, { backgroundColor: p.hairline }]} />
+        <ListRow
+          label="Place"
+          value={location ?? 'optional'}
+          open={open === 'where'}
+          onPress={() => toggle('where')}
+        />
+        {open === 'where' ? (
+          <PlacePicker
+            value={location}
+            onPick={v => {
+              setLocation(v);
+              setOpen(null);
+              haptic('selection');
+            }}
+          />
+        ) : null}
         <View style={[styles.divider, { backgroundColor: p.hairline }]} />
         <ListRow
           label="When"
@@ -215,6 +275,21 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
         />
       </Card>
 
+      <SectionHeader title="Notes" />
+      <Card>
+        <TextInput
+          value={note}
+          onChangeText={setNote}
+          onFocus={() => setOpen(null)}
+          placeholder="What happened, who was there, what it meant"
+          placeholderTextColor={p.faint}
+          multiline
+          scrollEnabled={false}
+          style={[type.body, styles.notes, { color: p.text }]}
+          accessibilityLabel="Notes"
+        />
+      </Card>
+
       {future ? (
         <Text style={[type.caption, styles.note, { color: p.dim }]}>
           That's ahead — it'll show as a plan, not a fact.
@@ -223,7 +298,7 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
 
       {unlocks.length ? (
         <>
-          <SectionHeader title="Tracks this unlocks" />
+          <SectionHeader title="Plans this unlocks" />
           <Card>
             <Rows>
               {unlocks.map(pb =>
@@ -258,7 +333,7 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
 
 const placeholderFor = (kind: string) =>
   ({
-    born: 'a place',
+    born: 'optional',
     graduated: 'a degree',
     migrated: 'a country',
     'moved-city': 'a city',
@@ -279,6 +354,9 @@ const styles = StyleSheet.create({
     gap: space.md,
   },
   input: { flex: 1, textAlign: 'right', paddingVertical: space.md },
+  notes: { minHeight: 96, padding: space.lg, paddingTop: space.md, textAlignVertical: 'top' },
   note: { paddingHorizontal: space.xl, paddingTop: space.sm },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, paddingHorizontal: space.lg, paddingBottom: space.md },
+  chip: { paddingHorizontal: space.md, paddingVertical: space.xs + 2, borderRadius: 14 },
   delete: { padding: space.lg, paddingTop: space.xxl },
 });

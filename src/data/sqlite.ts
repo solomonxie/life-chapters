@@ -2,7 +2,7 @@ import { open, type DB } from '@op-engineering/op-sqlite';
 import { EMPTY_PLAN, DEFAULT_SETTINGS, type Stored } from './plan';
 import type { Repository } from './repository';
 
-const TABLES = ['anchors', 'playbooks', 'tracks', 'instances', 'documents', 'entries'] as const;
+const TABLES = ['people', 'anchors', 'playbooks', 'tracks', 'instances', 'documents'] as const;
 type Table = (typeof TABLES)[number];
 
 /** Each migration runs once, in order, recorded in `migrations`. */
@@ -14,6 +14,8 @@ const MIGRATIONS: string[][] = [
     'CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, json TEXT NOT NULL)',
   ],
   ['CREATE TABLE IF NOT EXISTS entries (id TEXT PRIMARY KEY, json TEXT NOT NULL)'],
+  ['DROP TABLE IF EXISTS entries'],
+  ['CREATE TABLE IF NOT EXISTS people (id TEXT PRIMARY KEY, json TEXT NOT NULL)'],
 ];
 
 async function migrate(db: DB) {
