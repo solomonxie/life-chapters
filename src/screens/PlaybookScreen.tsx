@@ -6,7 +6,7 @@ import { formatDuration, formatMonth, formatPrecise } from '../domain/format';
 import { kindLabel } from '../domain/kinds';
 import { ME } from '../domain/people';
 import { anchorDisplay } from '../domain/plan';
-import { provinceName, twinFor } from '../domain/provinces';
+import { fits, rulesName, whereAt, whereName, whereWhy, twinFor } from '../domain/regions';
 import { schedule, topoSort } from '../domain/schedule';
 import type { StepTemplate } from '../domain/types';
 import type { Routes } from '../navigation/routes';
@@ -31,7 +31,7 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: playbook?.title ?? '',
+      title: '',
       headerRight: () => (
         <Pressable onPress={menu} hitSlop={12} accessibilityRole="button" accessibilityLabel="More">
           <Text maxFontSizeMultiplier={1.3} style={[type.headline, { color: p.accent }]}>⋯</Text>
@@ -55,7 +55,8 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
   const depth = useMemo(() => (playbook ? depths(playbook.steps) : new Map<string, number>()), [playbook]);
 
   if (!playbook) return null;
-  const twin = twinFor(playbook, plan.province, playbooks);
+  const due = whereAt(anchor, plan.where);
+  const twin = twinFor(playbook, due, playbooks);
 
   const trackSteps = track ? view.steps.filter(s => s.trackId === track.id) : [];
   const ordered = topoSort(playbook.steps);
@@ -123,6 +124,9 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={styles.content}>
       <View style={styles.head}>
+        <Text style={[type.title, { color: p.text }]} accessibilityRole="header">
+          {playbook.title}
+        </Text>
         <Text style={[type.caption, { color: p.dim }]}>
           {playbook.steps.length} steps · anchored on "{kindLabel(playbook.anchorKind)}"
           {playbook.region ? ` · ${playbook.region}` : ''}
@@ -134,15 +138,15 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
         <Disclaimer playbook={playbook} now={now} />
       </View>
 
-      {playbook.province && plan.province && playbook.province !== plan.province ? (
+      {!fits(playbook, due) ? (
         <Card style={[styles.needs, { backgroundColor: p.lateSoft }]}>
           <Text style={[type.body, styles.flex, { color: p.text }]}>
-            ⚠ {provinceName(playbook.province)} rules. {plan.person.id === ME ? 'You live' : `${plan.person.name} lives`} in{' '}
-            {provinceName(plan.province)}.
+            ⚠ {rulesName(playbook)} rules;{' '}
+            {whereWhy(anchor, plan.where).replace(/^lives/, plan.person.id === ME ? 'you live' : `${plan.person.name} lives`)}.
           </Text>
           {twin ? (
             <Button
-              title={track ? `Switch to ${provinceName(plan.province)}` : `See ${provinceName(plan.province)}`}
+              title={track ? `Switch to ${whereName(due)}` : `See ${whereName(due)}`}
               kind="plain"
               onPress={() => {
                 if (track) {

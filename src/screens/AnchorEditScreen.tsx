@@ -5,6 +5,7 @@ import { resolve } from '../domain/dates';
 import { formatPrecise } from '../domain/format';
 import { kindById } from '../domain/kinds';
 import { isLinkedKind } from '../domain/people';
+import { plansFor } from '../domain/regions';
 import type { DatePrecision } from '../domain/types';
 import type { Routes } from '../navigation/routes';
 import { haptic } from '../platform';
@@ -71,7 +72,8 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
 
   const linked = isLinkedKind(kind);
   const toggle = (row: Open) => setOpen(o => (o === row ? null : row));
-  const unlocks = playbooks.filter(pb => pb.anchorKind === kind);
+  const where = useStore(s => s.mine.where);
+  const unlocks = plansFor({ kind, location }, where, playbooks);
   const attachedHere = new Set(
     plan.tracks.filter(t => t.anchorId === anchorId).map(t => t.playbookId),
   );
@@ -339,7 +341,10 @@ const placeholderFor = (kind: string) =>
     'moved-city': 'a city',
     'school-start': "the child's name",
     'child-born': "the child's name",
-    'visa-lodge': 'the visa',
+    'visa-lodge': 'the program',
+    'visa-granted': 'the permit',
+    visit: 'who: Mom and Dad…',
+    trip: 'a country',
   }[kind] ?? 'optional');
 
 const styles = StyleSheet.create({

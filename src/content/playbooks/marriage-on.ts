@@ -6,6 +6,7 @@ export const marriageOn: Playbook = {
   summary:
     'Paperwork plan for a wedding in Ontario, from booking an officiant and the marriage licence to the certificate, name updates, taxes and wills.',
   region: 'Ontario, Canada',
+  country: 'CA',
   province: 'ON',
   family: 'marriage',
   anchorKind: 'married',

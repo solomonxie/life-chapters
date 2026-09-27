@@ -6,6 +6,7 @@ export const retirementBc: Playbook = {
   summary:
     'Paperwork plan for public pensions, registered savings and senior benefits from 55 to 72. Federal rules, with British Columbia drug, income and property tax programs.',
   region: 'British Columbia, Canada',
+  country: 'CA',
   province: 'BC',
   family: 'retirement',
   anchorKind: 'born',

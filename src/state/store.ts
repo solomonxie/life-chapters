@@ -3,7 +3,7 @@ import { BUNDLED_PLAYBOOKS } from '../content';
 import { resolve, today } from '../domain/dates';
 import { docId, planView, trackAnchorDate, type PlanView } from '../domain/plan';
 import { LINKED_KINDS, ME, ME_PERSON, isLinkedKind, mirrorOf, ownerOf, scopeTo, type Scoped } from '../domain/people';
-import { livesIn } from '../domain/provinces';
+import { livesIn, type Where } from '../domain/regions';
 import { recordMoves, summarize, type Moves } from '../domain/radar';
 import { planRedo } from '../domain/schedule';
 import type {
@@ -37,13 +37,21 @@ interface Snapshot {
 /** The board on screen: one person's dates, plans, steps and documents. */
 export interface Mine extends Scoped {
   person: Person;
-  /** Two-letter code: set on the person, or inferred from their events. */
-  province?: string;
+  /** Country and province: set on the person, or inferred from their events. */
+  where: Where;
   view: PlanView;
+}
+
+/** What the last plan change was, for the change log. */
+export interface LastChange {
+  cause: string;
+  detail: string | null;
+  person: string;
 }
 
 export interface AppState {
   ready: boolean;
+  lastChange: LastChange | null;
   mine: Mine;
   now: CivilDate;
   plan: Plan;
@@ -74,13 +82,20 @@ function derive(plan: Plan, now: CivilDate, personId: string) {
     mine: {
       ...scoped,
       person,
-      province: livesIn(person.province, scoped.anchors, now),
+      where: livesIn({ country: person.country, province: person.province }, scoped.anchors, now),
       view: planView(playbooks, scoped.tracks, scoped.anchors, scoped.instances, now),
     },
   };
 }
 
 const personIdNow = () => get().settings.personId;
+
+/** Date kinds whose shipped label changed; a date still showing the old default takes the new one. */
+const RELABELED: Record<string, string> = {
+  'Migrated to a country': 'Relocated to a country',
+  'Lodge a visa application': 'Apply for permanent residence',
+  'Visa granted': 'Permit or visa granted',
+};
 
 /** Bundled playbooks that changed id once they became provincial. */
 const RENAMED: Record<string, string> = {
@@ -105,6 +120,7 @@ export const useStore = create<AppState>(() => ({
   ...derive(EMPTY_PLAN, initialNow, ME),
   toast: null,
   undoSnapshot: null,
+  lastChange: null,
 }));
 
 const get = useStore.getState;
@@ -141,6 +157,7 @@ function commit(next: Plan, opts: CommitOptions) {
     moves: recordMoves(s.moves, s.view.steps, derived.view.steps, opts.cause, s.now, exclude),
     undoSnapshot: { plan: s.plan, moves: s.moves },
     toast: message ? { id: ++toastSeq, message, undoable: true } : s.toast,
+    lastChange: { cause: opts.cause, detail: message, person: s.mine.person.name },
   });
   persist();
 }
@@ -216,7 +233,7 @@ export const actions = {
     const plan = stored
       ? {
           people: stored.people?.length ? stored.people : [ME_PERSON],
-          anchors: stored.anchors,
+          anchors: stored.anchors.map(a => ({ ...a, label: RELABELED[a.label] ?? a.label })),
           playbooks: stored.playbooks,
           tracks: stored.tracks.map(t => ({ ...t, playbookId: RENAMED[t.playbookId] ?? t.playbookId })),
           instances: stored.instances,
@@ -255,6 +272,7 @@ export const actions = {
       ...derive(snap.plan, get().now, personIdNow()),
       undoSnapshot: null,
       toast: { id: ++toastSeq, message: 'Undone.', undoable: false },
+      lastChange: { cause: 'Undone', detail: get().lastChange?.cause ?? null, person: get().mine.person.name },
     });
     persist();
   },
@@ -659,11 +677,16 @@ export const actions = {
   },
 
   /** Undefined goes back to inferring it from their events. */
-  setProvince(id: string, province: string | undefined) {
+  setWhere(id: string, where: Where | undefined) {
     const { plan } = get();
     commit(
-      { ...plan, people: plan.people.map(p => (p.id === id ? { ...p, province } : p)) },
-      { cause: 'Province changed', toast: () => null },
+      {
+        ...plan,
+        people: plan.people.map(p =>
+          p.id === id ? { ...p, country: where?.country, province: where?.province } : p,
+        ),
+      },
+      { cause: 'Where they live changed', toast: () => null },
     );
   },
 

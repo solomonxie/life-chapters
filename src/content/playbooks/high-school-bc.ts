@@ -6,6 +6,7 @@ export const highSchoolBc: Playbook = {
   summary:
     'Dogwood requirements, graduation assessments and post-secondary applications for a teen going through a BC public secondary school. Dates assume Grade 8 starts around age 13.',
   region: 'British Columbia, Canada',
+  country: 'CA',
   province: 'BC',
   family: 'high-school',
   anchorKind: 'born',

@@ -6,6 +6,7 @@ export const marriageBc: Playbook = {
   summary:
     'Paperwork plan for a wedding in British Columbia, from booking an officiant and the marriage licence to the certificate, name updates, taxes and wills.',
   region: 'British Columbia, Canada',
+  country: 'CA',
   province: 'BC',
   family: 'marriage',
   anchorKind: 'married',

@@ -6,6 +6,7 @@ export const earlyYearsOn: Playbook = {
   summary:
     'Child care, family programs, health coverage and check-ups for a child from 1 to 4 in Ontario. Child care is run locally; details vary by municipality.',
   region: 'Ontario, Canada',
+  country: 'CA',
   province: 'ON',
   family: 'early-years',
   anchorKind: 'born',

@@ -6,6 +6,7 @@ export const comingOfAgeOn: Playbook = {
   summary:
     'IDs, first job, driving, voting and first accounts from 14 to 19. Federal rules apply across Canada; provincial rules are Ontario\'s.',
   region: 'Ontario, Canada',
+  country: 'CA',
   province: 'ON',
   family: 'coming-of-age',
   anchorKind: 'born',

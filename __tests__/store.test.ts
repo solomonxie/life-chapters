@@ -1,3 +1,4 @@
+import { addDays } from '../src/domain/dates';
 import { createMemoryRepository } from '../src/data/memory';
 import { actions, useStore } from '../src/state/store';
 
@@ -8,7 +9,7 @@ beforeAll(() => actions.load(repo));
 describe('store', () => {
   it('attaches the tracks picked while saving a date, and schedules them', () => {
     const id = actions.saveAnchor(
-      { kind: 'visa-lodge', label: 'Lodge a visa application', date: '2028-06-01', precision: 'day' },
+      { kind: 'visa-lodge', label: 'Apply for permanent residence', date: '2028-06-01', precision: 'day' },
       ['skilled-migration-ca'],
     );
     const s = useStore.getState();
@@ -49,5 +50,25 @@ describe('store', () => {
     const s = useStore.getState();
     expect(s.plan.tracks).toEqual([]);
     expect(s.plan.instances).toEqual([]);
+  });
+});
+
+describe('moving a step', () => {
+  it('replaces the suggested date, pushes what waits on it, and can go back', () => {
+    actions.saveAnchor(
+      { kind: 'visa-lodge', label: 'Apply for permanent residence', date: '2029-06-01', precision: 'day' },
+      ['skilled-migration-ca'],
+    );
+    const s = useStore.getState();
+    const step = s.view.steps.find(x => x.status === 'pending' && s.view.steps.some(y => y.template.dependsOn.includes(x.stepId) && y.trackId === x.trackId))!;
+    const waiter = s.view.steps.find(y => y.trackId === step.trackId && y.template.dependsOn.includes(step.stepId))!;
+    const later = addDays(step.dueBy, 200);
+    actions.moveDue(step.instanceId, later);
+    let v = useStore.getState().view.steps;
+    expect(v.find(x => x.instanceId === step.instanceId)!.dueBy).toBe(later);
+    expect(v.find(x => x.instanceId === waiter.instanceId)!.startBy >= later).toBe(true);
+    actions.moveDue(step.instanceId, undefined);
+    v = useStore.getState().view.steps;
+    expect(v.find(x => x.instanceId === step.instanceId)!.dueBy).toBe(step.dueBy);
   });
 });

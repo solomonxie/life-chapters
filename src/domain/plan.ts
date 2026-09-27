@@ -87,14 +87,17 @@ export function planView(
 
 export const openSteps = (steps: PlannedStep[]) => steps.filter(isOpen);
 
+/** Past their due date — the only steps shown in red. */
 export const lateSteps = (steps: PlannedStep[], now: CivilDate) =>
-  openSteps(steps).filter(s => s.startBy < now && !s.snoozedUntil);
+  openSteps(steps).filter(s => s.dueBy < now && !s.snoozedUntil);
 
 // ── Timeline ────────────────────────────────────────────────────────────────
 
 export interface TimelineNode extends LifeEvent {
   precision: Anchor['precision'];
   pendingSteps: number;
+  /** On the line, but doesn't open a chapter. */
+  moment?: boolean;
 }
 
 export function anchorDisplay(anchor: Anchor): string {
@@ -123,6 +126,7 @@ export function timelineNodes(
       chapterLabel: kind ? (a.place ? `${kind.chapter} · ${a.place}` : kind.chapter) : undefined,
       precision: a.precision,
       pendingSteps: openSteps(steps).filter(s => trackIds.has(s.trackId)).length,
+      moment: kind?.moment,
     };
   });
 
@@ -148,7 +152,7 @@ export function timelineNodes(
 
 export const lifeChapters = (nodes: TimelineNode[], now: CivilDate): Chapter[] =>
   deriveChapters(
-    nodes.filter(n => n.source === 'anchor'),
+    nodes.filter(n => n.source === 'anchor' && !n.moment),
     now,
   );
 
