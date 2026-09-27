@@ -226,8 +226,9 @@ export function documentViews(
         s => s.trackId === engine.trackId && s.stepId === engine.consumer.stepId,
       )!;
       clash = { consumer, source: producer, gapDays: engine.gapDays };
-    } else if (held && expiresOn && neededBy && expiresOn < neededBy.dueBy) {
-      clash = { consumer: neededBy, gapDays: diffDays(expiresOn, neededBy.dueBy) };
+    } else if (held && expiresOn) {
+      const after = askedBy.find(s => isOpen(s) && s !== producer && expiresOn < s.dueBy);
+      if (after) clash = { consumer: after, gapDays: diffDays(expiresOn, after.dueBy) };
     }
 
     return {
