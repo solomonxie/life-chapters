@@ -32,3 +32,18 @@ describe.each(BUNDLED_PLAYBOOKS.map(p => [p.id, p] as const))('%s', (_, playbook
     expect(playbook.sources?.length).toBeGreaterThan(0);
   });
 });
+
+describe('provinces', () => {
+  const provincial = BUNDLED_PLAYBOOKS.filter(p => p.province);
+
+  it('gives every provincial plan a family, one per province', () => {
+    const keys = provincial.map(p => `${p.family}:${p.province}`);
+    expect(provincial.every(p => p.family)).toBe(true);
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('ships a British Columbia twin for every Ontario plan', () => {
+    const families = (code: string) => provincial.filter(p => p.province === code).map(p => p.family).sort();
+    expect(families('BC')).toEqual(families('ON'));
+  });
+});
