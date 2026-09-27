@@ -54,8 +54,8 @@ One page, no tabs:
   any date
 - **People** — a board each for you, a partner, a child; a shared birth or
   wedding sits on both boards and moves as one
-- **Plans** — playbooks you attach, turned into dated steps, grouped by what
-  to start now / next / this year / later; expiring documents on top
+- **Plans** — playbooks you attach, turned into dated steps; each shows its
+  next step, and its page what to start now and next; expiring documents on top
 - **Settings** — at the bottom: reminders, backups (a daily copy plus a
   change log), playbook sources
 - Local reminders ahead of each step's start-by date, for everyone

@@ -35,7 +35,8 @@ const COUNTRY_NAMES: Record<string, string> = {
 };
 
 export const provinceName = (code?: string) => PROVINCES.find(p => p.code === code)?.name;
-export const countryName = (code?: string) => COUNTRIES.find(c => c.code === code)?.name ?? code;
+export const countryName = (code?: string) =>
+  Object.entries(COUNTRY_NAMES).find(([, c]) => c === code)?.[0].replace(/\b\w/g, l => l.toUpperCase()) ?? code;
 
 /** "Burnaby" or "British Columbia" or "China". */
 export const whereName = (w: Where) => provinceName(w.province) ?? countryName(w.country);
@@ -64,16 +65,16 @@ export const provinceOf = (location?: string) => whereOf(location).province;
 /** Dates that say where someone lives; a wedding or a trip abroad doesn't. */
 const RESIDENCE_KINDS = new Set(['born', 'migrated', 'moved-city', 'home-bought']);
 
+/** The latest date so far that says where they live and has a known place. */
+export const residenceOf = (anchors: Anchor[], now: CivilDate): Anchor | undefined =>
+  [...anchors]
+    .filter(a => a.date <= now && RESIDENCE_KINDS.has(a.kind) && whereOf(a.location).country)
+    .sort((a, b) => (a.date < b.date ? 1 : -1))[0];
+
 /** Set by hand, or else where they last moved to (or were born). */
 export function livesIn(set: Where | undefined, anchors: Anchor[], now: CivilDate): Where {
   if (set?.country) return set;
-  return (
-    [...anchors]
-      .filter(a => a.date <= now && RESIDENCE_KINDS.has(a.kind))
-      .sort((a, b) => (a.date < b.date ? 1 : -1))
-      .map(a => whereOf(a.location))
-      .find(w => w.country) ?? {}
-  );
+  return whereOf(residenceOf(anchors, now)?.location);
 }
 
 /** A plan fits unless its country or province is known to differ. */
@@ -107,6 +108,21 @@ export function whereWhy(anchor: Pick<Anchor, 'kind' | 'label' | 'location'> | u
   const here = whereOf(anchor?.location);
   const fromEvent = anchor && anchor.kind !== 'born' && here.country && here.country === at.country;
   return fromEvent ? `${anchor!.label} in ${whereName(at)}` : `lives in ${whereName(at)}`;
+}
+
+/**
+ * What decided where a plan's date counts: the date's own place, "Lives in"
+ * set by hand, or the latest move. The event, when there is one, can be edited.
+ */
+export function decidedBy(
+  anchor: Pick<Anchor, 'kind' | 'location'> | undefined,
+  set: Where | undefined,
+  anchors: Anchor[],
+  now: CivilDate,
+): { event?: Anchor; byHand?: boolean } {
+  if (anchor && anchor.kind !== 'born' && whereOf(anchor.location).country) return { event: anchor as Anchor };
+  if (set?.country) return { byHand: true };
+  return { event: residenceOf(anchors, now) ?? (anchor?.location ? (anchor as Anchor) : undefined) };
 }
 
 /** Plans a date opens: the ones whose country and province fit where it counts. */

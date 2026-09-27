@@ -1,12 +1,13 @@
 # Plans
 
-Everything ahead for the person on screen, grouped by when you must *start*
-it. A section of the one page, under the life line
+The plans of the person on screen, each with its next step; the steps
+themselves, grouped by when you must *start* them, live on each plan's page.
+A section of the one page, under the life line
 ([`timeline.md`](timeline.md)); the library and playbook detail push from it.
 Code calls a plan a *track*; the user never sees that word.
 
 ```
-  PLANS
+  PLANS                                 (3)
  ⌐ Reminders are off, so nothing will        ← only when denied, dismissible
    warn you.            ( Allow )  ( ✕ ) ¬
   ⚠ EXPIRING                            (1)
@@ -14,35 +15,15 @@ Code calls a plan a *track*; the user never sees that word.
  │ Passport                               │
  │ expires Feb 23, 2027 · in 150 days     │  ← red + "needed by …" on a clash
  ╰────────────────────────────────────────╯
-  YOUR PLANS                            (2)
  ╭────────────────────────────────────────╮
  │ Skilled migration · CA                 │
- │ [██████░░░░░░░░░░] 2/15    next Sep 28│›
+ │ [██████░░░░░░░░░░░░░░░]           2/15 │›
+ │ Next: Book a language test · now       │  ← nearest open step, one line
  ├────────────────────────────────────────┤
  │ Citizenship · CA                       │
- │ [███░░░░░░░░░░░░░] 2/14    next Nov 12│›
+ │ [███░░░░░░░░░░░░░░░░░░]           2/14 │›
+ │ Next: Record days outside · Sep 28     │
  ╰────────────────────────────────────────╯
-  ACT NOW                               (2)  ← calm; no ⚠, no red
- ╭────────────────────────────────────────╮
- │ Book a language test                   │
- │ start now · due Oct 30                 │  ← red only once past due
- │ Skilled migration · CA                ›│
- ├────────────────────────────────────────┤
- │ Record days spent outside Canada       │
- │ start by Sep 28 · in 2 days            │
- │ Citizenship · CA                      ›│
- ╰────────────────────────────────────────╯
-  NEXT STEPS                            (5) ⌄  ← within 90 days
- ╭────────────────────────────────────────╮
- │ Police certificates     Nov 12        ›│
- │ Address history, 10 yr  Dec 01        ›│
- │ Renew passport          Dec 20    ▼   ›│  ← ▼ = moved later by a reflow
- ╰────────────────────────────────────────╯
-  ( Show all 5 )                            ← the nearest 3 by default
-  THIS YEAR                             (9) ›
-  LATER                                (37) ›
-    Swipe a step left for Done or Snooze,
-    right for Not for me.
   DONE                                  (1)
   ✓ Getting married · Ontario       14/14 ›
   ( + Add a plan )                         → Library
@@ -54,8 +35,7 @@ Code calls a plan a *track*; the user never sees that word.
 no plans     PLANS
              [[ Browse plans ]]            ← primary, → Library
 
-all clear    Nothing to start yet ✓ Next is
-             Police certificates, Nov 12.
+all done     Next: Nothing left to start
 
 broken       CAN'T SCHEDULE                (1)   ← red
              Step "Lodge" depends on "Test",
@@ -113,7 +93,7 @@ English with the Chinese term in parentheses (`Secondary school · 中考 and �
 
 Rules follow the date a plan hangs on, not only the person: a wedding follows
 where it happens, a Born date follows where they live now. A plan whose rules
-don't match says so on its row, in red, naming why:
+don't match says so on its row, in amber, naming why:
 
 ```
   Ontario rules · Married in British Columbia
@@ -124,16 +104,20 @@ and on its detail:
 
 ```
  ╭────────────────────────────────────────╮
- │ ⚠ Ontario rules; Married in British    │
- │ Columbia.       ( Switch to British    │  ← replaces the plan with its
- │                   Columbia )           │    twin on the same date; one
- ╰────────────────────────────────────────╯    undo; progress doesn't carry
+ │ This plan follows British Columbia     │  ← calm, names the event and its
+ │ rules, but your "Relocated to Canada"  │    place, so a wrong pick shows
+ │ event is in Vancouver, Washington,     │
+ │ United States.                         │
+ │ ( Edit event )  ( Switch to … )        │  ← switch replaces the plan with
+ ╰────────────────────────────────────────╯    its twin; one undo
 ```
 
-With no twin for that place, the flag stays and the button doesn't show.
+Which event decided: the plan's own date when it has a place (not Born), else
+`Lives in` set by hand (`your Lives in is set to China`, no Edit), else the
+latest move. With no twin for that place, the switch doesn't show.
 Unattached, the button reads `See British Columbia`.
 
-`Fits your dates` hides a plan that counts from a birth once the person on
+`Fits your events` hides a plan that counts from a birth once the person on
 screen is past its `ages.to` — the newborn plan doesn't fit a 35-year-old, but
 fits Ava on her own board.
 
@@ -145,13 +129,9 @@ fits Ava on her own board.
   Citizenship · CA                          ← full title, wraps
   13 steps · anchored on "Became a
   permanent resident" · Canada
-  Paperwork plan for citizenship by grant
-  as an adult permanent resident, from
-  becoming one to the oath.
-  For age 18+                               ← AppliesIf, components.md
-  • You became a permanent resident
-  • 1,095 days physically in Canada in the
-    5 years before you apply
+  Paperwork plan for citizenship by grant  ← 2 lines, tap to unfold with
+  as an adult permanent resident, from…       AppliesIf (components.md)
+  More
   Reviewed Sep 2026 · not official advice
  ──────────────────────────────────────────
   [[ Attach to my plan ]]                   ← hidden once attached
@@ -161,7 +141,16 @@ fits Ava on her own board.
   First step         would start Sep 2024
   Last step          would finish Oct 2027
  ──────────────────────────────────────────
-  STEPS                                (13)
+  ACT NOW                               (1)  ← attached only; calm, no red
+  Record days spent outside Canada
+  start now · due Oct 30                    ← red only once past due
+  NEXT STEPS                                ← the nearest 3 after Act now
+  Work out the earliest date     Nov 12  ›
+  Gather language proof          Dec 01 ▼›  ← ▼ = moved later by a reflow
+  ⋮
+    Swipe a step left for Done or Snooze,
+    right for Not for me.
+  STEPS · ALL STEPS once attached      (13)
   1  Start a log of days spent outside
      Canada
      └  Work out the earliest date
@@ -171,6 +160,8 @@ fits Ava on her own board.
   SOURCES  ⓘ                               ← open in Safari
   Canadian citizenship: Who can apply    ›
   canada.ca
+  ⋮                                         ← 3 shown
+  ( Show all 7 )
 ```
 
 Attached, the steps list turns into dated step rows and `would start` /
@@ -208,7 +199,9 @@ detaching     │ Detach "Retirement · CA"?    │
 | step row | tap | → [`step.md`](step.md) |
 | step row | swipe ← | `[ Done ]` `[ Snooze ]` |
 | step row | swipe → | `[ Not for me ]` — detaches just this step |
-| bucket header | tap | collapse / expand, remembered; `ACT NOW` never collapses |
+| summary | tap | unfold / fold the description and who it's for |
+| `Edit event` | tap | → the event that decided the place |
+| `Show all n` (sources) | tap | the rest of the sources |
 | `▲` / `▼` | tap | popover: what moved it, and from which date |
 | expiring row | tap | → [`documents.md`](documents.md) detail |
 | plan row | tap | → playbook detail, steps dated |
@@ -224,21 +217,19 @@ detaching     │ Detach "Retirement · CA"?    │
 |---|---|
 | `plans.title` | Plans |
 | `plans.expiring` | ⚠ Expiring |
-| `plans.yours` | Your plans |
-| `plans.group.now` | Act now |
-| `plans.group.d90` | Next steps (3 shown, then "Show all n") |
-| `plans.group.year` | This year |
-| `plans.group.later` | Later |
+| `plan.now` | Act now |
+| `plan.next` | Next steps |
+| `plan.all` | All steps |
 | `plans.done` | Done |
 | `plans.startBy` | start by {Mon d} |
 | `plans.late` | {n} days late |
-| `plans.next` | next {Mon d} · next {Mon yyyy} |
-| `plans.clear` | Nothing to start yet ✓ Next is {step}, {Mon d}. |
+| `plans.next` | Next: {step} · now · {Mon d} · {Mon yyyy} |
+| `plans.clear` | Nothing left to start |
 | `plans.swipeHint` | Swipe a step left for Done or Snooze, right for Not for me. |
 | `plans.add` | + Add a plan · Browse plans |
 | `plans.notif.denied` | Reminders are off, so nothing will warn you. |
-| `library.fits` | Fits your dates |
-| `library.fitsInfo` | Plans that hang off a kind of date this person already has, fit where that date happened, and that they haven't aged past. |
+| `library.fits` | Fits your events |
+| `library.fitsInfo` | Plans that hang off a kind of event this person already has, fit where that event happened, and that they haven't aged past. |
 | `library.here` | {Country} and {Province} · {Country} · Everything |
 | `library.livesIn` | Lives in {place} · Plans for other places are below |
 | `library.livesIn.unknown` | Where do they live? · Pick a place to see only the plans that apply |
@@ -247,6 +238,8 @@ detaching     │ Detach "Retirement · CA"?    │
 | `library.soonInfo` | Plans for Canada and China, for now. |
 | `plan.flag` | {Rules} rules · {Kind} in {place} · {Rules} rules · lives in {place} |
 | `plan.flag.switch` | Switch to {place} · See {place} |
+| `plan.flag.detail` | This plan follows {Rules} rules, but {whose} "{event}" event is in {place}. · … but {whose} Lives in is set to {place}. |
+| `plan.flag.edit` | Edit event |
 | `playbook.reviewed` | Reviewed {Mon yyyy} · not official advice |
 | `playbook.stale` | Over {n} years old. Check the steps against the current rules. |
 | `playbook.needsAnchor` | Needs a "{kind}" date first. |
@@ -254,8 +247,10 @@ detaching     │ Detach "Retirement · CA"?    │
 
 ## Notes
 
-`ACT NOW` is anything to start within 14 days, late ones included. `THIS YEAR`
-and `LATER` start collapsed. A snoozed step groups by the day its snooze ends.
+`ACT NOW` is anything to start within 14 days, late ones included; `NEXT
+STEPS` the nearest 3 after that. A snoozed step groups by the day its snooze
+ends. They sit on the plan's page, not the one page, so the page stays a list
+of plans, not a list of every step.
 
 Grouping is by **start-by**, not due date — the point is being warned while
 there's still time. A step due in 2 years whose paperwork takes 14 months

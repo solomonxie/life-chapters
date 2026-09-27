@@ -43,8 +43,8 @@ steps. One timeline, one set of dates, both halves.
 - Each step carries: prerequisites, documents to obtain, prep actions, how-to
   notes, lead time, and validity window
 - Completing a step, or editing an anchor, reflows every dependent date
-- **Plans**: what to start now, the next few steps, this year, later — the
-  alarm fires at *start-by*, not at the deadline
+- **Plans**: each with its next step; on its page, what to start now and the
+  next few — the alarm fires at *start-by*, not at the deadline
 - Local notification ahead of each step; weekly digest
 - Fully offline, no account, no server
 
@@ -172,7 +172,7 @@ app covers more than one country's paperwork.
 - Shown, not enforced: eligibility is exactly the advice the app refuses to
   give. The user reads "Only if they plan to go to university in Ontario" and
   swipes the step away if it isn't them.
-- One filter uses them: "Fits your dates" hides a birth-counted plan the person
+- One filter uses them: "Fits your events" hides a birth-counted plan the person
   has aged past. A 35-year-old isn't offered the newborn plan; Ava is.
 
 ## Data & integrations

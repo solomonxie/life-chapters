@@ -2,7 +2,7 @@ import { BUNDLED_PLAYBOOKS } from '../src/content';
 import { createMemoryRepository } from '../src/data/memory';
 import { EMPTY_PLAN } from '../src/data/plan';
 import { ME } from '../src/domain/people';
-import { fits, livesIn, plansFor, twinFor, whereAt, whereOf, whereWhy } from '../src/domain/regions';
+import { countryName, decidedBy, fits, livesIn, plansFor, twinFor, whereAt, whereOf, whereWhy } from '../src/domain/regions';
 import type { Anchor, Playbook } from '../src/domain/types';
 import { actions, useStore } from '../src/state/store';
 
@@ -33,6 +33,22 @@ describe('where someone lives', () => {
   it("isn't moved by a wedding", () => {
     const anchors = [at('2020-01-01', 'Vancouver, British Columbia, Canada'), at('2024-06-01', 'Toronto, Ontario, Canada', 'married')];
     expect(livesIn(undefined, anchors, '2026-09-27')).toEqual(BC);
+  });
+});
+
+describe('what decided the place', () => {
+  const moved = at('2023-01-02', 'Vancouver, Washington, United States', 'migrated');
+  const born = at('1988-08-06', 'Nanchang, Jiangxi, China', 'born');
+
+  it('names the latest move for a Born plan, so a wrong pick can be fixed', () => {
+    expect(decidedBy(born, undefined, [born, moved], '2026-09-27').event).toBe(moved);
+    expect(countryName(whereOf(moved.location).country)).toBe('United States');
+  });
+
+  it("is the plan's own date when it has a place, and Lives in when set by hand", () => {
+    const wedding = at('2022-06-22', 'Toronto, Ontario, Canada', 'married');
+    expect(decidedBy(wedding, { country: 'CN' }, [moved], '2026-09-27').event).toBe(wedding);
+    expect(decidedBy(born, { country: 'CN' }, [moved], '2026-09-27')).toEqual({ byHand: true });
   });
 });
 
