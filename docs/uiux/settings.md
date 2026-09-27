@@ -18,6 +18,9 @@ skill (`references/mobile.md`) — the controls stay above the fold.
   Documents                         12  ›
  ──────────────────────────────────────────
   BACKUP  ⓘ
+  On this iPhone          today 21:05 · 14  ›   → Backups child
+  iCloud Drive                           ─●
+  Last iCloud copy        today 21:05
   Last export       Sep 12, 2026 · 41 KB
   ( Export… )        ( Import… )
  ──────────────────────────────────────────
@@ -67,6 +70,47 @@ skill (`references/mobile.md`) — the controls stay above the fold.
    step 5 years out has no alarm set yet. ¬
 ```
 
+## Backups child
+
+Every change writes a snapshot. Nothing to press.
+
+```
+ ‹ Settings      Backups
+ ──────────────────────────────────────────
+  ON THIS IPHONE  ⓘ                    (38)
+  Today                                (14) ⌄
+    21:05:33                                ›
+    20:58:10                                ›   ← counts shown on tap, in the confirm
+    ⋮
+  Yesterday                            (20) ›
+  Thu, Sep 24                           (4) ›
+ ──────────────────────────────────────────
+  ICLOUD DRIVE  ⓘ                       (5)
+  Today          one copy, replaced all day ›
+  Yesterday                                 ›
+  ⋮
+ ──────────────────────────────────────────
+  ( Show in Files )
+```
+
+`ⓘ` on this iPhone: "A copy after every change, never overwritten. Each day
+keeps its latest 20; days older than a week are cleared." `ⓘ` iCloud: "One
+file a day in iCloud Drive › Life Chapters, replaced on every change that day.
+Survives losing the phone."
+
+Tap a row → confirm, then the plan is replaced with that copy — and the plan
+you had a moment ago is itself already a snapshot, so a restore can be undone
+from the same list.
+
+```
+  ┌──────────────────────────────────────┐
+  │ Restore from 20:58?                  │
+  │ It has 9 dates, 3 tracks, 3 stories. │
+  │ What you have now stays in Backups.  │
+  │   ( Cancel )        [[ Restore ]]!   │
+  └──────────────────────────────────────┘
+```
+
 ## States
 
 ```
@@ -88,9 +132,14 @@ import, would replace
   │   ( Cancel )        [[ Replace ]]!   │
   └──────────────────────────────────────┘
 
+icloud unavailable
+  iCloud Drive                         ─●·
+  ⌐ iCloud Drive is off for this iPhone.   ¬   ← toggle disabled
+                         ( Open Settings )
+
 never exported
-  Last export       never
-  ⌐ Nothing is backed up. ¬   ( Export… )
+  Last export       never                      ← no warning: snapshots
+                                                 already cover the phone
 
 stale playbooks
   Check review dates             2 old  ›

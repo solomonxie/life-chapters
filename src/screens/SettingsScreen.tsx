@@ -5,12 +5,20 @@ import { formatDate } from '../domain/format';
 import { isStale } from '../domain/playbook';
 import { goTab, type Routes } from '../navigation/routes';
 import { weekdayName } from '../notify/queue';
+import { useBackups } from '../state/autobackup';
 import { useReminders } from '../state/reminders';
 import { actions, useStore } from '../state/store';
 import { Button, Card, ListRow, Rows, SectionHeader, space, type, usePalette } from '../ui';
 import { exportBackup, importBackup } from './backup';
 
 /** Keep equal to MARKETING_VERSION in project.pbxproj. */
+/** "today 21:05" · "Sep 24 21:05" from a snapshot name or an ISO-ish stamp. */
+const snapshotLabel = (stamp: string, now: string) => {
+  const day = stamp.slice(0, 10);
+  const time = stamp.slice(11, 16).replace('-', ':');
+  return `${day === now ? 'today' : formatDate(day).replace(/, \d{4}$/, '')} ${time}`;
+};
+
 export const VERSION = '1.0';
 
 export const CAP_INFO = (wanted: number) =>
@@ -23,6 +31,16 @@ export function SettingsScreen({ navigation }: NativeStackScreenProps<Routes, 'S
   const playbooks = useStore(s => s.playbooks);
   const now = useStore(s => s.now);
   const rem = useReminders();
+  const backups = useBackups();
+  const icloudBlocked = backups.icloudStatus === 'driveOff' || backups.icloudStatus === 'notEntitled';
+  const icloudDetail =
+    backups.icloudStatus === 'driveOff'
+      ? 'iCloud Drive is off for this iPhone.'
+      : backups.icloudStatus === 'notEntitled'
+      ? 'Not available in this build.'
+      : settings.icloudBackup && backups.lastICloud
+      ? `One file a day · last ${snapshotLabel(backups.lastICloud, now)}`
+      : 'One file a day, replaced on every change';
   const [exporting, setExporting] = useState(false);
   const denied = rem.permission === 'denied';
   const stale = playbooks.filter(pb => isStale(pb, now)).length;
@@ -78,9 +96,34 @@ export function SettingsScreen({ navigation }: NativeStackScreenProps<Routes, 'S
 
       <SectionHeader
         title="Backup"
-        info="The whole plan as one JSON file, out through the share sheet — save it to Files, AirDrop it, anywhere. Nothing is uploaded by the app. Import the same file to restore. Scans aren't included; they live in Files › Life Chapters."
+        info="Every change is saved as a snapshot on this iPhone, and — if you turn it on — as one file a day in your own iCloud Drive. Export sends the same file anywhere through the share sheet. Scans aren't included; they live in Files › Life Chapters."
       />
       <Card>
+        <ListRow
+          label="On this iPhone"
+          value={backups.lastLocal ? `${snapshotLabel(backups.lastLocal, now)} · ${backups.localCount}` : 'next change'}
+          onPress={() => navigation.navigate('Backups')}
+        />
+        <View style={[styles.divider, { backgroundColor: p.hairline }]} />
+        <ListRow
+          label="iCloud Drive"
+          detail={icloudDetail}
+          chevron={false}
+          right={
+            <Switch
+              value={settings.icloudBackup}
+              disabled={!settings.icloudBackup && icloudBlocked}
+              onValueChange={v => actions.updateSettings({ icloudBackup: v })}
+              accessibilityLabel="iCloud Drive backup"
+            />
+          }
+        />
+        {icloudBlocked ? (
+          <View style={styles.pad}>
+            <Button title="Open Settings" kind="plain" onPress={() => Linking.openSettings()} style={styles.left} />
+          </View>
+        ) : null}
+        <View style={[styles.divider, { backgroundColor: p.hairline }]} />
         <ListRow
           label="Last export"
           value={
@@ -90,9 +133,6 @@ export function SettingsScreen({ navigation }: NativeStackScreenProps<Routes, 'S
           }
           chevron={false}
         />
-        {!settings.lastExport ? (
-          <Text style={[type.caption, styles.pad, { color: p.warn }]}>Nothing is backed up.</Text>
-        ) : null}
         <View style={styles.buttons}>
           <Button
             title={exporting ? 'Exporting…' : 'Export…'}
@@ -178,6 +218,8 @@ const styles = StyleSheet.create({
   oneLine: { paddingHorizontal: space.lg, paddingBottom: space.sm },
   denied: { flexDirection: 'row', alignItems: 'center', padding: space.md, paddingHorizontal: space.lg, marginBottom: space.sm },
   pad: { paddingHorizontal: space.lg, paddingBottom: space.sm },
+  divider: { height: StyleSheet.hairlineWidth, marginLeft: space.lg },
+  left: { alignSelf: 'flex-start' },
   buttons: { flexDirection: 'row', gap: space.md, padding: space.lg, paddingTop: space.xs },
   gap: { height: space.xl },
   tagline: { textAlign: 'center', padding: space.lg },

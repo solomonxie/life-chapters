@@ -39,7 +39,22 @@ export const files = {
   scanPath: (name: string): Promise<string | null> =>
     N.Files?.scanPath(name) ?? Promise.resolve(null),
   deleteScan: (name: string): Promise<void> => N.Files?.deleteScan(name) ?? Promise.resolve(),
-  openFolder: (): Promise<boolean> => N.Files.openFolder(),
+  openFolder: (which: 'Scans' | 'Backups'): Promise<boolean> => N.Files.openFolder(which),
+  writeBackup: (name: string, text: string): Promise<void> =>
+    N.Files?.writeBackup(name, text) ?? Promise.resolve(),
+  listBackups: (): Promise<string[]> => N.Files?.listBackups() ?? Promise.resolve([]),
+  readBackup: (name: string): Promise<string> => N.Files.readBackup(name),
+  deleteBackups: (names: string[]): Promise<void> =>
+    N.Files?.deleteBackups(names) ?? Promise.resolve(),
+};
+
+export type ICloudStatus = 'available' | 'driveOff' | 'notEntitled' | 'notReady';
+
+export const icloud = {
+  status: (): Promise<ICloudStatus> => N.ICloudBackup?.status() ?? Promise.resolve('notEntitled'),
+  write: (name: string, text: string): Promise<void> => N.ICloudBackup.write(name, text),
+  list: (): Promise<string[]> => N.ICloudBackup?.list() ?? Promise.resolve([]),
+  read: (name: string): Promise<string> => N.ICloudBackup.read(name),
 };
 
 export const calendar = {

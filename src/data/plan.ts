@@ -26,6 +26,7 @@ export interface Settings {
   digestHour: number;
   digestOn: boolean;
   calendarMirror: boolean;
+  icloudBackup: boolean;
   haptics: boolean;
   lastExport?: { on: CivilDate; bytes: number };
   deniedBannerDismissed: boolean;
@@ -41,6 +42,7 @@ export const DEFAULT_SETTINGS: Settings = {
   digestHour: 9,
   digestOn: true,
   calendarMirror: false,
+  icloudBackup: false,
   haptics: true,
   deniedBannerDismissed: false,
   collapsed: ['year', 'later'],

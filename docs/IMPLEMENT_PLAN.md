@@ -87,6 +87,8 @@ Stories are text only (photos stay in the photo library — `DESIGN.md`).
 - [x] T6.4 Stories on the Timeline (`✎ n`) and in chapter detail (drawings: `uiux/journal.md`, `uiux/timeline.md`) — depends: T6.3
 - [x] T6.5 Entries in the backup file — see `src/data/plan.ts` — depends: T6.2, T5.1
 
+- [x] T6.6 Auto-backup: a snapshot per change in the app's `Backups` folder (20 a day, 7 days), opt-in iCloud Drive copy per day, restore list (drawing: `uiux/settings.md` → Backups child) — see `src/data/snapshots.ts`, `src/state/autobackup.ts`, `ios/LifeChapters/Native` — depends: T5.1
+
 ## Phase 7: Ship it
 
 Only meaningful once there's an app to sign. Grouped last because every item

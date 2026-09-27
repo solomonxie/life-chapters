@@ -8,6 +8,7 @@ export type Routes = {
   AnchorEdit: { anchorId?: string; kind?: string } | undefined;
   Settings: undefined;
   Reminders: undefined;
+  Backups: undefined;
   Sources: undefined;
   About: undefined;
   Journal: undefined;

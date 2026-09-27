@@ -26,6 +26,14 @@ class Files: NSObject, UIDocumentPickerDelegate, UIImagePickerControllerDelegate
     return url
   }
 
+  private static var backups: URL {
+    let url = documents.appendingPathComponent("Backups", isDirectory: true)
+    try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+    return url
+  }
+
+  private let backupQueue = DispatchQueue(label: "Files.backups", qos: .utility)
+
   private func top() -> UIViewController? {
     var vc = UIApplication.shared.connectedScenes
       .compactMap { ($0 as? UIWindowScene)?.keyWindow }.first?.rootViewController
@@ -185,6 +193,56 @@ class Files: NSObject, UIDocumentPickerDelegate, UIImagePickerControllerDelegate
     }
   }
 
+  // MARK: local backups (Documents/Backups, visible in Files)
+
+  @objc(writeBackup:text:resolver:rejecter:)
+  func writeBackup(
+    _ name: String, text: String,
+    resolver resolve: @escaping RCTPromiseResolveBlock,
+    rejecter reject: @escaping RCTPromiseRejectBlock
+  ) {
+    backupQueue.async {
+      do {
+        try text.write(to: Files.backups.appendingPathComponent(name), atomically: true, encoding: .utf8)
+        resolve(nil)
+      } catch { reject("BACKUP_WRITE", error.localizedDescription, error) }
+    }
+  }
+
+  @objc(listBackups:rejecter:)
+  func listBackups(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    backupQueue.async {
+      resolve((try? FileManager.default.contentsOfDirectory(atPath: Files.backups.path)) ?? [])
+    }
+  }
+
+  @objc(readBackup:resolver:rejecter:)
+  func readBackup(
+    _ name: String,
+    resolver resolve: @escaping RCTPromiseResolveBlock,
+    rejecter reject: @escaping RCTPromiseRejectBlock
+  ) {
+    backupQueue.async {
+      do { resolve(try String(contentsOf: Files.backups.appendingPathComponent(name), encoding: .utf8)) } catch {
+        reject("BACKUP_READ", error.localizedDescription, error)
+      }
+    }
+  }
+
+  @objc(deleteBackups:resolver:rejecter:)
+  func deleteBackups(
+    _ names: [String],
+    resolver resolve: @escaping RCTPromiseResolveBlock,
+    rejecter reject: @escaping RCTPromiseRejectBlock
+  ) {
+    backupQueue.async {
+      for name in names where !name.contains("/") {
+        try? FileManager.default.removeItem(at: Files.backups.appendingPathComponent(name))
+      }
+      resolve(nil)
+    }
+  }
+
   // MARK: scans
 
   @objc(scanPath:resolver:rejecter:)
@@ -207,10 +265,14 @@ class Files: NSObject, UIDocumentPickerDelegate, UIImagePickerControllerDelegate
     resolve(nil)
   }
 
-  /// Opens the Files app at this app's own folder.
-  @objc(openFolder:rejecter:)
-  func openFolder(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    let path = Files.scans.path
+  /// Opens the Files app at one of this app's folders: Scans or Backups.
+  @objc(openFolder:resolver:rejecter:)
+  func openFolder(
+    _ which: String,
+    resolver resolve: @escaping RCTPromiseResolveBlock,
+    rejecter reject: @escaping RCTPromiseRejectBlock
+  ) {
+    let path = which == "Backups" ? Files.backups.path : Files.scans.path
     DispatchQueue.main.async {
       if let url = URL(string: "shareddocuments://\(path)") {
         UIApplication.shared.open(url) { resolve($0) }

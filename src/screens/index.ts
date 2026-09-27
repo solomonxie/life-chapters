@@ -1,5 +1,6 @@
 export { AboutScreen } from './AboutScreen';
 export { AnchorEditScreen } from './AnchorEditScreen';
+export { BackupsScreen } from './BackupsScreen';
 export { DocsScreen } from './DocsScreen';
 export { DocumentScreen } from './DocumentScreen';
 export { EntryScreen } from './EntryScreen';
