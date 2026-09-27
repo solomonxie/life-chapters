@@ -16,6 +16,7 @@ export function ListRow({
   tone = 'normal',
   right,
   accessibilityLabel,
+  selected,
 }: {
   label: string;
   value?: string;
@@ -28,6 +29,8 @@ export function ListRow({
   tone?: 'normal' | 'accent' | 'late' | 'dim';
   right?: React.ReactNode;
   accessibilityLabel?: string;
+  /** For a row that is one choice of several. */
+  selected?: boolean;
 }) {
   const p = usePalette();
   const color =
@@ -37,7 +40,7 @@ export function ListRow({
       onPress={onPress}
       disabled={disabled || !onPress}
       accessibilityRole={onPress ? 'button' : undefined}
-      accessibilityState={open === undefined ? { disabled } : { expanded: open, disabled }}
+      accessibilityState={open === undefined ? { disabled, selected } : { expanded: open, disabled, selected }}
       accessibilityLabel={accessibilityLabel ?? spoken([label, value].filter(Boolean).join(', '))}
       style={({ pressed }) => [
         styles.row,

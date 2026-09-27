@@ -26,6 +26,8 @@ export interface Anchor {
 export interface Person {
   id: string;
   name: string;
+  /** Where they live now, as a two-letter code; otherwise inferred from their events. */
+  province?: string;
 }
 
 export interface LifeEvent {
@@ -83,6 +85,10 @@ export interface Playbook {
   /** One line under the title, describing the track — never an instruction. */
   summary?: string;
   region?: string;
+  /** Two-letter code for a provincial plan ("ON", "BC"); absent means it applies Canada-wide. */
+  province?: string;
+  /** Same life stage across provinces ("school-years"), so a plan can swap for its twin. */
+  family?: string;
   anchorKind: string;
   ages?: AgeRange;
   /** Who this is for, in plain language. */

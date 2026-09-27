@@ -4,6 +4,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatAges } from '../domain/format';
 import { kindLabel } from '../domain/kinds';
 import { ageOn } from '../domain/plan';
+import { fitsProvince, provinceName } from '../domain/provinces';
 import type { Playbook } from '../domain/types';
 import type { Routes } from '../navigation/routes';
 import { useStore } from '../state/store';
@@ -18,6 +19,8 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
   const plan = useStore(s => s.mine);
   const now = useStore(s => s.now);
   const [q, setQ] = useState('');
+  const [othersOpen, setOthersOpen] = useState(false);
+  const province = plan.province;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -45,7 +48,10 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
   const age = ageOn(plan.anchors, now);
   const notOutgrown = (pb: Playbook) =>
     pb.anchorKind !== 'born' || !pb.ages?.to || age === null || age <= pb.ages.to;
-  const fits = matches.filter(pb => kinds.has(pb.anchorKind) && notOutgrown(pb));
+  const here = matches.filter(pb => fitsProvince(pb, province));
+  const elsewhere = matches.filter(pb => !fitsProvince(pb, province));
+  const fits = here.filter(pb => kinds.has(pb.anchorKind) && notOutgrown(pb));
+  const pickProvince = () => navigation.navigate('Person', { mode: 'province', personId: plan.person.id });
 
   const row = (pb: Playbook) => {
     const attached = plan.tracks.some(t => t.playbookId === pb.id);
@@ -83,10 +89,33 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
           </Card>
         </>
       ) : null}
-      <SectionHeader title="Everything" count={matches.length} />
+      <SectionHeader title={province ? `Canada and ${provinceName(province)}` : 'Everything'} count={here.length} />
       <Card>
-        <Rows>{matches.map(row)}</Rows>
+        <Rows>
+          {here.map(row)}
+          <ListRow
+            label={province ? `Lives in ${provinceName(province)}` : 'Which province?'}
+            detail={province ? 'Plans for other provinces are below' : 'Pick one to see only its provincial plans'}
+            tone="accent"
+            onPress={pickProvince}
+          />
+        </Rows>
       </Card>
+      {elsewhere.length ? (
+        <>
+          <SectionHeader
+            title="Other provinces"
+            count={elsewhere.length}
+            collapsed={!othersOpen && !needle}
+            onToggle={() => setOthersOpen(o => !o)}
+          />
+          {othersOpen || needle ? (
+            <Card>
+              <Rows>{elsewhere.map(row)}</Rows>
+            </Card>
+          ) : null}
+        </>
+      ) : null}
       {soon.length ? (
         <>
           <SectionHeader title="Coming soon" info="Playbooks for Canada only, for now." />

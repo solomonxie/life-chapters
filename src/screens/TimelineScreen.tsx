@@ -4,6 +4,7 @@ import { diffDays } from '../domain/dates';
 import { formatMonth } from '../domain/format';
 import { ME } from '../domain/people';
 import { placeShort } from '../domain/places';
+import { provinceName } from '../domain/provinces';
 import { ageOn, lateSteps, lifeChapters, openSteps, timelineNodes } from '../domain/plan';
 import { useNav } from '../navigation/routes';
 import { actions, useStore } from '../state/store';
@@ -98,6 +99,12 @@ export function TimelineScreen() {
               label={`Link a person to ${person.name}`}
               detail="A child, partner or parent, joined by the date that ties you"
               onPress={() => go(() => nav.navigate('Person', { mode: 'link' }))}
+            />
+            <ListRow
+              label="Lives in"
+              value={provinceName(plan.province) ?? 'not set'}
+              detail={person.province ? undefined : plan.province ? 'from the latest place' : 'Picks the provincial plans'}
+              onPress={() => go(() => nav.navigate('Person', { mode: 'province', personId: person.id }))}
             />
             <ListRow
               label={`Rename ${person.name}`}

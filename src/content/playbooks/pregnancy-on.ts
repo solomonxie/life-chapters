@@ -1,11 +1,13 @@
 import type { Playbook } from '../../domain/types';
 
-export const pregnancyCa: Playbook = {
-  id: 'pregnancy-ca',
-  title: 'Expecting a baby · CA',
+export const pregnancyOn: Playbook = {
+  id: 'pregnancy-on',
+  title: 'Expecting a baby · Ontario',
   summary:
     'Care, leave, benefits and preparation plan for a pregnancy in Ontario, counted back from the due date.',
   region: 'Ontario, Canada',
+  province: 'ON',
+  family: 'pregnancy',
   anchorKind: 'baby-due',
   conditions: [
     'For a pregnancy with a due date, living in Ontario',
