@@ -11,11 +11,12 @@ import { Button, Card, ListRow, Rows, SectionHeader, space, type, usePalette } f
 import { exportBackup, importBackup } from './backup';
 
 /** Keep equal to MARKETING_VERSION in project.pbxproj. */
-/** "today 21:05" · "Sep 24 21:05" from a snapshot name or an ISO-ish stamp. */
+/** "today 21:05" · "Sep 24" from a stamp or a daily file name. */
 const snapshotLabel = (stamp: string, now: string) => {
   const day = stamp.slice(0, 10);
-  const time = stamp.slice(11, 16).replace('-', ':');
-  return `${day === now ? 'today' : formatDate(day).replace(/, \d{4}$/, '')} ${time}`;
+  const time = /T(\d{2})[-:](\d{2})/.exec(stamp);
+  const when = day === now ? 'today' : formatDate(day).replace(/, \d{4}$/, '');
+  return time ? `${when} ${time[1]}:${time[2]}` : when;
 };
 
 export const VERSION = '1.0';

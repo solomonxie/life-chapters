@@ -209,6 +209,30 @@ class Files: NSObject, UIDocumentPickerDelegate, UIImagePickerControllerDelegate
     }
   }
 
+  /// Adds to the end of a file, creating it first: the change log is never rewritten.
+  @objc(appendBackup:text:resolver:rejecter:)
+  func appendBackup(
+    _ name: String, text: String,
+    resolver resolve: @escaping RCTPromiseResolveBlock,
+    rejecter reject: @escaping RCTPromiseRejectBlock
+  ) {
+    backupQueue.async {
+      let url = Files.backups.appendingPathComponent(name)
+      let data = Data(text.utf8)
+      do {
+        if FileManager.default.fileExists(atPath: url.path) {
+          let handle = try FileHandle(forWritingTo: url)
+          defer { try? handle.close() }
+          try handle.seekToEnd()
+          try handle.write(contentsOf: data)
+        } else {
+          try data.write(to: url, options: .atomic)
+        }
+        resolve(nil)
+      } catch { reject("BACKUP_APPEND", error.localizedDescription, error) }
+    }
+  }
+
   @objc(listBackups:rejecter:)
   func listBackups(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     backupQueue.async {
