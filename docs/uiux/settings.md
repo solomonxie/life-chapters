@@ -29,7 +29,7 @@ skill (`references/mobile.md`) — the controls stay above the fold.
   Haptics                             ─●
  ──────────────────────────────────────────
   About                                ›
-  Life Chapters 0.1.0 · not advice
+  Life Chapters 1.0 · not advice
 ```
 
 ## Reminders child

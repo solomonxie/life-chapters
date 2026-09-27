@@ -10,7 +10,8 @@ import { actions, useStore } from '../state/store';
 import { Button, Card, ListRow, Rows, SectionHeader, space, type, usePalette } from '../ui';
 import { exportBackup, importBackup } from './backup';
 
-export const VERSION = '0.1.0';
+/** Keep equal to MARKETING_VERSION in project.pbxproj. */
+export const VERSION = '1.0';
 
 export const CAP_INFO = (wanted: number) =>
   `iOS holds at most 64 pending reminders per app. Your plan has ${wanted} open steps, so only the nearest ones are handed over; the queue refills each time you open the app or the plan changes. Nothing is lost — a step years out just has no alarm set yet.`;
