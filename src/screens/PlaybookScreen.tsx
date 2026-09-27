@@ -6,14 +6,20 @@ import { formatDuration, formatMonth, formatPrecise } from '../domain/format';
 import { kindLabel } from '../domain/kinds';
 import { ME } from '../domain/people';
 import { anchorDisplay } from '../domain/plan';
-import { fits, rulesName, whereAt, whereName, whereWhy, twinFor } from '../domain/regions';
+import { bucketize } from '../domain/radar';
+import { decidedBy, fits, rulesName, whereAt, whereName, twinFor } from '../domain/regions';
 import { schedule, topoSort } from '../domain/schedule';
 import type { StepTemplate } from '../domain/types';
 import type { Routes } from '../navigation/routes';
 import { haptic } from '../platform';
 import { actions, useStore } from '../state/store';
-import { AppliesIf, Button, Card, Disclaimer, ListRow, Rows, SectionHeader, StepRow, space, type, usePalette } from '../ui';
+import { AppliesIf, Button, Card, Disclaimer, ListRow, Rows, SectionHeader, StepRow, SwipeRow, space, type, usePalette } from '../ui';
+import { pickSnooze } from './snooze';
 import { exportPlaybook } from './playbookFiles';
+
+/** Next steps shows the nearest few; the full list is below. */
+const NEXT_SHOWN = 3;
+const SOURCES_SHOWN = 3;
 
 export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Routes, 'Playbook'>) {
   const p = usePalette();
@@ -28,6 +34,8 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
   const candidates = plan.anchors.filter(a => a.kind === playbook?.anchorKind);
   const [previewId, setPreviewId] = useState(candidates[0]?.id);
   const anchor = plan.anchors.find(a => a.id === (track?.anchorId ?? previewId));
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const [allSources, setAllSources] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -59,6 +67,29 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
   const twin = twinFor(playbook, due, playbooks);
 
   const trackSteps = track ? view.steps.filter(s => s.trackId === track.id) : [];
+  const buckets = bucketize(trackSteps, now);
+  const actNow = buckets.now;
+  const nextSteps = [...buckets.d90, ...buckets.year, ...buckets.later].slice(0, NEXT_SHOWN);
+  const decided = decidedBy(anchor, { country: plan.person.country, province: plan.person.province }, plan.anchors, now);
+  const whose = plan.person.id === ME ? 'your' : `${plan.person.name}'s`;
+  const sources = playbook.sources ?? [];
+
+  const swipeRow = (s: (typeof trackSteps)[number]) => (
+    <SwipeRow
+      key={s.instanceId}
+      trailing={[
+        { label: 'Done', color: p.done, onPress: () => { haptic('success'); actions.markDone(s.instanceId); } },
+        { label: 'Snooze', color: p.accent, onPress: () => pickSnooze(s.instanceId) },
+      ]}
+      leading={[{ label: 'Not for me', color: p.dim, onPress: () => actions.skip(s.instanceId) }]}>
+      <StepRow
+        step={s}
+        now={now}
+        move={moves[s.instanceId]}
+        onPress={() => navigation.navigate('Step', { instanceId: s.instanceId })}
+      />
+    </SwipeRow>
+  );
   const ordered = topoSort(playbook.steps);
 
   function menu() {
@@ -131,19 +162,43 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
           {playbook.steps.length} steps · anchored on "{kindLabel(playbook.anchorKind)}"
           {playbook.region ? ` · ${playbook.region}` : ''}
         </Text>
-        {playbook.summary ? (
-          <Text style={[type.body, { color: p.text }]}>{playbook.summary}</Text>
+        {playbook.summary || playbook.ages || playbook.conditions?.length ? (
+          <Pressable
+            onPress={() => setAboutOpen(o => !o)}
+            style={styles.about}
+            accessibilityRole="button"
+            accessibilityState={{ expanded: aboutOpen }}
+            accessibilityHint={aboutOpen ? 'Folds the description' : 'Shows the whole description'}>
+            {playbook.summary ? (
+              <Text style={[type.body, { color: p.text }]} numberOfLines={aboutOpen ? undefined : 2}>
+                {playbook.summary}
+              </Text>
+            ) : null}
+            {aboutOpen ? <AppliesIf ages={playbook.ages} conditions={playbook.conditions} /> : null}
+            <Text style={[type.caption, { color: p.accent }]}>{aboutOpen ? 'Less' : 'More'}</Text>
+          </Pressable>
         ) : null}
-        <AppliesIf ages={playbook.ages} conditions={playbook.conditions} />
         <Disclaimer playbook={playbook} now={now} />
       </View>
 
       {!fits(playbook, due) ? (
-        <Card style={[styles.needs, { backgroundColor: p.lateSoft }]}>
-          <Text style={[type.body, styles.flex, { color: p.text }]}>
-            ⚠ {rulesName(playbook)} rules;{' '}
-            {whereWhy(anchor, plan.where).replace(/^lives/, plan.person.id === ME ? 'you live' : `${plan.person.name} lives`)}.
+        <Card style={[styles.wrong, { backgroundColor: p.accentSoft }]}>
+          <Text style={[type.body, { color: p.text }]}>
+            This plan follows {rulesName(playbook)} rules, but{' '}
+            {decided.event?.location
+              ? `${whose} "${anchorDisplay(decided.event)}" event is in ${decided.event.location}.`
+              : decided.byHand
+              ? `${whose} Lives in is set to ${whereName(due)}.`
+              : `this counts as ${whereName(due)}.`}
           </Text>
+          <View style={styles.row}>
+          {decided.event ? (
+            <Button
+              title="Edit event"
+              kind="plain"
+              onPress={() => navigation.navigate('AnchorEdit', { anchorId: decided.event!.id })}
+            />
+          ) : null}
           {twin ? (
             <Button
               title={track ? `Switch to ${whereName(due)}` : `See ${whereName(due)}`}
@@ -158,6 +213,7 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
               }}
             />
           ) : null}
+          </View>
         </Card>
       ) : null}
 
@@ -206,7 +262,29 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
         </Card>
       ) : null}
 
-      <SectionHeader title="Steps" count={playbook.steps.length} />
+      {actNow.length ? (
+        <>
+          <SectionHeader title="Act now" count={actNow.length} />
+          <Card>
+            <Rows inset={space.lg + 18 + space.sm}>{actNow.map(swipeRow)}</Rows>
+          </Card>
+        </>
+      ) : null}
+      {nextSteps.length ? (
+        <>
+          <SectionHeader title="Next steps" />
+          <Card>
+            <Rows inset={space.lg + 18 + space.sm}>{nextSteps.map(swipeRow)}</Rows>
+          </Card>
+        </>
+      ) : null}
+      {actNow.length || nextSteps.length ? (
+        <Text style={[type.caption, styles.hint, { color: p.faint }]}>
+          Swipe a step left for Done or Snooze, right for Not for me.
+        </Text>
+      ) : null}
+
+      <SectionHeader title={track ? 'All steps' : 'Steps'} count={playbook.steps.length} />
       <Card>
         <Rows>
           {track
@@ -223,7 +301,7 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
         </Rows>
       </Card>
 
-      {playbook.sources?.length ? (
+      {sources.length ? (
         <>
           <SectionHeader
             title="Sources"
@@ -231,7 +309,7 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
           />
           <Card>
             <Rows>
-              {playbook.sources.map(s => (
+              {(allSources ? sources : sources.slice(0, SOURCES_SHOWN)).map(s => (
                 <ListRow
                   key={s.url}
                   label={s.title}
@@ -242,6 +320,14 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
               ))}
             </Rows>
           </Card>
+          {sources.length > SOURCES_SHOWN ? (
+            <Button
+              title={allSources ? 'Show fewer' : `Show all ${sources.length}`}
+              kind="plain"
+              style={styles.more}
+              onPress={() => setAllSources(x => !x)}
+            />
+          ) : null}
         </>
       ) : null}
     </ScrollView>
@@ -278,6 +364,11 @@ const styles = StyleSheet.create({
   head: { paddingHorizontal: space.lg, paddingTop: space.sm, gap: space.sm },
   attach: { padding: space.lg, gap: space.md },
   needs: { marginHorizontal: 0, flexDirection: 'row', alignItems: 'center', padding: space.md, gap: space.sm },
+  wrong: { padding: space.md, gap: space.xs },
+  row: { flexDirection: 'row', gap: space.lg },
+  about: { gap: space.xs },
+  hint: { textAlign: 'center', paddingHorizontal: space.lg, paddingTop: space.sm },
+  more: { alignSelf: 'flex-start', marginLeft: space.lg, marginTop: space.sm },
   card: { marginTop: space.md },
   tpl: { flexDirection: 'row', gap: space.sm, paddingRight: space.lg, paddingVertical: space.md },
   n: { width: 18, paddingTop: 2 },

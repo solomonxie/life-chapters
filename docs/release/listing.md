@@ -144,7 +144,7 @@ old `02-radar.jpg` / `04-journal.jpg`.
 Upload order (3 minimum, 10 maximum — the first two are what people actually see):
 
 1. **Timeline** (`01-timeline`) — the life line, chapters, TODAY, what's ahead
-2. **Plans** (`02-plans`) — expiring documents, your plans, Act now and Next steps
+2. **Plans** (`02-plans`) — expiring documents, your plans with their next step
 3. **Step** (`03-step`) — start-by / due-by / valid, documents, prep, how-to
 4. **Chapter** (`05-chapter`) — a chapter's active steps and its notes
 5. **Playbook** (`06-playbook`) — who it's for, projected first and last dates, sources, not-advice line
@@ -212,7 +212,7 @@ A PLAN THAT RESCHEDULES ITSELF
 • Results that expire — a police certificate, a language test — are timed so they're still valid when needed
 
 WHAT TO START NOW
-• Right under your timeline: what to start now, the next few steps, this year, later — grouped by when you must start, not when it's due
+• Right under your timeline: your plans, each with its next step; on each plan, what to start now and next — by when you must start, not when it's due
 • Calm by default: red only for a step past its due date or a document that expires before it's needed
 • Swipe to mark done, snooze, or set aside a step that isn't for you
 

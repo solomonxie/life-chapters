@@ -32,11 +32,11 @@ line, Plans, Settings. No tab bar, no ⚙. Everything else pushes on top.
         │
   2031  ○ Turns 40                        ›
         ⋮
-        ( + Add a date )
+        ( + Add an event )
  ──────────────────────────────────────────
   PLANS                                     → plans.md
-  ⚠ Expiring · Your plans · Act now ·
-  Next steps · This year · Later · Done
+  ⚠ Expiring · plans, each with its next
+  step · Done
   ( + Add a plan )
  ──────────────────────────────────────────
   Settings                                  → settings.md
@@ -53,7 +53,7 @@ switching to that step's owner)
 first run  ┌────────────────────────────────────────┐
            │            Life Chapters                │
            │                                        │
-           │   Two dates and it starts drawing.     │
+           │   Two events and it starts drawing.     │
            │                                        │
            │        [[ When were you born? ]]       │
            └────────────────────────────────────────┘
@@ -61,7 +61,7 @@ first run  ┌──────────────────────
 
 new person ┌────────────────────────────────────────┐
  (empty)   │                 Ava                    │
-           │   Two dates and it starts drawing.     │
+           │   Two events and it starts drawing.     │
            │        [[ When was Ava born? ]]        │
            └────────────────────────────────────────┘
              Settings still sits below it
@@ -114,7 +114,7 @@ Pushed from the NOW card, any future event, or a node's `(n)` badge.
   ENDS WITH
   ○ Apply for permanent resi…  Apr 2028  ›
  ──────────────────────────────────────────
-  ( Edit this date )
+  ( Edit this event )
 ```
 
 ```
@@ -139,7 +139,7 @@ nothing     Nothing to start in this stretch.
 | future event `○` | tap | → chapter detail for that event; a moment's page has no chapter bar |
 | `(15)` badge | tap | → that event's chapter detail |
 | `⚠ 2 steps are late` | tap | scrolls the page down to Plans |
-| `+ Add a date` | tap | → anchor editor, blank |
+| `+ Add an event` | tap | → anchor editor, blank |
 | list | flick, then touch | page stops, row does **not** open — `uiux` skill, mobile: brake-not-tap |
 
 **Moments** (`Visitors arrive`, `Trip abroad`) sit on the stem like any date
@@ -159,10 +159,10 @@ Every other row is a date the user entered, or the linked copy of one
 | `timeline.now` | NOW · AGE {n} |
 | `timeline.today` | TODAY · {Mon d, yyyy} |
 | `timeline.chapter.progress` | year {n} of {total} |
-| `timeline.firstRun.body` | Two dates and it starts drawing. |
+| `timeline.firstRun.body` | Two events and it starts drawing. |
 | `timeline.firstRun.cta` | When were you born? · When was {name} born? |
 | `timeline.noPlan` | No plans yet |
-| `timeline.addDate` | + Add a date |
+| `timeline.addEvent` | + Add an event |
 | `timeline.stepsRunning` | {n} steps running · next starts in {n}d |
 | `timeline.late` | ⚠ {n} steps are late |
 | `chapter.notes.add` | + Add notes |

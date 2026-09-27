@@ -39,7 +39,6 @@ export function RunningPlans({ navigation }: { navigation: Nav }) {
   if (!running.length) return null;
   return (
     <>
-      <SectionHeader title="Your plans" count={running.length} />
       <Card>
         <Rows>
           {running.map(x => (
@@ -60,10 +59,15 @@ export function RunningPlans({ navigation }: { navigation: Nav }) {
                   <View style={styles.flex}>
                     <ProgressBar done={x.done} total={x.total} />
                   </View>
-                  <Text style={[type.caption, { color: p.dim }]}>{nextLabel(x.next, now)}</Text>
+                  <Text style={[type.caption, { color: p.dim }]}>
+                    {x.done}/{x.total}
+                  </Text>
                 </View>
+                <Text style={[type.caption, { color: p.dim }]} numberOfLines={1}>
+                  {nextLabel(x.next, now)}
+                </Text>
                 {x.playbook && !fits(x.playbook, whereAt(x.anchor, where)) ? (
-                  <Text style={[type.caption, { color: p.late }]}>
+                  <Text style={[type.caption, { color: p.warn }]}>
                     {rulesName(x.playbook)} rules · {whereWhy(x.anchor, where)}
                   </Text>
                 ) : null}
@@ -170,10 +174,11 @@ export function ExpiringDocs({ navigation }: { navigation: Nav }) {
 }
 
 const nextLabel = (next: PlannedStep | undefined, now: string) => {
-  if (!next) return 'nothing next';
-  return next.startBy.slice(0, 4) === now.slice(0, 4)
-    ? `next ${formatShort(next.startBy)}`
-    : `next ${formatMonth(next.startBy)}`;
+  if (!next) return 'Nothing left to start';
+  const when = next.startBy <= now ? 'now' : next.startBy.slice(0, 4) === now.slice(0, 4)
+    ? formatShort(next.startBy)
+    : formatMonth(next.startBy);
+  return `Next: ${next.title} · ${when}`;
 };
 
 const styles = StyleSheet.create({
