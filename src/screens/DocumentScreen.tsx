@@ -37,8 +37,8 @@ type Open = 'issued' | 'expires' | null;
 export function DocumentScreen({ route, navigation }: NativeStackScreenProps<Routes, 'Document'>) {
   const p = usePalette();
   const { documentId } = route.params;
-  const plan = useStore(s => s.plan);
-  const view = useStore(s => s.view);
+  const plan = useStore(s => s.mine);
+  const view = useStore(s => s.mine.view);
   const moves = useStore(s => s.moves);
   const now = useStore(s => s.now);
   const doc = useMemo(
@@ -204,7 +204,8 @@ export function DocumentScreen({ route, navigation }: NativeStackScreenProps<Rou
         <Card style={[styles.alert, { backgroundColor: p.lateSoft }]}>
           <Pressable
             onPress={() => navigation.navigate('Step', { instanceId: doc.clash!.consumer.instanceId })}
-            accessibilityRole="button">
+            accessibilityRole="button"
+            accessibilityLabel={`Warning: expires ${doc.clash.gapDays} days before ${doc.clash.consumer.title} needs it. Open that step`}>
             <Text style={[type.body, { color: p.text }]}>
               ⚠ Expires {doc.clash.gapDays} days before "{doc.clash.consumer.title}" needs it. ›
             </Text>

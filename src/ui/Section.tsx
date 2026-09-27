@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } fro
 import { InfoPopover } from './InfoPopover';
 import { radius, space, type } from './theme';
 import { usePalette } from './usePalette';
+import { spoken } from './spoken';
 
 /** HEADING  ⓘ                    (n) — optionally collapsible, remembered by the caller. */
 export function SectionHeader({
@@ -26,7 +27,7 @@ export function SectionHeader({
   const color = tone === 'late' ? p.late : p.dim;
   const body = (
     <View style={styles.header}>
-      <Text style={[type.heading, { color }]} accessibilityRole="header">
+      <Text style={[type.heading, { color }]} accessibilityRole="header" accessibilityLabel={spoken(title)}>
         {title.toUpperCase()}
       </Text>
       {info ? <InfoPopover text={info} /> : null}
@@ -45,7 +46,7 @@ export function SectionHeader({
       onPress={onToggle}
       accessibilityRole="button"
       accessibilityState={{ expanded: !collapsed }}
-      accessibilityLabel={`${title}, ${count ?? ''}`}>
+      accessibilityLabel={spoken(`${title}, ${count ?? ''}`)}>
       {body}
     </Pressable>
   ) : (

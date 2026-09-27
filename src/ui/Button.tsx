@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, type ViewStyle } from 'react-native';
 import { radius, space, type } from './theme';
 import { usePalette } from './usePalette';
+import { spoken } from './spoken';
 
 /**
  * [[ primary ]] filled, ( secondary ) plain, ! destructive in red. Disabled
@@ -35,6 +36,7 @@ export function Button({
       onLongPress={onLongPress}
       disabled={disabled}
       accessibilityRole="button"
+      accessibilityLabel={spoken(title)}
       accessibilityState={{ disabled }}
       accessibilityHint={accessibilityHint}
       hitSlop={kind === 'plain' ? space.sm : 0}

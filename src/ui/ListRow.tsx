@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { space, type } from './theme';
 import { usePalette } from './usePalette';
+import { spoken } from './spoken';
 
 /** Label on the left, value on the right, › when it goes somewhere. */
 export function ListRow({
@@ -37,7 +38,7 @@ export function ListRow({
       disabled={disabled || !onPress}
       accessibilityRole={onPress ? 'button' : undefined}
       accessibilityState={open === undefined ? { disabled } : { expanded: open, disabled }}
-      accessibilityLabel={accessibilityLabel ?? [label, value].filter(Boolean).join(', ')}
+      accessibilityLabel={accessibilityLabel ?? spoken([label, value].filter(Boolean).join(', '))}
       style={({ pressed }) => [
         styles.row,
         { opacity: disabled ? 0.4 : 1, backgroundColor: pressed ? p.hairline : 'transparent' },
