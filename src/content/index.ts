@@ -1,12 +1,20 @@
 import type { Playbook } from '../domain/types';
 import { citizenshipCa } from './playbooks/citizenship-ca';
-import { comingOfAgeCa } from './playbooks/coming-of-age-ca';
-import { earlyYearsCa } from './playbooks/early-years-ca';
+import { comingOfAgeBc } from './playbooks/coming-of-age-bc';
+import { comingOfAgeOn } from './playbooks/coming-of-age-on';
+import { earlyYearsBc } from './playbooks/early-years-bc';
+import { earlyYearsOn } from './playbooks/early-years-on';
+import { highSchoolBc } from './playbooks/high-school-bc';
 import { highSchoolOn } from './playbooks/high-school-on';
+import { marriageBc } from './playbooks/marriage-bc';
 import { marriageOn } from './playbooks/marriage-on';
-import { newbornCa } from './playbooks/newborn-ca';
-import { pregnancyCa } from './playbooks/pregnancy-ca';
-import { retirementCa } from './playbooks/retirement-ca';
+import { newbornBc } from './playbooks/newborn-bc';
+import { newbornOn } from './playbooks/newborn-on';
+import { pregnancyBc } from './playbooks/pregnancy-bc';
+import { pregnancyOn } from './playbooks/pregnancy-on';
+import { retirementBc } from './playbooks/retirement-bc';
+import { retirementOn } from './playbooks/retirement-on';
+import { schoolYearsBc } from './playbooks/school-years-bc';
 import { schoolYearsOn } from './playbooks/school-years-on';
 import { skilledMigrationCa } from './playbooks/skilled-migration-ca';
 
@@ -15,11 +23,19 @@ export const BUNDLED_PLAYBOOKS: Playbook[] = [
   skilledMigrationCa,
   citizenshipCa,
   marriageOn,
-  pregnancyCa,
-  newbornCa,
-  earlyYearsCa,
+  marriageBc,
+  pregnancyOn,
+  pregnancyBc,
+  newbornOn,
+  newbornBc,
+  earlyYearsOn,
+  earlyYearsBc,
   schoolYearsOn,
+  schoolYearsBc,
   highSchoolOn,
-  comingOfAgeCa,
-  retirementCa,
+  highSchoolBc,
+  comingOfAgeOn,
+  comingOfAgeBc,
+  retirementOn,
+  retirementBc,
 ];

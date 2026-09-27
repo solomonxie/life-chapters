@@ -1,0 +1,324 @@
+import type { Playbook } from '../../domain/types';
+
+export const newbornBc: Playbook = {
+  id: 'newborn-bc',
+  title: 'Newborn · first year · British Columbia',
+  summary:
+    'Paperwork, health and money plan for a baby born in British Columbia, from birth registration to the 18-month vaccines, plus the BC education grant from age 6.',
+  region: 'British Columbia, Canada',
+  province: 'BC',
+  family: 'newborn',
+  anchorKind: 'born',
+  ages: { from: 0, to: 1 },
+  conditions: [
+    'For a baby born in British Columbia',
+    'For parents living in British Columbia',
+  ],
+  reviewedAt: '2026-09-27',
+  version: 1,
+  sources: [
+    {
+      title: 'Birth registration (British Columbia)',
+      url: 'https://www2.gov.bc.ca/gov/content/life-events/birth-adoption/births/birth-registration',
+    },
+    {
+      title: 'BC online birth registration: FAQ',
+      url: 'https://ebr.vs.gov.bc.ca/ebr/OnLineHelp/faq.html',
+    },
+    {
+      title: 'BC Vital Statistics: Electronic Certificate Ordering System',
+      url: 'https://ecos.vs.gov.bc.ca/',
+    },
+    {
+      title: 'Enrolling your newborn in the Medical Services Plan (MSP)',
+      url: 'https://www2.gov.bc.ca/assets/gov/health/health-drug-coverage/medical-services-plan/bc-residents/managing-your-msp-account/adding-and-removing-dependents/enrolling-your-newborn-msp.pdf',
+    },
+    {
+      title: 'MSP: Adding or removing spouse or children',
+      url: 'https://www2.gov.bc.ca/gov/content/health/health-drug-coverage/msp/bc-residents/managing-your-msp-account/adding-and-removing-dependents',
+    },
+    {
+      title: 'Birth Registration and Canada Child Benefits - British Columbia (RC4476)',
+      url: 'https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4476-bc/birth-registration-canada-child-benefits.html',
+    },
+    {
+      title: 'Canada child benefit: How to apply',
+      url: 'https://www.canada.ca/en/revenue-agency/services/child-family-benefits/canada-child-benefit-overview/canada-child-benefit-apply.html',
+    },
+    {
+      title: 'Apply for a Social Insurance Number',
+      url: 'https://www.canada.ca/en/employment-social-development/services/sin/apply.html',
+    },
+    {
+      title: 'HealthLink BC: Health Connect Registry',
+      url: 'https://www.healthlinkbc.ca/find-care/health-connect-registry',
+    },
+    {
+      title: 'Midwives Association of BC: Frequently asked questions',
+      url: 'https://www.bcmidwives.com/faq.html',
+    },
+    {
+      title: 'HealthLink BC: Immunization schedules for children',
+      url: 'https://www.healthlinkbc.ca/health-library/immunizations/schedules/children',
+    },
+    {
+      title: 'Vancouver Coastal Health: Immunization for infants and toddlers',
+      url: 'https://www.vch.ca/en/service/immunization-infants-and-toddlers',
+    },
+    {
+      title: 'How to apply for a child passport in Canada',
+      url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/child-passport.html',
+    },
+    {
+      title: "Documents to submit when applying for a child's passport",
+      url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/child-passport/documents-submit.html',
+    },
+    {
+      title: 'Canada Education Savings Grant (CESG)',
+      url: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/registered-education-savings-plans-resps/canada-education-savings-programs-cesp/canada-education-savings-grant-cesg.html',
+    },
+    {
+      title: 'Canada Learning Bond (CRA)',
+      url: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/registered-education-savings-plans-resps/canada-education-savings-programs-cesp/canada-learning-bond.html',
+    },
+    {
+      title: 'Canada Learning Bond brochure for those under 18 years old',
+      url: 'https://www.canada.ca/en/employment-social-development/services/student-financial-aid/education-savings/reports/learning-bond-under-18-brochure.html',
+    },
+    {
+      title: 'BC Employment Standards: Leaves of absence',
+      url: 'https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/time-off/leaves-of-absence',
+    },
+    {
+      title: 'EI maternity and parental benefits: What these benefits offer',
+      url: 'https://www.canada.ca/en/services/benefits/ei/ei-maternity-parental.html',
+    },
+    {
+      title: "Canadian Dental Association: Your child's first visit",
+      url: 'https://www.cda-adc.ca/en/oral_health/cfyt/dental_care_children/first_visit.asp',
+    },
+  ],
+  steps: [
+    {
+      id: 'register-birth',
+      title: 'Register the birth online with BC Vital Statistics',
+      offsetDays: 30,
+      durationDays: 7,
+      dependsOn: [],
+      documents: ['Birth registration confirmation'],
+      prepare: [
+        'All parents to be listed present to certify',
+        'Baby\'s full name',
+        'Mother\'s SIN, for child benefits',
+        'Tick MSP, Canada Child Benefits and Social Insurance Number',
+      ],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. A birth in BC is registered with the Vital Statistics Agency within 30 days; a fee may be charged after that.\n2. Online registration is not available for a child over 1 year old, more than two parents, or surrogacy; call Vital Statistics instead.\n3. Each parent listed certifies the online registration separately and is present when it is completed.\n4. At the same time you can apply, at no fee, for the baby\'s MSP coverage, Canada Child Benefits and Social Insurance Number.',
+    },
+    {
+      id: 'birth-certificate',
+      title: 'Order the baby\'s birth certificate',
+      offsetDays: 45,
+      durationDays: 7,
+      dependsOn: ['register-birth'],
+      documents: ['Birth certificate'],
+      prepare: ['Choose the parental certificate, which lists the parents', 'Credit or debit card for the fee'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. Certificates can be ordered at the end of the online registration, or later through the Electronic Certificate Ordering System.\n2. Certificates are issued once both the registration and the hospital\'s Notice of Live Birth are received; registration and certificate take about 4 to 6 weeks in total.\n3. The parental birth certificate is the one needed for a passport; if the name is too long, you receive an individual certificate and a birth extract instead.',
+    },
+    {
+      id: 'family-doctor',
+      title: 'Line up a family doctor or NP for the baby\'s checkups',
+      offsetDays: 42,
+      durationDays: 14,
+      dependsOn: [],
+      documents: [],
+      prepare: ['Baby\'s Personal Health Number', 'Join the Health Connect Registry if you have no doctor'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. Midwives care for parent and baby until about 6 weeks after the birth; care then passes to a family doctor or nurse practitioner.\n2. The Health Connect Registry matches people with a family doctor or nurse practitioner; register online or call 8-1-1 to add family members.\n3. The checkup schedule is set by the provider; this date is a planning estimate.',
+    },
+    {
+      id: 'ccb',
+      title: 'Apply for the Canada Child Benefit',
+      offsetDays: 45,
+      durationDays: 7,
+      dependsOn: ['register-birth'],
+      documents: ['CCB application confirmation'],
+      prepare: ['CRA My Account login', 'Both parents\' tax returns filed'],
+      ages: { from: 0, to: 0 },
+      conditions: ['Only if you didn\'t apply through the BC birth registration'],
+      howTo:
+        '1. The BC online birth registration can apply for Canada child benefits when the mother consents; she is a citizen or permanent resident and primarily cares for the child.\n2. Otherwise apply through CRA My Account or Form RC66 as soon as the child is born and living with you.\n3. Applying for a child who started living with you more than 11 months ago needs extra documents.',
+    },
+    {
+      id: 'msp',
+      title: 'Confirm the baby\'s MSP enrolment and BC Services Card',
+      offsetDays: 60,
+      durationDays: 7,
+      dependsOn: ['register-birth'],
+      documents: ['BC Services Card (baby)'],
+      prepare: ['Parent\'s MSP coverage active', 'Baby Enrolment form (HLTH 115) if not done through birth registration'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. When the mother has MSP coverage, ticking MSP in the online birth registration enrols the baby through Health Insurance BC.\n2. A hospital-assigned Personal Health Number does not replace enrolment.\n3. A BC Services Card in the baby\'s name arrives within about 4 to 5 weeks.\n4. Otherwise send the Baby Enrolment form (HLTH 115) within 60 days of the birth; a parent enrolling the baby on a different MSP account contacts Health Insurance BC.',
+    },
+    {
+      id: 'sin',
+      title: 'Get the baby\'s Social Insurance Number',
+      offsetDays: 60,
+      durationDays: 14,
+      dependsOn: ['birth-certificate'],
+      documents: ['Social Insurance Number (baby)'],
+      prepare: ['Baby\'s birth certificate', 'SIN application form (NAS2120)'],
+      ages: { from: 0, to: 0 },
+      conditions: ['Only if you didn\'t apply through the BC birth registration'],
+      howTo:
+        '1. Through the birth registration, the SIN is delivered within about 5 business days.\n2. Otherwise apply to Service Canada online, by mail or in person with the birth certificate; there is no fee.\n3. The SIN is needed to open an RESP and claim education grants.',
+    },
+    {
+      id: 'vaccines-2m',
+      title: 'Routine vaccines at 2 months',
+      offsetDays: 61,
+      durationDays: 1,
+      dependsOn: [],
+      documents: ['Immunization record'],
+      prepare: ['Book with the public health unit or your doctor or NP', 'Bring the immunization record'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. Follow the BC routine immunization schedule; at 2 months it lists DTaP-HB-IPV-Hib, pneumococcal conjugate, meningococcal C conjugate and rotavirus.\n2. Routine vaccines are free, from public health units or a family doctor or nurse practitioner.\n3. Move this to the appointment date.',
+    },
+    {
+      id: 'passport',
+      title: 'Apply for the baby\'s passport',
+      offsetDays: 120,
+      durationDays: 30,
+      validForDays: 1826,
+      dependsOn: ['birth-certificate'],
+      documents: ['Child passport', 'Birth certificate', 'Passport photos'],
+      prepare: [
+        'Parental birth certificate, as proof of parentage',
+        'Two identical passport photos',
+        'Guarantor who has known you 2 years and knows the child',
+        'All parents sign the form',
+      ],
+      ages: { from: 0, to: 0 },
+      conditions: ['Only if the baby will travel outside Canada'],
+      howTo:
+        '1. Wait for the parental birth certificate.\n2. Standard processing is 10 to 20 business days plus mail.\n3. A child passport is valid for up to 5 years and can\'t be renewed.\n4. The date here is a planning estimate; move it to 2 months before travel.',
+    },
+    {
+      id: 'vaccines-4m',
+      title: 'Routine vaccines at 4 months',
+      offsetDays: 122,
+      durationDays: 1,
+      dependsOn: ['vaccines-2m'],
+      documents: ['Immunization record'],
+      prepare: ['Book the appointment ahead', 'Bring the immunization record'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. Follow the BC routine immunization schedule; at 4 months it lists DTaP-HB-IPV-Hib, pneumococcal conjugate and rotavirus.\n2. Move this to the appointment date.',
+    },
+    {
+      id: 'resp',
+      title: 'Open an RESP for the Canada Education Savings Grant',
+      offsetDays: 180,
+      durationDays: 30,
+      dependsOn: ['sin'],
+      documents: ['RESP contract'],
+      prepare: ['Baby\'s SIN', 'Compare RESP providers, including ones offering the BC grant', 'Decide on regular contributions'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. The baby\'s SIN is needed to open the RESP.\n2. The basic CESG adds 20% of yearly contributions, up to a yearly and a lifetime limit, whatever the family income.\n3. Middle- and lower-income families can get an additional grant.\n4. Grants apply to contributions until the end of the year the child turns 17.\n5. Timing is a planning estimate; unused grant room carries forward.',
+    },
+    {
+      id: 'vaccines-6m',
+      title: 'Routine vaccines at 6 months',
+      offsetDays: 183,
+      durationDays: 1,
+      dependsOn: ['vaccines-4m'],
+      documents: ['Immunization record'],
+      prepare: ['Book the appointment ahead', 'Bring the immunization record'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. Follow the BC routine immunization schedule; at 6 months it lists DTaP-HB-IPV-Hib, plus hepatitis A for Indigenous children.\n2. The schedule also lists a yearly flu vaccine from 6 months, with a second dose 4 weeks later the first time; COVID-19 vaccine is free from 6 months.\n3. Move this to the appointment date.',
+    },
+    {
+      id: 'clb',
+      title: 'Request the Canada Learning Bond',
+      offsetDays: 210,
+      durationDays: 14,
+      dependsOn: ['resp'],
+      documents: ['CLB request'],
+      prepare: ['Primary caregiver\'s tax return filed', 'Ask the RESP provider to apply'],
+      ages: { from: 0, to: 0 },
+      conditions: ['Only if the family is low-income and the child is eligible for the Canada Child Benefit'],
+      howTo:
+        '1. The CLB is for children from low-income families born in 2004 or later.\n2. No contribution to the RESP is needed.\n3. It is retroactive: yearly amounts build up until the year the child turns 15.\n4. It can be claimed for past eligible years even if no RESP was open then.',
+    },
+    {
+      id: 'return-notice',
+      title: 'Confirm the return-to-work date with the employer',
+      offsetDays: 330,
+      durationDays: 7,
+      dependsOn: [],
+      documents: [],
+      prepare: ['Last week of EI benefits', 'Childcare start date'],
+      ages: { from: 0, to: 0 },
+      conditions: ['Only if a parent is on maternity or parental leave'],
+      howTo:
+        '1. Under BC employment standards, the employer contacts the employee to arrange the return to work.\n2. Standard EI parental benefits are taken within 52 weeks of the birth; extended within 78 weeks.\n3. The one-year return is a planning estimate; move it for extended leave.',
+    },
+    {
+      id: 'return-to-work',
+      title: 'Parental leave ends: return to work',
+      offsetDays: 365,
+      durationDays: 1,
+      dependsOn: ['return-notice'],
+      documents: [],
+      prepare: ['Childcare arranged', 'Feeding and pickup plan'],
+      ages: { from: 0, to: 1 },
+      conditions: ['Only if a parent is on maternity or parental leave'],
+      howTo:
+        '1. BC parental leave is up to 61 weeks after maternity leave, or 62 weeks for the other parent; about 78 weeks at most with maternity leave.\n2. When leave ends, the employee comes back to their job or one like it.\n3. One year is a planning estimate for standard benefits; move this to your real date.',
+    },
+    {
+      id: 'dentist',
+      title: 'First dental visit',
+      offsetDays: 365,
+      durationDays: 30,
+      dependsOn: [],
+      documents: [],
+      prepare: ['Find a dentist who sees babies', 'Note when the first tooth came in'],
+      ages: { from: 0, to: 1 },
+      howTo:
+        '1. The Canadian Dental Association recommends a first dental assessment within 6 months of the first tooth or by one year of age.\n2. Move this earlier if the first tooth came early.',
+    },
+    {
+      id: 'vaccines-12m',
+      title: 'Routine vaccines at 12 months',
+      offsetDays: 366,
+      durationDays: 1,
+      dependsOn: ['vaccines-6m'],
+      documents: ['Immunization record'],
+      prepare: ['Book the appointment ahead', 'Bring the immunization record'],
+      ages: { from: 1, to: 1 },
+      howTo:
+        '1. Follow the BC routine immunization schedule; at 12 months it lists pneumococcal conjugate, meningococcal C conjugate, MMR and chickenpox (varicella).\n2. Move this to the appointment date.',
+    },
+    {
+      id: 'vaccines-18m',
+      title: 'Routine vaccines at 18 months',
+      offsetDays: 548,
+      durationDays: 1,
+      dependsOn: ['vaccines-12m'],
+      documents: ['Immunization record'],
+      prepare: ['Book the appointment ahead', 'Bring the immunization record'],
+      ages: { from: 1, to: 1 },
+      howTo:
+        '1. Follow the BC routine immunization schedule; at 18 months it lists DTaP-IPV-Hib, plus hepatitis A for Indigenous children.\n2. The next routine vaccines are at 4 to 6 years, at school entry.\n3. Move this to the appointment date.',
+    },
+  ],
+};

@@ -11,7 +11,7 @@ export function seedSample() {
   actions.saveAnchor({ kind: 'born', label: 'Born', location: "Xi'an, Shaanxi, China", date: '1991-04-12', precision: 'day' });
   actions.saveAnchor({ kind: 'graduated', label: 'Graduated', place: 'BSc', date: '2013-07-01', precision: 'year', note: 'Rain all morning, sun for the photo. Nobody could find the gowns.' });
   actions.saveAnchor(
-    { kind: 'migrated', label: 'Migrated to a country', place: 'Canada', location: 'Toronto, Ontario, Canada', date: `${year - 2}-09-14`, precision: 'day', note: 'Two suitcases and a borrowed car. The first night we slept on the floor of an empty flat.' },
+    { kind: 'migrated', label: 'Migrated to a country', place: 'Canada', location: 'Vancouver, British Columbia, Canada', date: `${year - 2}-09-14`, precision: 'day', note: 'Two suitcases and a borrowed car. The first night we slept on the floor of an empty flat.' },
     ['citizenship-ca'],
   );
   actions.saveAnchor(
@@ -24,8 +24,8 @@ export function seedSample() {
   const ava = plan.people.find(p => p.name === 'Ava');
   const avaBorn = plan.anchors.find(a => a.personId === ava?.id && a.kind === 'born');
   if (avaBorn) {
-    actions.attachTrack('early-years-ca', avaBorn.id);
-    actions.attachTrack('school-years-on', avaBorn.id);
+    actions.attachTrack('early-years-bc', avaBorn.id);
+    actions.attachTrack('school-years-bc', avaBorn.id);
   }
 
   const steps = useStore.getState().view.steps;
