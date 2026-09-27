@@ -1,0 +1,309 @@
+import type { Playbook } from '../../domain/types';
+
+export const newbornCa: Playbook = {
+  id: 'newborn-ca',
+  title: 'Newborn · first year · CA',
+  summary:
+    'Paperwork, health and money plan for a baby born in Ontario, from birth registration to the first birthday and the 18-month visit.',
+  region: 'Ontario, Canada',
+  anchorKind: 'born',
+  ages: { from: 0, to: 1 },
+  conditions: [
+    'For a baby born in Ontario',
+    'For parents living in Ontario',
+  ],
+  reviewedAt: '2026-09-26',
+  version: 1,
+  sources: [
+    {
+      title: 'Register the birth of a new baby (Ontario)',
+      url: 'https://www.ontario.ca/page/register-birth-new-baby',
+    },
+    {
+      title: 'Apply for OHIP and get a health card',
+      url: 'https://www.ontario.ca/page/apply-ohip-and-get-health-card',
+    },
+    {
+      title: 'Canada child benefit: How to apply',
+      url: 'https://www.canada.ca/en/revenue-agency/services/child-family-benefits/canada-child-benefit-overview/canada-child-benefit-apply.html',
+    },
+    {
+      title: 'Birth Registration and Canada Child Benefits - Ontario (RC4476)',
+      url: 'https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4476-on/birth-registration-canada-child-benefits.html',
+    },
+    {
+      title: 'Find a family doctor or nurse practitioner (Health Care Connect)',
+      url: 'https://www.ontario.ca/page/find-family-doctor-or-nurse-practitioner',
+    },
+    {
+      title: 'Midwifery in Ontario',
+      url: 'https://www.ontario.ca/page/midwifery-ontario',
+    },
+    {
+      title: 'Healthy Babies Healthy Children program',
+      url: 'https://www.ontario.ca/page/healthy-babies-healthy-children-program',
+    },
+    {
+      title: "Ontario's routine immunization schedule",
+      url: 'https://www.ontario.ca/page/ontarios-routine-immunization-schedule',
+    },
+    {
+      title: 'Enhanced 18-month well-baby visit',
+      url: 'https://www.ontario.ca/page/enhanced-18-month-well-baby-visit',
+    },
+    {
+      title: 'How to apply for a child passport in Canada',
+      url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/child-passport.html',
+    },
+    {
+      title: "Documents to submit when applying for a child's passport",
+      url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/child-passport/documents-submit.html',
+    },
+    {
+      title: 'Canada Education Savings Grant (CESG)',
+      url: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/registered-education-savings-plans-resps/canada-education-savings-programs-cesp/canada-education-savings-grant-cesg.html',
+    },
+    {
+      title: 'Canada Learning Bond (CRA)',
+      url: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/registered-education-savings-plans-resps/canada-education-savings-programs-cesp/canada-learning-bond.html',
+    },
+    {
+      title: 'Canada Learning Bond brochure for those under 18 years old',
+      url: 'https://www.canada.ca/en/employment-social-development/services/student-financial-aid/education-savings/reports/learning-bond-under-18-brochure.html',
+    },
+    {
+      title: 'Your guide to the Employment Standards Act: Pregnancy and parental leave',
+      url: 'https://www.ontario.ca/document/your-guide-employment-standards-act-0/pregnancy-and-parental-leave',
+    },
+    {
+      title: 'EI maternity and parental benefits: What these benefits offer',
+      url: 'https://www.canada.ca/en/services/benefits/ei/ei-maternity-parental.html',
+    },
+    {
+      title: "Canadian Dental Association: Your child's first visit",
+      url: 'https://www.cda-adc.ca/en/oral_health/cfyt/dental_care_children/first_visit.asp',
+    },
+  ],
+  steps: [
+    {
+      id: 'ohip',
+      title: 'Register the baby for OHIP',
+      offsetDays: 2,
+      durationDays: 2,
+      dependsOn: [],
+      documents: ['Ontario health card (baby)'],
+      prepare: ['Baby\'s name', 'Mailing address', 'Keep the bottom part of the form with the health number'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. Hospitals with birthing facilities and registered midwives hand out the Ontario Health Coverage Infant Registration form; it is not online.\n2. They send the top part; the bottom part shows the baby\'s health number.\n3. The health card is mailed within 8 weeks.\n4. Born elsewhere or without a midwife: apply in person at ServiceOntario.',
+    },
+    {
+      id: 'register-birth',
+      title: 'Register the birth with the 5-in-1 newborn bundle',
+      offsetDays: 30,
+      durationDays: 7,
+      dependsOn: [],
+      documents: ['Birth registration confirmation'],
+      prepare: [
+        'All parents present to certify the birth',
+        'Baby\'s full name',
+        'Parents\' SINs and details',
+        'Tick birth certificate, SIN, child benefits and Education Savings Referral',
+      ],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. A birth in Ontario must be registered within 30 days.\n2. The online bundle registers the birth and applies for a birth certificate, the baby\'s SIN, Canada child benefits and an Education Savings Referral in one go.\n3. Registration is free within 12 months of the birth.\n4. Ask for the long-form birth certificate listing parents if a passport is planned.',
+    },
+    {
+      id: 'family-doctor',
+      title: 'Line up a family doctor or NP for the baby\'s checkups',
+      offsetDays: 42,
+      durationDays: 14,
+      dependsOn: ['ohip'],
+      documents: [],
+      prepare: ['Baby\'s health number', 'Register with Health Care Connect if you have no doctor'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. Midwives care for parent and baby for 6 weeks after birth; ongoing well-baby checkups are then with a family doctor, nurse practitioner or paediatrician.\n2. Health Care Connect finds a family doctor or nurse practitioner accepting patients; the whole family can register.\n3. The free Healthy Babies Healthy Children program runs through the local public health unit.\n4. The checkup schedule is set by the provider; this date is a planning estimate.',
+    },
+    {
+      id: 'ccb',
+      title: 'Apply for the Canada Child Benefit',
+      offsetDays: 45,
+      durationDays: 7,
+      dependsOn: ['register-birth'],
+      documents: ['CCB application confirmation'],
+      prepare: ['CRA My Account login', 'Both parents\' tax returns filed'],
+      ages: { from: 0, to: 0 },
+      conditions: ['Only if you didn\'t apply through the birth registration bundle'],
+      howTo:
+        '1. Apply as soon as the child is born and living with you.\n2. The bundle\'s Automated Benefits Application usually covers this; otherwise apply through CRA My Account.\n3. Applying for a child who started living with you more than 11 months ago needs extra documents.',
+    },
+    {
+      id: 'vaccines-2m',
+      title: 'Routine vaccines at 2 months',
+      offsetDays: 61,
+      durationDays: 1,
+      dependsOn: ['family-doctor'],
+      documents: ['Immunization record'],
+      prepare: ['Book the appointment ahead', 'Bring the immunization record'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. Follow Ontario\'s routine immunization schedule; at 2 months it lists DTaP-IPV-Hib, pneumococcal conjugate and rotavirus.\n2. Ask the doctor or nurse any questions.\n3. Move this to the appointment date.',
+    },
+    {
+      id: 'passport',
+      title: 'Apply for the baby\'s passport',
+      offsetDays: 120,
+      durationDays: 30,
+      validForDays: 1826,
+      dependsOn: ['register-birth'],
+      documents: ['Child passport', 'Birth certificate', 'Passport photos'],
+      prepare: [
+        'Long-form birth certificate listing parents, as proof of parentage',
+        'Two identical passport photos',
+        'Guarantor who has known you 2 years and knows the child',
+        'All parents sign the form',
+      ],
+      ages: { from: 0, to: 0 },
+      conditions: ['Only if the baby will travel outside Canada'],
+      howTo:
+        '1. Wait for the birth certificate from the registration.\n2. Standard processing is 10 to 20 business days plus mail.\n3. A child passport is valid for up to 5 years and can\'t be renewed.\n4. The date here is a planning estimate; move it to 2 months before travel.',
+    },
+    {
+      id: 'vaccines-4m',
+      title: 'Routine vaccines at 4 months',
+      offsetDays: 122,
+      durationDays: 1,
+      dependsOn: ['vaccines-2m'],
+      documents: ['Immunization record'],
+      prepare: ['Book the appointment ahead', 'Bring the immunization record'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. Follow Ontario\'s routine immunization schedule; at 4 months it lists DTaP-IPV-Hib, pneumococcal conjugate and rotavirus.\n2. Move this to the appointment date.',
+    },
+    {
+      id: 'resp',
+      title: 'Open an RESP for the Canada Education Savings Grant',
+      offsetDays: 180,
+      durationDays: 30,
+      dependsOn: ['register-birth'],
+      documents: ['RESP contract'],
+      prepare: ['Baby\'s SIN', 'Compare RESP providers', 'Decide on regular contributions'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. The baby\'s SIN comes from the registration bundle and is needed to open the RESP.\n2. The basic CESG adds 20% of yearly contributions, up to a yearly and a lifetime limit, whatever the family income.\n3. Middle- and lower-income families can get an additional grant.\n4. Grants apply to contributions until the end of the year the child turns 17.\n5. Timing is a planning estimate; unused grant room carries forward.',
+    },
+    {
+      id: 'vaccines-6m',
+      title: 'Routine vaccines at 6 months',
+      offsetDays: 183,
+      durationDays: 1,
+      dependsOn: ['vaccines-4m'],
+      documents: ['Immunization record'],
+      prepare: ['Book the appointment ahead', 'Bring the immunization record'],
+      ages: { from: 0, to: 0 },
+      howTo:
+        '1. Follow Ontario\'s routine immunization schedule; at 6 months it lists DTaP-IPV-Hib.\n2. The schedule also recommends yearly flu and COVID-19 vaccines each fall from 6 months.\n3. Move this to the appointment date.',
+    },
+    {
+      id: 'clb',
+      title: 'Request the Canada Learning Bond',
+      offsetDays: 210,
+      durationDays: 14,
+      dependsOn: ['resp'],
+      documents: ['CLB request'],
+      prepare: ['Primary caregiver\'s tax return filed', 'Ask the RESP provider to apply'],
+      ages: { from: 0, to: 0 },
+      conditions: ['Only if the family is low-income and the child is eligible for the Canada Child Benefit'],
+      howTo:
+        '1. The CLB is for children from low-income families born in 2004 or later.\n2. No contribution to the RESP is needed.\n3. It is retroactive: yearly amounts build up until the year the child turns 15.\n4. The caregiver can request it until the day before the child turns 18.',
+    },
+    {
+      id: 'return-notice',
+      title: 'Confirm the return-to-work date with the employer',
+      offsetDays: 330,
+      durationDays: 7,
+      dependsOn: [],
+      documents: ['Return notice'],
+      prepare: ['Last week of EI benefits', 'Childcare start date'],
+      ages: { from: 0, to: 0 },
+      conditions: ['Only if a parent is on pregnancy or parental leave'],
+      howTo:
+        '1. Returning before the leave ends needs at least 4 weeks\' written notice.\n2. Standard EI parental benefits are taken within 52 weeks of the birth; extended within 78 weeks.\n3. The one-year return is a planning estimate; move it for extended leave.',
+    },
+    {
+      id: 'return-to-work',
+      title: 'Parental leave ends: return to work',
+      offsetDays: 365,
+      durationDays: 1,
+      dependsOn: ['return-notice'],
+      documents: [],
+      prepare: ['Childcare arranged', 'Feeding and pickup plan'],
+      ages: { from: 0, to: 1 },
+      conditions: ['Only if a parent is on pregnancy or parental leave'],
+      howTo:
+        '1. Parental leave is up to 61 weeks after pregnancy leave, or 63 weeks otherwise.\n2. One year is a planning estimate for standard benefits; move this to your real date.',
+    },
+    {
+      id: 'dentist',
+      title: 'First dental visit',
+      offsetDays: 365,
+      durationDays: 30,
+      dependsOn: [],
+      documents: [],
+      prepare: ['Find a dentist who sees babies', 'Note when the first tooth came in'],
+      ages: { from: 0, to: 1 },
+      howTo:
+        '1. The Canadian Dental Association recommends a first dental assessment within 6 months of the first tooth or by one year of age.\n2. Move this earlier if the first tooth came early.',
+    },
+    {
+      id: 'vaccines-12m',
+      title: 'Routine vaccines at 1 year',
+      offsetDays: 366,
+      durationDays: 1,
+      dependsOn: ['vaccines-6m'],
+      documents: ['Immunization record'],
+      prepare: ['Book the appointment ahead', 'Bring the immunization record'],
+      ages: { from: 1, to: 1 },
+      howTo:
+        '1. Follow Ontario\'s routine immunization schedule; at 1 year it lists pneumococcal conjugate, meningococcal conjugate and MMR.\n2. Move this to the appointment date.',
+    },
+    {
+      id: 'vaccines-15m',
+      title: 'Routine vaccine at 15 months',
+      offsetDays: 457,
+      durationDays: 1,
+      dependsOn: ['vaccines-12m'],
+      documents: ['Immunization record'],
+      prepare: ['Book the appointment ahead', 'Bring the immunization record'],
+      ages: { from: 1, to: 1 },
+      howTo:
+        '1. Follow Ontario\'s routine immunization schedule; at 15 months it lists varicella (chickenpox).\n2. Move this to the appointment date.',
+    },
+    {
+      id: 'vaccines-18m',
+      title: 'Routine vaccine at 18 months',
+      offsetDays: 548,
+      durationDays: 1,
+      dependsOn: ['vaccines-15m'],
+      documents: ['Immunization record'],
+      prepare: ['Book the appointment ahead', 'Bring the immunization record'],
+      ages: { from: 1, to: 1 },
+      howTo:
+        '1. Follow Ontario\'s routine immunization schedule; at 18 months it lists DTaP-IPV-Hib.\n2. Book it with the enhanced 18-month well-baby visit if you can.',
+    },
+    {
+      id: 'well-baby-18m',
+      title: 'Enhanced 18-month well-baby visit',
+      offsetDays: 548,
+      durationDays: 7,
+      dependsOn: ['family-doctor'],
+      documents: [],
+      prepare: ['Optional Early Years Check-In survey', 'Questions about development'],
+      ages: { from: 1, to: 1 },
+      howTo:
+        '1. Book with the primary care provider when the child is 18 months old.\n2. A short survey gives a snapshot of development to start the discussion.\n3. The provider may point to free community resources such as EarlyON centres.',
+    },
+  ],
+};

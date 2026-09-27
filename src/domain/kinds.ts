@@ -24,6 +24,7 @@ export const ANCHOR_KINDS: AnchorKind[] = [
   { id: 'visa-granted', label: 'Visa granted', group: 'Moving', chapter: 'On a visa' },
   { id: 'visa-lodge', label: 'Lodge a visa application', group: 'Moving', chapter: 'Applying' },
   { id: 'married', label: 'Married', group: 'Family', chapter: 'Married life' },
+  { id: 'baby-due', label: 'Baby due', group: 'Family', chapter: 'Expecting' },
   { id: 'child-born', label: 'Child born', group: 'Family', chapter: 'Young family', withDetail: '{} born' },
   { id: 'home-bought', label: 'Bought a home', group: 'Family', chapter: 'Homeowner' },
 ];
@@ -33,7 +34,7 @@ export const kindById = (id: string): AnchorKind | undefined =>
 
 export const kindLabel = (id: string): string => kindById(id)?.label ?? id;
 
-/** "Migrated to Australia", "Born · Xi'an", or just the label. */
+/** "Migrated to Canada", "Born · Xi'an", or just the label. */
 export function anchorTitle(kind: string, label: string, detail?: string): string {
   if (!detail) return label;
   const k = kindById(kind);

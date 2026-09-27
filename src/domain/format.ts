@@ -71,3 +71,10 @@ export function formatDuration(days: number): string {
   }
   return `${days} day${days === 1 ? '' : 's'}`;
 }
+
+/** age 18 · ages 4–5 · age 16+ */
+export function formatAges(ages: { from: number; to?: number }): string {
+  if (ages.to === undefined) return `age ${ages.from}+`;
+  if (ages.to === ages.from) return `age ${ages.from}`;
+  return `ages ${ages.from}–${ages.to}`;
+}

@@ -37,6 +37,10 @@ export function validatePlaybook(input: unknown): Validation {
   if (!Array.isArray(steps) || steps.length === 0) {
     return fail(`"${title}" has no steps.`);
   }
+  if (input.ages !== undefined && !ageRange(input.ages)) return fail(`"${title}" has a malformed age range.`);
+  if (input.conditions !== undefined && !strings(input.conditions)) {
+    return fail(`"${title}" has a malformed conditions list.`);
+  }
 
   const seen = new Set<string>();
   for (const [i, raw] of steps.entries()) {
@@ -58,7 +62,8 @@ export function validatePlaybook(input: unknown): Validation {
     ) {
       return fail(`Step "${name}" has a validity window that isn't a positive number of days.`);
     }
-    for (const key of ['dependsOn', 'documents', 'prepare'] as const) {
+    if (raw.ages !== undefined && !ageRange(raw.ages)) return fail(`Step "${name}" has a malformed age range.`);
+    for (const key of ['dependsOn', 'documents', 'prepare', 'conditions'] as const) {
       if (raw[key] !== undefined && !strings(raw[key])) {
         return fail(`Step "${name}" has a malformed ${key} list.`);
       }
@@ -115,3 +120,9 @@ export const STALE_AFTER_YEARS = 2;
 
 export const isStale = (playbook: Playbook, now: CivilDate): boolean =>
   reviewAgeYears(playbook.reviewedAt, now) >= STALE_AFTER_YEARS;
+
+const ageRange = (v: unknown): boolean =>
+  isObj(v) &&
+  int(v.from) &&
+  (v.from as number) >= 0 &&
+  (v.to === undefined || (int(v.to) && (v.to as number) >= (v.from as number)));

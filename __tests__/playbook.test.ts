@@ -33,6 +33,16 @@ describe('playbook import', () => {
     });
   });
 
+  it('rejects an age range that ends before it starts', () => {
+    expect(validatePlaybook({ ...valid, ages: { from: 5, to: 3 } })).toMatchObject({ ok: false });
+    expect(validatePlaybook({ ...valid, ages: { from: 4, to: 5 }, conditions: ['Ontario'] })).toMatchObject({ ok: true });
+  });
+
+  it('names a step with a malformed conditions list', () => {
+    const r = validatePlaybook(withSteps([{ ...valid.steps[0], conditions: 'Ontario' }]));
+    expect(r).toMatchObject({ ok: false, error: expect.stringContaining('Book test') });
+  });
+
   it('names a dangling dependency', () => {
     const r = validatePlaybook(
       withSteps([{ id: 'a', title: 'Lodge', offsetDays: 0, durationDays: 1, dependsOn: ['ghost'] }]),
