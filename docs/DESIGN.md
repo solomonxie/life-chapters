@@ -120,5 +120,15 @@ paying twice" explainer rather than as a date the app picks.
   readable error rather than silently producing dates.
 - A life anchor changing (a date the user got wrong) can reflow hundreds of
   instances. Completed instances must keep their real dates, not be recomputed.
+- **Dependencies.** Runtime deps: navigation (3), safe-area, screens, zustand,
+  and `@op-engineering/op-sqlite` — taken because SQLite is the store and a
+  hand-rolled binding is not a hundred lines. Everything else that touches iOS
+  is hand-rolled Swift in `ios/LifePlanner/Native/` (~400 lines): local
+  notifications (instead of notifee — its RN 0.87 support is unproven and the
+  API we use is four calls), document/photo/camera pickers and the share sheet,
+  the EventKit calendar mirror, haptics. Date entry is JS wheels, not a native
+  picker, so year- and month-precision dates get the right columns.
+- **Links out.** Playbook sources open in Safari. That sends no user data and is
+  user-initiated, so it doesn't break "nothing leaves the device".
 - Open: does a playbook ever need a *branch* (visa stream A or B) in v1, or is
   attaching two playbooks and detaching one enough? Currently the latter.

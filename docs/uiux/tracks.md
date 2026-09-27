@@ -92,8 +92,8 @@ import bad    ┌─────────────────────
               └──────────────────────────────┘
 
 detaching     │ Detach "Retirement"?         │
-              │ 19 steps go, 0 done are kept │
-              │ as history.                  │
+              │ 19 steps go, including 2     │
+              │ done.                        │
               │  ( Cancel )  [[ Detach ]]!   │
 ```
 
@@ -106,7 +106,7 @@ detaching     │ Detach "Retirement"?         │
 | `Anchored on` | tap | pick a different anchor; preview dates update live |
 | step in tree | tap | → [`step.md`](step.md) (template view when not attached) |
 | `Import a playbook file…` | tap | `[ document picker ]`, then validate |
-| `⋯` | tap | `Duplicate & edit` `Export…` `Detach`! |
+| `⋯` | tap | `Duplicate` `Export…` `Detach`! |
 
 ## Copy
 
@@ -128,5 +128,9 @@ The detail screen shows the projected first and last dates **before** attaching.
 Committing 22 steps to a plan without seeing that it runs until 2030 is the kind
 of surprise that gets a track detached the same day.
 
-`Duplicate & edit` is the whole content strategy: a shipped playbook is a
-starting point the user forks, not a rule they obey.
+`Duplicate` + `Export…` is the whole content strategy: a shipped playbook is a
+starting point the user forks — export the copy, edit the JSON, import it back —
+not a rule they obey. The library search is the native iOS search bar.
+
+Playbook detail also lists the playbook's **Sources**; they open in Safari. The
+app itself sends nothing.

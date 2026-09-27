@@ -8,7 +8,7 @@ an anchor), and the whole of first run.
  ──────────────────────────────────────────
  ╭────────────────────────────────────────╮
  │ What          Migrated to a country  › │
- │ Where         Australia              › │
+ │ Detail        Australia                │
  │ When          Sep 14, 2024           › │
  │ Precision     to the day             › │
  ╰────────────────────────────────────────╯
@@ -30,7 +30,7 @@ it moves down. Nothing gets covered, so there's nothing to dismiss.
         tap What                  unfolded in place
  ╭────────────────────────╮   ╭────────────────────────╮
  │ What      Migrated   › │   │ What      Migrated   ⌄ │
- │ Where     Australia  › │   │┌──────────────────────┐│
+ │ Detail    Australia    │   │┌──────────────────────┐│
  │ When      Sep 14     › │ → ││ ┌──────────────────┐ ││
  │ Precision to the day › │   ││ │ mig▌             │ ││ ← autofocused
  ╰────────────────────────╯   ││ └──────────────────┘ ││
@@ -42,7 +42,7 @@ it moves down. Nothing gets covered, so there's nothing to dismiss.
                               ││ SCHOOL               ││
                               ││   Started school   ▓ ││
                               │└──────────────────────┘│
-                              │ Where     Australia  › │
+                              │ Detail    Australia    │
                               │ When      Sep 14     › │
                               ╰────────────────────────╯
                                 Save pushed below the fold
@@ -120,7 +120,7 @@ precision open     Precision  to the day         ⌄
 | `anchor.title.add` | Add a date |
 | `anchor.title.edit` | Edit date |
 | `anchor.field.what` | What |
-| `anchor.field.where` | Where |
+| `anchor.field.detail` | Detail |
 | `anchor.field.when` | When |
 | `anchor.field.precision` | Precision |
 | `anchor.unlocks` | TRACKS THIS UNLOCKS |
@@ -135,6 +135,10 @@ precision open     Precision  to the day         ⌄
 `Precision` exists because "graduated in 2013" is real knowledge and forcing a
 day out of it makes every derived date falsely exact. A year-precision anchor
 schedules from mid-year and the Timeline prints `2013`, not `Jun 30, 2013`.
+
+`Detail` is free text, not just a place: "Xi'an", "BSc", "Ava". It reads into
+the Timeline label per kind — `Migrated to Australia`, `Born · Xi'an`,
+`Ava starts primary school`.
 
 `TRACKS THIS UNLOCKS` is the only place the app suggests anything, and it does it
 from the date just typed — no recommendation engine, no remote list.

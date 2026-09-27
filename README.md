@@ -1,7 +1,5 @@
 # A life plan that reschedules itself
 
-> 🚧 Work in progress — engine and scaffold only, screens are placeholders.
-
 Enter the dates that actually matter — born, graduated, migrated, a child's
 birth — and the app works out the rest: the phase you're in, what's coming, and
 every step you need to start *now* for something years away to land on time.
@@ -67,13 +65,18 @@ Bare React Native — **no Expo**, Metro as the bundler, iPhone only.
 ```sh
 npm install
 npm run pods          # bundle install first, once
-npm test              # domain engine, 26 tests
+npm test              # engine, store, reminder queue, content
 npm run typecheck
 npm run ios           # physical device
 ```
 
-`ios/LifePlanner.xcworkspace` for Xcode. Signing is not committed — set your
-team in a gitignored `ios/Local.xcconfig`.
+`ios/LifePlanner.xcworkspace` for Xcode. Signing is not committed — put your
+team and bundle id in a gitignored `ios/Local.xcconfig`:
+
+```
+DEVELOPMENT_TEAM = ABCDE12345
+PRODUCT_BUNDLE_IDENTIFIER = com.yourname.lifeplanner
+```
 
 ### Physical device only
 

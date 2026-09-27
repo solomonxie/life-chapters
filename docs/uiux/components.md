@@ -14,10 +14,37 @@ Used in Radar groups, phase detail, track detail.
  moved      Renew passport         Dec 20 ▼  ›
  snoozed    Address history    snoozed 2w    ›
  skipped    Skills assessment   not for me   ›
- waiting    Medical exam       waiting on 2  ›
  truncated  Overseas police certific…  Dec 01 ›
 
- props: status · date · delta(▲▼) · badge · playbook(optional subtitle)
+ ACT NOW  ⚠ Book IELTS sitting
+            start by Sep 20 · 5 days late  ›     ← two-line form, red only here
+
+ props: step · now · move(▲▼, tap → "was Jan 12" popover) · subtitle · detailed
+```
+
+`blocked` means a step it waits for is itself late, so no date can be promised.
+A step whose prerequisites are merely unfinished still shows its projected date.
+
+## Swipe row
+
+Radar only. Horizontal once the finger has clearly chosen horizontal.
+
+```
+ ← swipe    Police check      Nov 12 [ Done ][ Snooze ]
+ → swipe  [ Not for me ] Police check      Nov 12
+```
+
+VoiceOver gets the same three as custom actions.
+
+## Date wheels
+
+The in-place picker for any date: month · day · year columns, snapping, a
+highlight band on the chosen row. Columns follow precision.
+
+```
+ day       ░ September ░  ░ 14 ░  ░ 2024 ░
+ month     ░ September ░          ░ 2024 ░
+ year                             ░ 2024 ░
 ```
 
 ## Timeline stem
@@ -83,7 +110,7 @@ Row doesn't move, everything below does, one open at a time, no Cancel/Done.
 
 ```
  earlier   ⌐ Done. 3 later steps moved
-             earlier.        ( Undo ) ¬
+             earlier.        ( Undo ) ¬     ← dark pill above the tab bar, 5s
  later     ⌐ 41 steps rescheduled.
                              ( Undo ) ¬
  none      ⌐ Done.                      ¬
