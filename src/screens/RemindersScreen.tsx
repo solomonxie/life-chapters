@@ -18,7 +18,7 @@ import {
   type,
   usePalette,
 } from '../ui';
-import { CAP_INFO } from './SettingsScreen';
+import { CAP_INFO } from './SettingsSection';
 
 const LEADS = [0, 3, 7, 14, 30].map(d => ({
   value: String(d),

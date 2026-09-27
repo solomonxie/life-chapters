@@ -1,9 +1,10 @@
+import { ME, ME_PERSON } from '../domain/people';
 import type { Moves } from '../domain/radar';
 import type {
   Anchor,
   CivilDate,
   DocumentRecord,
-  Entry,
+  Person,
   Playbook,
   StepInstance,
   Track,
@@ -11,13 +12,13 @@ import type {
 
 /** Everything the user owns. Bundled playbooks are code, not data, and not here. */
 export interface Plan {
+  people: Person[];
   anchors: Anchor[];
   /** Imported or forked playbooks only. */
   playbooks: Playbook[];
   tracks: Track[];
   instances: StepInstance[];
   documents: DocumentRecord[];
-  entries: Entry[];
 }
 
 export interface Settings {
@@ -34,6 +35,8 @@ export interface Settings {
   firstRunDone: boolean;
   /** iOS only lets us ask once; after that it's Settings. */
   askedNotifications: boolean;
+  /** Whose board is showing. */
+  personId: string;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -48,6 +51,7 @@ export const DEFAULT_SETTINGS: Settings = {
   collapsed: ['year', 'later'],
   firstRunDone: false,
   askedNotifications: false,
+  personId: ME,
 };
 
 export interface Stored extends Plan {
@@ -56,12 +60,12 @@ export interface Stored extends Plan {
 }
 
 export const EMPTY_PLAN: Plan = {
+  people: [ME_PERSON],
   anchors: [],
   playbooks: [],
   tracks: [],
   instances: [],
   documents: [],
-  entries: [],
 };
 
 export const BACKUP_FORMAT = 'life-chapters-backup';
@@ -100,12 +104,12 @@ export function parseBackup(text: string): ParsedBackup {
   return {
     ok: true,
     plan: {
+      people: isArr(o.people) && o.people.length ? (o.people as Person[]) : [ME_PERSON],
       anchors: o.anchors as Anchor[],
       playbooks: o.playbooks as Playbook[],
       tracks: o.tracks as Track[],
       instances: o.instances as StepInstance[],
       documents: o.documents as DocumentRecord[],
-      entries: isArr(o.entries) ? (o.entries as Entry[]) : [],
     },
   };
 }

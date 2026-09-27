@@ -1,28 +1,61 @@
-import React, { useMemo } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { diffDays } from '../domain/dates';
 import { formatMonth } from '../domain/format';
-import { storiesIn } from '../domain/journal';
+import { ME } from '../domain/people';
+import { placeShort } from '../domain/places';
 import { ageOn, lateSteps, lifeChapters, openSteps, timelineNodes } from '../domain/plan';
-import { goTab, useNav } from '../navigation/routes';
-import { useStore } from '../state/store';
-import { Button, Card, EmptyState, TimelineStem, space, type, usePalette } from '../ui';
+import { useNav } from '../navigation/routes';
+import { actions, useStore } from '../state/store';
+import { Button, Card, EmptyState, ListRow, Rows, TimelineStem, space, type, usePalette } from '../ui';
+import { PlansSection } from './PlansSection';
+import { SettingsSection } from './SettingsSection';
 
+/** The whole app on one page: whose board, their life line, their plans, then settings. */
 export function TimelineScreen() {
   const p = usePalette();
   const nav = useNav();
-  const plan = useStore(s => s.plan);
-  const view = useStore(s => s.view);
+  const plan = useStore(s => s.mine);
+  const view = useStore(s => s.mine.view);
+  const people = useStore(s => s.plan.people);
   const now = useStore(s => s.now);
+  const [menu, setMenu] = useState(false);
+  const scroll = useRef<React.ComponentRef<typeof ScrollView>>(null);
+  const plansY = useRef(0);
+  const person = plan.person;
+  const isMe = person.id === ME;
 
-  const nodes = useMemo(() => {
-    const all = timelineNodes(plan.anchors, plan.tracks, view.steps, now);
-    const chapters = lifeChapters(all, now);
-    return all.map(n => {
-      const c = chapters.find(x => x.eventId === n.id);
-      return c ? { ...n, stories: storiesIn(c, plan.entries).length } : n;
+  useLayoutEffect(() => {
+    nav.setOptions({
+      headerTitle: () => (
+        <Pressable
+          onPress={() => setMenu(m => !m)}
+          hitSlop={8}
+          style={styles.title}
+          accessibilityRole="button"
+          accessibilityLabel={`Life Chapters, showing ${isMe ? 'you' : person.name}. Switch person`}
+          accessibilityState={{ expanded: menu }}>
+          <Text maxFontSizeMultiplier={1.4} style={[type.headline, { color: p.text }]}>
+            Life Chapters {menu ? '▴' : '▾'}
+          </Text>
+          {!isMe ? (
+            <Text maxFontSizeMultiplier={1.4} style={[type.caption, { color: p.dim }]} numberOfLines={1}>
+              {person.name}
+            </Text>
+          ) : null}
+        </Pressable>
+      ),
     });
-  }, [plan.anchors, plan.tracks, plan.entries, view.steps, now]);
+  }, [nav, menu, person.name, isMe, p]);
+
+  const nodes = useMemo(
+    () =>
+      timelineNodes(plan.anchors, plan.tracks, view.steps, now).map(n => {
+        const a = plan.anchors.find(x => x.id === n.anchorId);
+        return { ...n, noted: !!a?.note, where: a?.location ? placeShort(a.location) : undefined };
+      }),
+    [plan.anchors, plan.tracks, view.steps, now],
+  );
   const chapter = useMemo(() => lifeChapters(nodes, now).find(x => x.isCurrent), [nodes, now]);
   const age = ageOn(plan.anchors, now);
   const open = openSteps(view.steps);
@@ -32,83 +65,120 @@ export function TimelineScreen() {
     .sort((a, b) => (a.startBy < b.startBy ? -1 : 1))[0];
   const late = lateSteps(view.steps, now).length;
 
-  if (plan.anchors.length === 0) {
-    return (
-      <View style={[styles.fill, { backgroundColor: p.bg }]}>
-        <EmptyState
-          title="Life Chapters"
-          body="Two dates and it starts drawing."
-          action="When were you born?"
-          onAction={() => nav.navigate('AnchorEdit', { kind: 'born' })}
-        />
-      </View>
-    );
-  }
+  const go = (fn: () => void) => {
+    setMenu(false);
+    fn();
+  };
+  const remove = () =>
+    Alert.alert(`Remove ${person.name}?`, 'Their dates and plans go. Events on other boards stay.', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Remove', style: 'destructive', onPress: () => go(() => actions.removePerson(person.id)) },
+    ]);
 
   return (
     <ScrollView
+      ref={scroll}
       style={{ backgroundColor: p.bg }}
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={styles.content}>
-      {chapter ? (
-        <>
-          <Text style={[type.heading, styles.now, { color: p.dim }]}>
-            NOW{age !== null ? ` · AGE ${age}` : ''}
-          </Text>
-          <Pressable
-            onPress={() => nav.navigate('Chapter', { eventId: chapter.eventId })}
-            accessibilityRole="button"
-            accessibilityLabel={`Current chapter: ${chapter.label}`}>
-            <Card style={styles.nowCard}>
-              <Text style={[type.headline, { color: p.text }]} numberOfLines={1}>
-                {chapter.label}
-              </Text>
-              <ChapterBar start={chapter.start} end={chapter.end} now={now} />
-              <View style={styles.nowFoot}>
-                <Text style={[type.caption, styles.fill, { color: p.dim }]}>
-                  {stepsLine(running, next ? diffDays(now, next.startBy) : null, plan.tracks.length)}
-                </Text>
-                <Text style={{ color: p.faint }}>›</Text>
-              </View>
-            </Card>
-          </Pressable>
-        </>
-      ) : null}
-
-      <View style={styles.stem}>
-        <TimelineStem
-          nodes={nodes}
-          now={now}
-          lateCount={late}
-          onPressLate={() => goTab(nav, 'RadarTab')}
-          onPressNode={n =>
-            n.source === 'anchor' && n.date <= now
-              ? nav.navigate('AnchorEdit', { anchorId: n.id })
-              : nav.navigate('Chapter', { eventId: n.id })
-          }
-          onPressBadge={n => goTab(nav, 'RadarTab', 'Radar', { anchorId: n.id })}
-        />
-      </View>
-
-      {plan.tracks.length === 0 ? (
-        <Card style={styles.noTrack}>
-          <Text style={[type.body, { color: p.dim }]}>Dates, but no plan yet.</Text>
-          <Button title="Add a track" onPress={() => goTab(nav, 'TracksTab', 'Library')} />
+      {menu ? (
+        <Card style={styles.menu}>
+          <Rows>
+            {people.map(x => (
+              <ListRow
+                key={x.id}
+                label={`${x.id === person.id ? '✓ ' : '   '}${x.name}`}
+                chevron={false}
+                accessibilityLabel={`${x.name}${x.id === person.id ? ', showing' : ''}`}
+                onPress={() => go(() => actions.switchPerson(x.id))}
+              />
+            ))}
+            <ListRow label="＋ New person" onPress={() => go(() => nav.navigate('Person', { mode: 'new' }))} />
+            <ListRow
+              label={`Link a person to ${person.name}`}
+              detail="A child, partner or parent, joined by the date that ties you"
+              onPress={() => go(() => nav.navigate('Person', { mode: 'link' }))}
+            />
+            <ListRow
+              label={`Rename ${person.name}`}
+              onPress={() => go(() => nav.navigate('Person', { mode: 'rename', personId: person.id }))}
+            />
+            {!isMe ? (
+              <ListRow label={`Remove ${person.name}`} tone="late" chevron={false} onPress={remove} />
+            ) : null}
+          </Rows>
         </Card>
       ) : null}
 
-      <Button
-        title="+ Add a date"
-        kind="plain"
-        onPress={() => nav.navigate('AnchorEdit')}
-        style={styles.add}
-      />
+      {plan.anchors.length === 0 ? (
+        <EmptyState
+          title={isMe ? 'Life Chapters' : person.name}
+          body="Two dates and it starts drawing."
+          action={isMe ? 'When were you born?' : `When was ${person.name} born?`}
+          onAction={() => nav.navigate('AnchorEdit', { kind: 'born' })}
+        />
+      ) : (
+        <>
+          {chapter ? (
+            <>
+              <Text style={[type.heading, styles.now, { color: p.dim }]}>
+                NOW{age !== null ? ` · AGE ${age}` : ''}
+              </Text>
+              <Pressable
+                onPress={() => nav.navigate('Chapter', { eventId: chapter.eventId })}
+                accessibilityRole="button"
+                accessibilityLabel={`Current chapter: ${chapter.label}`}>
+                <Card style={styles.nowCard}>
+                  <Text style={[type.headline, { color: p.text }]} numberOfLines={1}>
+                    {chapter.label}
+                  </Text>
+                  <ChapterBar start={chapter.start} end={chapter.end} now={now} />
+                  <View style={styles.nowFoot}>
+                    <Text style={[type.caption, styles.fill, { color: p.dim }]}>
+                      {stepsLine(running, next ? diffDays(now, next.startBy) : null, plan.tracks.length)}
+                    </Text>
+                    <Text style={{ color: p.faint }}>›</Text>
+                  </View>
+                </Card>
+              </Pressable>
+            </>
+          ) : null}
+
+          <View style={styles.stem}>
+            <TimelineStem
+              nodes={nodes}
+              now={now}
+              lateCount={late}
+              onPressLate={() => scroll.current?.scrollTo({ y: plansY.current })}
+              onPressNode={n =>
+                n.source === 'anchor' && n.date <= now
+                  ? nav.navigate('AnchorEdit', { anchorId: n.id })
+                  : nav.navigate('Chapter', { eventId: n.id })
+              }
+              onPressBadge={n => nav.navigate('Chapter', { eventId: n.id })}
+            />
+          </View>
+
+          <Button
+            title="+ Add a date"
+            kind="plain"
+            onPress={() => nav.navigate('AnchorEdit')}
+            style={styles.add}
+          />
+
+          <View onLayout={e => (plansY.current = e.nativeEvent.layout.y)}>
+            <PlansSection navigation={nav} />
+          </View>
+        </>
+      )}
+
+      <SettingsSection navigation={nav} />
     </ScrollView>
   );
 }
 
 const stepsLine = (running: number, nextIn: number | null, tracks: number) => {
-  if (tracks === 0) return 'No tracks yet';
+  if (tracks === 0) return 'No plans yet';
   const parts = [`${running} step${running === 1 ? '' : 's'} running`];
   if (nextIn !== null) parts.push(`next starts in ${nextIn}d`);
   return parts.join(' · ');
@@ -138,7 +208,8 @@ const styles = StyleSheet.create({
   nowCard: { padding: space.lg, gap: space.md },
   nowFoot: { flexDirection: 'row', alignItems: 'center' },
   stem: { paddingTop: space.lg },
-  noTrack: { padding: space.lg, gap: space.md, marginTop: space.md },
+  title: { alignItems: 'center' },
+  menu: { marginTop: space.sm },
   add: { alignSelf: 'flex-start', marginLeft: space.lg + 44 + space.sm, marginTop: space.md },
   bar: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   track: { flex: 1, height: 14, justifyContent: 'center' },

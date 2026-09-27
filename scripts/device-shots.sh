@@ -19,10 +19,8 @@ shot() { # <name> <qa-spec>
 }
 
 shot 01-timeline "sample>Timeline@light"
-shot 02-radar    "sample>Radar@light"
+shot 02-plans    "sample>Plans@light"
 shot 03-step     "sample>Step:0@light"
-shot 04-journal  "sample>Journal@light"
 shot 05-chapter  "sample>Chapter@light"
 shot 06-playbook "sample>Playbook@light"
-shot 07-docs     "sample>Docs@light"
 shot 08-timeline-dark "sample>Timeline@dark"

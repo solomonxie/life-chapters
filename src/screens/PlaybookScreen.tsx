@@ -7,18 +7,18 @@ import { kindLabel } from '../domain/kinds';
 import { anchorDisplay } from '../domain/plan';
 import { schedule, topoSort } from '../domain/schedule';
 import type { StepTemplate } from '../domain/types';
-import { goTab, type Routes } from '../navigation/routes';
+import type { Routes } from '../navigation/routes';
 import { haptic } from '../platform';
 import { actions, useStore } from '../state/store';
-import { Button, Card, Disclaimer, ListRow, Rows, SectionHeader, StepRow, space, type, usePalette } from '../ui';
+import { AppliesIf, Button, Card, Disclaimer, ListRow, Rows, SectionHeader, StepRow, space, type, usePalette } from '../ui';
 import { exportPlaybook } from './playbookFiles';
 
 export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Routes, 'Playbook'>) {
   const p = usePalette();
   const { playbookId, trackId } = route.params;
   const playbook = useStore(s => s.playbooks.find(x => x.id === playbookId));
-  const plan = useStore(s => s.plan);
-  const view = useStore(s => s.view);
+  const plan = useStore(s => s.mine);
+  const view = useStore(s => s.mine.view);
   const moves = useStore(s => s.moves);
   const now = useStore(s => s.now);
   const track = plan.tracks.find(t => t.id === trackId);
@@ -94,8 +94,7 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
     if (!anchor) return;
     actions.attachTrack(playbook.id, anchor.id);
     haptic('success');
-    navigation.goBack();
-    goTab(navigation, 'RadarTab', 'Radar');
+    navigation.popToTop();
   };
 
   const pickAnchor = () => {
@@ -127,6 +126,7 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
         {playbook.summary ? (
           <Text style={[type.body, { color: p.text }]}>{playbook.summary}</Text>
         ) : null}
+        <AppliesIf ages={playbook.ages} conditions={playbook.conditions} />
         <Disclaimer playbook={playbook} now={now} />
       </View>
 

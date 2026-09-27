@@ -33,7 +33,7 @@ export async function importPlaybook(): Promise<string | null> {
     return new Promise(resolveId =>
       Alert.alert(
         `Replace "${existing.title}"?`,
-        'A playbook with the same id is already in your library. Attached tracks reflow against the new steps.',
+        'A playbook with the same id is already in your library. Plans using it reflow against the new steps.',
         [
           { text: 'Cancel', style: 'cancel', onPress: () => resolveId(null) },
           {
