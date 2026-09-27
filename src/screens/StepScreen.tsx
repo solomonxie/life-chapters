@@ -41,7 +41,7 @@ export function StepScreen({ route, navigation }: NativeStackScreenProps<Routes,
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: step?.title ?? '',
+      title: '',
       headerRight: () =>
         step ? (
           <Pressable onPress={menu} hitSlop={12} accessibilityRole="button" accessibilityLabel="More">
@@ -147,6 +147,9 @@ export function StepScreen({ route, navigation }: NativeStackScreenProps<Routes,
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={styles.content}>
       <View style={styles.head}>
+        <Text style={[type.title, { color: p.text }]} accessibilityRole="header">
+          {step.title}
+        </Text>
         <Text style={[type.caption, { color: p.dim }]}>
           {step.playbook.title} · step {step.index} of {step.total}
         </Text>
@@ -158,9 +161,18 @@ export function StepScreen({ route, navigation }: NativeStackScreenProps<Routes,
         {step.status === 'done' ? (
           <>
             <View style={styles.line}>
-              <Text style={[type.label, styles.flex, { color: p.done }]}>
-                ✓ Done · {formatDate(step.startBy)}
-              </Text>
+              <Pressable
+                style={styles.flex}
+                onPress={() => {
+                  setPickDate(step.startBy);
+                  setPanel(panel === 'doneOn' ? null : 'doneOn');
+                }}
+                accessibilityRole="button"
+                accessibilityLabel={`Done on ${formatDate(step.startBy)}. Change the date`}>
+                <Text style={[type.label, { color: p.done }]}>
+                  ✓ Done · {formatDate(step.startBy)} <Text style={[type.caption, { color: p.accent }]}>Change ›</Text>
+                </Text>
+              </Pressable>
               <Button title="Undo" kind="plain" onPress={() => actions.reopen(instanceId)} />
             </View>
             {step.expiresOn ? (
@@ -190,12 +202,23 @@ export function StepScreen({ route, navigation }: NativeStackScreenProps<Routes,
                 <DatePair date={step.startBy} now={now} lateRed={false} />
               )}
             </DateLine>
-            <DateLine label="due by">
-              <Text style={[type.caption, { color: p.text }]}>
-                {formatDate(step.dueBy)}
-                {instance.dueOverride ? '  (moved by you)' : ''}
-              </Text>
-            </DateLine>
+            <Pressable
+              onPress={() => {
+                setPickDate(step.dueBy);
+                setPanel(panel === 'due' ? null : 'due');
+              }}
+              accessibilityRole="button"
+              accessibilityLabel={`Due by ${formatDate(step.dueBy)}, ${instance.dueOverride ? 'moved by you' : 'suggested'}. Change`}>
+              <DateLine label="due by">
+                <View style={styles.line}>
+                  <Text style={[type.caption, styles.flex, { color: p.text }]}>
+                    {formatDate(step.dueBy)}
+                    <Text style={{ color: p.dim }}>{instance.dueOverride ? '  · moved by you' : '  · suggested'}</Text>
+                  </Text>
+                  <Text style={[type.caption, { color: p.accent }]}>Change ›</Text>
+                </View>
+              </DateLine>
+            </Pressable>
             {step.snoozedUntil && step.snoozedUntil > now ? (
               <View style={styles.line}>
                 <Text style={[type.caption, styles.flex, { color: p.dim }]}>
@@ -222,6 +245,45 @@ export function StepScreen({ route, navigation }: NativeStackScreenProps<Routes,
           </Text>
         ) : null}
       </Card>
+
+      {panel ? (
+        <Card style={styles.panel}>
+          <Text style={[type.label, styles.pad, { color: p.text }]}>
+            {panel === 'doneOn' ? 'Done on' : 'Move the due date to'}
+          </Text>
+          <DateWheel
+            value={pickDate}
+            onChange={setPickDate}
+            minYear={Number(now.slice(0, 4)) - 30}
+            maxYear={Number(now.slice(0, 4)) + (panel === 'doneOn' ? 0 : 30)}
+          />
+          <View style={styles.actionsInner}>
+            <Button title="Cancel" kind="plain" onPress={() => setPanel(null)} />
+            {panel === 'due' && instance.dueOverride ? (
+              <Button
+                title="Reset"
+                kind="plain"
+                onPress={() => {
+                  actions.moveDue(instanceId, undefined);
+                  setPanel(null);
+                }}
+              />
+            ) : null}
+            <Button
+              title={panel === 'doneOn' ? (step.status === 'done' ? 'Save' : 'Mark done') : 'Move it'}
+              kind="primary"
+              disabled={panel === 'doneOn' && pickDate > now}
+              onPress={() => {
+                if (panel === 'doneOn') {
+                  haptic('success');
+                  actions.markDone(instanceId, pickDate);
+                } else actions.moveDue(instanceId, pickDate);
+                setPanel(null);
+              }}
+            />
+          </View>
+        </Card>
+      ) : null}
 
       {clash && !expired ? (
         <Card style={[styles.alert, { backgroundColor: p.lateSoft }]}>
@@ -276,44 +338,6 @@ export function StepScreen({ route, navigation }: NativeStackScreenProps<Routes,
         </Text>
       ) : null}
 
-      {panel ? (
-        <Card style={styles.panel}>
-          <Text style={[type.label, styles.pad, { color: p.text }]}>
-            {panel === 'doneOn' ? 'Done on' : 'Move the due date to'}
-          </Text>
-          <DateWheel
-            value={pickDate}
-            onChange={setPickDate}
-            minYear={Number(now.slice(0, 4)) - 30}
-            maxYear={Number(now.slice(0, 4)) + (panel === 'doneOn' ? 0 : 30)}
-          />
-          <View style={styles.actionsInner}>
-            <Button title="Cancel" kind="plain" onPress={() => setPanel(null)} />
-            {panel === 'due' && instance.dueOverride ? (
-              <Button
-                title="Reset"
-                kind="plain"
-                onPress={() => {
-                  actions.moveDue(instanceId, undefined);
-                  setPanel(null);
-                }}
-              />
-            ) : null}
-            <Button
-              title={panel === 'doneOn' ? 'Mark done' : 'Move it'}
-              kind="primary"
-              disabled={panel === 'doneOn' && pickDate > now}
-              onPress={() => {
-                if (panel === 'doneOn') {
-                  haptic('success');
-                  actions.markDone(instanceId, pickDate);
-                } else actions.moveDue(instanceId, pickDate);
-                setPanel(null);
-              }}
-            />
-          </View>
-        </Card>
-      ) : null}
 
       {step.template.documents.length ? (
         <>

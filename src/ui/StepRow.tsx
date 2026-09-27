@@ -18,7 +18,6 @@ export function StepRow({
   subtitle,
   move,
   detailed = false,
-  lateRed = false,
   onPress,
 }: {
   step: ScheduledStep & { completedOn?: CivilDate };
@@ -28,15 +27,15 @@ export function StepRow({
   /** Two-line form for ACT NOW: "start by Sep 20 · 5 days late". */
   detailed?: boolean;
   /** Red is reserved for ACT NOW; elsewhere late reads in the normal dim. */
-  lateRed?: boolean;
   onPress?: () => void;
 }) {
   const p = usePalette();
   const open = step.status === 'pending' || step.status === 'snoozed';
   const blocked = open && step.blockedByLate.length > 0;
-  const late = open && !blocked && !step.snoozedUntil && step.startBy < now;
-  const mark = step.status === 'done' ? '✓' : late || step.atRisk ? '⚠' : '';
-  const markColor = step.status === 'done' ? p.done : lateRed ? p.late : p.warn;
+  /** Past its due date. Only this is red; a passed start-by is just "start now". */
+  const overdue = open && !blocked && !step.snoozedUntil && step.dueBy < now;
+  const mark = step.status === 'done' ? '✓' : overdue || step.atRisk ? '⚠' : '';
+  const markColor = step.status === 'done' ? p.done : overdue ? p.late : p.warn;
 
   let trailing: string;
   if (step.status === 'done') trailing = formatShort(step.startBy);
@@ -44,7 +43,8 @@ export function StepRow({
   else if (step.snoozedUntil && step.snoozedUntil > now)
     trailing = `snoozed ${formatSpan(diffDays(now, step.snoozedUntil))}`;
   else if (blocked) trailing = 'blocked';
-  else if (late) trailing = formatRelative(step.startBy, now);
+  else if (overdue) trailing = formatRelative(step.dueBy, now);
+  else if (step.startBy <= now) trailing = 'start now';
   else trailing = sameYear(step.startBy, now) ? formatShort(step.startBy) : formatMonth(step.startBy);
 
   const a11y = [
@@ -75,9 +75,13 @@ export function StepRow({
           {step.title}
         </Text>
         {detailed && open ? (
-          <Text style={[type.caption, { color: late && lateRed ? p.late : p.dim }]}>
+          <Text style={[type.caption, { color: overdue ? p.late : p.dim }]}>
             {blocked
               ? 'blocked · waiting on a late step'
+              : overdue
+              ? `due ${formatShort(step.dueBy)} · ${formatRelative(step.dueBy, now)}`
+              : step.startBy <= now
+              ? `start now · due ${formatShort(step.dueBy)}`
               : `start by ${formatShort(step.startBy)} · ${formatRelative(step.startBy, now)}`}
           </Text>
         ) : null}
@@ -92,7 +96,7 @@ export function StepRow({
           style={[
             type.caption,
             styles.trailing,
-            { color: late && lateRed ? p.late : p.dim },
+            { color: overdue ? p.late : p.dim },
           ]}>
           {trailing}
         </Text>

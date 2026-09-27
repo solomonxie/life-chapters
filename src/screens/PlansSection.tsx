@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Linking, Pressable, StyleSheet, Text } from 'react-native';
 import { formatShort } from '../domain/format';
 import type { PlannedStep } from '../domain/plan';
@@ -11,9 +11,12 @@ import { Button, Card, Rows, SectionHeader, StepRow, SwipeRow, space, type, useP
 import { ExpiringDocs, FinishedPlans, RunningPlans } from './PlanList';
 import { pickSnooze } from './snooze';
 
+/** Next steps shows the nearest few; the rest are a tap away. */
+const NEXT_SHOWN = 3;
+
 const TITLES: Record<Bucket, string> = {
-  now: '⚠ Act now',
-  d90: 'Next 90 days',
+  now: 'Act now',
+  d90: 'Next steps',
   year: 'This year',
   later: 'Later',
 };
@@ -26,6 +29,7 @@ export function PlansSection({ navigation }: { navigation: Nav }) {
   const now = useStore(s => s.now);
   const settings = useStore(s => s.settings);
   const permission = useReminders(s => s.permission);
+  const [showAllNext, setShowAllNext] = useState(false);
 
   const buckets = useMemo(() => bucketize(mine.view.steps, now), [mine.view.steps, now]);
   const total = BUCKETS.reduce((n, b) => n + buckets[b].length, 0);
@@ -50,7 +54,6 @@ export function PlansSection({ navigation }: { navigation: Nav }) {
         step={s}
         now={now}
         detailed={b === 'now'}
-        lateRed={b === 'now'}
         move={moves[s.instanceId]}
         subtitle={s.playbook.title}
         onPress={() => navigation.navigate('Step', { instanceId: s.instanceId })}
@@ -106,14 +109,24 @@ export function PlansSection({ navigation }: { navigation: Nav }) {
             <SectionHeader
               title={TITLES[b]}
               count={items.length}
-              tone={b === 'now' ? 'late' : 'normal'}
+              tone="normal"
               collapsed={collapsed}
               onToggle={b === 'now' ? undefined : () => toggleCollapsed(b)}
             />
             {!collapsed ? (
               <Card>
-                <Rows inset={space.lg + 18 + space.sm}>{items.map(s => row(s, b))}</Rows>
+                <Rows inset={space.lg + 18 + space.sm}>
+                  {(b === 'd90' && !showAllNext ? items.slice(0, NEXT_SHOWN) : items).map(s => row(s, b))}
+                </Rows>
               </Card>
+            ) : null}
+            {!collapsed && b === 'd90' && items.length > NEXT_SHOWN ? (
+              <Button
+                title={showAllNext ? 'Show fewer' : `Show all ${items.length}`}
+                kind="plain"
+                style={styles.add}
+                onPress={() => setShowAllNext(x => !x)}
+              />
             ) : null}
           </React.Fragment>
         );
