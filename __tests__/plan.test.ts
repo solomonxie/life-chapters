@@ -13,8 +13,8 @@ import type { Anchor, StepInstance, Track } from '../src/domain/types';
 const NOW = '2026-09-26';
 const anchors: Anchor[] = [
   { id: 'b', kind: 'born', label: 'Born', place: "Xi'an", date: '1991-04-12', precision: 'day' },
-  { id: 'm', kind: 'migrated', label: 'Migrated to a country', place: 'Canada', date: '2024-09-14', precision: 'day' },
-  { id: 'v', kind: 'visa-lodge', label: 'Lodge a visa application', date: '2027-12-01', precision: 'day' },
+  { id: 'm', kind: 'migrated', label: 'Relocated to a country', place: 'Canada', date: '2024-09-14', precision: 'day' },
+  { id: 'v', kind: 'visa-lodge', label: 'Apply for permanent residence', date: '2027-12-01', precision: 'day' },
 ];
 const tracks: Track[] = [
   { id: 't', playbookId: 'skilled-migration-ca', anchorId: 'v', anchorEventDate: '2000-01-01' },
@@ -42,8 +42,8 @@ describe('timeline', () => {
   it('reads kinds with their detail, and adds only the next round birthday', () => {
     expect(nodes.map(n => n.label)).toEqual([
       "Born · Xi'an",
-      'Migrated to Canada',
-      'Lodge a visa application',
+      'Relocated to Canada',
+      'Apply for permanent residence',
       'Turns 40',
     ]);
     expect(nodes[3].date).toBe('2031-04-12');

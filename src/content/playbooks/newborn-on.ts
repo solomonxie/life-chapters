@@ -6,6 +6,7 @@ export const newbornOn: Playbook = {
   summary:
     'Paperwork, health and money plan for a baby born in Ontario, from birth registration to the first birthday and the 18-month visit.',
   region: 'Ontario, Canada',
+  country: 'CA',
   province: 'ON',
   family: 'newborn',
   anchorKind: 'born',

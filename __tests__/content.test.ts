@@ -47,3 +47,16 @@ describe('provinces', () => {
     expect(families('BC')).toEqual(families('ON'));
   });
 });
+
+describe('countries', () => {
+  const STAGES = ['marriage', 'pregnancy', 'newborn', 'early-years', 'school-years', 'high-school', 'coming-of-age', 'retirement'];
+
+  it('ships every life stage for China', () => {
+    const cn = BUNDLED_PLAYBOOKS.filter(p => p.country === 'CN').map(p => p.family);
+    expect(STAGES.filter(s => !cn.includes(s))).toEqual([]);
+  });
+
+  it('tags every bundled plan with a country', () => {
+    expect(BUNDLED_PLAYBOOKS.filter(p => !p.country).map(p => p.id)).toEqual([]);
+  });
+});

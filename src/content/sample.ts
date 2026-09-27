@@ -11,11 +11,11 @@ export function seedSample() {
   actions.saveAnchor({ kind: 'born', label: 'Born', location: "Xi'an, Shaanxi, China", date: '1991-04-12', precision: 'day' });
   actions.saveAnchor({ kind: 'graduated', label: 'Graduated', place: 'BSc', date: '2013-07-01', precision: 'year', note: 'Rain all morning, sun for the photo. Nobody could find the gowns.' });
   actions.saveAnchor(
-    { kind: 'migrated', label: 'Migrated to a country', place: 'Canada', location: 'Vancouver, British Columbia, Canada', date: `${year - 2}-09-14`, precision: 'day', note: 'Two suitcases and a borrowed car. The first night we slept on the floor of an empty flat.' },
-    ['citizenship-ca'],
+    { kind: 'migrated', label: 'Relocated to a country', place: 'Canada', location: 'Vancouver, British Columbia, Canada', date: `${year - 2}-09-14`, precision: 'day', note: 'Two suitcases and a borrowed car. The first night we slept on the floor of an empty flat.' },
+    ['relocation-bc'],
   );
   actions.saveAnchor(
-    { kind: 'visa-lodge', label: 'Lodge a visa application', place: 'Express Entry', date: addDays(now, 560), precision: 'day' },
+    { kind: 'visa-lodge', label: 'Apply for permanent residence', place: 'Express Entry', date: addDays(now, 560), precision: 'day' },
     ['skilled-migration-ca'],
   );
   actions.saveAnchor({ kind: 'married', label: 'Married', date: '2019-06-01', precision: 'day' }, [], 'Sam');
@@ -37,7 +37,6 @@ export function seedSample() {
   doneOn(/eligibility and the CRS/i, addDays(now, -120));
   doneOn(/passport validity/i, addDays(now, -90));
   doneOn(/absences|days spent outside/i, `${year - 2}-10-01`);
-  doneOn(/Record the permanent residence/i, `${year - 1}-03-01`);
 
   const language = byTitle(/language test/i);
   if (language) {

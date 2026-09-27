@@ -6,6 +6,7 @@ export const retirementOn: Playbook = {
   summary:
     'Paperwork plan for public pensions, registered savings and senior benefits from 55 to 72. Federal rules, with Ontario health programs.',
   region: 'Ontario, Canada',
+  country: 'CA',
   province: 'ON',
   family: 'retirement',
   anchorKind: 'born',

@@ -10,6 +10,8 @@ export interface AnchorKind {
   chapter: string;
   /** How a place or detail reads with this kind; `{}` is the detail. */
   withDetail?: string;
+  /** A dated moment on the line that doesn't start a new chapter: a visit. */
+  moment?: boolean;
 }
 
 export const ANCHOR_KINDS: AnchorKind[] = [
@@ -19,14 +21,18 @@ export const ANCHOR_KINDS: AnchorKind[] = [
   { id: 'first-job', label: 'First job', group: 'Work', chapter: 'Working' },
   { id: 'new-job', label: 'New job', group: 'Work', chapter: 'New role' },
   { id: 'retire', label: 'Retire', group: 'Work', chapter: 'Retirement' },
-  { id: 'migrated', label: 'Migrated to a country', group: 'Moving', chapter: 'Settling in', withDetail: 'Migrated to {}' },
+  // Ids stay as first shipped; saved dates keep working. Labels are what people see.
+  { id: 'migrated', label: 'Relocated to a country', group: 'Moving', chapter: 'Settling in', withDetail: 'Relocated to {}' },
   { id: 'moved-city', label: 'Moved city', group: 'Moving', chapter: 'New city', withDetail: 'Moved to {}' },
-  { id: 'visa-granted', label: 'Visa granted', group: 'Moving', chapter: 'On a visa' },
-  { id: 'visa-lodge', label: 'Lodge a visa application', group: 'Moving', chapter: 'Applying' },
+  { id: 'visa-granted', label: 'Permit or visa granted', group: 'Moving', chapter: 'On a permit' },
+  { id: 'visa-lodge', label: 'Apply for permanent residence', group: 'Moving', chapter: 'Applying for PR' },
+  { id: 'pr-landed', label: 'Became a permanent resident', group: 'Moving', chapter: 'Permanent resident' },
   { id: 'married', label: 'Married', group: 'Family', chapter: 'Married life' },
   { id: 'baby-due', label: 'Baby due', group: 'Family', chapter: 'Expecting' },
   { id: 'child-born', label: 'Child born', group: 'Family', chapter: 'Young family', withDetail: '{} born' },
   { id: 'home-bought', label: 'Bought a home', group: 'Family', chapter: 'Homeowner' },
+  { id: 'visit', label: 'Visitors arrive', group: 'Family', chapter: 'Visit', withDetail: '{} arrive', moment: true },
+  { id: 'trip', label: 'Trip abroad', group: 'Moving', chapter: 'Trip', withDetail: 'Trip to {}', moment: true },
 ];
 
 export const kindById = (id: string): AnchorKind | undefined =>

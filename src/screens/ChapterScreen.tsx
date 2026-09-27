@@ -8,6 +8,7 @@ import type { Routes } from '../navigation/routes';
 import { useStore } from '../state/store';
 import { Button, Card, ListRow, Rows, SectionHeader, StepRow, space, type, usePalette } from '../ui';
 import { ChapterBar } from './TimelineScreen';
+import { plansFor } from '../domain/regions';
 
 export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Routes, 'Chapter'>) {
   const p = usePalette();
@@ -25,7 +26,7 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
   const node = nodes.find(n => n.id === eventId);
   const chapter = lifeChapters(nodes, now).find(x => x.eventId === eventId);
   const anchor = plan.anchors.find(a => a.id === eventId);
-  const nextNode = node ? nodes.find(n => n.date > node.date) : undefined;
+  const nextNode = node ? nodes.find(n => n.date > node.date && !n.moment) : undefined;
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: chapter?.label ?? node?.label ?? '' });
@@ -40,7 +41,7 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
     ),
   ).sort((a, b) => (a.startBy < b.startBy ? -1 : 1));
   const past = !!chapter?.end && chapter.end <= now;
-  const unlocks = anchor ? playbooks.filter(pb => pb.anchorKind === anchor.kind) : [];
+  const unlocks = anchor ? plansFor(anchor, plan.where, playbooks) : [];
   const years = chapter?.end ? Math.max(1, Math.round(diffDays(chapter.start, chapter.end) / 365.25)) : null;
   const yearN = chapter ? Math.floor(diffDays(chapter.start, now) / 365.25) + 1 : null;
 

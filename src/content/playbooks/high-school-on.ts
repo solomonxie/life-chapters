@@ -6,6 +6,7 @@ export const highSchoolOn: Playbook = {
   summary:
     'Diploma requirements, key tests and post-secondary applications for a teen going through an Ontario public high school. Dates assume Grade 9 starts around age 14.',
   region: 'Ontario, Canada',
+  country: 'CA',
   province: 'ON',
   family: 'high-school',
   anchorKind: 'born',

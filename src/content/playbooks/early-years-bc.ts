@@ -6,6 +6,7 @@ export const earlyYearsBc: Playbook = {
   summary:
     'Child care, fee help, early learning drop-ins, health coverage and vaccines for a child from 1 to 4 in British Columbia. Child care waitlists are kept by each provider.',
   region: 'British Columbia, Canada',
+  country: 'CA',
   province: 'BC',
   family: 'early-years',
   anchorKind: 'born',

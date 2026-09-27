@@ -4,14 +4,14 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatAges } from '../domain/format';
 import { kindLabel } from '../domain/kinds';
 import { ageOn } from '../domain/plan';
-import { fitsProvince, provinceName } from '../domain/provinces';
+import { countryName, fits, provinceName, whereAt, whereName } from '../domain/regions';
 import type { Playbook } from '../domain/types';
 import type { Routes } from '../navigation/routes';
 import { useStore } from '../state/store';
 import { Button, Card, ListRow, Rows, SectionHeader, space, usePalette } from '../ui';
 import { importPlaybook } from './playbookFiles';
 
-const COMING_SOON = ['United States', 'China'];
+const COMING_SOON = ['United States'];
 
 export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Library'>) {
   const p = usePalette();
@@ -20,7 +20,7 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
   const now = useStore(s => s.now);
   const [q, setQ] = useState('');
   const [othersOpen, setOthersOpen] = useState(false);
-  const province = plan.province;
+  const where = plan.where;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -44,13 +44,16 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
     )
     .sort((a, b) => (a.ages?.from ?? 99) - (b.ages?.from ?? 99));
   const soon = COMING_SOON.filter(r => !needle || r.toLowerCase().includes(needle));
-  const kinds = new Set(plan.anchors.map(a => a.kind));
   const age = ageOn(plan.anchors, now);
   const notOutgrown = (pb: Playbook) =>
     pb.anchorKind !== 'born' || !pb.ages?.to || age === null || age <= pb.ages.to;
-  const here = matches.filter(pb => fitsProvince(pb, province));
-  const elsewhere = matches.filter(pb => !fitsProvince(pb, province));
-  const fits = here.filter(pb => kinds.has(pb.anchorKind) && notOutgrown(pb));
+  const here = matches.filter(pb => fits(pb, where));
+  const elsewhere = matches.filter(pb => !fits(pb, where));
+  const suggested = matches.filter(
+    pb =>
+      notOutgrown(pb) &&
+      plan.anchors.some(a => a.kind === pb.anchorKind && fits(pb, whereAt(a, where))),
+  );
   const pickProvince = () => navigation.navigate('Person', { mode: 'province', personId: plan.person.id });
 
   const row = (pb: Playbook) => {
@@ -77,25 +80,34 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={styles.content}
       keyboardDismissMode="on-drag">
-      {fits.length ? (
+      {suggested.length ? (
         <>
           <SectionHeader
             title="Fits your dates"
-            count={fits.length}
-            info="Plans that hang off a kind of date this person already has, and that they haven't aged past."
+            count={suggested.length}
+            info="Plans that hang off a kind of date this person already has, fit where that date happened, and that they haven't aged past."
           />
           <Card>
-            <Rows>{fits.map(row)}</Rows>
+            <Rows>{suggested.map(row)}</Rows>
           </Card>
         </>
       ) : null}
-      <SectionHeader title={province ? `Canada and ${provinceName(province)}` : 'Everything'} count={here.length} />
+      <SectionHeader
+        title={
+          !where.country
+            ? 'Everything'
+            : where.province
+            ? `${countryName(where.country)} and ${provinceName(where.province)}`
+            : countryName(where.country) ?? 'Everything'
+        }
+        count={here.length}
+      />
       <Card>
         <Rows>
           {here.map(row)}
           <ListRow
-            label={province ? `Lives in ${provinceName(province)}` : 'Which province?'}
-            detail={province ? 'Plans for other provinces are below' : 'Pick one to see only its provincial plans'}
+            label={where.country ? `Lives in ${whereName(where)}` : 'Where do they live?'}
+            detail={where.country ? 'Plans for other places are below' : 'Pick a place to see only the plans that apply'}
             tone="accent"
             onPress={pickProvince}
           />
@@ -104,7 +116,7 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
       {elsewhere.length ? (
         <>
           <SectionHeader
-            title="Other provinces"
+            title="Other places"
             count={elsewhere.length}
             collapsed={!othersOpen && !needle}
             onToggle={() => setOthersOpen(o => !o)}
@@ -118,7 +130,7 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
       ) : null}
       {soon.length ? (
         <>
-          <SectionHeader title="Coming soon" info="Playbooks for Canada only, for now." />
+          <SectionHeader title="Coming soon" info="Plans for Canada and China, for now." />
           <Card>
             <Rows>
               {soon.map(r => (

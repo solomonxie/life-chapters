@@ -6,6 +6,7 @@ export const pregnancyBc: Playbook = {
   summary:
     'Care, leave, benefits and preparation plan for a pregnancy in British Columbia, counted back from the due date.',
   region: 'British Columbia, Canada',
+  country: 'CA',
   province: 'BC',
   family: 'pregnancy',
   anchorKind: 'baby-due',

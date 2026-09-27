@@ -1,3 +1,5 @@
+import { lifeChapters, timelineNodes } from '../src/domain/plan';
+import type { Anchor } from '../src/domain/types';
 import { currentChapter, deriveChapters } from '../src/domain/chapters';
 import type { LifeEvent } from '../src/domain/types';
 
@@ -37,5 +39,17 @@ describe('chapters', () => {
     expect(currentChapter(deriveChapters(events, '2024-09-14'))?.label).toBe(
       'Migrated',
     );
+  });
+});
+
+describe('moments', () => {
+  it("a visit sits on the line without opening a chapter", () => {
+    const anchors: Anchor[] = [
+      { id: 'b', kind: 'born', label: 'Born', date: '1990-01-01', precision: 'day' },
+      { id: 'v', kind: 'visit', label: 'Visitors arrive', place: 'Mom and Dad', date: '2026-10-01', precision: 'day' },
+    ];
+    const nodes = timelineNodes(anchors, [], [], '2026-09-27');
+    expect(nodes.map(n => n.label)).toContain('Mom and Dad arrive');
+    expect(lifeChapters(nodes, '2026-09-27').map(c => c.eventId)).toEqual(['b']);
   });
 });

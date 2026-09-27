@@ -6,6 +6,7 @@ export const newbornBc: Playbook = {
   summary:
     'Paperwork, health and money plan for a baby born in British Columbia, from birth registration to the 18-month vaccines, plus the BC education grant from age 6.',
   region: 'British Columbia, Canada',
+  country: 'CA',
   province: 'BC',
   family: 'newborn',
   anchorKind: 'born',

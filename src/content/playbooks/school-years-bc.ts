@@ -6,6 +6,7 @@ export const schoolYearsBc: Playbook = {
   summary:
     'Registration, records, assessments, school vaccines and the move to secondary for a child at a British Columbia public elementary school. Many dates are set by each school district.',
   region: 'British Columbia, Canada',
+  country: 'CA',
   province: 'BC',
   family: 'school-years',
   anchorKind: 'born',
