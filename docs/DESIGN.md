@@ -115,6 +115,16 @@ app covers more than one country's paperwork.
 - The Library shows the United States and China as "Coming soon". The earlier
   Australian playbooks are gone.
 
+**Province per person.**
+- Marriage, school, health cards and licences differ by province, so each
+  provincial plan has a `province` and a `family`; Ontario and British Columbia
+  ship, a twin per life stage.
+- A person's province is set by hand or inferred from the latest past date
+  with a Canadian Place — no extra question for most people.
+- The Library shows Canada-wide plans plus the person's province; others sit
+  collapsed. A plan from the wrong province is flagged with a one-tap switch to
+  its twin; progress doesn't carry, since the steps differ.
+
 **Ages and conditions.**
 - Playbooks and steps may carry `ages` (`{from, to?}`) and `conditions` —
   plain "applies if" lines.

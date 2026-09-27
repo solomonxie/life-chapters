@@ -20,9 +20,10 @@ line down — not a sheet, per the `uiux` skill (`references/mobile.md`).
  ├────────────────────────────────────────┤
  │ ＋ New person                        › │
  │ Link a person to Ava                 › │
- │ A child or partner, joined by the      │
- │ date that ties you                     │
- │ Rename Ava                           › │  ← Me too, e.g. to a real name
+ │ A child, partner or parent, joined by  │
+ │ the date that ties you                 │
+ │ Lives in          British Columbia   › │  ← "from the latest place" when
+ │ Rename Ava                           › │    inferred  ← Me too, e.g. to a real name
  │ Remove Ava                           ! │  ← not for Me
  ╰────────────────────────────────────────╯
   NOW · AGE 2
@@ -169,3 +170,25 @@ stated as "Ava born" on my board — the date is what the plans need.
 The Person modal offers Child, Partner and Parent. Parent reuses this
 person's `Born` (created if missing, date fixed if present); two parents share
 one birth event.
+
+## Lives in
+
+Provincial plans follow it. The first row keeps it inferred: the province of
+the latest past date whose Place is in Canada. Any other row pins it.
+
+```
+ ( Done )          Lives in
+ ──────────────────────────────────────────
+  Provincial plans — school, health cards,
+  licences, marriage — follow the province
+  you live in.
+ ╭────────────────────────────────────────╮
+ │ ✓ From my events                       │
+ │   Now: British Columbia, from the      │
+ │   latest place                         │
+ │   Alberta                              │
+ │   British Columbia                     │
+ │   ⋮                                    │
+ │   Yukon                                │
+ ╰────────────────────────────────────────╯
+```

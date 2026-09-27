@@ -74,31 +74,47 @@ stage (`ages.from`); playbooks with no age range sort last.
  ‹              Library
   🔍 Search
  ──────────────────────────────────────────
-  FITS YOUR DATES  ⓘ                    (4)  ← their date kinds, not aged past
-  Skilled migration · CA      ✓ attached ›
+  FITS YOUR DATES  ⓘ                    (4)  ← their date kinds, their
+  Skilled migration · CA      ✓ attached ›     province, not aged past
   from "Lodge a visa application" · age 18+
   Citizenship · CA            ✓ attached ›
   from "Migrated to a country" · age 18+
-  Getting married · Ontario    14 steps ›
-  Retirement · CA              12 steps ›
+  Getting married · British C… 14 steps ›
+  Retirement · British Colum…  12 steps ›
   from "Born" · ages 55–72
  ──────────────────────────────────────────
-  EVERYTHING                           (10)
-  Newborn · first year · CA    17 steps ›
+  CANADA AND BRITISH COLUMBIA          (10)
+  Newborn · first year · Bri…  17 steps ›
   from "Born" · ages 0–1
-  Early years · ages 1–4 · On… 10 steps ›
-  School years · JK to Grad…   12 steps ›
-  High school · Grades 9–12…   18 steps ›
-  Growing up · ages 14–19 · CA 16 steps ›
+  Early years · ages 1–4 · B…  10 steps ›
   ⋮
-  Expecting a baby · CA        14 steps ›
+  Expecting a baby · British…  14 steps ›
   from "Baby due"
+  Lives in British Columbia            ›  ← accent; opens Lives in
+  Plans for other provinces are below
+ ──────────────────────────────────────────
+  OTHER PROVINCES                  (8) ›  ← collapsed; opens on search
  ──────────────────────────────────────────
   COMING SOON  ⓘ                            ← "Playbooks for Canada only,
   United States                               for now."
   China
  ──────────────────────────────────────────
   ( Import a playbook file… )
+```
+
+Provincial plans carry a `province` and a `family` (the same life stage in
+every province). With the province unknown, everything shows under
+`Everything` and the row reads `Which province?`.
+
+A plan attached for another province — after a move, say — says so on its row
+(`Ontario rules · lives in British Columbia`, red) and on its detail:
+
+```
+ ╭────────────────────────────────────────╮
+ │ ⚠ Ontario rules. You live in British   │
+ │ Columbia.       ( Switch to British    │  ← replaces the plan with its
+ │                   Columbia )           │    twin on the same date; one
+ ╰────────────────────────────────────────╯    undo; progress doesn't carry
 ```
 
 `Fits your dates` hides a plan that counts from a birth once the person on

@@ -56,10 +56,11 @@ One page, no tabs:
 - **Settings** — at the bottom: reminders, backup, playbook sources
 - Local reminders ahead of each step's start-by date, for everyone
 
-Bundled playbooks are for Canada (federal, and Ontario where rules are
-provincial): Express Entry, citizenship, marriage, expecting a baby, newborn,
-early years, school, high school, growing up, retirement. Each says who it's
-for — an age range and "applies if" lines. United States and China: coming
+Bundled playbooks are for Canada — federal, plus Ontario and British Columbia
+where rules are provincial: Express Entry, citizenship, marriage, expecting a
+baby, newborn, early years, school, high school, growing up, retirement. Each
+says who it's for — an age range and "applies if" lines — and each person sees
+their own province's, set by hand or read from where their latest date happened. United States and China: coming
 soon.
 
 Fully offline. No account, no server, no subscription — the only copy off the
