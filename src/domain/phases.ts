@@ -11,7 +11,8 @@ export function derivePhases(events: LifeEvent[], now: CivilDate): Phase[] {
   return sorted.map((event, i) => {
     const end = sorted[i + 1]?.date ?? null;
     return {
-      label: event.label,
+      eventId: event.id,
+      label: event.phaseLabel ?? event.label,
       start: event.date,
       end,
       isCurrent: event.date <= now && (end === null || now < end),

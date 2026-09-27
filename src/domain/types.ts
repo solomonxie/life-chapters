@@ -19,9 +19,12 @@ export interface LifeEvent {
   date: CivilDate;
   source: 'anchor' | 'derived';
   anchorId?: string;
+  /** What the phase that starts here is called, if not the event label. */
+  phaseLabel?: string;
 }
 
 export interface Phase {
+  eventId: string;
   label: string;
   start: CivilDate;
   end: CivilDate | null;
@@ -41,13 +44,25 @@ export interface StepTemplate {
   documents: string[];
   prepare: string[];
   howTo?: string;
+  /** Set on a step the user inserted, e.g. a redo; names the original. */
+  redoOf?: string;
+}
+
+export interface Source {
+  title: string;
+  url: string;
 }
 
 export interface Playbook {
   id: string;
   title: string;
+  /** One line under the title, describing the track — never an instruction. */
+  summary?: string;
+  region?: string;
   anchorKind: string;
   reviewedAt: CivilDate;
+  version?: number;
+  sources?: Source[];
   steps: StepTemplate[];
 }
 
@@ -60,6 +75,9 @@ export interface StepInstance {
   status: InstanceStatus;
   completedOn?: CivilDate;
   snoozedUntil?: CivilDate;
+  /** Set via "Move due date…" — replaces anchor + offset for this step. */
+  dueOverride?: CivilDate;
+  note?: string;
   checkedDocuments: string[];
   checkedPrepare: string[];
 }
@@ -67,7 +85,13 @@ export interface StepInstance {
 export interface Track {
   id: string;
   playbookId: string;
+  /** The anchor this track hangs off; its date wins over `anchorEventDate`. */
+  anchorId?: string;
   anchorEventDate: CivilDate;
+  /** Steps the user added to this track only, e.g. a planned redo. */
+  extraSteps?: StepTemplate[];
+  /** Extra dependencies per step id, e.g. a consumer waiting on a redo. */
+  extraDependsOn?: Record<string, string[]>;
 }
 
 export interface ScheduledStep {
@@ -86,6 +110,9 @@ export interface ScheduledStep {
   blockedBy: string[];
   /** Set once done and the result has a validity window. */
   expiresOn?: CivilDate;
+  snoozedUntil?: CivilDate;
+  /** Dependencies that are themselves late, so this date can't be trusted. */
+  blockedByLate: string[];
 }
 
 export interface DocumentRecord {
@@ -93,5 +120,7 @@ export interface DocumentRecord {
   name: string;
   issuedOn?: CivilDate;
   expiresOn?: CivilDate;
+  number?: string;
+  /** File name inside the app's Documents/Scans folder. */
   scanPath?: string;
 }

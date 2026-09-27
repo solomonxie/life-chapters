@@ -1,6 +1,7 @@
 import { addDays, diffDays } from '../src/domain/dates';
 import {
   MissingDependencyError,
+  planRedo,
   PlaybookCycleError,
   expiryClashes,
   schedule,
@@ -190,6 +191,57 @@ describe('expiry clashes', () => {
 
   it('stays quiet when the result is still valid', () => {
     const instances = done(pending(['a', 'b', 'c']), 'b', addDays(ANCHOR, -10));
+    expect(expiryClashes(schedule(chain, track, instances), chain)).toEqual([]);
+  });
+});
+
+describe('user overrides', () => {
+  const instances = pending(['a', 'b', 'c']);
+
+  it('a skipped step holds nothing up', () => {
+    const skipped = instances.map(i =>
+      i.stepId === 'b' ? { ...i, status: 'skipped' as const } : i,
+    );
+    const s = index(schedule(chain, track, skipped));
+    expect(s.get('c')!.blockedBy).toEqual([]);
+    expect(s.get('c')!.startBy).toBe(addDays(ANCHOR, -5));
+  });
+
+  it('a moved due date replaces anchor + offset for that step only', () => {
+    const moved = instances.map(i =>
+      i.stepId === 'c' ? { ...i, dueOverride: '2027-03-01' } : i,
+    );
+    const s = index(schedule(chain, track, moved));
+    expect(s.get('c')!.dueBy).toBe('2027-03-01');
+    expect(s.get('a')!.dueBy).toBe(addDays(ANCHOR, -100));
+  });
+
+  it('flags a successor whose dependency is already late', () => {
+    const now = addDays(ANCHOR, -95);
+    const s = index(schedule(chain, track, instances, now));
+    expect(s.get('b')!.blockedByLate).toEqual(['a']);
+    expect(s.get('c')!.blockedByLate).toEqual([]);
+  });
+});
+
+describe('plan a redo', () => {
+  it('inserts a repeat that clears the clash and holds the consumer', () => {
+    const instances = done(pending(['a', 'b', 'c']), 'b', '2026-05-01');
+    const before = schedule(chain, track, instances);
+    const clash = expiryClashes(before, chain, track)[0];
+    expect(clash.gapDays).toBe(diffDays('2026-05-31', ANCHOR));
+
+    const redone = planRedo(chain, track, 'b', 'c', before);
+    const after = index(schedule(chain, redone, instances));
+    const redo = after.get('b~redo1')!;
+    expect(redo.dueBy).toBe(before.find(s => s.stepId === 'c')!.startBy);
+    expect(after.get('c')!.blockedBy).toContain('b~redo1');
+    expect(expiryClashes([...after.values()], chain, redone)).toEqual([]);
+  });
+
+  it('a finished consumer no longer clashes', () => {
+    let instances = done(pending(['a', 'b', 'c']), 'b', '2026-05-01');
+    instances = done(instances, 'c', '2026-05-10');
     expect(expiryClashes(schedule(chain, track, instances), chain)).toEqual([]);
   });
 });
