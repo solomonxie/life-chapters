@@ -1,38 +1,49 @@
-# Timeline
+# Timeline — the one page
 
-The life line: anchors behind you, events ahead, the chapter you're in between
-them. First tab, app's home.
+The whole app is one scrolling page for whoever is on screen: header, life
+line, Plans, Settings. No tab bar, no ⚙. Everything else pushes on top.
 
 ```
-             Life Chapters                 ⚙
+            Life Chapters ▾                     ← person dropdown, people.md
  ──────────────────────────────────────────
-  NOW · age 34                              ← computed from the Born anchor
+  NOW · AGE 35                              ← computed from the Born date
  ╭────────────────────────────────────────╮
- │ Settling in · Australia                │
- │ Sep 2024 ───────●────────────  Sep 2029│  ← ● = today's position in chapter
+ │ Settling in                            │
+ │ Sep 2024 ───────●────────────  Apr 2028│  ← ● = today's position in chapter
  │ 4 steps running · next starts in 12d  ›│
  ╰────────────────────────────────────────╯
 
   1991  ● Born · Xi'an                    ›
         │
-  2013  ● Graduated · BSc                 ›
+  2013  ◍ Graduated · BSc               ✎ ›  ← ✎ = the date has notes
         │
-  2019  ● First job · Shenzhen            ›
+  2019  ● Married · Sam                   ›
         │
-  2024  ● Migrated to Australia           ›
+  2024  ● Ava born                        ›
+        │
+  2024  ● Migrated to Canada            ✎ ›
         ┃                                    ← thick stem = current chapter
   ══════ TODAY · Sep 26, 2026 ═════════════
+        ┃  ⚠ 2 steps are late             ›  ← scrolls down to Plans
         ┃
-  2027  ○ Citizenship eligible        (6) ›
-        │
-  2029  ○ Ava starts primary school  (11) ›
+  2028  ○ Lodge a visa application   (15) ›
         │
   2031  ○ Turns 40                        ›
         ⋮
         ( + Add a date )
+ ──────────────────────────────────────────
+  PLANS                                     → plans.md
+  ⚠ Expiring · Your plans · ⚠ Act now ·
+  Next 90 days · This year · Later · Done
+  ( + Add a plan )
+ ──────────────────────────────────────────
+  Settings                                  → settings.md
+  Reminders · Backup · Playbooks · About
+  Life Chapters 1.0 · not advice
 ```
 
-Reached from: launch · back from any pushed page · tab bar
+Reached from: launch · back from any pushed page · a reminder tap (after
+switching to that step's owner)
 
 ## States
 
@@ -46,73 +57,103 @@ first run  ┌──────────────────────
            └────────────────────────────────────────┘
                                           → anchors.md
 
-dates only   1991  ● Born · Xi'an                  ›
- (no track)        ⋮
-             ══════ TODAY ═══════════════════════════
-                   ⌐ Dates, but no plan yet. ¬
-                   ( Add a track )    → tracks.md
+new person ┌────────────────────────────────────────┐
+ (empty)   │                 Ava                    │
+           │   Two dates and it starts drawing.     │
+           │        [[ When was Ava born? ]]        │
+           └────────────────────────────────────────┘
+             Settings still sits below it
 
-late        2024  ● Migrated to Australia          ›
+someone     Life Chapters ▾
+else             Ava                        ← whose board, under the title
+
+dates only  1991  ● Born · Xi'an                  ›
+ (no plan)        ⋮
+            NOW card foot: No plans yet
+            PLANS
+            [[ Browse plans ]]             → plans.md
+
+late        2024  ● Migrated to Canada            ›
                   ┃
-            ══════ TODAY ════════════════════════════
-                  ┃  ⚠ 2 steps are late         (2) ›
+            ══════ TODAY ═══════════════════════════
+                  ┃  ⚠ 2 steps are late          ›
 
-long label  2029  ○ Ava starts primary sch…  (11) ›
+long label  2028  ○ Lodge a visa applicat…  (15) ›
                                                     ← truncate, never wrap
 ```
 
 ## Chapter detail
 
-Pushed from the NOW card or any stem segment.
+Pushed from the NOW card, any future event, or a node's `(n)` badge.
 
 ```
- ‹ Timeline      Settling in            ⋯
+ ‹              Settling in
  ──────────────────────────────────────────
-  Sep 2024 ───────●────────────── Sep 2029
-  year 2 of 5                              ← from the two bounding events
- ──────────────────────────────────────────
-  OPENS                                     ← what this chapter makes possible
-  Permanent residency held           ✓
-  Citizenship clock running          ✓
+ ╭────────────────────────────────────────╮
+ │ Sep 2024 ───────●──────────── Apr 2028 │
+ │ year 3 of 4                            │  ← from the two bounding events
+ ╰────────────────────────────────────────╯
+  OPENS                                     ← plans hanging off this date
+  Citizenship · CA              ✓ attached ›
  ──────────────────────────────────────────
   ACTIVE STEPS                          (4)
-  ⚠ Book IELTS sitting      5 days late  ›
-    Police check            starts Nov 12 ›
-    Order birth cert copy   starts Sep 28 ›
+  ⚠ Book a language test    5 days late  ›
+    Police certificates     starts Nov 12 ›
+    Record days outside     starts Sep 28 ›
     Address history         starts Dec 01 ›
  ──────────────────────────────────────────
+  NOTES
+ ╭────────────────────────────────────────╮
+ │ Two suitcases and a borrowed car. The  │  ← tap → anchor editor
+ │ first night we slept on the floor of   │
+ │ an empty flat.                         │
+ ╰────────────────────────────────────────╯
+ ──────────────────────────────────────────
   ENDS WITH
-  ○ Citizenship eligible · Sep 2029     ›
+  ○ Lodge a visa application   Apr 2028  ›
+ ──────────────────────────────────────────
+  ( Edit this date )
+```
+
+```
+no notes    NOTES
+            ( + Add notes )                → anchors.md, Notes field
+past        no ACTIVE STEPS header when nothing is open
+nothing     Nothing to start in this stretch.
 ```
 
 ## Interactions
 
 | Target | Action | Result |
 |---|---|---|
+| `Life Chapters ▾` | tap | unfolds the person dropdown in place — [`people.md`](people.md) |
 | NOW card | tap | → chapter detail |
-| anchor row `●` | tap | → [`anchors.md`](anchors.md) editor |
-| event row `○` | tap | → chapter detail scoped to that event; `( Edit this date )` at its foot |
-| `(6)` badge | tap | → [`radar.md`](radar.md), filtered to that event (a removable `Only …` chip) |
-| `⚠ 2 steps are late` | tap | → [`radar.md`](radar.md) |
+| past date `●` | tap | → [`anchors.md`](anchors.md) editor |
+| future event `○` | tap | → chapter detail for that event |
+| `(15)` badge | tap | → that event's chapter detail |
+| `⚠ 2 steps are late` | tap | scrolls the page down to Plans |
 | `+ Add a date` | tap | → anchor editor, blank |
-| ⚙ | tap | → [`settings.md`](settings.md) |
 | list | flick, then touch | page stops, row does **not** open — `uiux` skill, mobile: brake-not-tap |
 
 Derived events: only the next round birthday (`Turns 40`) from the Born date.
-Every other row is a date the user entered.
+Every other row is a date the user entered, or the linked copy of one
+([`people.md`](people.md)).
 
 ## Copy
 
 | Key | String |
 |---|---|
-| `timeline.now` | NOW · age {n} |
+| `timeline.now` | NOW · AGE {n} |
 | `timeline.today` | TODAY · {Mon d, yyyy} |
 | `timeline.chapter.progress` | year {n} of {total} |
 | `timeline.firstRun.body` | Two dates and it starts drawing. |
-| `timeline.firstRun.cta` | When were you born? |
-| `timeline.noTrack` | Dates, but no plan yet. |
+| `timeline.firstRun.cta` | When were you born? · When was {name} born? |
+| `timeline.noPlan` | No plans yet |
 | `timeline.addDate` | + Add a date |
 | `timeline.stepsRunning` | {n} steps running · next starts in {n}d |
+| `timeline.late` | ⚠ {n} steps are late |
+| `chapter.notes.add` | + Add notes |
+| `chapter.nothing` | Nothing to start in this stretch. |
 
 ## Notes
 
@@ -120,3 +161,7 @@ The stem is the design. A list of dated rows would read as a table; the
 continuous `│`/`┃` line is what makes a 40-year span feel like one object you're
 standing inside. `┃` is the only place the current chapter is marked — no badge,
 no colour needed.
+
+One page because the life line and the plan are the same thing at two zoom
+levels. Tabs made them look like separate apps; one scroll keeps each step
+under the date it serves.

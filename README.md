@@ -1,7 +1,7 @@
 # Life Chapters
 
-The life behind you and the plan ahead, on one line. Past chapters hold your
-stories; future ones hold the steps to get there — and the plan reschedules
+The life behind you and the plan ahead, on one line. Past dates hold your
+notes; future chapters hold the steps to get there — and the plan reschedules
 itself.
 
 Enter the dates that actually matter — born, graduated, migrated, a child's
@@ -15,13 +15,13 @@ Mark one step done and the whole downstream series moves with it.
         │
   2013  ◍ Graduated · BSc                 ›
         │
-  2024  ● Migrated to Australia           ›
+  2024  ● Migrated to Canada              ›
         ┃
   ══════ TODAY · Sep 26, 2026 ═════════════
         ┃
-  2027  ○ Citizenship eligible        (6) ›
+  2028  ○ Lodge a visa application   (15) ›
         │
-  2029  ○ Ava starts primary school  (11) ›
+  2031  ○ Turns 40                        ›
         ⋮
 ```
 
@@ -45,24 +45,29 @@ real date, not the estimate.
 
 ## What's in it
 
-- **Timeline** — the life line, anchors behind you and events ahead, cut into chapters
-- **Journal** — stories in your own words, filed into the chapter they happened in
-- **Radar** — what to start now / in 90 days / this year / later
-- **Tracks** — playbooks you attach, each one a life track turned into dated steps
-- **Docs** — every document a step asked for, sorted by what expires first
-- Local reminders ahead of each step's start-by date
+One page, no tabs:
 
-Fully offline. No account, no server, no subscription. Playbooks are plain data
-you can edit, fork, and share as a file — and they are **not advice**, just a
-plan you maintain.
+- **Timeline** — the life line, dates behind you and events ahead, cut into
+  chapters; notes on any date
+- **People** — a board each for you, a partner, a child; a shared birth or
+  wedding sits on both boards and moves as one
+- **Plans** — playbooks you attach, turned into dated steps, grouped by what
+  to start now / in 90 days / this year / later; expiring documents on top
+- **Settings** — at the bottom: reminders, backup, playbook sources
+- Local reminders ahead of each step's start-by date, for everyone
 
-## Docs
+Bundled playbooks are for Canada (federal, and Ontario where rules are
+provincial): Express Entry, citizenship, marriage, expecting a baby, newborn,
+early years, school, high school, growing up, retirement. Each says who it's
+for — an age range and "applies if" lines. United States and China: coming
+soon.
 
-- [`docs/DESIGN.md`](docs/DESIGN.md) — problem, options, decision, constraints
-- [`docs/UIUX_DESIGN.md`](docs/UIUX_DESIGN.md) — screen map and flows
-- [`docs/uiux/`](docs/uiux/) — every screen and state, drawn
-- [`docs/IMPLEMENT_PLAN.md`](docs/IMPLEMENT_PLAN.md) — build order, task by task
-- [`docs/release/`](docs/release/) — App Store listing, privacy policy, screenshots
+Fully offline. No account, no server, no subscription — the only copy off the
+phone is an optional daily backup file in your own iCloud Drive, or a file you
+export. Playbooks are plain data you can edit, fork, and share as a file — and
+they are **not advice**, just a plan you maintain.
+
+Design, screen drawings, build plan and release kit: [`docs/`](docs/).
 
 ## Development
 

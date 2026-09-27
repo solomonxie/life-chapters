@@ -1,44 +1,46 @@
 # Settings
 
-Pushed from the Timeline's ⚙. Explanations sit behind ⓘ popovers, per the `uiux`
-skill (`references/mobile.md`) — the controls stay above the fold.
+The bottom of the one page ([`timeline.md`](timeline.md)), under Plans — not a
+screen of its own, and no ⚙. Its children (Reminders, Backups, Playbooks,
+About) still push. Explanations sit behind ⓘ popovers, per the `uiux` skill
+(`references/mobile.md`) — the controls stay above the fold.
 
 ```
- ‹ Timeline       Settings
- ──────────────────────────────────────────
-  REMINDERS  ⓘ
+  ⋮  (Plans above)
+  Settings
+  REMINDERS  ⓘ                              ← ⓘ = the 64-cap explainer
   Only the steps you haven't started.        ← the one sentence that stays out
   Remind me before start-by    14 days  ›
   Weekly digest                Sun 9am  ›
-  Nearest reminders queued        18/64  ›    → notifications child
- ──────────────────────────────────────────
-  YOUR PLAN
-  Dates                              7  ›
-  Tracks                             3  ›
-  Documents                         12  ›
+  Nearest reminders queued        18/64  ›    → Reminders child
  ──────────────────────────────────────────
   BACKUP  ⓘ
   On this iPhone          today 21:05 · 14  ›   → Backups child
   iCloud Drive                           ─●
-  Last iCloud copy        today 21:05
+  One file a day · last today 21:05
   Last export       Sep 12, 2026 · 41 KB
   ( Export… )        ( Import… )
  ──────────────────────────────────────────
   PLAYBOOKS
-  Sources                  bundled only ›
-  Check review dates                 ›
+  Sources                  bundled only ›    → Playbooks child
+  Check review dates        all current ›
  ──────────────────────────────────────────
   Calendar export                     ○─
+  Start-by dates in a "Life Chapters"
+  calendar
   Haptics                             ─●
  ──────────────────────────────────────────
   About                                ›
   Life Chapters 1.0 · not advice
 ```
 
+Settings are app-wide, not per person. Reminders and backups cover every
+board.
+
 ## Reminders child
 
 ```
- ‹ Settings     Reminders
+ ‹              Reminders
  ──────────────────────────────────────────
   Remind me before start-by     14 days  ⌄   ← unfolds in place
  ╭────────────────────────────────────────╮
@@ -70,12 +72,27 @@ skill (`references/mobile.md`) — the controls stay above the fold.
    step 5 years out has no alarm set yet. ¬
 ```
 
+## Playbooks child
+
+```
+ ‹              Playbooks
+ ──────────────────────────────────────────
+  Oldest review first. A playbook over two
+  years old is labelled, never hidden.
+  BUNDLED WITH THE APP                 (10)
+  Skilled migration · CA       Sep 2026 ›
+  Citizenship · CA             Sep 2026 ›
+  ⋮
+  YOURS                                 (1)
+  My citizenship copy        ⚠ Mar 2023 ›
+```
+
 ## Backups child
 
 Every change writes a snapshot. Nothing to press.
 
 ```
- ‹ Settings      Backups
+ ‹               Backups
  ──────────────────────────────────────────
   ON THIS IPHONE  ⓘ                    (38)
   Today                                (14) ⌄
@@ -105,7 +122,7 @@ from the same list.
 ```
   ┌──────────────────────────────────────┐
   │ Restore from 20:58?                  │
-  │ It has 9 dates, 3 tracks, 3 stories. │
+  │ It has 9 dates, 3 plans.             │
   │ What you have now stays in Backups.  │
   │   ( Cancel )        [[ Restore ]]!   │
   └──────────────────────────────────────┘
@@ -126,8 +143,8 @@ export running
 import, would replace
   ┌──────────────────────────────────────┐
   │ Replace your plan?                   │
-  │ This file has 9 dates and 4 tracks.  │
-  │ Your current 7 dates and 3 tracks    │
+  │ This file has 9 dates and 4 plans.   │
+  │ Your current 7 dates and 3 plans     │
   │ are overwritten.                     │
   │   ( Cancel )        [[ Replace ]]!   │
   └──────────────────────────────────────┘
@@ -154,7 +171,7 @@ stale playbooks
 | `Import…` | tap | `[ document picker ]` → confirm → reflow |
 | `Rebuild the queue` | tap | clears and re-registers the nearest 64 |
 | `Calendar export` | toggle on | asks calendar permission, then mirrors start-by dates into a `Life Chapters` calendar |
-| `Dates` / `Tracks` / `Documents` | tap | the matching tab, unfiltered |
+| `Sources` / `Check review dates` | tap | → Playbooks child: bundled and imported playbooks, review dates |
 
 ## Copy
 
@@ -167,15 +184,22 @@ stale playbooks
 | `settings.reminders.capInfo` | iOS holds at most 64 pending reminders per app… |
 | `settings.reminders.denied` | Turned off in iOS Settings. |
 | `settings.backup.never` | Nothing is backed up. |
-| `settings.import.replace` | This file has {n} dates and {m} tracks. Your current {n2} dates and {m2} tracks are overwritten. |
+| `settings.import.replace` | This file has {n} dates and {m} plans. Your current {n2} dates and {m2} plans are overwritten. |
+| `settings.restore` | It has {n} dates, {m} plans. What you have now stays in Backups. |
 | `settings.about.tagline` | Life Chapters {version} · not advice |
 
 ## Notes
 
-`Nearest reminders queued 18/64` is on the main Settings screen on purpose. The
+`Nearest reminders queued 18/64` is on the page itself on purpose. The
 64-item cap ([`../DESIGN.md`](../DESIGN.md#constraints)) is the one place where
 the app silently does less than the user assumes, and a counter is cheaper than
 a support conversation.
+
+Settings sit at the bottom because nobody navigates to them twice a month; a
+tab or a ⚙ gave them more weight than they earn.
+
+A backup file carries every person's board. An old file (from before people)
+imports with everything on Me; its journal stories are ignored.
 
 Calendar export is off by default. Writing 312 dates into someone's real
 calendar without asking is the fastest way to get an app deleted.

@@ -4,56 +4,58 @@ One node of a playbook, bound to real dates. The screen where work gets marked
 done and the reflow becomes visible.
 
 ```
- ‹ Radar         Police check            ⋯
+ ‹        Order police certificates       ⋯
  ──────────────────────────────────────────
-  Skilled migration AU · step 4 of 22
+  Skilled migration · CA · step 13 of 15
+                                           ← AppliesIf lines here, if any
+  Reviewed Sep 2026 · not official advice
 
   start by   Nov 12, 2026   ·  in 47 days
   due by     Jan 10, 2027
-  valid      3 months from issue        ⓘ    ← popover: why not earlier
+  valid      6 months from issue        ⓘ    ← popover: why not earlier
  ──────────────────────────────────────────
   [[ Mark done ]]        ( Snooze… )
  ──────────────────────────────────────────
   DOCUMENTS TO OBTAIN                   1/3
   [x] Passport · bio page scan           ›
-  [ ] AFP national police check          ›
-  [ ] Overseas police cert · China       ›
+  [ ] Police certificate · Canada        ›
+  [ ] Police certificate · China         ›
  ──────────────────────────────────────────
   PREPARE                               0/2
   [ ] Address history, last 10 years
   [ ] Fingerprint appointment booked
  ──────────────────────────────────────────
   HOW TO                                  ⓘ
-  1. Apply on the AFP portal, purpose
-     code 33 (visa / immigration).
-  2. Pay, then wait 2-15 business days.
-  3. Certificate arrives by post; scan
-     it into Docs before it expires.
+  1. One certificate per country lived
+     in for 6+ months since age 18.
+  2. Each country has its own process
+     and wait.
+  3. Scan each one into its document
+     before it expires.
                               Read more  ›
  ──────────────────────────────────────────
   BLOCKS
-  → Lodge EOI             starts Jan 12  ›
-  → Medical exam          starts Jan 12  ›
+  → Submit PR application starts Jan 12  ›
  ──────────────────────────────────────────
   WAITS FOR
-  ✓ Choose visa subclass    done Aug 02  ›
+  ✓ Receive an ITA          done Aug 02  ›
 ```
 
-Reached from: [`radar.md`](radar.md) · chapter detail · another step's Blocks /
-Waits-for · a notification
+Reached from: [`plans.md`](plans.md) · chapter detail · playbook detail ·
+another step's Blocks / Waits-for · a reminder (switching to its owner first)
 
 ## States
 
 ```
 blocked     start by   — blocked                ← no date until the blocker lands
-            [[ Mark done ]]·  ← waiting on "Choose visa subclass"
+            [[ Mark done ]]·  ← waiting on "Receive an ITA"
 
 done        ✓ Done · Sep 26, 2026     ( Undo )
             valid until Dec 26, 2026            ← from validForDays
             ⌐ 3 later steps moved earlier. ( Undo ) ¬
 
 expiring    ⚠ Expires Dec 26, 2026 — 11 days
-               before Lodge EOI needs it.   ›
+               before Submit PR needs it.   ›
 
 expired     ⚠ Expired Aug 01. Redo this step.
             [[ Redo ]]
@@ -63,6 +65,12 @@ snoozed     start by   Nov 12  ·  snoozed 2 weeks
 
 skipped     Not for me                ( Restore )
             2 later steps no longer wait for it.
+
+applies if  Take the literacy course (OSSLC)
+            For ages 16–18
+            • Only if they have had two chances
+              at the OSSLT and were unsuccessful
+              at least once                   ← AppliesIf, components.md
 
 no how-to   HOW TO
             Nothing written yet.   ( Add a note )
@@ -98,7 +106,9 @@ no how-to   HOW TO
 | `step.expiring` | ⚠ Expires {Mon d, yyyy} — {n} days before {step} needs it. |
 | `step.skip` | Not for me |
 | `step.skipped` | {n} later steps no longer wait for it. |
-| `step.validInfo` | A police check is only accepted for 3 months. Starting sooner means paying for it twice. |
+| `step.validInfo` | {step} is usually accepted for {duration} from issue. Starting before {date} risks it expiring before {Mon d} — paying for it twice. |
+| `appliesIf.ages` | For {age n+ \| ages n–m} |
+| `appliesIf.condition` | • {condition} |
 | `step.howToEmpty` | Nothing written yet. |
 
 ## Notes
@@ -107,6 +117,10 @@ no how-to   HOW TO
 reflow doesn't feel like magic — after marking one step done you can see exactly
 which two rows moved and by how much. That's cheaper to trust than an
 explanation.
+
+`AppliesIf` lines are plain text the user judges, not rules the app enforces.
+A step that doesn't apply is swiped or marked `Not for me` — the app never
+guesses eligibility.
 
 `PREPARE` deliberately does not gate anything. If prep items blocked successors,
 every playbook author would be forced to model "think about it" as a dependency.

@@ -11,50 +11,49 @@ gestures, in-place pickers, and the ⓘ rule.
 
 | Surface | Kind | Drawing |
 |---|---|---|
-| Timeline | tab, home | [`uiux/timeline.md`](uiux/timeline.md) |
-| Journal | tab | [`uiux/journal.md`](uiux/journal.md) |
-| Story entry | modal | [`uiux/journal.md`](uiux/journal.md) |
-| Radar | tab | [`uiux/radar.md`](uiux/radar.md) |
-| Tracks | tab | [`uiux/tracks.md`](uiux/tracks.md) |
-| Docs | tab | [`uiux/documents.md`](uiux/documents.md) |
-| Anchor editor | pushed page | [`uiux/anchors.md`](uiux/anchors.md) |
+| Timeline — the one page | root, home | [`uiux/timeline.md`](uiux/timeline.md) |
+| Person dropdown | unfolds under the title | [`uiux/people.md`](uiux/people.md) |
+| Plans | section of the page | [`uiux/plans.md`](uiux/plans.md) |
+| Settings | section of the page, at the bottom | [`uiux/settings.md`](uiux/settings.md) |
+| Anchor editor | modal | [`uiux/anchors.md`](uiux/anchors.md) |
+| Person (new / link / rename) | modal | [`uiux/people.md`](uiux/people.md) |
 | Chapter detail | pushed page | [`uiux/timeline.md`](uiux/timeline.md) |
 | Step detail | pushed page | [`uiux/step.md`](uiux/step.md) |
-| Playbook library / detail | pushed page | [`uiux/tracks.md`](uiux/tracks.md) |
-| Settings | pushed from Timeline ⚙ | [`uiux/settings.md`](uiux/settings.md) |
+| Document detail | pushed page | [`uiux/documents.md`](uiux/documents.md) |
+| Playbook library / detail | pushed page | [`uiux/plans.md`](uiux/plans.md) |
+| Reminders / Backups / Playbooks / About | pushed from Settings | [`uiux/settings.md`](uiux/settings.md) |
 | Components | reused parts | [`uiux/components.md`](uiux/components.md) |
 
-Five tabs. Journal earns one because stories are half the product — writing
-one shouldn't be three taps deep. Settings still earns only a ⚙ in the Timeline
-nav bar — nobody navigates to it twice a month. Docs keeps a tab because an
-expiring document is the one thing you check without having a step in mind.
+One page, no tab bar, no ⚙: life line, then Plans, then Settings, in one
+scroll. Everything else pushes on one stack. The old tabs (Radar, Tracks,
+Docs, Journal) are gone — Radar and Tracks became the Plans section, expiring
+documents moved into it, and the journal became a Notes field on each date.
+"Tracks" are called **Plans** wherever the user sees them.
+
+The title, `Life Chapters ▾`, switches whose board the page shows.
 
 ## Screen map
 
 ```
-      Launch ──first run──▶ Anchors (empty) ──▶ Playbook library
+  Launch ──first run──▶ Born ─▶ one more date ─▶ Pick a plan
         │
         ▼
-  ┌───────────┬─────────┬─────────┬──────────┬────────┐
-  │ Timeline  │ Journal │  Radar  │  Tracks  │  Docs  │
-  └───────────┴─────────┴─────────┴──────────┴────────┘
-        │          │  └─▶ Story entry
-        │          │          │         │
-        │          │          │         └─▶ Document detail
-        │          │          │
-        │          │          ├─▶ Playbook library ─▶ Playbook detail
-        │          │          └─▶ Track detail ──┐
-        │          │                             │
-        │          └────────────────────────────▶ Step detail ─┐
-        │                                            │  ▲      │
-        ├─▶ Anchor editor                             │  └──────┘
-        ├─▶ Chapter detail ────────────────────────────▶┘   (blocks → next step)
-        │
-        └─▶ ⚙ Settings ──▶ Notifications
-                       ├──▶ Backup ──▶ [share sheet]
-                       └──▶ Playbook sources
+  ┌─ Timeline, one page ────────────────────┐
+  │ Life Chapters ▾ ─▶ dropdown ─▶ Person ◆ │
+  │ NOW card ─────────▶ Chapter detail      │
+  │ life line ─● past ─▶ Anchor editor ◆    │
+  │            ○ / (n) ─▶ Chapter detail    │
+  │ + Add a date ─────▶ Anchor editor ◆     │
+  │ Plans ─ step row ─▶ Step detail ─┐      │
+  │       ─ expiring ─▶ Document ◀───┘      │
+  │       ─ plan row ─▶ Playbook detail     │
+  │       ─ + Add a plan ─▶ Library ─▶ …    │
+  │ Settings ─▶ Reminders · Backups         │
+  │          ─▶ Playbooks · About           │
+  │          ─▶ [share sheet] [doc picker]  │
+  └─────────────────────────────────────────┘
 
-  [brackets] = OS-owned surface
+  ◆ = modal    [brackets] = OS-owned surface
 ```
 
 ## Flows
@@ -69,7 +68,7 @@ right:
   │ start Nov 12 │  ──▶  engine recomputes ──▶│ ✓ Sep 26     │
   │ [[ Mark done]]│       successors from      │              │
   └──────────────┘       the REAL date         │ BLOCKS       │
-                                              │ → Lodge EOI  │
+                                              │ → Submit PR  │
                                               │   Oct 3 (was │
                                               │   Jan 12) ▲  │
                                               └──────────────┘
@@ -88,12 +87,20 @@ Changing an anchor is the same engine, bigger blast radius:
                       ( Cancel )  [[ Move it ]]
 ```
 
+Moving a shared date moves it everywhere it lives — linked events share a
+`linkId` across boards ([`uiux/people.md`](uiux/people.md)):
+
+```
+  my "Ava born" ── save ──▶ her "Born" moves too ──▶ plans on both boards
+                                                      reflow
+```
+
 First run, because an empty graph has nothing to draw:
 
 ```
-  Launch ──▶ "When were you born?"  ──▶ Timeline (1 anchor, no steps)
-                                          │
-                                          └─▶ "Add a track" ──▶ library
+  Launch ──▶ "When were you born?"  ──▶ "One more." ──▶ "Pick a plan"
+                                                          │
+                                   Timeline (dates, maybe a plan) ◀─┘
 ```
 
 ## Cross-screen states
@@ -102,14 +109,15 @@ Drawn per screen; these are the rules behind them.
 
 ```
 empty       no anchors      → first-run prompt, not a blank list
-            no tracks       → Timeline shows dates only, Radar shows the
-                              "add a track" invitation
+            new person      → "When was {name} born?"
+            no plans        → dates only; Plans shows [[ Browse plans ]]
 loading     none            → the store is local; a spinner would be a lie.
                               Reflow is synchronous under ~2k instances
 error       bad playbook    → import rejected with the failing step named
-            notif denied    → one dismissible banner in Radar, with [ Allow ]
+            notif denied    → one dismissible banner atop Plans, with [ Allow ]
 partial     stale playbook  → "reviewed Mar 2026" badge, never hidden
-overdue     past start-by   → ⚠ ACT NOW group in Radar, red only there
+overdue     past start-by   → ⚠ Act now bucket in Plans, and one
+                              "⚠ n steps are late" line on the stem
 ```
 
 ## Copy rules
@@ -122,6 +130,9 @@ overdue     past start-by   → ⚠ ACT NOW group in Radar, red only there
 - A step never says "overdue". It says **`5 days late`** — the plan slipped, the
   user didn't fail.
 - Every playbook screen carries `Reviewed <month year> · not official advice`.
+- "Plan", never "track", in anything the user reads.
+- "Applies if" lines are descriptions ("Only if they plan to go to university
+  in Ontario"), never eligibility verdicts.
 
 Full strings live per screen, under each drawing's `Copy` table.
 
@@ -129,6 +140,7 @@ Full strings live per screen, under each drawing's `Copy` table.
 
 - None in v1. Two of its mobile rules are load-bearing here and cited where
   used: the **in-place unfolding picker** for the anchor editor's kind/date rows
-  ([`uiux/anchors.md`](uiux/anchors.md)), and **explanations behind an ⓘ** for
+  ([`uiux/anchors.md`](uiux/anchors.md)) and the person dropdown
+  ([`uiux/people.md`](uiux/people.md)), and **explanations behind an ⓘ** for
   the validity-window and notification-cap explainers
   ([`uiux/step.md`](uiux/step.md), [`uiux/settings.md`](uiux/settings.md)).

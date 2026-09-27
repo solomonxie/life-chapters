@@ -14,5 +14,5 @@ Upload a build: `make release` — checks, archives, signs, uploads. Nothing in 
 Build number is a timestamp unless you pass `BUILD=`. `make help` lists the rest.
 
 Versioning: `MARKETING_VERSION` in `project.pbxproj` is the user-visible version; bump it per
-release, together with `VERSION` in `src/screens/SettingsScreen.tsx` (the About line).
+release, together with `VERSION` in `src/screens/SettingsSection.tsx` (the About line).
 `CURRENT_PROJECT_VERSION` is set per upload by the script and never committed.
