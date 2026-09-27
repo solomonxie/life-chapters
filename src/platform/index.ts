@@ -42,6 +42,8 @@ export const files = {
   openFolder: (which: 'Scans' | 'Backups'): Promise<boolean> => N.Files.openFolder(which),
   writeBackup: (name: string, text: string): Promise<void> =>
     N.Files?.writeBackup(name, text) ?? Promise.resolve(),
+  appendBackup: (name: string, text: string): Promise<void> =>
+    N.Files?.appendBackup(name, text) ?? Promise.resolve(),
   listBackups: (): Promise<string[]> => N.Files?.listBackups() ?? Promise.resolve([]),
   readBackup: (name: string): Promise<string> => N.Files.readBackup(name),
   deleteBackups: (names: string[]): Promise<void> =>

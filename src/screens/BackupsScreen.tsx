@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { parseBackup } from '../data/plan';
-import { dailyDay, groupSnapshots, snapshotTime, KEEP_DAYS, PER_DAY } from '../data/snapshots';
+import { changeLogName, dailyDay, groupSnapshots, snapshotTime, KEEP_DAYS } from '../data/snapshots';
 import { addDays } from '../domain/dates';
 import { formatDate } from '../domain/format';
 import { files, icloud } from '../platform';
@@ -10,7 +10,9 @@ import { backupNow, useBackups } from '../state/autobackup';
 import { actions, useStore } from '../state/store';
 import { Button, Card, ListRow, Rows, SectionHeader, space, type, usePalette } from '../ui';
 
-const LOCAL_INFO = `A copy after every change, never overwritten. Each day keeps its latest ${PER_DAY}; days older than a week are cleared. They live in Files › Life Chapters › Backups.`;
+const LOCAL_INFO = `One copy a day, replaced on every change that day and kept ${KEEP_DAYS} days. What changed, and when, goes into a change log that is only ever added to. Both live in Files › Life Chapters › Backups.`;
+const LOG_INFO = 'Every change, one line each: when, whose board, what happened. Added to, never rewritten or cleared — one file a year.';
+const LOG_SHOWN = 30;
 const ICLOUD_INFO =
   'One file a day in iCloud Drive › Life Chapters, replaced on every change that day. It survives losing the phone. Turn it on in Settings.';
 
@@ -22,9 +24,14 @@ export function BackupsScreen() {
   const [local, setLocal] = useState<string[]>([]);
   const [cloud, setCloud] = useState<string[]>([]);
   const [openDay, setOpenDay] = useState<string | null>(now);
+  const [log, setLog] = useState<string[]>([]);
 
   const refresh = useCallback(() => {
     files.listBackups().then(setLocal);
+    files
+      .readBackup(changeLogName(new Date()))
+      .then(text => setLog(text.trim().split('\n').slice(-LOG_SHOWN).reverse()))
+      .catch(() => setLog([]));
     if (icloudOn) icloud.list().then(n => setCloud(n.filter(x => dailyDay(x))));
   }, [icloudOn]);
 
@@ -57,7 +64,7 @@ export function BackupsScreen() {
           text: 'Restore',
           style: 'destructive',
           onPress: async () => {
-            await backupNow();
+            await backupNow(undefined, 'before-restore');
             actions.replacePlan(parsed.plan);
           },
         },
@@ -105,7 +112,7 @@ export function BackupsScreen() {
         </Card>
       ) : (
         <Text style={[type.body, styles.pad, { color: p.dim }]}>
-          The first snapshot is written with your next change.
+          The first copy is written with your next change.
         </Text>
       )}
 
@@ -131,17 +138,38 @@ export function BackupsScreen() {
         <Text style={[type.body, styles.pad, { color: p.dim }]}>Off. Turn it on in Settings › Backup.</Text>
       )}
 
+      <SectionHeader title="Change log" count={log.length ? `latest ${log.length}` : undefined} info={LOG_INFO} />
+      {log.length ? (
+        <Card style={styles.log}>
+          {log.map((line, i) => {
+            const [when, who, what] = line.split('\t');
+            return (
+              <View key={`${i}-${when}`} style={styles.logLine}>
+                <Text style={[type.caption, { color: p.dim }]}>
+                  {when?.slice(0, 16)} · {who}
+                </Text>
+                <Text style={[type.body, { color: p.text }]}>{what}</Text>
+              </View>
+            );
+          })}
+        </Card>
+      ) : (
+        <Text style={[type.body, styles.pad, { color: p.dim }]}>Changes appear here as you make them.</Text>
+      )}
+
       <View style={styles.buttons}>
         <Button title="Show in Files" onPress={() => files.openFolder('Backups')} />
       </View>
       <Text style={[type.caption, styles.foot, { color: p.faint }]}>
-        Snapshots older than {KEEP_DAYS} days are cleared automatically.
+        Daily copies older than {KEEP_DAYS} days are cleared automatically. The change log is kept.
       </Text>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  log: { padding: space.lg, gap: space.md },
+  logLine: { gap: 2 },
   content: { paddingBottom: 80 },
   pad: { paddingHorizontal: space.lg },
   buttons: { padding: space.lg, paddingTop: space.xl },

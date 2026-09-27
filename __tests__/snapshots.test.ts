@@ -5,33 +5,45 @@ import {
   snapshotName,
   snapshotTime,
   snapshotsToPrune,
+  changeLine,
+  changeLogName,
 } from '../src/data/snapshots';
 
 const TODAY = '2026-09-26';
 const at = (day: string, i: number) => `${day}T10-00-${String(i).padStart(2, '0')}-000.json`;
 
 describe('snapshots', () => {
-  it('names sort in time order, in local time', () => {
-    const a = snapshotName(new Date(2026, 8, 26, 9, 5, 3, 7));
-    const b = snapshotName(new Date(2026, 8, 26, 21, 5, 3, 7));
-    expect(a).toBe('2026-09-26T09-05-03-007.json');
-    expect(a < b).toBe(true);
-    expect(snapshotTime(b)).toBe('21:05:03');
+  it('one file a day, in local time; a tag keeps a one-off apart', () => {
+    expect(snapshotName(new Date(2026, 8, 26, 21, 5, 3))).toBe('2026-09-26.json');
+    expect(snapshotName(new Date(2026, 8, 26, 9), 'before-restore')).toBe('2026-09-26-before-restore.json');
+    expect(snapshotTime('2026-09-26.json')).toBe('latest');
+    expect(snapshotTime('2026-09-26-before-restore.json')).toBe('before restore');
   });
 
-  it('keeps the newest 20 of a day and drops the rest', () => {
-    const day = Array.from({ length: 25 }, (_, i) => at(TODAY, i));
-    const gone = snapshotsToPrune(day, TODAY);
-    expect(gone).toEqual(day.slice(0, 5));
+  it('still reads the hourly and per-change names written before', () => {
+    expect(snapshotTime('2026-09-26T21.json')).toBe('21:00');
+    expect(snapshotTime('2026-09-26T21-05-33-120.json')).toBe('21:05');
+    expect(snapshotsToPrune(['2026-09-26T21-05-33-120.json'], TODAY)).toEqual([]);
   });
 
-  it('keeps 7 days including today, drops anything older', () => {
-    const names = [at('2026-09-20', 1), at('2026-09-19', 1), at('2026-08-01', 1), at(TODAY, 1)];
-    expect(snapshotsToPrune(names, TODAY)).toEqual([at('2026-08-01', 1), at('2026-09-19', 1)]);
+  it('keeps the newest few of a day and drops the rest', () => {
+    const day = Array.from({ length: 8 }, (_, i) => at(TODAY, i));
+    expect(snapshotsToPrune(day, TODAY)).toEqual(day.slice(0, 3));
   });
 
-  it('never touches files that are not snapshots', () => {
-    expect(snapshotsToPrune(['notes.txt', 'life-chapters-2020-01-01.json'], TODAY)).toEqual([]);
+  it('keeps 30 days including today, drops anything older', () => {
+    const names = ['2026-08-28.json', '2026-08-27.json', '2026-01-01.json', `${TODAY}.json`];
+    expect(snapshotsToPrune(names, TODAY)).toEqual(['2026-01-01.json', '2026-08-27.json']);
+  });
+
+  it('never touches files that are not snapshots, the change log included', () => {
+    expect(snapshotsToPrune(['notes.txt', 'life-chapters-2020-01-01.json', 'changes-2020.log'], TODAY)).toEqual([]);
+  });
+
+  it('writes one tab-separated change line, newlines flattened', () => {
+    const at = new Date(2026, 8, 27, 14, 3, 22);
+    expect(changeLogName(at)).toBe('changes-2026.log');
+    expect(changeLine(at, 'Me', 'Ava born moved\n3 steps')).toBe('2026-09-27 14:03:22\tMe\tAva born moved 3 steps\n');
   });
 
   it('groups newest day first, newest snapshot first', () => {
