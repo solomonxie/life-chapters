@@ -69,7 +69,7 @@ function TimelineFlow() {
               hitSlop={12}
               accessibilityRole="button"
               accessibilityLabel="Settings">
-              <Text style={[styles.gear, { color: p.accent }]}>⚙︎</Text>
+              <Text maxFontSizeMultiplier={1.3} style={[styles.gear, { color: p.accent }]}>⚙︎</Text>
             </Pressable>
           ),
         })}

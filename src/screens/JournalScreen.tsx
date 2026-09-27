@@ -31,7 +31,7 @@ export function JournalScreen({ navigation }: NativeStackScreenProps<Routes, 'Jo
           hitSlop={12}
           accessibilityRole="button"
           accessibilityLabel="Write a story">
-          <Text style={[type.headline, { color: p.accent }]}>＋</Text>
+          <Text maxFontSizeMultiplier={1.3} style={[type.headline, { color: p.accent }]}>＋</Text>
         </Pressable>
       ),
     });

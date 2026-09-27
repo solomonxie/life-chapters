@@ -31,7 +31,7 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
       title: playbook?.title ?? '',
       headerRight: () => (
         <Pressable onPress={menu} hitSlop={12} accessibilityRole="button" accessibilityLabel="More">
-          <Text style={[type.headline, { color: p.accent }]}>⋯</Text>
+          <Text maxFontSizeMultiplier={1.3} style={[type.headline, { color: p.accent }]}>⋯</Text>
         </Pressable>
       ),
     });
