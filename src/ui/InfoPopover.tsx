@@ -4,11 +4,22 @@ import { radius, space, type } from './theme';
 import { usePalette } from './usePalette';
 
 /**
- * The ⓘ beside a section heading. Long explanations live in here, not under the
+ * The ⓘ beside a heading. Long explanations live in here, not under the
  * heading, so the controls stay above the fold — `uiux` skill, mobile.
+ * Pass children to use something other than ⓘ as the trigger (e.g. ▲▼).
  */
-export function InfoPopover({ text }: { text: string }) {
-  const palette = usePalette();
+export function InfoPopover({
+  text,
+  title,
+  children,
+  label = 'More about this',
+}: {
+  text: string;
+  title?: string;
+  children?: React.ReactNode;
+  label?: string;
+}) {
+  const p = usePalette();
   const [open, setOpen] = useState(false);
 
   return (
@@ -17,17 +28,19 @@ export function InfoPopover({ text }: { text: string }) {
         onPress={() => setOpen(true)}
         hitSlop={space.md}
         accessibilityRole="button"
-        accessibilityLabel="More about this">
-        <Text style={{ color: palette.accent }}>ⓘ</Text>
+        accessibilityLabel={label}>
+        {children ?? <Text style={[type.body, { color: p.accent }]}>ⓘ</Text>}
       </Pressable>
-      <Modal
-        transparent
-        visible={open}
-        animationType="fade"
-        onRequestClose={() => setOpen(false)}>
-        <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
-          <View style={[styles.bubble, { backgroundColor: palette.card }]}>
-            <Text style={[type.body, { color: palette.text }]}>{text}</Text>
+      <Modal transparent visible={open} animationType="fade" onRequestClose={() => setOpen(false)}>
+        <Pressable
+          style={[styles.backdrop, { backgroundColor: p.backdrop }]}
+          onPress={() => setOpen(false)}
+          accessibilityLabel="Close">
+          <View style={[styles.bubble, { backgroundColor: p.card }]}>
+            {title ? (
+              <Text style={[type.label, styles.title, { color: p.text }]}>{title}</Text>
+            ) : null}
+            <Text style={[type.body, { color: p.text }]}>{text}</Text>
           </View>
         </Pressable>
       </Modal>
@@ -36,11 +49,7 @@ export function InfoPopover({ text }: { text: string }) {
 }
 
 const styles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: space.xl,
-    backgroundColor: '#00000055',
-  },
+  backdrop: { flex: 1, justifyContent: 'center', padding: space.xl },
   bubble: { borderRadius: radius.lg, padding: space.lg },
+  title: { marginBottom: space.xs, fontWeight: '600' },
 });

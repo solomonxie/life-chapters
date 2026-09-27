@@ -1,11 +1,14 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { ListRow } from './ListRow';
 import { space, type } from './theme';
 import { usePalette } from './usePalette';
 
 export interface Option {
   value: string;
   label: string;
+  /** Shown in the closed row when the full label is too long. */
+  short?: string;
   group?: string;
 }
 
@@ -34,20 +37,12 @@ export function UnfoldingPicker({
 
   return (
     <View>
-      <Pressable
+      <ListRow
+        label={label}
+        value={selected?.short ?? selected?.label ?? value}
+        open={open}
         onPress={onToggle}
-        style={styles.row}
-        accessibilityRole="button"
-        accessibilityState={{ expanded: open }}
-        accessibilityLabel={`${label}, ${selected?.label ?? value}`}>
-        <Text style={[type.label, { color: palette.text }]}>{label}</Text>
-        <View style={styles.trailing}>
-          <Text style={[type.label, { color: palette.dim }]}>
-            {selected?.label ?? value}
-          </Text>
-          <Text style={{ color: palette.dim }}>{open ? '⌄' : '›'}</Text>
-        </View>
-      </Pressable>
+      />
 
       {open ? (
         <View style={[styles.panel, { borderTopColor: palette.hairline }]}>

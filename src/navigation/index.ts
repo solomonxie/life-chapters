@@ -1,7 +1,2 @@
-export { RootNavigator } from './RootNavigator';
-export type {
-  DocsStackParams,
-  RadarStackParams,
-  TimelineStackParams,
-  TracksStackParams,
-} from './RootNavigator';
+export { RootNavigator, navRef } from './RootNavigator';
+export { goTab, useNav, type Nav, type Routes } from './routes';
