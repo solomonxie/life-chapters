@@ -16,7 +16,7 @@ gestures, in-place pickers, and the ⓘ rule.
 | Plans | section of the page | [`uiux/plans.md`](uiux/plans.md) |
 | Settings | section of the page, at the bottom | [`uiux/settings.md`](uiux/settings.md) |
 | Anchor editor | modal | [`uiux/anchors.md`](uiux/anchors.md) |
-| Person (new / link / rename) | modal | [`uiux/people.md`](uiux/people.md) |
+| Person (new / link / rename / lives in) | modal | [`uiux/people.md`](uiux/people.md) |
 | Chapter detail | pushed page | [`uiux/timeline.md`](uiux/timeline.md) |
 | Step detail | pushed page | [`uiux/step.md`](uiux/step.md) |
 | Document detail | pushed page | [`uiux/documents.md`](uiux/documents.md) |
@@ -80,7 +80,7 @@ Changing an anchor is the same engine, bigger blast radius:
 ```
   Anchor editor ── save ──▶ ⚠ confirm ──▶ reflow ──▶ Timeline
                              │
-                  "Moving 'Migrated' by 4 months
+                  "Moving 'Relocated' by 4 months
                    reschedules 41 steps.
                    12 already-done steps keep
                    their real dates."
@@ -116,8 +116,13 @@ loading     none            → the store is local; a spinner would be a lie.
 error       bad playbook    → import rejected with the failing step named
             notif denied    → one dismissible banner atop Plans, with [ Allow ]
 partial     stale playbook  → "reviewed Mar 2026" badge, never hidden
-overdue     past start-by   → ⚠ Act now bucket in Plans, and one
-                              "⚠ n steps are late" line on the stem
+            wrong place     → plan's rules ≠ its date's place: red line
+                              "Ontario rules · Married in British
+                              Columbia", switch to the twin on detail
+moment      visit, trip     → on the stem with its plans; cuts no chapter
+start now   past start-by   → Act now in Plans, calm: "start now", no red
+overdue     past due-by     → the only red: ⚠ on the row, "n days late",
+                              and one "⚠ n steps are late" line on the stem
 ```
 
 ## Copy rules
@@ -131,6 +136,9 @@ overdue     past start-by   → ⚠ Act now bucket in Plans, and one
   user didn't fail.
 - Every playbook screen carries `Reviewed <month year> · not official advice`.
 - "Plan", never "track", in anything the user reads.
+- China plans are English; the Chinese term follows in parentheses
+  (`旅行证`, `中考`) so it can be matched to a form or a counter.
+- Nationality steps say what each route requires, never which to take.
 - "Applies if" lines are descriptions ("Only if they plan to go to university
   in Ontario"), never eligibility verdicts.
 

@@ -21,7 +21,7 @@ step finishes early, every downstream date should move with it.
 
 ## Core idea
 
-You enter a handful of **anchors** (born, graduated, migrated, child born).
+You enter a handful of **anchors** (born, graduated, relocated, child born).
 Everything else is computed: chapters, upcoming events, and each step's
 *start-by* date, scheduled **backward** from the event it serves. Mark a step
 done and its successors reflow from the real completion date, not the estimate.
@@ -43,8 +43,8 @@ steps. One timeline, one set of dates, both halves.
 - Each step carries: prerequisites, documents to obtain, prep actions, how-to
   notes, lead time, and validity window
 - Completing a step, or editing an anchor, reflows every dependent date
-- **Plans**: what needs starting now, in 90 days, this year, later — the alarm
-  fires at *start-by*, not at the deadline
+- **Plans**: what to start now, the next few steps, this year, later — the
+  alarm fires at *start-by*, not at the deadline
 - Local notification ahead of each step; weekly digest
 - Fully offline, no account, no server
 
@@ -105,25 +105,66 @@ app covers more than one country's paperwork.
 - Reminders, backups and the calendar mirror cover every board — a reminder
   switches to the step's owner.
 
-**Canada first.**
-- Content is the product and each country is real research. One country done
-  properly beats three done thinly.
-- Federal plans (Express Entry, citizenship, retirement) plus Ontario for
-  provincial ones (marriage, school, high school). A life-course set — expecting,
-  newborn, early years, school, high school, growing up, retirement — so one
-  family has plans from due date to pension.
-- The Library shows the United States and China as "Coming soon". The earlier
+**Canada and China.**
+- Content is the product and each country is real research. Two countries a
+  family actually moves between, done properly, beat five done thinly.
+- Canada: federal plans (Express Entry, provincial nomination, citizenship,
+  retirement) plus Ontario and British Columbia for provincial ones. China:
+  every life stage, plus the paperwork between the two countries — visitors
+  to Canada, travelling to China, a child born in Canada to a Chinese parent,
+  relocating to China.
+- A life-course set per place — expecting, newborn, early years, school, high
+  school, growing up, retirement — so one family has plans from due date to
+  pension.
+- The Library shows the United States as "Coming soon". The earlier
   Australian playbooks are gone.
 
-**Province per person.**
-- Marriage, school, health cards and licences differ by province, so each
-  provincial plan has a `province` and a `family`; Ontario and British Columbia
-  ship, a twin per life stage.
-- A person's province is set by hand or inferred from the latest past date
-  with a Canadian Place — no extra question for most people.
-- The Library shows Canada-wide plans plus the person's province; others sit
-  collapsed. A plan from the wrong province is flagged with a one-tap switch to
-  its twin; progress doesn't carry, since the steps differ.
+**Where a person lives: country, then province.**
+- Marriage, school, health cards and licences differ by country and, in
+  Canada, by province. Each plan has a `country`, a `province` when
+  provincial, and a `family` — the same life stage elsewhere is its twin.
+- A person's `where` is set by hand ("Lives in") or inferred from the latest
+  past *residence* date — Born, Relocated, Moved city, Bought a home. A wedding
+  or a trip says where something happened, not where they live.
+- A place typed in Chinese with no country counts as China: a village isn't
+  in the city list, and the script says enough.
+- The Library shows the person's country and province first ("Canada and
+  British Columbia", "China", or "Everything" when unknown); other places sit
+  collapsed.
+
+**A date's own place decides.**
+- Plans on a date follow the date's Place: a wedding in Ontario runs Ontario
+  rules even for someone living in BC, and a due date follows where the birth
+  happens.
+- Born is the exception: its plans run for years, so they follow where the
+  person lives now, not the birthplace.
+- A plan whose rules don't match is flagged ("Ontario rules · Married in
+  British Columbia") with a one-tap switch to its twin; progress doesn't
+  carry, since the steps differ.
+
+**Relocation: temporary status, then PR, then citizenship.**
+- Many newcomers arrive on a work or study permit, not as permanent residents.
+  "Relocated to a country" opens the arrival plan (permit, SIN, bank, housing,
+  health, licence, extending status); "Apply for permanent residence" opens
+  Express Entry and provincial nomination; "Became a permanent resident" opens
+  citizenship.
+- Each stage hangs off its own date, so a delay at one moves only what follows.
+
+**Moments.**
+- A visit or a trip has paperwork (visa, eTA, super visa) but doesn't change
+  the chapter you're in. Moment kinds sit on the line and open plans, but cut
+  no chapter.
+
+**China plans in English, with Chinese terms.**
+- Written for someone reading in English, dealing with offices that name
+  things in Chinese. The term goes in parentheses (中考, 旅行证) so it can be
+  matched to a form or a sign.
+
+**Nationality plans state the law, never recommend.**
+- Dual heritage touches nationality, where the stakes are highest and the
+  choice is personal. The plans say what the law and each office require for
+  each route (visa, travel document, residence, nationality) and never which
+  one to take.
 
 **Ages and conditions.**
 - Playbooks and steps may carry `ages` (`{from, to?}`) and `conditions` —
@@ -137,13 +178,18 @@ app covers more than one country's paperwork.
 ## Data & integrations
 
 ```
-Person      a board: one life's namespace       Me · Sam · Ava
+Person      a board: one life's namespace       Me · Sam · Ava; country, province
+Where       whose rules apply                   {country, province}: set by hand, or
+                                                from the latest residence date
 Anchor      a dated fact the user entered       born · married · baby due; note;
                                                 location; personId, withPersonId, linkId
-Event       a dated point, entered or derived   turns 40 · visa lodged
+AnchorKind  what a date is                      born · relocated · pr-landed · …;
+                                                a moment (visit, trip) cuts no chapter
+Event       a dated point, entered or derived   turns 40 · applied for PR
 Chapter     the interval between two events     "Settling in" · "Young family"
-Playbook    template for one life track         "Skilled migration · CA"; ages,
-            (a "plan" in the UI)                conditions, reviewedAt, sources
+Playbook    template for one life track         "Skilled migration · CA"; country,
+            (a "plan" in the UI)                province, family, ages, conditions,
+                                                reviewedAt, sources
 Step        template node in a playbook         offset, deps, docs, prep, how-to,
                                                 ages, conditions
 Instance    a Step bound to real dates          status, startBy, dueBy, notes
@@ -171,11 +217,19 @@ paying twice" explainer rather than as a date the app picks.
 - **Ownership**: anchors, tracks and documents may carry `personId`; absent
   means Me, so data from before people needs no rewrite. Migrations dropped the
   `entries` table and added `people`.
+- **Kind ids are stable.** A renamed kind keeps its id (`migrated`,
+  `visa-lodge`, `visa-granted`); a saved date still showing the old default
+  label ("Migrated to a country", "Lodge a visa application", "Visa granted")
+  takes the new one on load.
 - **Backup**, three layers, all the same JSON file format:
-  - *Snapshots on the phone* — written after every change into the app's
-    Files-visible `Backups` folder, never overwritten. Each day keeps its
-    latest 20; anything older than 7 days is cleared. Undo for mistakes the
-    in-app Undo can't reach.
+  - *Daily copy on the phone* — one file a day (`2026-09-27.json`) in the
+    app's Files-visible `Backups` folder, replaced on every change that day,
+    kept 30 days. A restore first saves the current plan as
+    `…-before-restore.json`, so it can't overwrite anything.
+  - *Change log* — `changes-2026.log`, one plain-text line per change (time,
+    whose board, what happened), only ever appended, never pruned. The daily
+    copies say *what the plan was*; the log says *how it got there*. Chosen over
+    a copy per change: as traceable, a fraction of the files.
   - *iCloud Drive* — opt-in. One file a day in the user's own iCloud Drive
     (`Life Chapters` folder), replaced on every change that day. Survives a
     lost phone. It is the user's storage under their Apple account; the app
