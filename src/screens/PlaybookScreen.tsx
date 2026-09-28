@@ -7,7 +7,7 @@ import { kindLabel } from '../domain/kinds';
 import { ME } from '../domain/people';
 import { anchorDisplay } from '../domain/plan';
 import { bucketize } from '../domain/radar';
-import { decidedBy, fits, rulesName, whereAt, whereName, twinFor } from '../domain/regions';
+import { decidedBy, fits, rulesName, whereFor, whereName, twinFor } from '../domain/regions';
 import { schedule, topoSort } from '../domain/schedule';
 import type { StepTemplate } from '../domain/types';
 import type { Routes } from '../navigation/routes';
@@ -63,7 +63,7 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
   const depth = useMemo(() => (playbook ? depths(playbook.steps) : new Map<string, number>()), [playbook]);
 
   if (!playbook) return null;
-  const due = whereAt(anchor, plan.where);
+  const due = whereFor(playbook, anchor, plan.where, plan.anchors);
   const twin = twinFor(playbook, due, playbooks);
 
   const trackSteps = track ? view.steps.filter(s => s.trackId === track.id) : [];

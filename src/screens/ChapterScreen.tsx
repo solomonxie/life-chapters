@@ -46,7 +46,7 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
   ).sort((a, b) => (a.startBy < b.startBy ? -1 : 1));
   const past = !!chapter?.end && chapter.end <= now;
   const unlocks = anchor
-    ? plansFor(anchor, plan.where, playbooks).filter(pb => {
+    ? plansFor(anchor, plan.where, playbooks, plan.anchors).filter(pb => {
         const on = countsFrom(pb, anchor, allAnchors);
         return on && ownerOf(on) === plan.person.id;
       })
