@@ -90,14 +90,38 @@ export const firstJobCa: Playbook = {
       title: 'Termination of employment — Your guide to the Employment Standards Act, ontario.ca',
       url: 'https://www.ontario.ca/document/your-guide-employment-standards-act-0/termination-employment',
     },
+    {
+      title: 'Extend or change the conditions on your work permit — Canada.ca',
+      url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/work-canada/permit/temporary/extend.html',
+    },
+    {
+      title: 'Canadian Dental Care Plan: Do you qualify — Canada.ca',
+      url: 'https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html',
+    },
+    {
+      title: 'Canada Groceries and Essentials Benefit (CGEB) — Canada Revenue Agency',
+      url: 'https://www.canada.ca/en/revenue-agency/services/child-family-benefits/canada-groceries-essentials-benefit.html',
+    },
   ],
   steps: [
+    {
+      id: 'new-permit',
+      title: 'Get a new permit before working for a new employer',
+      offsetDays: -90,
+      durationDays: 60,
+      dependsOn: [],
+      documents: ['New work permit or IRCC work authorization', 'Offer letter'],
+      prepare: ['Current permit and its expiry', 'New employer\'s LMIA or offer of employment number', 'Check current in-Canada processing times'],
+      conditions: ['Only if you hold an employer-specific (closed) work permit and are changing employers'],
+      howTo:
+        '1. An employer-specific permit covers only the employer named on it; working for another employer needs a new permit or an authorization from IRCC first.\n2. The new employer may need an LMIA, or an offer of employment submitted in the IRCC Employer Portal for LMIA-exempt jobs.\n3. IRCC\'s "changing jobs or employers" page describes when you can request authorization to work while the application is processed; check current.\n4. The 90 days here is an estimate; move it to match the planned start date.',
+    },
     {
       id: 'permit-match',
       title: 'Check the job fits your work permit',
       offsetDays: -21,
       durationDays: 7,
-      dependsOn: [],
+      dependsOn: ['new-permit'],
       documents: ['Work permit', 'Offer letter'],
       prepare: ['Employer name, job title and location on the permit, if it names them'],
       conditions: ['Only if you work in Canada on a work permit'],
@@ -126,6 +150,18 @@ export const firstJobCa: Playbook = {
       prepare: ['Pay, hours and start date', 'Probation length', 'Benefits and pension waiting periods', 'Notice and termination clauses'],
       howTo:
         '1. The offer or contract sets pay, hours, duties, probation and benefits start dates.\n2. A contract can give more than provincial employment standards, not less.\n3. Keep a signed copy; it is the reference later for probation, benefits and notice.',
+    },
+    {
+      id: 'health-gap',
+      title: 'Cover health and dental between jobs',
+      offsetDays: -7,
+      durationDays: 7,
+      dependsOn: [],
+      documents: [],
+      prepare: ['Last day of the old plan\'s coverage', 'New plan\'s waiting period', 'Upcoming prescriptions and dental visits'],
+      conditions: ['Only if you are leaving a job with health or dental benefits, or the new job has none'],
+      howTo:
+        '1. Group coverage usually ends on the last day of work or the end of that month; new plans often have a waiting period.\n2. Some insurers offer a conversion or individual plan within a short window after group coverage ends, often around 30 to 60 days; check the booklet.\n3. The Canadian Dental Care Plan is for people with no access to dental insurance, adjusted family net income under $90,000, tax returns filed and Canadian tax residency; check current.\n4. Provincial health cover (MSP, OHIP) continues regardless of the job.',
     },
     {
       id: 'sin',
@@ -195,6 +231,18 @@ export const firstJobCa: Playbook = {
         '1. Deductions usually shown: CPP contributions, EI premiums and income tax (federal and provincial); Quebec shows QPP and QPIP instead.\n2. CPP stops for the year once earnings pass the yearly maximum, plus a second tier (CPP2) above it; EI stops at its own maximum.\n3. Benefit premiums, pension or RRSP contributions and union dues may also appear.\n4. Errors are easiest to fix with payroll early in the year.',
     },
     {
+      id: 'old-pension',
+      title: 'Decide what to do with the old employer\'s pension and group RRSP',
+      offsetDays: 60,
+      durationDays: 30,
+      dependsOn: ['roe'],
+      documents: ['Termination statement from the pension plan', 'Transfer forms'],
+      prepare: ['Pension plan\'s option deadline', 'Commuted value and deferred pension figures', 'Account at the receiving institution'],
+      conditions: ['Only if you left another job with a pension plan or group RRSP'],
+      howTo:
+        '1. A registered pension plan usually sends a statement of options after you leave, with a deadline to choose.\n2. Common options: leave it as a deferred pension, transfer the commuted value to a locked-in account (LIRA, or LIRA-like account under provincial pension law), or move it to the new employer\'s plan if that plan accepts it.\n3. Part of a commuted value above the tax-free transfer limit may be paid out in cash and taxed.\n4. A group RRSP can move by direct transfer to a personal RRSP without tax withheld; a cash withdrawal is taxed.\n5. Not financial advice; the plan administrator is the reference.',
+    },
+    {
       id: 'benefits',
       title: 'Enrol in group benefits within the enrolment window',
       offsetDays: 45,
@@ -249,7 +297,7 @@ export const firstJobCa: Playbook = {
       documents: ['Notice of assessment'],
       prepare: ['All T4 slips for the year', 'Receipts for credits and deductions', 'CRA My Account sign-in'],
       howTo:
-        '1. For most people the return is due April 30 of the year after.\n2. Filing online with certified software gets a notice of assessment within about 2 weeks.\n3. Filing also keeps benefits such as the GST/HST credit coming.\n4. This date assumes a mid-year start; move it to April 30.',
+        '1. For most people the return is due April 30 of the year after.\n2. Filing online with certified software gets a notice of assessment within about 2 weeks.\n3. Filing also keeps benefits such as the Canada Groceries and Essentials Benefit (formerly the GST/HST credit) coming.\n4. This date assumes a mid-year start; move it to April 30.',
     },
     {
       id: 'room',

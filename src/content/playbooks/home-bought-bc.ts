@@ -83,6 +83,14 @@ export const homeBoughtBc: Playbook = {
       title: 'Prohibition on the Purchase of Residential Property by Non-Canadians Regulations (SOR/2022-250) — Justice Laws',
       url: 'https://laws-lois.justice.gc.ca/eng/regulations/SOR-2022-250/FullText.html',
     },
+    {
+      title: 'Renewing your mortgage — Financial Consumer Agency of Canada',
+      url: 'https://www.canada.ca/en/financial-consumer-agency/services/mortgages/renew-mortgage.html',
+    },
+    {
+      title: 'Appeals — BC Assessment',
+      url: 'https://info.bcassessment.ca/Services-products/appeals',
+    },
   ],
   steps: [
     {
@@ -300,6 +308,17 @@ export const homeBoughtBc: Playbook = {
         '1. Owners in the taxed areas of B.C. get a declaration letter each year and declare online or by phone by March 31, even with no change.\n2. Most owners living in their home as a principal residence are exempt, but only after declaring.\n3. Each owner on title declares separately.\n4. The date here is an estimate; move it to when the letter arrives.',
     },
     {
+      id: 'property-tax',
+      title: 'Pay the property tax by the city\'s due date, every year',
+      offsetDays: 150,
+      durationDays: 30,
+      dependsOn: ['completion'],
+      documents: ['Property tax notice'],
+      prepare: ['Folio or roll number', 'Whether the lender collects property tax with the mortgage', 'Claim the home owner grant before paying'],
+      howTo:
+        '1. Each municipality sets its own due date; many B.C. cities set it in early July.\n2. A late payment adds a penalty set by the city; check the notice.\n3. Most cities offer monthly pre-authorized payments, and some owners can defer the tax through the province\'s property tax deferment program.\n4. This repeats every year; the date here is an estimate, so move it to the due date on the notice.',
+    },
+    {
       id: 'tax-return',
       title: 'Claim the home buyers\' amount and report withdrawals on your tax return',
       offsetDays: 200,
@@ -309,6 +328,28 @@ export const homeBoughtBc: Playbook = {
       prepare: ['Purchase date and address', 'Receipts for the lawyer or notary'],
       howTo:
         '1. The first-time home buyers\' amount (line 31270) is up to $10,000, a federal credit of up to $1,500; it is for buyers who did not live in a home they or a spouse owned in the year or the 4 years before.\n2. FHSA and HBP withdrawals are reported on the return for the year they happened.\n3. The principal residence exemption is designated when the home is later sold, on the return for that year.\n4. File for the year of the purchase by April 30 of the next year.',
+    },
+    {
+      id: 'assessment',
+      title: 'Check the assessment notice and appeal by January 31 if it looks wrong',
+      offsetDays: 250,
+      durationDays: 21,
+      dependsOn: ['completion'],
+      documents: ['BC Assessment notice'],
+      prepare: ['Recent sales of similar homes nearby', 'Anything wrong in the property details'],
+      howTo:
+        '1. BC Assessment mails notices early in January, valuing the home as of July 1 the year before.\n2. Talk to BC Assessment first; a formal complaint to the Property Assessment Review Panel is filed by January 31 (moved to the next business day when it falls on a weekend).\n3. The assessed value sets the property tax share and the home owner grant threshold.\n4. This repeats every year; the date here is an estimate, so move it to when the notice arrives.',
+    },
+    {
+      id: 'insurance-renewal',
+      title: 'Review and renew home insurance, every year',
+      offsetDays: 365,
+      durationDays: 14,
+      dependsOn: ['insurance'],
+      documents: ['Home insurance renewal notice'],
+      prepare: ['Changes to the home, renovations or valuables', 'Quotes from other insurers', 'For strata: the current strata deductible'],
+      howTo:
+        '1. Policies usually renew yearly; the insurer sends the renewal terms before the end date.\n2. Check the coverage amount, deductibles, and whether earthquake or water damage cover is included.\n3. The lender asks for proof of insurance to continue.\n4. This repeats every year.',
     },
     {
       id: 'hbp-repay',
@@ -321,6 +362,18 @@ export const homeBoughtBc: Playbook = {
       prepare: ['The amount due this year from My Account'],
       howTo:
         '1. Repayments usually start in the second year after the year of the withdrawal, and run over 15 years.\n2. Temporary relief has pushed the start to the fifth year for first withdrawals in certain years; check the current rule on canada.ca.\n3. A repayment is an RRSP contribution designated as an HBP repayment on Schedule 7; any amount not repaid is added to income for that year.\n4. The date here is an estimate; the notice of assessment shows the real schedule.',
+    },
+    {
+      id: 'mortgage-renewal',
+      title: 'Renew or switch the mortgage before the term ends',
+      offsetDays: 1825,
+      durationDays: 30,
+      conditions: ['Only if you are borrowing to buy'],
+      dependsOn: ['mortgage'],
+      documents: ['Mortgage renewal statement'],
+      prepare: ['The term end date on the mortgage', 'Quotes from other lenders or a broker', 'Current income documents, if switching'],
+      howTo:
+        '1. Move this date to about a month before the real term end; a 5-year term is assumed here.\n2. A federally regulated lender sends a renewal statement at least 21 days before the term ends; other lenders follow provincial rules.\n3. Since November 2024 a straight switch of the same balance and amortization to another lender at renewal generally skips the stress test; check current rules. Switching can bring legal, appraisal or discharge fees.\n4. Left alone, some lenders renew automatically into a term and rate they choose, so compare before the date.',
     },
   ],
 };

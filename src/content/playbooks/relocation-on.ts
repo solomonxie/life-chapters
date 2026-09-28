@@ -107,6 +107,26 @@ export const relocationOn: Playbook = {
       url: 'https://www.canada.ca/en/revenue-agency/services/tax/international-non-residents/individuals-leaving-entering-canada-non-residents/newcomers-canada-immigrants.html',
     },
     {
+      title: 'Ontario Trillium Benefit — Ontario.ca',
+      url: 'https://www.ontario.ca/page/ontario-trillium-benefit',
+    },
+    {
+      title: 'BSF186 Personal Effects Accounting Document — CBSA',
+      url: 'https://www.cbsa-asfc.gc.ca/publications/forms-formulaires/bsf186-eng.html',
+    },
+    {
+      title: "D2-2-1 Settlers' effects — CBSA",
+      url: 'https://www.cbsa-asfc.gc.ca/publications/dm-md/d2/d2-2-1-eng.html',
+    },
+    {
+      title: 'Declare goods and currency — CBSA',
+      url: 'https://www.cbsa-asfc.gc.ca/travel-voyage/declare-eng.html',
+    },
+    {
+      title: 'T1135 Foreign Income Verification Statement — Canada Revenue Agency',
+      url: 'https://www.canada.ca/en/revenue-agency/services/forms-publications/forms/t1135.html',
+    },
+    {
       title: 'Extend your work permit — Canada.ca',
       url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/work-canada/extend.html',
     },
@@ -241,6 +261,22 @@ export const relocationOn: Playbook = {
         '1. For IEC, once the application is started there are 20 days to complete it, submit it and pay the fee.\n2. Other open work permits (e.g. for some spouses) have their own IRCC eligibility pages.\n3. Processing times are estimates that IRCC updates weekly.',
     },
     {
+      id: 'family-permits',
+      title: "Apply for the spouse's work permit and the children's study permits",
+      offsetDays: -150,
+      durationDays: 14,
+      dependsOn: ['route'],
+      documents: ['Marriage or common-law proof', "Children's birth certificates", "Family members' passports"],
+      prepare: [
+        'Check whether your job or program lets a spouse get an open work permit',
+        'Check whether the children need a study permit or can study without one',
+        'Apply at the same time as the main permit if possible',
+      ],
+      howTo:
+        "1. Spouses and common-law partners of some workers and students can apply for an open work permit; IRCC narrowed who qualifies in 2024, depending on the job's TEER level or the study program, so check current rules.\n2. Minor children can often attend preschool, primary or secondary school without a study permit when a parent is allowed to work or study in Canada; a study permit can still be applied for.\n3. Family applications sent together with the main one are usually processed together.",
+      conditions: ['Only if a spouse, partner or children are coming with you'],
+    },
+    {
       id: 'biometrics',
       title: 'Give biometrics',
       offsetDays: -150,
@@ -302,11 +338,26 @@ export const relocationOn: Playbook = {
         '1. A short stay gives time to view places in person before signing a lease.\n2. The length here is an estimate; rental markets vary across Ontario.',
     },
     {
+      id: 'customs-goods',
+      title: 'List the goods you bring and the goods to follow',
+      offsetDays: -14,
+      durationDays: 14,
+      dependsOn: ['approval'],
+      documents: ['BSF186 Personal Effects Accounting Document', 'Goods list with values'],
+      prepare: [
+        'Two lists: goods carried now and goods to follow, with values and serial numbers',
+        'Proof of ownership for valuable items',
+        'Total of cash and monetary instruments carried',
+      ],
+      howTo:
+        '1. Settlers list their goods on form BSF186 at the first arrival; goods to follow come in duty- and tax-free only if they were on that list.\n2. The CBSA treats someone coming to work for more than 36 months as a settler; a shorter stay is not, so check which rules apply.\n3. Currency and monetary instruments worth CAN$10,000 or more are declared at the border.',
+    },
+    {
       id: 'poe',
       title: 'Get the permit at the port of entry and check it',
       offsetDays: 0,
       durationDays: 1,
-      dependsOn: ['approval', 'travel-doc', 'insurance'],
+      dependsOn: ['approval', 'travel-doc', 'insurance', 'customs-goods'],
       documents: ['Work or study permit', 'Passport', 'Port of entry letter of introduction'],
       prepare: [
         'Carry the letter, passport, proof of funds and the letters behind the application',
@@ -314,6 +365,38 @@ export const relocationOn: Playbook = {
       ],
       howTo:
         '1. Show the port of entry letter to the border services officer, who issues the permit.\n2. Before leaving, check the name, the conditions (employer, school, work rights) and the expiry date.\n3. Point out any mistake to the officer before leaving.\n4. Note the expiry date; the extension step counts back from it.',
+    },
+    {
+      id: 'school-children',
+      title: "Register the children at the school board's welcome centre",
+      offsetDays: 14,
+      durationDays: 14,
+      dependsOn: ['poe'],
+      documents: ['School registration form', "Children's passports and permits", 'Proof of address'],
+      prepare: [
+        'Find the school board for the home address',
+        'Past school reports, translated if needed',
+        'Immunization records',
+      ],
+      howTo:
+        "1. Many Ontario school boards register newcomer students through a welcome or reception centre, which also assesses English level for English language learner support.\n2. The board then places the child at a school, usually the one for the address.\n3. Each board sets its own papers and whether fees apply to children of temporary residents; check with the board.",
+      conditions: ['Only if you have school-age children'],
+    },
+    {
+      id: 'licensing',
+      title: 'Start licensing for a regulated occupation',
+      offsetDays: 30,
+      durationDays: 30,
+      dependsOn: ['poe'],
+      documents: ['Degree certificates and transcripts', 'Professional licence from abroad', 'Work references'],
+      prepare: [
+        'Find the regulator for the occupation, such as Professional Engineers Ontario, the College of Nurses of Ontario, or Skilled Trades Ontario',
+        'Official translations',
+        'Check the fees and exams',
+      ],
+      howTo:
+        '1. Regulated occupations, such as engineering, nursing and many trades, need a licence or certificate from the Ontario regulator to practise under that title.\n2. The regulator assesses foreign credentials and may ask for exams, supervised work or Canadian experience.\n3. The whole process often takes months; the date here is when to start.',
+      conditions: ['Only if you work in a regulated occupation'],
     },
     {
       id: 'sin',
@@ -414,10 +497,10 @@ export const relocationOn: Playbook = {
       durationDays: 14,
       conditions: ['Only if you are resident in Canada for tax and have a low or modest income or children'],
       dependsOn: ['sin'],
-      documents: [],
+      documents: ['RC151 or RC66 form'],
       prepare: ['SIN', 'Income from the year before arrival', 'Form RC66 if you have children'],
       howTo:
-        '1. Newcomers can apply for benefit payments as soon as they arrive, before the first tax return.\n2. The Canada Groceries and Essentials Benefit (formerly the GST/HST credit) has a web form; with children under 19 use RC151, and for the Canada Child Benefit RC66.\n3. Eligibility depends on being a Canadian resident for tax purposes; check the CRA newcomers page.',
+        '1. Newcomers can apply for benefit payments as soon as they arrive, before the first tax return.\n2. People without children apply for the Canada Groceries and Essentials Benefit (CGEB, formerly the GST/HST credit) with form RC151; there is a web form.\n3. Families with children under 19 use form RC66 for the Canada Child Benefit; the CRA uses it for the CGEB too.\n4. Eligibility depends on being a Canadian resident for tax purposes; check the CRA newcomers page.',
     },
     {
       id: 'tax-return',
@@ -441,6 +524,42 @@ export const relocationOn: Playbook = {
       prepare: ['The permit expiry date', 'New job offer, LMIA or school letter, if the route needs one'],
       howTo:
         '1. IRCC suggests applying at least 30 days before the permit expires; move this step to that date.\n2. If you apply before it expires, you can keep working under the same conditions until a decision; IRCC calls this maintained status.\n3. Check the IRCC page before travelling while waiting.',
+    },
+    {
+      id: 'permit-health-update',
+      title: 'Renew the health card at ServiceOntario with the new permit',
+      offsetDays: 340,
+      durationDays: 7,
+      dependsOn: ['extend'],
+      documents: ['New work permit', 'Health card'],
+      prepare: ['Book a ServiceOntario visit', 'The original new permit'],
+      howTo:
+        "1. OHIP for a permit holder is tied to the permit; bring each new permit to ServiceOntario so coverage carries on.\n2. Move this step to when the new permit arrives; it repeats after every extension.\n3. With maintained status while waiting, ServiceOntario confirms eligibility case by case.\n4. Update the SIN record at Service Canada at the same time.",
+      conditions: ['Only if your permit was extended', 'Only if you have OHIP'],
+    },
+    {
+      id: 't1135',
+      title: 'Check whether form T1135 for foreign property applies',
+      offsetDays: 240,
+      durationDays: 30,
+      dependsOn: ['sin'],
+      documents: ['T1135 Foreign Income Verification Statement'],
+      prepare: ['Cost of property held outside Canada: bank accounts, shares, rental property', 'Year-end statements'],
+      howTo:
+        '1. Residents of Canada whose specified foreign property cost more than CAN$100,000 at any time in the year file form T1135 with the return.\n2. It is not needed for the year you first become resident.\n3. Late filing has a penalty for each day late, up to a maximum; check the current amounts.\n4. It repeats every year with the return; move it with the tax return step.',
+      conditions: ['Only if you are resident in Canada for tax', 'Only if you hold property outside Canada'],
+    },
+    {
+      id: 'renter-credit',
+      title: 'Claim the Ontario Energy and Property Tax Credit on rent (ON-BEN)',
+      offsetDays: 240,
+      durationDays: 30,
+      dependsOn: ['rent'],
+      documents: ['ON-BEN Application form', 'Rent receipts or lease'],
+      prepare: ['Rental address', 'Total rent paid in the year'],
+      howTo:
+        "1. The credit is part of the Ontario Trillium Benefit; renters apply by filling in the ON-BEN form in the tax return, due April 30.\n2. It counts renters who were Ontario residents on December 31 and whose landlord paid property tax on the home.\n3. Payments start in July; the ON-BEN form is filled in every year with the return.",
+      conditions: ['Only if you rent', 'Only if you are resident in Canada for tax'],
     },
     {
       id: 'oinp',

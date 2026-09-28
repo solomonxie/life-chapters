@@ -74,6 +74,10 @@ export const schoolYearsOn: Playbook = {
       title: 'De-streaming — York Region District School Board (example)',
       url: 'https://www2.yrdsb.ca/schools-programs/de-streaming',
     },
+    {
+      title: 'How to apply for a child passport in Canada — Canada.ca',
+      url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/child-passport.html',
+    },
   ],
   steps: [
     {
@@ -231,6 +235,44 @@ export const schoolYearsOn: Playbook = {
       prepare: ['Talk with the Grade 8 teacher or guidance counsellor', 'Electives your child is interested in'],
       howTo:
         '1. Grade 9 course types are de-streamed, academic and open; core subjects are de-streamed, so there is no applied/academic choice for them.\n2. Course selection for students under 18 needs a parent\'s approval.\n3. Windows are board-specific; Toronto, for example, runs it online in February of Grade 8; the date here is an estimate.',
+    },
+    {
+      id: 'passport-5',
+      title: 'Apply for a new child passport (around age 5)',
+      offsetDays: 1890,
+      durationDays: 30,
+      validForDays: 1826,
+      dependsOn: [],
+      documents: ['Child passport', 'Passport photos'],
+      prepare: [
+        'Expiry date of the current child passport',
+        'Two identical passport photos',
+        'Guarantor who has known you 2 years and knows the child',
+        'All parents sign the form',
+      ],
+      ages: { from: 5, to: 5 },
+      conditions: ['Only if the child has, or needs, a Canadian passport'],
+      howTo:
+        '1. A child passport, for under 16, is valid for up to 5 years and cannot be renewed; each one is a new application.\n2. This date assumes a first passport in the baby\'s first months; move it to about 2 months before the current one expires, or before travel.\n3. Standard processing is 10 to 20 business days plus mail; check current times.\n4. Many countries ask for a passport valid 6 months past the return date.',
+    },
+    {
+      id: 'passport-10',
+      title: 'Apply for a new child passport (around age 10)',
+      offsetDays: 3716,
+      durationDays: 30,
+      validForDays: 1826,
+      dependsOn: [],
+      documents: ['Child passport', 'Passport photos'],
+      prepare: [
+        'Expiry date of the current child passport',
+        'Two identical passport photos',
+        'Guarantor who has known you 2 years and knows the child',
+        'All parents sign the form',
+      ],
+      ages: { from: 10, to: 10 },
+      conditions: ['Only if the child has, or needs, a Canadian passport'],
+      howTo:
+        '1. A child passport, for under 16, is valid for up to 5 years and cannot be renewed; each one is a new application.\n2. This date assumes a first passport in the baby\'s first months; move it to about 2 months before the current one expires, or before travel.\n3. Standard processing is 10 to 20 business days plus mail; check current times.\n4. Many countries ask for a passport valid 6 months past the return date.',
     },
   ],
 };

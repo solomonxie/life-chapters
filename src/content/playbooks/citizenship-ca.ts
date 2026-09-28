@@ -50,6 +50,14 @@ export const citizenshipCa: Playbook = {
       url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/become-canadian-citizen/citizenship-ceremony/after.html',
     },
     {
+      title: 'When to update your SIN record — Canada.ca',
+      url: 'https://www.canada.ca/en/employment-social-development/services/sin/update.html',
+    },
+    {
+      title: 'Nationality Law of the People\'s Republic of China (National Immigration Administration)',
+      url: 'https://en.nia.gov.cn/n147418/n147458/c155976/content.html',
+    },
+    {
       title: 'Apply for a new adult passport',
       url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/new-adult-passport.html',
     },
@@ -137,6 +145,18 @@ export const citizenshipCa: Playbook = {
         '1. IRCC encourages online applications; paper is for specific cases.\n2. Fees include a processing fee and a right of citizenship fee.\n3. This date is an estimate: 1,095 days as a permanent resident plus a short buffer, with no absences and no credit for earlier time in Canada; move it to the date the calculator shows.\n4. The physical presence calculation is included with the application.',
     },
     {
+      id: 'minors',
+      title: 'Include children under 18 in the application',
+      offsetDays: 1110,
+      durationDays: 3,
+      dependsOn: ['identity-docs'],
+      documents: ['Minor citizenship application', 'Child\'s PR document', 'Child\'s passport', 'Citizenship photos'],
+      prepare: ['Proof you are the parent or legal guardian', 'Each child\'s identity documents and photos'],
+      howTo:
+        '1. A parent or legal guardian applies for a child under 18; when a parent is a citizen or applying at the same time, the child can be added to the parent\'s application.\n2. A minor applying without a Canadian parent needs 1,095 days of physical presence, like an adult.\n3. The minor application form number (CIT 0003 for paper) and the fees are on the IRCC forms page; check current.\n4. Children do not take the test.',
+      conditions: ['Only if you have children under 18 who are permanent residents'],
+    },
+    {
       id: 'aor',
       title: 'Watch for the acknowledgement of receipt',
       offsetDays: 1170,
@@ -190,6 +210,29 @@ export const citizenshipCa: Playbook = {
       prepare: ['Ceremony invitation', 'Identification and PR card', 'Check whether it is virtual or in person'],
       howTo:
         '1. Adults approved for citizenship take the oath; citizenship takes effect once it is taken.\n2. The PR card is collected at the ceremony.\n3. An electronic certificate is usually in the IRCC portal within 5 business days of the signed oath form; paper certificates come at in-person ceremonies or by mail.',
+    },
+    {
+      id: 'pr-card-sin',
+      title: 'Hand in the PR card and update the SIN record',
+      offsetDays: 1460,
+      durationDays: 14,
+      dependsOn: ['ceremony'],
+      documents: ['Citizenship certificate'],
+      prepare: ['PR card', 'Citizenship certificate', 'SIN'],
+      howTo:
+        '1. IRCC says the PR card is destroyed or collected at the ceremony; if it is still in hand, check IRCC\'s current instructions for it.\n2. The PR card is no longer a travel document once the oath is taken.\n3. Service Canada lists a change of immigration status as a reason to update the SIN record; the citizenship certificate is the proof.',
+    },
+    {
+      id: 'china-nationality',
+      title: 'Settle Chinese passport, hukou and visa after naturalising',
+      offsetDays: 1470,
+      durationDays: 30,
+      dependsOn: ['ceremony'],
+      documents: ['Citizenship certificate', 'Chinese passport', 'Household register (户口簿)'],
+      prepare: ['Chinese passport and ID card', 'Family member who can visit the hukou police station', 'Plans for the next trip to China'],
+      howTo:
+        '1. China\'s Nationality Law (中华人民共和国国籍法), Article 9: a Chinese national settled abroad who takes a foreign nationality of their own free will loses Chinese nationality automatically; China does not recognise dual nationality (Article 3).\n2. The Chinese passport is no longer used to travel after the oath; trips to China then use the Canadian passport with a Chinese visa (签证), or a visa-free arrangement if one covers Canadian passports; check current.\n3. The hukou (户口) is cancelled (户口注销) at the local police station where it is registered; the local requirements and who can apply on your behalf vary, so check current.\n4. Bank accounts, property and pensions in China tied to the ID card number may need updating; ask each institution.',
+      conditions: ['Only if you held Chinese nationality'],
     },
     {
       id: 'vote',

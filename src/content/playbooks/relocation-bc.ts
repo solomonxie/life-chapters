@@ -80,12 +80,32 @@ export const relocationBc: Playbook = {
       url: 'https://www.canada.ca/en/revenue-agency/services/tax/international-non-residents/individuals-leaving-entering-canada-non-residents/newcomers-canada-immigrants.html',
     },
     {
-      title: 'GST/HST credit — Canada Revenue Agency',
+      title: 'Canada Groceries and Essentials Benefit (CGEB) — Canada Revenue Agency',
       url: 'https://www.canada.ca/en/revenue-agency/services/child-family-benefits/goods-services-tax-harmonized-sales-tax-gst-hst-credit.html',
     },
     {
-      title: 'B.C. climate action tax credit — Province of British Columbia',
-      url: 'https://www2.gov.bc.ca/gov/content/taxes/income-taxes/personal/credits/climate-action',
+      title: "B.C. renter's tax credit — Province of British Columbia",
+      url: 'https://www2.gov.bc.ca/gov/content/taxes/income-taxes/personal/credits/renters-tax-credit',
+    },
+    {
+      title: 'Fair PharmaCare plan — Province of British Columbia',
+      url: 'https://www2.gov.bc.ca/gov/content/health/health-drug-coverage/pharmacare-for-bc-residents/who-we-cover/fair-pharmacare-plan',
+    },
+    {
+      title: 'BSF186 Personal Effects Accounting Document — CBSA',
+      url: 'https://www.cbsa-asfc.gc.ca/publications/forms-formulaires/bsf186-eng.html',
+    },
+    {
+      title: "D2-2-1 Settlers' effects — CBSA",
+      url: 'https://www.cbsa-asfc.gc.ca/publications/dm-md/d2/d2-2-1-eng.html',
+    },
+    {
+      title: 'Declare goods and currency — CBSA',
+      url: 'https://www.cbsa-asfc.gc.ca/travel-voyage/declare-eng.html',
+    },
+    {
+      title: 'T1135 Foreign Income Verification Statement — Canada Revenue Agency',
+      url: 'https://www.canada.ca/en/revenue-agency/services/forms-publications/forms/t1135.html',
     },
     {
       title: 'MSP: How to enrol — Province of British Columbia',
@@ -245,6 +265,22 @@ export const relocationBc: Playbook = {
       conditions: ['Only if you came on IEC / Working Holiday'],
     },
     {
+      id: 'family-permits',
+      title: 'Apply for the spouse\'s work permit and the children\'s study permits',
+      offsetDays: -150,
+      durationDays: 14,
+      dependsOn: ['route'],
+      documents: ['Marriage or common-law proof', 'Children\'s birth certificates', 'Family members\' passports'],
+      prepare: [
+        'Check whether your job or program lets a spouse get an open work permit',
+        'Check whether the children need a study permit or can study without one',
+        'Apply at the same time as the main permit if possible',
+      ],
+      howTo:
+        '1. Spouses and common-law partners of some workers and students can apply for an open work permit; IRCC narrowed who qualifies in 2024, depending on the job\'s TEER level or the study program, so check current rules.\n2. Minor children can often attend preschool, primary or secondary school without a study permit when a parent is allowed to work or study in Canada; a study permit can still be applied for.\n3. Family applications sent together with the main one are usually processed together.',
+      conditions: ['Only if a spouse, partner or children are coming with you'],
+    },
+    {
       id: 'biometrics',
       title: 'Give biometrics',
       offsetDays: -120,
@@ -314,11 +350,26 @@ export const relocationBc: Playbook = {
         '1. A short stay gives time to view rentals in person before signing.\n2. The length here is an estimate.',
     },
     {
+      id: 'customs-goods',
+      title: 'List the goods you bring and the goods to follow',
+      offsetDays: -14,
+      durationDays: 14,
+      dependsOn: ['approval'],
+      documents: ['BSF186 Personal Effects Accounting Document', 'Goods list with values'],
+      prepare: [
+        'Two lists: goods carried now and goods to follow, with values and serial numbers',
+        'Proof of ownership for valuable items',
+        'Total of cash and monetary instruments carried',
+      ],
+      howTo:
+        '1. Settlers list their goods on form BSF186 at the first arrival; goods to follow come in duty- and tax-free only if they were on that list.\n2. The CBSA treats someone coming to work for more than 36 months as a settler; a shorter stay is not, so check which rules apply.\n3. Currency and monetary instruments worth CAN$10,000 or more are declared at the border.',
+    },
+    {
       id: 'port-of-entry',
       title: 'Get the permit from the officer at the port of entry',
       offsetDays: 0,
       durationDays: 1,
-      dependsOn: ['approval', 'visa', 'eta', 'proof-of-funds', 'insurance', 'temp-housing'],
+      dependsOn: ['approval', 'visa', 'eta', 'proof-of-funds', 'insurance', 'temp-housing', 'customs-goods'],
       documents: ['Study or work permit', 'Passport', 'Port of entry letter of introduction'],
       prepare: [
         'Carry the letter of introduction, the letter of acceptance or job offer, and proof of funds in hand luggage',
@@ -327,6 +378,38 @@ export const relocationBc: Playbook = {
       ],
       howTo:
         '1. A border services officer checks the documents and issues the permit.\n2. Errors are easiest to fix on the spot.\n3. A study permit that allows off-campus work carries a condition line that lets you apply for a SIN; without it, an amendment can be requested.',
+    },
+    {
+      id: 'school-children',
+      title: 'Register the children at the school district\'s welcome centre',
+      offsetDays: 14,
+      durationDays: 14,
+      dependsOn: ['port-of-entry'],
+      documents: ['School registration form', 'Children\'s passports and permits', 'Proof of address'],
+      prepare: [
+        'Find the school district for the home address',
+        'Past school reports, translated if needed',
+        'Immunization records',
+      ],
+      howTo:
+        '1. Many B.C. school districts register newcomer students through a welcome or newcomer centre, which also assesses English level for English language learning support.\n2. The district then places the child at a school, usually the catchment school for the address.\n3. Each district sets its own papers and whether fees apply to children of temporary residents; check with the district.',
+      conditions: ['Only if you have school-age children'],
+    },
+    {
+      id: 'licensing',
+      title: 'Start licensing for a regulated occupation',
+      offsetDays: 30,
+      durationDays: 30,
+      dependsOn: ['port-of-entry'],
+      documents: ['Degree certificates and transcripts', 'Professional licence from abroad', 'Work references'],
+      prepare: [
+        'Find the regulator for the occupation, such as Engineers and Geoscientists BC, the BC College of Nurses and Midwives, or SkilledTradesBC',
+        'Official translations',
+        'Check the fees and exams',
+      ],
+      howTo:
+        '1. Regulated occupations, such as engineering, nursing and many trades, need a licence or certificate from the B.C. regulator to practise under that title.\n2. The regulator assesses foreign credentials and may ask for exams, supervised work or Canadian experience.\n3. The whole process often takes months; the date here is when to start.',
+      conditions: ['Only if you work in a regulated occupation'],
     },
     {
       id: 'phone',
@@ -407,8 +490,19 @@ export const relocationBc: Playbook = {
       documents: ['RC151 or RC66 form'],
       prepare: ['SIN', 'Arrival date and world income for the year', 'Children\'s details, if any'],
       howTo:
-        '1. Newcomers can apply for benefits without first filing a return.\n2. Form RC151 covers the Canada Groceries and Essentials Benefit, which replaced the GST/HST credit in July 2026.\n3. Families with children under 19 use form RC66, which also covers the BC family benefit.\n4. The B.C. climate action tax credit ended with the April 2025 payment.',
+        '1. Newcomers can apply for benefits without first filing a return.\n2. People without children apply for the Canada Groceries and Essentials Benefit (CGEB), which replaced the GST/HST credit in July 2026, with form RC151; there is a web form.\n3. Families with children under 19 use form RC66 for the Canada child benefit; the CRA uses it for the CGEB and the BC family benefit too.\n4. The B.C. climate action tax credit ended with the April 2025 payment.',
       conditions: ['Only if you are a resident of Canada for tax purposes'],
+    },
+    {
+      id: 'fair-pharmacare',
+      title: 'Register for Fair PharmaCare',
+      offsetDays: 100,
+      durationDays: 14,
+      dependsOn: ['msp'],
+      documents: ['Fair PharmaCare registration'],
+      prepare: ['Personal Health Number', 'Family members\' details', 'Proof of Income Affidavit if there is no Canadian tax return yet'],
+      howTo:
+        '1. Fair PharmaCare helps B.C. residents enrolled in MSP pay for eligible prescription drugs; the help depends on family income, not age.\n2. Coverage is based on income from 2 years before, from the CRA; new residents without that can use the Fair PharmaCare Proof of Income Affidavit.\n3. Register once, online or by phone.',
     },
     {
       id: 'doctor',
@@ -449,6 +543,18 @@ export const relocationBc: Playbook = {
         '1. Move this step to about 30 days before the real expiry date; IRCC suggests applying at least 30 days before a work permit expires.\n2. Applying before expiry and staying in Canada keeps you on maintained status while IRCC decides.\n3. Update the SIN and MSP once the new permit arrives.',
     },
     {
+      id: 'permit-health-update',
+      title: 'Send the new permit to Health Insurance BC',
+      offsetDays: 340,
+      durationDays: 5,
+      dependsOn: ['extend'],
+      documents: ['New study or work permit'],
+      prepare: ['Personal Health Number', 'A copy of the new permit'],
+      howTo:
+        '1. MSP for a permit holder is tied to the permit; send each new permit to Health Insurance BC so coverage carries on.\n2. Move this step to when the new permit arrives; it repeats after every extension.\n3. Update the SIN record at Service Canada at the same time.',
+      conditions: ['Only if your permit was extended'],
+    },
+    {
       id: 'tax-return',
       title: 'File the first Canadian tax return',
       offsetDays: 365,
@@ -459,6 +565,30 @@ export const relocationBc: Playbook = {
       howTo:
         '1. The return is usually due by April 30 of the year after arrival; move this date to that deadline.\n2. Filing keeps benefit payments going.',
       conditions: ['Only if you are a resident of Canada for tax purposes'],
+    },
+    {
+      id: 't1135',
+      title: 'Check whether form T1135 for foreign property applies',
+      offsetDays: 365,
+      durationDays: 30,
+      dependsOn: ['sin'],
+      documents: ['T1135 Foreign Income Verification Statement'],
+      prepare: ['Cost of property held outside Canada: bank accounts, shares, rental property', 'Year-end statements'],
+      howTo:
+        '1. Residents of Canada whose specified foreign property cost more than CAN$100,000 at any time in the year file form T1135 with the return.\n2. It is not needed for the year you first become resident.\n3. Late filing has a penalty for each day late, up to a maximum; check the current amounts.\n4. It repeats every year with the return.',
+      conditions: ['Only if you are a resident of Canada for tax purposes', 'Only if you hold property outside Canada'],
+    },
+    {
+      id: 'renter-credit',
+      title: 'Claim the B.C. renter\'s tax credit on the return',
+      offsetDays: 365,
+      durationDays: 30,
+      dependsOn: ['rent'],
+      documents: ['Form BC479', 'Rent receipts or lease'],
+      prepare: ['Rental address and landlord details', 'Total rent paid and months rented'],
+      howTo:
+        '1. The credit is up to $400 a year for low- and moderate-income renters; it phases out above an income threshold that changes each year.\n2. It counts renters who lived in an eligible B.C. rental unit for at least 6 one-month periods in the year and were B.C. residents on December 31.\n3. It is claimed on form BC479 with the return, and repeats each year.',
+      conditions: ['Only if you rent', 'Only if you are a resident of Canada for tax purposes'],
     },
     {
       id: 'check-pnp',

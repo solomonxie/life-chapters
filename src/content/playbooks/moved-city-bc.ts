@@ -59,6 +59,18 @@ export const movedCityBc: Playbook = {
       url: 'https://www2.gov.bc.ca/gov/content/housing-tenancy/residential-tenancies/starting-a-tenancy/move-in-condition-inspection',
     },
     {
+      title: 'Ending a tenancy: tenant notice — Province of British Columbia',
+      url: 'https://www2.gov.bc.ca/gov/content/housing-tenancy/residential-tenancies/ending-a-tenancy/tenant-notice',
+    },
+    {
+      title: 'Returning deposits — Province of British Columbia',
+      url: 'https://www2.gov.bc.ca/gov/content/housing-tenancy/residential-tenancies/ending-a-tenancy/returning-deposits',
+    },
+    {
+      title: "B.C. renter's tax credit — Province of British Columbia",
+      url: 'https://www2.gov.bc.ca/gov/content/taxes/income-taxes/personal/credits/renters-tax-credit',
+    },
+    {
       title: 'Change your address — Canada Revenue Agency',
       url: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/change-your-address.html',
     },
@@ -76,6 +88,22 @@ export const movedCityBc: Playbook = {
     },
   ],
   steps: [
+    {
+      id: 'notice-old',
+      title: 'Give notice at the old rental and plan the move-out inspection',
+      offsetDays: -45,
+      durationDays: 7,
+      dependsOn: [],
+      documents: ['Written notice to end the tenancy', 'Move-out condition inspection report'],
+      prepare: [
+        'Check the tenancy agreement: month-to-month or fixed term',
+        'Written notice, delivered so the landlord gets it in time',
+        'Forwarding address in writing for the deposit',
+      ],
+      howTo:
+        "1. On a month-to-month tenancy, the landlord receives the tenant's written notice at least one full rental month before it takes effect, not just 30 days.\n2. The landlord offers times for a move-out condition inspection; a tenant who skips it can lose the right to the damage or pet deposit back.\n3. After getting the forwarding address in writing, the landlord has 15 days to return the deposits with interest or apply to keep them; if not, the tenant can ask the Residential Tenancy Branch for double.",
+      conditions: ['Only if you rented the old home in B.C.'],
+    },
     {
       id: 'lease',
       title: 'Sign the tenancy agreement or complete the purchase',
@@ -267,6 +295,18 @@ export const movedCityBc: Playbook = {
       howTo:
         '1. After enrolling in MSP, the photo card is made at an ICBC driver licensing office.\n2. The card itself has no fee.\n3. It shows the Personal Health Number and can be set up in the BC Services Card app for online government services.',
       conditions: ['Only if you moved to B.C. from another province'],
+    },
+    {
+      id: 'renter-credit',
+      title: "Claim the B.C. renter's tax credit on next year's return",
+      offsetDays: 240,
+      durationDays: 30,
+      dependsOn: ['lease'],
+      documents: ['Form BC479', 'Rent receipts or tenancy agreements'],
+      prepare: ['Addresses and landlord details for each rental in the year', 'Total rent paid and months rented'],
+      howTo:
+        "1. The credit is up to $400 a year for low- and moderate-income renters; it phases out above an income threshold that changes each year.\n2. It counts renters who lived in eligible B.C. rental units for at least 6 one-month periods in the year and were B.C. residents on December 31; rent at the old and new B.C. addresses both count.\n3. It is claimed on form BC479 with the return, due April 30; move this step to that date. It repeats each year.",
+      conditions: ['Only if you rent', 'Only if you live in B.C. on December 31'],
     },
   ],
 };

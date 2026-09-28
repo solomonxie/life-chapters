@@ -65,7 +65,11 @@ and China:
 
 - **Life stages**, each place: marriage, expecting, newborn, early years,
   school, high school (中考 / 高考 in China), growing up, graduating, a job,
-  moving home, buying a home, retirement
+  moving home, buying a home, retirement; yearly adult paperwork (tax,
+  renewals, 社保 / 公积金)
+- **Life turns**: job ended, starting a business, moving in together,
+  separation and divorce, caring for a family member, a parent turning 60
+  (China), a death in the family, buying a car, selling a home
 - **Relocation**: arriving on a work or study permit, Express Entry,
   provincial nomination, citizenship; relocating to China with Chinese family
 - **Visitors and travel**: visitors to Canada (eTA, visa, super visa),

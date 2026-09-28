@@ -4,18 +4,18 @@ export const retirementOn: Playbook = {
   id: 'retirement-on',
   title: 'Retirement · Ontario',
   summary:
-    'Paperwork plan for public pensions, registered savings and senior benefits from 55 to 72. Federal rules, with Ontario health programs.',
+    'Paperwork plan for public pensions, registered savings and senior benefits from 55 to 80. Federal rules, with Ontario health programs.',
   region: 'Ontario, Canada',
   country: 'CA',
   province: 'ON',
   family: 'retirement',
   anchorKind: 'born',
-  ages: { from: 55, to: 72 },
+  ages: { from: 55, to: 80 },
   conditions: [
     'You live in Canada; the dental and drug programs are for Ontario residents',
     'You paid into the Canada Pension Plan, or expect OAS from living in Canada',
   ],
-  reviewedAt: '2026-09-26',
+  reviewedAt: '2026-09-27',
   version: 1,
   sources: [
     {
@@ -73,6 +73,42 @@ export const retirementOn: Playbook = {
     {
       title: 'Make a power of attorney — Ontario.ca',
       url: 'https://www.ontario.ca/page/make-power-attorney',
+    },
+    {
+      title: 'Canadian Dental Care Plan: Do you qualify — Canada.ca',
+      url: 'https://www.canada.ca/en/services/benefits/dental/dental-care-plan/qualify.html',
+    },
+    {
+      title: 'Line 21000 – Deduction for elected split-pension amount — Canada.ca',
+      url: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-21000-deduction-elected-split-pension-amount.html',
+    },
+    {
+      title: 'Line 31400 – Pension income amount — Canada.ca',
+      url: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-31400-pension-income-amount.html',
+    },
+    {
+      title: 'Old Age Security pension recovery tax — Canada.ca',
+      url: 'https://www.canada.ca/en/services/benefits/publicpensions/old-age-security/recovery-tax.html',
+    },
+    {
+      title: 'Old Age Security: Payment amounts — Canada.ca',
+      url: 'https://www.canada.ca/en/services/benefits/publicpensions/old-age-security/payments.html',
+    },
+    {
+      title: 'Guaranteed Annual Income System (GAINS) — Ontario.ca',
+      url: 'https://www.ontario.ca/page/guaranteed-annual-income-system-payments-seniors',
+    },
+    {
+      title: 'Province of Ontario benefit programs — Canada Revenue Agency',
+      url: 'https://www.canada.ca/en/revenue-agency/services/child-family-benefits/provincial-territorial-programs/province-ontario.html',
+    },
+    {
+      title: 'Long-term care in Ontario — Ontario.ca',
+      url: 'https://www.ontario.ca/page/long-term-care-ontario',
+    },
+    {
+      title: 'Ontario Health atHome',
+      url: 'https://ontariohealthathome.ca/',
     },
   ],
   steps: [
@@ -146,7 +182,7 @@ export const retirementOn: Playbook = {
       documents: ['OAS enrolment letter'],
       prepare: ['Check the mail around your 64th birthday'],
       howTo:
-        '1. Most people get a letter around their 64th birthday saying they are enrolled automatically for OAS at 65.\n2. OAS needs at least 10 years living in Canada after age 18 (20 years if living abroad).\n3. You can delay OAS to as late as 70: it rises 0.6% a month, up to 36% at 70. If you qualify for GIS, there is no gain in waiting.',
+        '1. Most people get a letter around their 64th birthday saying they are enrolled automatically for OAS at 65.\n2. OAS needs at least 10 years living in Canada after age 18 (20 years if living abroad).\n3. You can delay OAS to as late as 70: it rises 0.6% a month, up to 36% at 70. If you qualify for GIS, there is no gain in waiting.\n4. From 75, OAS is 10% higher; the increase is automatic.',
     },
     {
       id: 'oas-apply',
@@ -166,7 +202,7 @@ export const retirementOn: Playbook = {
       title: 'Check the Guaranteed Income Supplement',
       offsetDays: 23741,
       durationDays: 30,
-      ages: { from: 65, to: 72 },
+      ages: { from: 65, to: 80 },
       conditions: ['Only if your income is low'],
       dependsOn: ['oas-letter'],
       documents: [],
@@ -192,13 +228,116 @@ export const retirementOn: Playbook = {
       title: 'Apply to the Ontario Seniors Dental Care Program',
       offsetDays: 23772,
       durationDays: 30,
-      ages: { from: 65, to: 72 },
+      ages: { from: 65, to: 80 },
       conditions: ['Only if you live in Ontario, your income is under the program limit and you have no other dental benefits apart from the CDCP'],
       dependsOn: [],
       documents: [],
       prepare: ['Social Insurance Number', 'Latest tax return filed', 'Check the current income limits'],
       howTo:
         '1. For Ontario residents 65 or older with low income and no other dental benefits apart from the Canadian Dental Care Plan.\n2. Apply online, or on paper from the local public health unit; income is checked from your tax return.\n3. Coverage ends every July 31 and most people are renewed automatically if they keep filing taxes.',
+    },
+    {
+      id: 'oas-recovery',
+      title: 'Check income against the OAS recovery tax threshold',
+      offsetDays: 23000,
+      durationDays: 30,
+      ages: { from: 62, to: 64 },
+      dependsOn: [],
+      documents: ['Recent notices of assessment'],
+      prepare: ['Expected CPP, workplace pension and RRSP or RRIF income', 'The current threshold on canada.ca'],
+      howTo:
+        '1. OAS is reduced by 15% of net income above a yearly threshold (a little over $90,000 at review; check current), and stops at a higher level.\n2. The timing of CPP, RRSP withdrawals, RRIF conversion and pension splitting all change net income in the OAS years.\n3. Income in one year sets the recovery tax taken from monthly OAS from July of the following year.\n4. Not financial advice; the date here is only a prompt before the CPP and OAS start.',
+    },
+    {
+      id: 'group-benefits',
+      title: 'Replace workplace health and dental benefits at retirement',
+      offsetDays: 23711,
+      durationDays: 30,
+      ages: { from: 55, to: 80 },
+      conditions: ['Only if you had health or dental benefits through work'],
+      dependsOn: [],
+      documents: ['Group benefits booklet', 'Conversion offer from the insurer'],
+      prepare: ['The date workplace coverage ends', 'Drugs, dental and travel cover you use now', 'Whether the employer offers retiree benefits'],
+      howTo:
+        '1. Workplace health and dental plans often end on the last day of work or soon after, unless the employer offers retiree benefits.\n2. Many group insurers offer a conversion plan without medical questions if applied for within a short window after coverage ends, often 30 to 60 days; check the plan booklet.\n3. Individual plans with medical questions are another route, and travel medical cover usually needs its own policy.\n4. Moving this date to the real retirement date keeps the window in view.',
+    },
+    {
+      id: 'cdcp',
+      title: 'Apply for the Canadian Dental Care Plan',
+      offsetDays: 23772,
+      durationDays: 30,
+      ages: { from: 65, to: 80 },
+      conditions: ['Only if you have no dental insurance and your adjusted family net income is under $90,000'],
+      dependsOn: ['group-benefits'],
+      documents: ['CDCP letter or card'],
+      prepare: ['Social Insurance Number', 'Tax returns filed for you and any spouse', 'Check that no retiree or pension plan still gives dental cover'],
+      howTo:
+        '1. The Canadian Dental Care Plan is for residents with no access to dental insurance, an adjusted family net income under $90,000, and tax returns filed by you and any spouse; there is no upper age limit.\n2. Dental cover still available through a pension or retiree plan usually rules it out, even if you do not take it.\n3. Apply online or by phone through Service Canada; co-payments depend on income.\n4. Eligibility is confirmed every year from the tax return, so keep filing.',
+    },
+    {
+      id: 'pension-split',
+      title: 'Split pension income with a spouse and claim the pension income amount',
+      offsetDays: 23741,
+      durationDays: 30,
+      ages: { from: 65, to: 80 },
+      conditions: ['Only with a spouse or common-law partner and pension or RRIF income'],
+      dependsOn: [],
+      documents: ['Form T1032'],
+      prepare: ['Pension, annuity and RRIF income for the year', 'Both spouses\' returns'],
+      howTo:
+        '1. Up to half of eligible pension income can be moved to a spouse or common-law partner on Form T1032, filed with both returns each year.\n2. From 65, RRIF and annuity income counts; before 65, mainly life annuity payments from a workplace pension plan.\n3. The pension income amount gives a federal credit on up to $2,000 of eligible pension income.\n4. CPP and OAS cannot be split this way; CPP can be shared through Service Canada instead.\n5. This repeats every year with the return.',
+    },
+    {
+      id: 'gains',
+      title: 'Check the Ontario GAINS top-up',
+      offsetDays: 23771,
+      durationDays: 30,
+      ages: { from: 65, to: 80 },
+      conditions: ['Only if you get the Guaranteed Income Supplement'],
+      dependsOn: ['gis'],
+      documents: [],
+      prepare: ['File your taxes every year'],
+      howTo:
+        '1. GAINS, the Ontario seniors income top-up, adds to the income of low-income Ontario seniors who get OAS and GIS.\n2. There is no application when OAS and GIS are already paid; Ontario works it out from Service Canada information.\n3. It also asks for 10 years in Canada and 12 months living in Ontario; payments run from July to June and are paid monthly.\n4. Check the current maximum on ontario.ca.',
+    },
+    {
+      id: 'senior-property-grant',
+      title: 'Claim the Ontario Senior Homeowners\' Property Tax Grant',
+      offsetDays: 23772,
+      durationDays: 30,
+      ages: { from: 65, to: 80 },
+      conditions: ['Only if you own and live in your home in Ontario'],
+      dependsOn: [],
+      documents: ['Form ON-BEN', 'Property tax bills for the year'],
+      prepare: ['Property tax paid on your principal residence', 'Social Insurance Number'],
+      howTo:
+        '1. Owners 65 or older who pay property tax on their Ontario principal residence and have low to moderate income can get up to $500 a year.\n2. It is claimed on Form ON-BEN with the income tax return, alongside the Ontario Energy and Property Tax Credit.\n3. This repeats every year with the return; move the date to April 30.',
+    },
+    {
+      id: 'driver-renewal',
+      title: 'Renew the driver\'s licence under the senior driver program',
+      offsetDays: 29130,
+      durationDays: 60,
+      ages: { from: 79, to: 80 },
+      conditions: ['Only if you hold an Ontario driver\'s licence'],
+      dependsOn: [],
+      documents: ['Renewal notice from ServiceOntario'],
+      prepare: ['The renewal notice mailed before your 80th birthday', 'Glasses or contacts for the vision test'],
+      howTo:
+        '1. From 80, Ontario drivers renew every 2 years through the senior driver licence renewal program; the notice comes by mail before the birthday.\n2. It usually includes a vision test, a driver record review and short in-class screening exercises; a road test or medical report may also be asked for. Check the current steps on ontario.ca.\n3. Book a DriveTest or ServiceOntario appointment early, before the licence expires on the birthday.',
+    },
+    {
+      id: 'home-care',
+      title: 'Contact Ontario Health atHome about home care or long-term care',
+      offsetDays: 29220,
+      durationDays: 30,
+      ages: { from: 75, to: 80 },
+      conditions: ['Only if daily living at home is getting harder'],
+      dependsOn: [],
+      documents: ['Care needs assessment'],
+      prepare: ['Health card', 'Current diagnoses and medications', 'Who helps at home now'],
+      howTo:
+        '1. Ontario Health atHome arranges home care and assesses eligibility for long-term care homes; call 310-2222 or ask a doctor or hospital for a referral.\n2. A care coordinator assesses needs and helps choose long-term care homes and join their waitlists.\n3. Long-term care has a set accommodation charge; a rate reduction may be available on low income.\n4. Age 80 here is only a prompt; ask whenever daily living gets hard.',
     },
     {
       id: 'rrsp-convert',

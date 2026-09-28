@@ -71,6 +71,10 @@ export const marriageOn: Playbook = {
       title: 'Sponsor your spouse, partner or child: Who can apply — Canada.ca',
       url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/family-sponsorship/spouse-partner-children/eligibility.html',
     },
+    {
+      title: 'Death of a TFSA holder (successor holder) — Canada.ca',
+      url: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/death-a-tfsa-holder.html',
+    },
   ],
   steps: [
     {
@@ -214,6 +218,18 @@ export const marriageOn: Playbook = {
         '1. The deadline is the end of the month after the month you married; e.g. married in March, tell the CRA by the end of April.\n2. Update in CRA My Account or by phone (processed straight away), or mail form RC65 (4 to 6 weeks).\n3. The date here is a safe estimate; move it to the real deadline.',
     },
     {
+      id: 'workplace-benefits',
+      title: 'Add your spouse to workplace health and dental benefits',
+      offsetDays: 14,
+      durationDays: 7,
+      conditions: ['Only if either of you has health or dental benefits through work'],
+      dependsOn: ['ceremony'],
+      documents: ['Benefits enrolment change'],
+      prepare: ["Spouse's date of birth", "Spouse's other coverage, if any", 'The plan booklet'],
+      howTo:
+        '1. Group plans usually treat marriage as a life event that lets you add a spouse outside the yearly enrolment period.\n2. The window is set by each plan and is often 31 days from the wedding; after it, late enrolment may need health evidence or wait for the next enrolment period.\n3. If both of you have plans, each plan\'s coordination of benefits rules decide which pays first.\n4. Update life insurance and pension beneficiaries in the same session.',
+    },
+    {
       id: 'benefits',
       title: 'Check the Canada Child Benefit and credits',
       offsetDays: 60,
@@ -235,10 +251,11 @@ export const marriageOn: Playbook = {
       prepare: [
         'Existing wills of both spouses',
         'Beneficiaries on RRSPs, TFSAs, pensions and life insurance',
+        'Successor holder on a TFSA or FHSA',
         'Who should decide for you if you cannot',
       ],
       howTo:
-        '1. Since January 1, 2022, marriage no longer revokes an existing will in Ontario, so an old will stays in force until you change it.\n2. Without an attorney for property, a spouse cannot automatically step in on finances.\n3. You can make a power of attorney yourself for free or with a lawyer.\n4. Not legal advice; see a lawyer if your affairs are complicated.',
+        '1. Since January 1, 2022, marriage no longer revokes an existing will in Ontario, so an old will stays in force until you change it.\n2. Without an attorney for property, a spouse cannot automatically step in on finances.\n3. You can make a power of attorney yourself for free or with a lawyer.\n4. On a TFSA, a spouse can be named successor holder, so the account carries on in their name; the FHSA has the same option, and RRSPs and RRIFs take a beneficiary. Designations are made with the financial institution; check the plan documents.\n5. Not legal advice; see a lawyer if your affairs are complicated.',
     },
     {
       id: 'sponsorship',
