@@ -203,7 +203,7 @@ YOUR FAMILY
 • Visits and trips sit on the line with their own plans, without starting a new chapter
 
 A PLAN THAT RESCHEDULES ITSELF
-• Pick a plan — relocating on a work or study permit, Express Entry, provincial nomination, citizenship, getting married, a new baby, school, retirement — and it becomes dated steps
+• Pick a plan — relocating on a work or study permit, Express Entry, provincial nomination, citizenship, getting married, a new baby, school, graduating, a new job, moving, buying a home, retirement — and it becomes dated steps
 • Plans for Canada (Ontario and British Columbia where rules are provincial) and China, plus the paperwork between them: visitors to Canada, travelling to China, a child born in Canada to a Chinese parent, relocating to China
 • Plans follow where each person lives; a date with its own place, like a wedding in another province, follows that place
 • Each plan says who it's for: an age range and "applies if" lines
@@ -246,7 +246,7 @@ The app is one scrolling page: the timeline, then Plans, then Settings at the bo
 
 Tapping the "Life Chapters" title switches between people (for example a partner or a child); each has their own timeline, stored on the device like everything else.
 
-The bundled plans describe common paperwork steps: for Canada, relocating on a work or study permit, permanent residence through Express Entry or provincial nomination, citizenship, visitors to Canada, and life stages from marriage to retirement for Ontario and British Columbia; for China, the same life stages, travelling to China, relocating to China, and a child born in Canada to a Chinese parent. China plans are in English with Chinese terms in parentheses. Plans touching nationality describe the routes and never recommend one. None of it is legal, immigration or medical advice: every plan and step screen shows "Reviewed <month> · not official advice", and each plan lists the official pages it was checked against, which open in Safari.
+The bundled plans describe common paperwork steps: for Canada, relocating on a work or study permit, permanent residence through Express Entry or provincial nomination, citizenship, visitors to Canada, life stages from marriage to retirement for Ontario and British Columbia, and graduating, starting a job, moving home and buying a home; for China, the same life stages, travelling to China, relocating to China, and a child born in Canada to a Chinese parent. China plans are in English with Chinese terms in parentheses. Plans touching nationality describe the routes and never recommend one. None of it is legal, immigration or medical advice: every plan and step screen shows "Reviewed <month> · not official advice", and each plan lists the official pages it was checked against, which open in Safari.
 
 Optional permissions, all user-initiated: notifications (reminders), calendar (off by default; Settings → Calendar export), camera / photo picker (adding a scan to a document). iCloud Drive backup is off by default (Settings → Backup) and writes to the user's own iCloud Drive.
 

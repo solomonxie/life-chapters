@@ -64,7 +64,8 @@ Bundled playbooks cover Canada (federal, plus Ontario and British Columbia)
 and China:
 
 - **Life stages**, each place: marriage, expecting, newborn, early years,
-  school, high school (中考 / 高考 in China), growing up, retirement
+  school, high school (中考 / 高考 in China), growing up, graduating, a job,
+  moving home, buying a home, retirement
 - **Relocation**: arriving on a work or study permit, Express Entry,
   provincial nomination, citizenship; relocating to China with Chinese family
 - **Visitors and travel**: visitors to Canada (eTA, visa, super visa),

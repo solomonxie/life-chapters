@@ -7,12 +7,22 @@ import { comingOfAgeOn } from './playbooks/coming-of-age-on';
 import { earlyYearsBc } from './playbooks/early-years-bc';
 import { earlyYearsCn } from './playbooks/early-years-cn';
 import { earlyYearsOn } from './playbooks/early-years-on';
+import { firstJobCa } from './playbooks/first-job-ca';
+import { firstJobCn } from './playbooks/first-job-cn';
+import { graduatedCa } from './playbooks/graduated-ca';
+import { graduatedCn } from './playbooks/graduated-cn';
 import { highSchoolBc } from './playbooks/high-school-bc';
 import { highSchoolCn } from './playbooks/high-school-cn';
 import { highSchoolOn } from './playbooks/high-school-on';
+import { homeBoughtBc } from './playbooks/home-bought-bc';
+import { homeBoughtCn } from './playbooks/home-bought-cn';
+import { homeBoughtOn } from './playbooks/home-bought-on';
 import { marriageBc } from './playbooks/marriage-bc';
 import { marriageCn } from './playbooks/marriage-cn';
 import { marriageOn } from './playbooks/marriage-on';
+import { movedCityBc } from './playbooks/moved-city-bc';
+import { movedCityCn } from './playbooks/moved-city-cn';
+import { movedCityOn } from './playbooks/moved-city-on';
 import { newbornBc } from './playbooks/newborn-bc';
 import { newbornCn } from './playbooks/newborn-cn';
 import { newbornOn } from './playbooks/newborn-on';
@@ -66,6 +76,16 @@ export const BUNDLED_PLAYBOOKS: Playbook[] = [
   comingOfAgeBc,
   comingOfAgeCn,
   comingOfAgeOn,
+  graduatedCa,
+  graduatedCn,
+  firstJobCa,
+  firstJobCn,
+  movedCityBc,
+  movedCityCn,
+  movedCityOn,
+  homeBoughtBc,
+  homeBoughtCn,
+  homeBoughtOn,
   retirementBc,
   retirementCn,
   retirementOn,
