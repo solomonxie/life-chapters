@@ -123,8 +123,8 @@ app covers more than one country's paperwork.
 - Marriage, school, health cards and licences differ by country and, in
   Canada, by province. Each plan has a `country`, a `province` when
   provincial, and a `family` — the same life stage elsewhere is its twin.
-- A person's `where` is set by hand ("Lives in") or inferred from the latest
-  past *residence* date — Born, Relocated, Moved city, Bought a home. A wedding
+- A person's `where` is never picked: it's read from the latest past
+  *residence* event with a Place — Born, Relocated, Moved city, Bought a home. A wedding
   or a trip says where something happened, not where they live.
 - A place typed in Chinese with no country counts as China: a village isn't
   in the city list, and the script says enough.
@@ -178,9 +178,9 @@ app covers more than one country's paperwork.
 ## Data & integrations
 
 ```
-Person      a board: one life's namespace       Me · Sam · Ava; country, province
-Where       whose rules apply                   {country, province}: set by hand, or
-                                                from the latest residence date
+Person      a board: one life's namespace       Me · Sam · Ava
+Where       whose rules apply                   {country, province}, from the
+                                                latest residence event
 Anchor      a dated fact the user entered       born · married · baby due; note;
                                                 location; personId, withPersonId, linkId
 AnchorKind  what a date is                      born · relocated · pr-landed · …;

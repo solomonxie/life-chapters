@@ -44,7 +44,7 @@ developer.apple.com → Certificates, Identifiers & Profiles → Identifiers →
   - first run: born date → one more date → pick a plan
   - Plans (below the timeline): swipe a step left → **Done**; the toast says what moved; **Undo** puts it back
   - Step: long-press **Mark done** → pick a past date; then **Change ›** on the done date, and on **due by** → move it → **Reset**
-  - title **Life Chapters ▾** → **Lives in** → China; the Library leads with **China**; back to **From my events**
+  - add **Moved city** with Place Nanchang → the Library leads with **China**; delete it → back to Canada
   - add **Visitors arrive** (Detail: who) → it sits on the stem, the chapter doesn't change, **Visitors to Canada** is offered
   - a date → Notes: write some; the chapter shows them and the stem gets a ✎
   - title **Life Chapters ▾** → **Link a person to me** → Child, a name, a date; her board opens with "Born"; move the date on either board and both move

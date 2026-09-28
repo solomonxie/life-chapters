@@ -10,7 +10,7 @@ export type Routes = {
   Backups: undefined;
   Sources: undefined;
   About: undefined;
-  Person: { mode: 'new' | 'link' | 'rename' | 'province'; personId?: string };
+  Person: { mode: 'new' | 'link' | 'rename'; personId?: string };
   Library: undefined;
   Playbook: { playbookId: string; trackId?: string };
   Document: { documentId: string };

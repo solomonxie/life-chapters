@@ -66,18 +66,16 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
     ...g,
     open: !!needle || (toggled.includes(g.key) ? !g.open : g.open),
   }));
-  const decided = decidedBy(undefined, { country: plan.person.country, province: plan.person.province }, plan.anchors, now);
+  const decided = decidedBy(undefined, plan.anchors, now);
   const whose = plan.person.id === ME ? 'your' : `${plan.person.name}'s`;
-  const livesDetail = !where.country
-    ? 'Pick a place to open the plans that apply'
-    : decided.byHand
-    ? 'Set by hand · tap to change'
-    : decided.event
-    ? `From ${whose} "${anchorDisplay(decided.event)}" event · ${decided.event.location}`
-    : 'Tap to change';
+  const born = plan.anchors.find(a => a.kind === 'born');
+  const livesDetail = decided
+    ? `From ${whose} "${anchorDisplay(decided)}" event · ${decided.location}`
+    : 'Add a place to Born or a move to open the plans that apply';
   const toggle = (key: string) =>
     setToggled(t => (t.includes(key) ? t.filter(k => k !== key) : [...t, key]));
-  const pickProvince = () => navigation.navigate('Person', { mode: 'province', personId: plan.person.id });
+  const fixPlace = () =>
+    navigation.navigate('AnchorEdit', decided ? { anchorId: decided.id } : born ? { anchorId: born.id } : { kind: 'moved-city' });
 
   const row = (pb: Playbook) => {
     const attached = plan.tracks.some(t => t.playbookId === pb.id);
@@ -108,7 +106,7 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
           label={where.country ? `Lives in ${whereName(where)}` : 'Where do they live?'}
           detail={livesDetail}
           tone="accent"
-          onPress={pickProvince}
+          onPress={fixPlace}
         />
       </Card>
       {suggested.length ? (

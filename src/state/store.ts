@@ -82,7 +82,7 @@ function derive(plan: Plan, now: CivilDate, personId: string) {
     mine: {
       ...scoped,
       person,
-      where: livesIn({ country: person.country, province: person.province }, scoped.anchors, now),
+      where: livesIn(scoped.anchors, now),
       view: planView(playbooks, scoped.tracks, scoped.anchors, scoped.instances, now),
     },
   };
@@ -680,20 +680,6 @@ export const actions = {
       name,
     );
     return get().plan.anchors.find(a => a.id === id)?.withPersonId ?? null;
-  },
-
-  /** Undefined goes back to inferring it from their events. */
-  setWhere(id: string, where: Where | undefined) {
-    const { plan } = get();
-    commit(
-      {
-        ...plan,
-        people: plan.people.map(p =>
-          p.id === id ? { ...p, country: where?.country, province: where?.province } : p,
-        ),
-      },
-      { cause: 'Where they live changed', toast: () => null },
-    );
   },
 
   /** Swap a plan for its twin in another province, on the same date; progress doesn't carry over. */
