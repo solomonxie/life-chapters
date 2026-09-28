@@ -118,3 +118,15 @@ describe('parents', () => {
     actions.switchPerson(ME);
   });
 });
+
+describe('the person menu', () => {
+  const { menuPeople } = require('../src/domain/people') as typeof import('../src/domain/people');
+  const people = [{ id: ME, name: 'Me' }, { id: 'c', name: 'Christine' }, { id: 'a', name: 'Ava' }];
+  const wedding = { id: 'w', kind: 'married', label: 'Married', date: '2022-06-22', precision: 'day' as const, personId: 'c', linkId: 'l' };
+  const job = { id: 'j', kind: 'first-job', label: 'First job', date: '2010-01-01', precision: 'day' as const, personId: 'a' };
+
+  it('lists only people with an event of their own, plus whoever is showing', () => {
+    expect(menuPeople(people, [wedding, job], ME).map(p => p.name)).toEqual(['Me', 'Ava']);
+    expect(menuPeople(people, [wedding, job], 'c').map(p => p.name)).toEqual(['Me', 'Christine', 'Ava']);
+  });
+});
