@@ -1,0 +1,216 @@
+import type { Playbook } from '../../domain/types';
+
+const HOME = 'https://home-affairs.ec.europa.eu/policies/schengen';
+
+export const visaSchengenCn: Playbook = {
+  id: 'visa-schengen-cn',
+  title: 'Visiting the Schengen area · Chinese passport',
+  summary:
+    'Paperwork plan for a short visit to the Schengen area on a Chinese passport, from choosing the right consulate and booking the visa centre to insurance, the decision, the Entry/Exit System and the 90/180-day limit.',
+  region: 'Schengen area',
+  country: 'SCHENGEN',
+  family: 'visa-schengen',
+  citizen: 'CN',
+  anchorKind: 'trip',
+  ages: { from: 0 },
+  conditions: [
+    "You hold a passport of the People's Republic of China (mainland ordinary passport)",
+    'You are visiting one or more Schengen countries for tourism or to see family or friends, for up to 90 days in any 180',
+    'Not for work, study or stays over 90 days; those are national visas',
+    'The date is the day you arrive in the Schengen area',
+  ],
+  reviewedAt: '2026-09-27',
+  version: 1,
+  sources: [
+    { title: 'Applying for a Schengen visa — European Commission, Migration and Home Affairs', url: `${HOME}/visa-policy/applying-schengen-visa_en` },
+    { title: 'Visa policy — European Commission, Migration and Home Affairs', url: `${HOME}/visa-policy_en` },
+    { title: 'Regulation (EU) 2018/1806, Annex I: countries whose nationals need a visa — EUR-Lex', url: 'https://eur-lex.europa.eu/eli/reg/2018/1806/oj' },
+    { title: 'Visa Code, Regulation (EC) No 810/2009, consolidated — EUR-Lex', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02009R0810-20200202' },
+    { title: 'Short-stay calculator — European Commission', url: `${HOME}/border-crossing/short-stay-calculator_en` },
+    { title: 'Entry/Exit System (EES) — European Commission, Migration and Home Affairs', url: `${HOME}/smart-borders/entry-exit-system_en` },
+    { title: 'EES and ETIAS for travellers — European Union', url: 'https://travel-europe.europa.eu/ees_en' },
+  ],
+  steps: [
+    {
+      id: 'entry-check',
+      title: 'Check the visa rule for a Chinese passport',
+      offsetDays: -200,
+      durationDays: 7,
+      dependsOn: [],
+      documents: ['Passport'],
+      prepare: ['Passport valid at least 3 months after you leave the Schengen area, issued within the last 10 years, with 2 blank pages', 'Countries you plan to visit and nights in each', 'Any transit through a Schengen airport on the way'],
+      howTo:
+        "1. China is on Annex I of Regulation (EU) 2018/1806, so a mainland Chinese passport holder needs a short-stay (type C) Schengen visa; Hong Kong and Macao SAR passports are visa-exempt.\n2. A Schengen visa covers all 29 Schengen countries for up to 90 days in any 180-day period.\n3. China is not on the EU-wide airport transit visa list, but single countries can add their own; check current if you connect through a Schengen airport to a non-Schengen country.\n4. Countries outside Schengen, such as Ireland, Cyprus or the United Kingdom, need their own visa.\n5. Not immigration advice; the consulate of your main destination is the reference.",
+    },
+    {
+      id: 'main-destination',
+      title: 'Work out which country you apply to',
+      offsetDays: -190,
+      durationDays: 7,
+      dependsOn: ['entry-check'],
+      documents: ['Travel itinerary'],
+      prepare: ['Day-by-day plan with nights in each country', 'Where you live now: mainland China or another country'],
+      howTo:
+        '1. One country: apply to that country.\n2. Several countries: apply to the one where you spend the longest time.\n3. Equal stays: apply to the country you enter first.\n4. As a rule, apply at that country\'s consulate (or its visa centre) covering the place where you legally live; in China, each consulate covers set provinces.\n5. Keep the plan consistent: travelling mostly elsewhere than the country that issued the visa can cause questions at the border or on the next application.',
+    },
+    {
+      id: 'child-docs',
+      title: "Gather a child's papers",
+      offsetDays: -150,
+      durationDays: 14,
+      ages: { from: 0, to: 17 },
+      conditions: ['Only if a child under 18 is travelling'],
+      dependsOn: ['main-destination'],
+      documents: ['Birth certificate', 'Passport'],
+      prepare: [
+        "Birth medical certificate (出生医学证明) or notarial certificate of kinship (亲属关系公证书), translated if the consulate asks",
+        'Application form signed by a parent or guardian',
+        "Notarized consent from the parent(s) not travelling, with a copy of their ID (check the consulate's checklist)",
+        "Parents' bank and employment papers",
+      ],
+      howTo:
+        '1. Each child has their own application; a person with parental authority signs for a minor.\n2. Children under 12 do not give fingerprints.\n3. The visa fee is lower for children aged 6 to under 12 (45 euros) and waived under 6.\n4. Consulates commonly ask for consent from a parent who is not travelling; follow the checklist of the consulate you apply to.',
+    },
+    {
+      id: 'host-docs',
+      title: 'Ask your host for an invitation and proof of their status',
+      offsetDays: -150,
+      durationDays: 30,
+      conditions: ['Only if visiting family or friends, or staying at their home'],
+      dependsOn: ['main-destination'],
+      documents: ['Letter of invitation', 'Proof of relationship'],
+      prepare: [
+        "Invitation letter with the host's address, your dates and relationship",
+        "Copy of the host's passport or residence permit",
+        'A formal undertaking of accommodation or costs where the country uses one, e.g. Verpflichtungserklärung (Germany) or attestation d\'accueil (France), made by the host at a local office',
+        "Proof of the host's finances if they cover your costs",
+        'Proof of relationship, e.g. notarial certificate of kinship',
+      ],
+      howTo:
+        "1. The Visa Code asks for proof of accommodation, or of sufficient means to cover it; an invitation from a host is one way.\n2. Some countries use an official form issued to the host by their town hall or foreigners' office; the host starts it weeks ahead.\n3. Send originals by courier if the consulate asks for them.",
+    },
+    {
+      id: 'insurance',
+      title: 'Buy travel medical insurance of at least 30,000 euros',
+      offsetDays: -120,
+      durationDays: 7,
+      dependsOn: ['main-destination'],
+      documents: ['Travel insurance policy'],
+      prepare: ['Trip dates, plus a few days of margin', 'Every Schengen country you will visit'],
+      howTo:
+        '1. The Visa Code asks for travel medical insurance valid across the whole Schengen area for the full stay, covering emergency care, hospital treatment and repatriation, including for death, with at least 30,000 euros of cover.\n2. For a multiple-entry visa, the first trip is covered at application and later trips need cover too.\n3. Many consulates in China list accepted insurers; buy a policy that can be refunded if the visa is refused.',
+    },
+    {
+      id: 'own-docs',
+      title: 'Gather your own documents',
+      offsetDays: -120,
+      durationDays: 30,
+      dependsOn: ['main-destination'],
+      documents: ['Passport', 'Passport photo', 'Bank statements', 'Employment letter', 'Travel itinerary'],
+      prepare: [
+        'Application form (online or paper, per country), and an ICAO-standard photo',
+        'Household register (户口簿) copy, and residence permit (居住证) if your hukou is outside the consulate\'s area',
+        'Employment certificate (在职证明) with approved leave, or business licence, or student and retirement papers',
+        'Bank statements for recent months',
+        'Flight reservation and hotel bookings or the host invitation',
+        'Previous passports with past Schengen visas',
+      ],
+      howTo:
+        '1. EU list: passport, form, photo, travel medical insurance, and papers on the purpose of the trip, money and accommodation for the stay, and your intention to return.\n2. Each consulate publishes its own checklist and translation rules; follow the one for your main destination.\n3. Many consulates ask for flight reservations, not paid tickets.',
+    },
+    {
+      id: 'appointment',
+      title: 'Book the visa centre appointment',
+      offsetDays: -110,
+      durationDays: 7,
+      dependsOn: ['main-destination'],
+      documents: [],
+      prepare: ['The visa centre the consulate uses (VFS Global, TLScontact or BLS International, depending on the country)', 'Earliest and latest filing dates for your trip', 'Check the current visa fee and service fee'],
+      howTo:
+        '1. Applications go in no earlier than 6 months and no later than 15 days before the trip; in busy seasons, appointments can be weeks out.\n2. Book online with the visa centre named on the consulate website; do not use paid slot resellers.\n3. The EU visa fee is 90 euros for adults; the visa centre adds its own service fee.',
+    },
+    {
+      id: 'apply-china',
+      title: 'Lodge the application and give fingerprints in China',
+      offsetDays: -90,
+      durationDays: 1,
+      conditions: ['Only if you live in mainland China'],
+      dependsOn: ['own-docs', 'insurance', 'host-docs', 'child-docs', 'appointment'],
+      documents: ['Passport', 'Visa application form', 'Travel insurance policy'],
+      prepare: ['Originals and copies of every document on the checklist', 'Appointment confirmation'],
+      howTo:
+        "1. Go in person to the visa centre in the consulate district that covers your residence; the consulate's district rules decide which city.\n2. Fingerprints are taken at the first application and reused for 59 months if they are in the Visa Information System.\n3. Some consulates also interview applicants.\n4. The passport stays with the consulate while it decides.",
+    },
+    {
+      id: 'apply-abroad',
+      title: 'Lodge the application from the country where you live',
+      offsetDays: -90,
+      durationDays: 1,
+      conditions: ['Only if you live legally outside mainland China, e.g. in Canada'],
+      dependsOn: ['own-docs', 'insurance', 'host-docs', 'child-docs', 'appointment'],
+      documents: ['Passport', 'Residence permit', 'Visa application form', 'Travel insurance policy'],
+      prepare: [
+        'Proof of legal residence (PR card, residence permit or long-term visa), usually valid for some months beyond your return (check the consulate)',
+        "Your main destination's consulate or visa centre covering where you live",
+      ],
+      howTo:
+        '1. The EU rule is to apply at the consulate with territorial responsibility for the country where you legally live, so a Chinese citizen living in Canada applies in Canada, not in China.\n2. A consulate can accept an application from someone legally present but not resident if there is a good reason; this is at its discretion.\n3. Add proof of your status and job in the country of residence; the rest of the list is the same.',
+    },
+    {
+      id: 'decision',
+      title: 'Wait for the decision and check the visa sticker',
+      offsetDays: -45,
+      durationDays: 45,
+      dependsOn: ['apply-china', 'apply-abroad'],
+      documents: ['Visa', 'Passport'],
+      prepare: ['Valid from and to dates, number of entries and duration of stay (days)', 'Territorial validity (e.g. Schengen States)'],
+      howTo:
+        '1. The normal decision time is 15 days, extendable to 45 days if more checks are needed; the 45 days here is a planning estimate.\n2. Multiple-entry visas: under the Visa Code cascade, a traveller who has lawfully used 3 visas in the last 2 years is to be considered for a 1-year multiple-entry visa, then 2 years, then up to 5 years; whether a China-specific cascade applies is check current.\n3. A refusal gives the reasons and how to appeal.',
+    },
+    {
+      id: 'flights',
+      title: 'Book flights once the visa is issued',
+      offsetDays: -30,
+      durationDays: 7,
+      dependsOn: ['decision'],
+      documents: ['Flight itinerary'],
+      prepare: ['Dates inside the visa validity', 'Enter first in the country you applied to, if that was the plan'],
+      howTo:
+        '1. Book after the visa is issued, so a refusal or delay does not cost the fare.\n2. Match the route to the itinerary you filed.',
+    },
+    {
+      id: 'arrival',
+      title: 'Arrival: register in the Entry/Exit System',
+      offsetDays: 0,
+      durationDays: 1,
+      dependsOn: ['flights'],
+      documents: ['Passport', 'Visa', 'Travel insurance policy', 'Flight itinerary'],
+      prepare: ['Return ticket, hotel bookings or invitation, and proof of funds in your carry-on'],
+      howTo:
+        '1. The Entry/Exit System (EES) started on October 12, 2025 and has been fully running since April 10, 2026; it records your passport, fingerprints, face image and each entry and exit, and replaces passport stamps.\n2. The border guard can still ask about purpose, money, accommodation and return.\n3. ETIAS is for visa-exempt travellers, so it does not apply to a Chinese visa holder.',
+    },
+    {
+      id: 'extend',
+      title: 'Ask for an extension only in exceptional cases',
+      offsetDays: 30,
+      durationDays: 7,
+      conditions: ['Only if something like illness, force majeure or a serious personal reason keeps you in the Schengen area past your visa'],
+      dependsOn: ['arrival'],
+      documents: ['Passport', 'Visa'],
+      prepare: ['Proof of the reason, e.g. a doctor\'s letter or cancelled flight', 'Proof of funds and insurance for the extra days'],
+      howTo:
+        '1. Schengen visas are generally not extended; the Visa Code allows it only for force majeure, humanitarian or serious personal reasons, or professional reasons in some cases.\n2. Apply before the visa runs out to the immigration authority of the country where you are.\n3. The date here is an estimate; move it to before your visa ends.',
+    },
+    {
+      id: 'leave',
+      title: 'Leave within 90 days in any 180',
+      offsetDays: 90,
+      durationDays: 1,
+      dependsOn: ['arrival'],
+      documents: ['Passport', 'Boarding pass'],
+      prepare: ['Days used in the last 180, from the EU short-stay calculator', 'The end date on the visa sticker'],
+      howTo:
+        '1. Leave by the earlier of the visa end date and the day you reach 90 days in the last 180.\n2. EES records the exit and flags overstays automatically; an overstay can lead to fines, an entry ban and refusals later.\n3. Keep boarding passes and hotel receipts; the next application asks about earlier Schengen visas.\n4. The 90 days here is the maximum; move it to your real date.',
+    },
+  ],
+};

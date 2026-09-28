@@ -1,0 +1,201 @@
+import type { Playbook } from '../../domain/types';
+
+const GOV = 'https://www.gov.uk';
+
+export const visaGbCn: Playbook = {
+  id: 'visa-gb-cn',
+  title: 'Visiting the United Kingdom · Chinese passport',
+  summary:
+    'Paperwork plan for a short UK visit on a Chinese passport: the Standard Visitor visa and its 2, 5 and 10-year options, the online application, biometrics in China or abroad, arrival and leaving on time.',
+  region: 'United Kingdom',
+  country: 'GB',
+  citizen: 'CN',
+  family: 'visa-gb',
+  anchorKind: 'trip',
+  ages: { from: 0 },
+  conditions: [
+    "You travel on a passport of the People's Republic of China",
+    'The visit is for tourism, visiting family or friends, or business visitor activities',
+    'Not for study over 6 months, work or moving to the UK',
+    'The date is the day you arrive in the UK',
+  ],
+  reviewedAt: '2026-09-27',
+  version: 1,
+  sources: [
+    { title: 'Check if you need a UK visa — GOV.UK', url: `${GOV}/check-uk-visa` },
+    { title: 'Visit the UK as a Standard Visitor — GOV.UK', url: `${GOV}/standard-visitor` },
+    { title: 'Standard Visitor: documents you need — GOV.UK', url: `${GOV}/standard-visitor/documents-you-need` },
+    { title: 'Standard Visitor: apply for a Standard Visitor visa — GOV.UK', url: `${GOV}/standard-visitor/apply-standard-visitor-visa` },
+    { title: 'Standard Visitor: extend your stay — GOV.UK', url: `${GOV}/standard-visitor/extend-your-stay` },
+    { title: 'Visa processing times: applications outside the UK — GOV.UK', url: `${GOV}/guidance/visa-processing-times-applications-outside-the-uk` },
+    { title: 'Transit through the UK — GOV.UK', url: `${GOV}/transit-visa` },
+    { title: 'Visitor visa: guide to supporting documents — GOV.UK', url: `${GOV}/government/publications/visitor-visa-guide-to-supporting-documents` },
+    { title: 'Find a visa application centre — GOV.UK', url: `${GOV}/find-a-visa-application-centre` },
+  ],
+  steps: [
+    {
+      id: 'entry-check',
+      title: 'Confirm the Standard Visitor visa is needed',
+      offsetDays: -120,
+      durationDays: 7,
+      dependsOn: [],
+      documents: ['Passport'],
+      prepare: ['Purpose and length of the trip', 'Whether the route changes planes in the UK', 'Any earlier UK visas or refusals'],
+      howTo:
+        '1. Answer the GOV.UK "Check if you need a UK visa" questions for a Chinese passport; for a visit it points to the Standard Visitor visa.\n2. The UK electronic travel authorisation (ETA) is for visa-free nationalities; a Chinese passport holder with a visitor visa does not use it. Check current.\n3. Changing planes in the UK may need a transit visa unless an exemption applies, such as holding certain valid visas for other countries; check the transit page for your route.\n4. A visit is usually up to 6 months per trip, whatever the length of the visa.',
+    },
+    {
+      id: 'visa-length',
+      title: 'Choose 6 months or a 2, 5 or 10-year visa',
+      offsetDays: -110,
+      durationDays: 7,
+      dependsOn: ['entry-check'],
+      documents: [],
+      prepare: ['How often you expect to visit', 'Passport expiry date', 'Current fees on GOV.UK'],
+      howTo:
+        '1. The standard visa covers one visit period of up to 6 months; GOV.UK listed its fee at £135 when this plan was reviewed.\n2. A long-term Standard Visitor visa lasts 2, 5 or 10 years, still up to 6 months per visit; GOV.UK listed £506, £903 and £1,128. Check current before paying.\n3. A long-term visa is more likely to be granted after earlier UK trips that followed the rules; if refused, the fee is not refunded.\n4. Fees change most years; the GOV.UK page is the reference.',
+    },
+    {
+      id: 'documents',
+      title: 'Gather passport, funds and ties papers',
+      offsetDays: -105,
+      durationDays: 14,
+      dependsOn: ['entry-check'],
+      documents: ['Passport', 'Bank statements', 'Employment or leave letter'],
+      prepare: [
+        'Passport valid for the whole stay, with a blank page',
+        'Bank statements, deposit or property certificates',
+        'Employment letter with approved leave, business licence (营业执照), or retirement certificate (退休证)',
+        'Rough itinerary and where you will stay',
+        'Certified English translations of Chinese documents',
+      ],
+      howTo:
+        '1. GOV.UK asks visitors to show they will leave at the end of the visit and can pay for the trip and the return.\n2. The Home Office guide to supporting documents lists the kinds of evidence usually given: finances, job, accommodation, travel plans.\n3. Anything not in English or Welsh needs a certified translation.\n4. Only the papers that match your situation are needed; more pages do not help by themselves.',
+    },
+    {
+      id: 'host-letter',
+      title: 'Ask your host for an invitation letter and status proof',
+      offsetDays: -105,
+      durationDays: 14,
+      conditions: ['Only if visiting family or friends in the UK'],
+      dependsOn: ['entry-check'],
+      documents: ['Letter of invitation', "Copy of host's UK status document"],
+      prepare: [
+        "Host's full name, address, phone and relationship to you",
+        "Copy of the host's British passport, or visa or eVisa share code",
+        'Where you will stay, and proof of it if at the host\'s home',
+        "Host's bank statements or payslips, if the host is paying",
+      ],
+      howTo:
+        "1. A letter from the host explaining the relationship, the dates and where you will stay helps the caseworker understand the trip.\n2. Add a copy of the host's UK status and, if staying with them, proof of their address.\n3. If the host is paying, include evidence of their means; the caseworker checks that support is realistic.\n4. The host sends scans or originals to upload or bring.",
+    },
+    {
+      id: 'child-docs',
+      title: "Prepare a child's birth certificate and parents' consent",
+      offsetDays: -105,
+      durationDays: 14,
+      ages: { from: 0, to: 17 },
+      conditions: ['Only if a child under 18 is travelling'],
+      dependsOn: [],
+      documents: ["Child's passport", 'Birth certificate (出生医学证明)', 'Parental consent letter'],
+      prepare: [
+        "Both parents' names, addresses and ID copies",
+        'Signed consent from the parent or parents not travelling',
+        'Details of the adult the child travels with and where the child stays',
+      ],
+      howTo:
+        '1. Each child needs their own application and visa.\n2. For a child under 18, GOV.UK asks for the parent or guardian details, where the child will stay, and consent when travelling with someone else.\n3. Bring the birth certificate to show the relationship.\n4. Children also attend the biometrics appointment; check current rules for young children on the centre\'s site.',
+    },
+    {
+      id: 'apply',
+      title: 'Apply online on GOV.UK and pay the fee',
+      offsetDays: -85,
+      durationDays: 3,
+      dependsOn: ['visa-length', 'documents', 'host-letter', 'child-docs'],
+      documents: ['Application confirmation', 'Fee receipt'],
+      prepare: ['Passport', 'Travel history for the last 10 years', 'Email address', 'Travel dates'],
+      howTo:
+        '1. Apply online on GOV.UK in English; the earliest is 3 months before travel.\n2. The form asks about the purpose, funds, job, family and travel history; answers are checked against earlier applications.\n3. Pay the fee online; priority services, where offered, cost extra.\n4. After paying, the form hands over to the visa application centre booking site for the biometrics appointment.',
+    },
+    {
+      id: 'biometrics-china',
+      title: 'Give biometrics at a UK visa application centre in China',
+      offsetDays: -75,
+      durationDays: 7,
+      conditions: ['Only if you are applying in mainland China'],
+      dependsOn: ['apply'],
+      documents: ['Passport', 'Appointment confirmation', 'Supporting documents'],
+      prepare: ['Nearest centre city', 'Printed or uploaded supporting documents, as the centre instructs'],
+      howTo:
+        "1. UK visa application centres in mainland China are run by a commercial partner (VFS Global when last checked; check current on the GOV.UK centre finder), with centres in several large cities.\n2. Fingerprints and a photo are taken; documents are uploaded before or scanned at the centre.\n3. Optional paid services, such as document scanning or passport courier, are not needed for the decision.\n4. The passport may be kept or returned, depending on the centre; ask at the appointment.",
+    },
+    {
+      id: 'biometrics-abroad',
+      title: 'Give biometrics in the country where you live',
+      offsetDays: -75,
+      durationDays: 7,
+      conditions: ['Only if you live legally outside China and apply there'],
+      dependsOn: ['apply'],
+      documents: ['Passport', 'Appointment confirmation', 'Residence permit or visa for that country'],
+      prepare: ['Proof of legal status there: permit, PR card or long-stay visa', 'Proof of ties there: job, study, lease'],
+      howTo:
+        '1. The online form is the same from any country outside the UK; you choose the centre in the country you apply from.\n2. Applying where you live legally, with your residence permit, lets the caseworker weigh your ties there; applying from a country you are only visiting can raise questions. Check current guidance for that country.\n3. Centres and operators differ by country; use the GOV.UK centre finder.',
+    },
+    {
+      id: 'decision',
+      title: 'Wait for the decision and collect the passport',
+      offsetDays: -45,
+      durationDays: 21,
+      dependsOn: ['biometrics-china', 'biometrics-abroad'],
+      documents: ['Passport', 'Visa vignette'],
+      prepare: ['Check the GOV.UK processing times page', 'Watch the email used in the application'],
+      howTo:
+        '1. GOV.UK says a decision usually comes within 3 weeks after the biometrics appointment; it can take longer if more checks are needed.\n2. If approved, a visa vignette is put in the passport; check the name, dates and number of entries.\n3. The 21 days here is an estimate; move it to the real appointment.',
+    },
+    {
+      id: 'flights',
+      title: 'Book flights and travel medical insurance',
+      offsetDays: -21,
+      durationDays: 7,
+      dependsOn: ['decision'],
+      documents: ['Flight itinerary', 'Travel insurance policy'],
+      prepare: ['Visa start and end dates', 'Insurance for the whole stay'],
+      howTo:
+        '1. Book after the visa is in the passport, so a refusal or delay does not cost the fare.\n2. Visitors generally pay for NHS hospital care; travel medical insurance is not a visa requirement but is widely bought.\n3. Arrive on or after the visa start date.',
+    },
+    {
+      id: 'arrival',
+      title: 'Arrival: UK border control',
+      offsetDays: 0,
+      durationDays: 1,
+      dependsOn: ['flights'],
+      documents: ['Passport', 'Visa vignette', 'Letter of invitation'],
+      prepare: ['UK address for the stay', 'Return ticket and proof of funds in carry-on', 'Host contact, if visiting family'],
+      howTo:
+        '1. A Border Force officer may ask about the purpose and length of the trip.\n2. A visit is up to 6 months per entry, even on a 2, 5 or 10-year visa.\n3. Visitors cannot work, claim public funds, or live in the UK through frequent or back-to-back visits.',
+    },
+    {
+      id: 'extend',
+      title: 'Apply to extend the stay from inside the UK',
+      offsetDays: 30,
+      durationDays: 14,
+      conditions: ['Only if you were given less than 6 months and need to stay longer'],
+      dependsOn: ['arrival'],
+      documents: ['Passport', 'Bank statements', 'Extension application confirmation'],
+      prepare: ['Reason for staying longer', 'Funds for the extra time', 'Current extension fee on GOV.UK'],
+      howTo:
+        '1. GOV.UK allows an extension only if the permission given was under 6 months, and only up to 6 months in total.\n2. It is applied for from inside the UK before the current permission ends; biometrics are taken again.\n3. GOV.UK listed the fee at £1,172 when this plan was reviewed; check current.\n4. Stays beyond 6 months as a visitor are limited to special cases such as private medical treatment; the GOV.UK page lists them.',
+    },
+    {
+      id: 'leave',
+      title: 'Leave on time and keep the records',
+      offsetDays: 180,
+      durationDays: 1,
+      dependsOn: ['arrival'],
+      documents: ['Passport', 'Boarding pass'],
+      prepare: ['Copies of the visa and boarding passes'],
+      howTo:
+        '1. Leave within 6 months of entry, or by the end of any extension.\n2. Overstaying makes later UK visas harder to get.\n3. Keep boarding passes; the next application asks about earlier trips.\n4. The 180 days here is an estimate; move it to your real departure.',
+    },
+  ],
+};
