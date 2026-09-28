@@ -4,6 +4,7 @@
 # The phone must be unlocked and not in use — each shot relaunches the app.
 #
 # Usage: scripts/device-shots.sh [out-dir]     then: make screenshots SHOTS=<out-dir>
+# README copies: sips --resampleWidth 390 <out-dir>/0*.png into docs/screenshots/
 set -e
 OUT=${1:-/tmp/lifechapters-shots}
 DEVICE=${DEVICE:-$(xcrun devicectl list devices 2>/dev/null | awk '/physical/ && /connected/ {print $3; exit}')}
@@ -19,8 +20,10 @@ shot() { # <name> <qa-spec>
 }
 
 shot 01-timeline "sample>Timeline@light"
-shot 02-plans    "sample>Plans@light"
-shot 03-step     "sample>Step:0@light"
-shot 05-chapter  "sample>Chapter@light"
-shot 06-playbook "sample>Playbook@light"
+shot 02-plan "sample>Playbook@light"
+shot 03-step "sample>Step:0@light"
+shot 04-chapter "sample>Chapter@light"
+shot 05-event "sample>AnchorEdit:migrated@light"
+shot 06-library "sample>Library@light"
+shot 07-child-board "sample>Timeline:Ava@light"
 shot 08-timeline-dark "sample>Timeline@dark"

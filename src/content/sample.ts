@@ -28,6 +28,10 @@ export function seedSample() {
     actions.attachTrack('school-years-bc', avaBorn.id);
   }
 
+  for (const s of useStore.getState().view.steps.filter(x => x.dueBy < now && x.status === 'pending')) {
+    actions.markDone(s.instanceId, s.dueBy);
+  }
+
   const steps = useStore.getState().view.steps;
   const byTitle = (re: RegExp) => steps.find(s => re.test(s.title));
   const doneOn = (re: RegExp, on: string) => {
