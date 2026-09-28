@@ -130,3 +130,16 @@ describe('the person menu', () => {
     expect(menuPeople(people, [wedding, job], 'c').map(p => p.name)).toEqual(['Me', 'Christine', 'Ava']);
   });
 });
+
+describe('a replaced plan', () => {
+  it('goes back to Me when the person on screen is not in it', () => {
+    const { actions: a, useStore: st } = require('../src/state/store') as typeof import('../src/state/store');
+    const { EMPTY_PLAN: empty } = require('../src/data/plan') as typeof import('../src/data/plan');
+    a.saveAnchor({ kind: 'child-born', label: 'Child born', date: '2025-03-18', precision: 'day' }, [], 'Zoe');
+    a.switchPerson(st.getState().plan.people.find(p => p.name === 'Zoe')!.id);
+    a.replacePlan(empty);
+    a.saveAnchor({ kind: 'born', label: 'Born', date: '1990-01-01', precision: 'day' });
+    expect(st.getState().mine.person.id).toBe(ME);
+    expect(st.getState().mine.anchors).toHaveLength(1);
+  });
+});
