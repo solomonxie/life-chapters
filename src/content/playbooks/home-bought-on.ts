@@ -71,6 +71,18 @@ export const homeBoughtOn: Playbook = {
       title: 'Prohibition on the Purchase of Residential Property by Non-Canadians Regulations (SOR/2022-250) — Justice Laws',
       url: 'https://laws-lois.justice.gc.ca/eng/regulations/SOR-2022-250/FullText.html',
     },
+    {
+      title: 'Renewing your mortgage — Financial Consumer Agency of Canada',
+      url: 'https://www.canada.ca/en/financial-consumer-agency/services/mortgages/renew-mortgage.html',
+    },
+    {
+      title: 'Request for Reconsideration — MPAC',
+      url: 'https://www.mpac.ca/en/MakingChangesUpdates/DisagreeingYourAssessedValue/RfR',
+    },
+    {
+      title: 'Province of Ontario benefit programs — Canada Revenue Agency',
+      url: 'https://www.canada.ca/en/revenue-agency/services/child-family-benefits/provincial-territorial-programs/province-ontario.html',
+    },
   ],
   steps: [
     {
@@ -287,6 +299,40 @@ export const homeBoughtOn: Playbook = {
         '1. The first-time home buyers\' amount (line 31270) is up to $10,000, a federal credit of up to $1,500; it is for buyers who did not live in a home they or a spouse owned in the year or the 4 years before.\n2. FHSA and HBP withdrawals are reported on the return for the year they happened.\n3. The principal residence exemption is designated when the home is later sold, on the return for that year.\n4. File for the year of the purchase by April 30 of the next year.',
     },
     {
+      id: 'assessment',
+      title: 'Check the MPAC assessment notice and ask for reconsideration if it looks wrong',
+      offsetDays: 250,
+      durationDays: 21,
+      dependsOn: ['closing'],
+      documents: ['MPAC property assessment notice'],
+      prepare: ['Recent sales of similar homes nearby', 'Anything wrong in the property details on AboutMyProperty'],
+      howTo:
+        '1. MPAC sends a property assessment notice when values are updated or the property changes, such as a new owner.\n2. A Request for Reconsideration is free and is filed by the deadline printed on the notice, often 120 days from the notice date; check the notice.\n3. After MPAC\'s answer, an appeal can go to the Assessment Review Board.\n4. The date here is an estimate; move it to when a notice arrives.',
+    },
+    {
+      id: 'on-ben',
+      title: 'Claim the property tax part of the Ontario Trillium Benefit',
+      offsetDays: 365,
+      durationDays: 30,
+      conditions: ['Only if your income is low or moderate'],
+      dependsOn: ['property-tax'],
+      documents: ['Form ON-BEN', 'Property tax bills for the year'],
+      prepare: ['Property tax paid on the principal residence for the year', 'Social Insurance Number'],
+      howTo:
+        '1. The Ontario Energy and Property Tax Credit counts property tax paid on a principal residence in Ontario.\n2. It is applied for on Form ON-BEN with the income tax return; the CRA pays it as part of the Ontario Trillium Benefit, usually monthly from July.\n3. Owners 65 or older may also get the Ontario Senior Homeowners\' Property Tax Grant on the same form.\n4. This repeats every year with the return; move the date to April 30.',
+    },
+    {
+      id: 'insurance-renewal',
+      title: 'Review and renew home insurance, every year',
+      offsetDays: 365,
+      durationDays: 14,
+      dependsOn: ['insurance'],
+      documents: ['Home insurance renewal notice'],
+      prepare: ['Changes to the home, renovations or valuables', 'Quotes from other insurers', 'For condos: the condo corporation\'s deductible'],
+      howTo:
+        '1. Policies usually renew yearly; the insurer sends the renewal terms before the end date.\n2. Check the coverage amount, deductibles, and whether sewer backup or overland water cover is included.\n3. The lender asks for proof of insurance to continue.\n4. This repeats every year.',
+    },
+    {
       id: 'hbp-repay',
       title: 'Start repaying the Home Buyers\' Plan',
       offsetDays: 730,
@@ -297,6 +343,18 @@ export const homeBoughtOn: Playbook = {
       prepare: ['The amount due this year from My Account'],
       howTo:
         '1. Repayments usually start in the second year after the year of the withdrawal, and run over 15 years.\n2. Temporary relief has pushed the start to the fifth year for first withdrawals in certain years; check the current rule on canada.ca.\n3. A repayment is an RRSP contribution designated as an HBP repayment on Schedule 7; any amount not repaid is added to income for that year.\n4. The date here is an estimate; the notice of assessment shows the real schedule.',
+    },
+    {
+      id: 'mortgage-renewal',
+      title: 'Renew or switch the mortgage before the term ends',
+      offsetDays: 1825,
+      durationDays: 30,
+      conditions: ['Only if you are borrowing to buy'],
+      dependsOn: ['mortgage'],
+      documents: ['Mortgage renewal statement'],
+      prepare: ['The term end date on the mortgage', 'Quotes from other lenders or a broker', 'Current income documents, if switching'],
+      howTo:
+        '1. Move this date to about a month before the real term end; a 5-year term is assumed here.\n2. A federally regulated lender sends a renewal statement at least 21 days before the term ends; other lenders follow provincial rules.\n3. Since November 2024 a straight switch of the same balance and amortization to another lender at renewal generally skips the stress test; check current rules. Switching can bring legal, appraisal or discharge fees.\n4. Left alone, some lenders renew automatically into a term and rate they choose, so compare before the date.',
     },
   ],
 };

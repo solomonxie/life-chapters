@@ -13,7 +13,7 @@ const state = () => useStore.getState();
 describe('what an event opens', () => {
   it('opens plans counted from Born for school, retiring and a child', () => {
     expect(ids('school-start')).toEqual(['school-years-bc']);
-    expect(ids('retire')).toEqual(['retirement-bc']);
+    expect(ids('retire').sort()).toEqual(['retire-ca', 'retirement-bc']);
     expect(ids('child-born').sort()).toEqual(['early-years-bc', 'newborn-bc']);
   });
 
@@ -23,6 +23,9 @@ describe('what an event opens', () => {
     expect(ids('new-job')).toEqual(['first-job-ca']);
     expect(ids('moved-city')).toEqual(['moved-city-bc']);
     expect(ids('home-bought')).toEqual(['home-bought-bc']);
+    for (const kind of ['job-lost', 'business-started', 'home-sold', 'car-bought', 'cohabiting', 'separated', 'caregiving', 'family-death', 'pr-landed', 'visa-granted']) {
+      expect([kind, ids(kind).length > 0]).toEqual([kind, true]);
+    }
   });
 
   it('a new job opens the job-start plans', () => {

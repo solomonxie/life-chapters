@@ -51,6 +51,14 @@ export const movedCityOn: Playbook = {
       url: 'https://www.ontario.ca/page/find-family-doctor-or-nurse-practitioner',
     },
     {
+      title: 'Landlord and Tenant Board forms — Tribunals Ontario',
+      url: 'https://tribunalsontario.ca/ltb/forms/',
+    },
+    {
+      title: 'Ontario Trillium Benefit — Ontario.ca',
+      url: 'https://www.ontario.ca/page/ontario-trillium-benefit',
+    },
+    {
       title: 'Change your address — Canada Revenue Agency',
       url: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/change-your-address.html',
     },
@@ -68,6 +76,22 @@ export const movedCityOn: Playbook = {
     },
   ],
   steps: [
+    {
+      id: 'notice-old',
+      title: 'Give notice at the old rental and plan the move-out',
+      offsetDays: -75,
+      durationDays: 7,
+      dependsOn: [],
+      documents: ["Form N9, Tenant's Notice to End the Tenancy"],
+      prepare: [
+        'Check the lease: monthly, or a fixed term still running',
+        'Pick a termination date on the last day of a rental period',
+        'Photos of the unit when leaving',
+      ],
+      howTo:
+        "1. A monthly tenant gives at least 60 days' written notice, usually on the Landlord and Tenant Board's form N9, ending on the last day of a rental period.\n2. On a fixed-term lease the date can't be earlier than the end of the term, unless the landlord agrees in writing.\n3. The last month's rent deposit pays for the last month; a refundable key deposit comes back when the keys are returned.\n4. Ontario has no formal move-out inspection; dated photos are a useful record if damage is raised later.",
+      conditions: ['Only if you rented the old home in Ontario'],
+    },
     {
       id: 'lease',
       title: 'Sign the standard lease or complete the purchase',
@@ -256,6 +280,18 @@ export const movedCityOn: Playbook = {
       howTo:
         '1. New residents have 60 days to exchange a valid licence from another province for an Ontario licence.\n2. Licences from other Canadian provinces can be exchanged; a vision, knowledge or road test may apply depending on the class and driving history.\n3. Since May 11, 2026, applicants declare that Ontario is their primary residence.',
       conditions: ['Only if you moved to Ontario from another province', 'Only if you drive'],
+    },
+    {
+      id: 'renter-credit',
+      title: 'Claim the Ontario Energy and Property Tax Credit on rent (ON-BEN)',
+      offsetDays: 240,
+      durationDays: 30,
+      dependsOn: ['lease'],
+      documents: ['ON-BEN Application form', 'Rent receipts or leases'],
+      prepare: ['Addresses and rent paid for each home in the year', 'Moving dates'],
+      howTo:
+        "1. The credit is part of the Ontario Trillium Benefit; renters apply by filling in the ON-BEN form in the tax return, due April 30; move this step to that date.\n2. It counts people resident in Ontario on December 31 whose landlord paid property tax on the home; rent at both Ontario addresses is listed.\n3. Payments depend on where you live on the 1st of each month, so the CRA address matters. It repeats each year.",
+      conditions: ['Only if you rent', 'Only if you live in Ontario on December 31'],
     },
   ],
 };

@@ -32,6 +32,7 @@ export const visitCanada: Playbook = {
       title: 'Super visa: Host financial support and minimum income — Canada.ca',
       url: `${IRCC}/visit-canada/parent-grandparent-super-visa/forms-documents/host-financial-support.html`,
     },
+    { title: 'Sponsor your parents and grandparents — Canada.ca', url: `${IRCC}/immigrate-canada/family-sponsorship/sponsor-parents-grandparents.html` },
     { title: 'Super visa: Length of stay in Canada — Canada.ca', url: `${IRCC}/visit-canada/parent-grandparent-super-visa/length-stay-canada.html` },
     {
       title: 'Medical exam requirements for visitors — Canada.ca',
@@ -69,6 +70,18 @@ export const visitCanada: Playbook = {
       ],
       howTo:
         "1. Answer IRCC's \"Find out if you need a visa or eTA\" questions for their passport; the answer decides the rest of this plan.\n2. Visa-exempt passports need an electronic travel authorization (eTA) to fly in; visa-required passports need a visitor visa, also called a temporary resident visa (TRV).\n3. China is on IRCC's list of visa-required countries, so a Chinese passport holder needs a visitor visa; China is not on the list of countries whose travellers can use an eTA instead.\n4. A visitor visa can be valid for up to 10 years, or until the passport or biometrics expire, whichever comes first; the officer decides single or multiple entry and the length.\n5. If a parent or grandparent wants to stay more than 6 months at a time, look at the super visa next.\n6. Not immigration advice; the IRCC pages are the reference.",
+    },
+    {
+      id: 'pgp',
+      title: 'Check whether parent and grandparent sponsorship is open',
+      offsetDays: -200,
+      durationDays: 7,
+      conditions: ['Only if you are hosting a parent or grandparent and are a Canadian citizen or permanent resident'],
+      dependsOn: [],
+      documents: [],
+      prepare: ['Your status in Canada', 'Your notices of assessment for recent years', 'Family size'],
+      howTo:
+        '1. The Parents and Grandparents Program (PGP) lets a citizen or permanent resident sponsor a parent or grandparent for permanent residence, as an alternative to repeated visits or super visas.\n2. Sponsors first submit an interest to sponsor form in an intake window, then IRCC invites some of them to apply; the sponsor meets an income requirement for several recent tax years.\n3. When this plan was reviewed, IRCC had paused the program: no new interest to sponsor forms or invitations until further notice, while existing applications keep being processed. Check the IRCC page for any new intake.\n4. Meanwhile, the super visa below covers stays of up to 5 years at a time.',
     },
     {
       id: 'super-visa',

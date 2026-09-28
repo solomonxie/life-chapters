@@ -106,6 +106,18 @@ export const comingOfAgeBc: Playbook = {
       title: 'Joint credit cards — Canada.ca',
       url: 'https://www.canada.ca/en/financial-consumer-agency/services/credit-cards/joint-credit-card.html',
     },
+    {
+      title: 'How to apply for a child passport in Canada — Canada.ca',
+      url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/child-passport.html',
+    },
+    {
+      title: 'Apply for a new adult passport — Canada.ca',
+      url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/new-adult-passport.html',
+    },
+    {
+      title: 'Canada Groceries and Essentials Benefit (CGEB) — Canada Revenue Agency',
+      url: 'https://www.canada.ca/en/revenue-agency/services/child-family-benefits/canada-groceries-essentials-benefit.html',
+    },
   ],
   steps: [
     {
@@ -186,7 +198,7 @@ export const comingOfAgeBc: Playbook = {
       ages: { from: 14, to: 19 },
       conditions: ['Only once they have earned income, e.g. from a first job'],
       howTo:
-        '1. Returns are due April 30 of the following year; this date assumes income the year they turn 15, so move it to match.\n2. Filing gets back tax withheld from pay and records earned income for future RRSP deduction room.\n3. Filing every year also sets up the GST/HST credit, which students can get once they turn 19.',
+        '1. Returns are due April 30 of the following year; this date assumes income the year they turn 15, so move it to match.\n2. Filing gets back tax withheld from pay and records earned income for future RRSP deduction room.\n3. Filing every year also sets up the Canada Groceries and Essentials Benefit (CGEB, formerly the GST/HST credit), which students can get once they turn 19.',
     },
     {
       id: 'bc-future-voters',
@@ -345,6 +357,38 @@ export const comingOfAgeBc: Playbook = {
       ],
       howTo:
         '1. The FHSA opens at 18, or at 19 where that is the legal age to enter a contract, as in BC.\n2. They must not have lived in a home they owned in the current year or the 4 years before.\n3. FHSA room only starts once the account is opened, so opening early starts the clock even with no deposit.',
+    },
+    {
+      id: 'passport-15',
+      title: 'Apply for the last child passport, around age 15',
+      offsetDays: 5540,
+      durationDays: 30,
+      validForDays: 1826,
+      dependsOn: [],
+      documents: ['Child passport', 'Passport photos'],
+      prepare: [
+        'Expiry date of the current child passport',
+        'Two identical passport photos',
+        'Guarantor who has known you 2 years and knows the child',
+        'All parents sign the form',
+      ],
+      ages: { from: 15, to: 15 },
+      conditions: ['Only if the child has, or needs, a Canadian passport'],
+      howTo:
+        '1. A child passport, for under 16, is valid for up to 5 years and cannot be renewed; each one is a new application.\n2. This date assumes a first passport in the baby\'s first months; move it to about 2 months before the current one expires, or before travel.\n3. Standard processing is 10 to 20 business days plus mail; check current times.\n4. From 16 the application is for an adult passport instead; see the next passport step.\n5. Many countries ask for a passport valid 6 months past the return date.',
+    },
+    {
+      id: 'adult-passport',
+      title: 'Apply for a first adult passport',
+      offsetDays: 7300,
+      durationDays: 30,
+      dependsOn: [],
+      documents: ['Adult passport', 'Passport photos'],
+      prepare: ['Expiry date of the last child passport', 'Proof of citizenship', 'ID', 'Two identical passport photos', 'Choose 5 or 10 years'],
+      ages: { from: 16, to: 19 },
+      conditions: ['Only if they have, or need, a Canadian passport'],
+      howTo:
+        '1. From 16, a passport is applied for as an adult, by the young person themselves, with a choice of 5 or 10 years of validity.\n2. A child passport issued before 16 stays valid to its expiry, then the first adult passport is a new application, not a renewal.\n3. This date assumes a child passport issued at about 15; move it to about 2 months before that one expires, or earlier for travel.\n4. Check the current document list, guarantor rules and fees on canada.ca.',
     },
   ],
 };

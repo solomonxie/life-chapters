@@ -75,6 +75,18 @@ export const skilledMigrationCa: Playbook = {
       url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/police-certificates.html',
     },
     {
+      title: 'Police certificates: China — Canada.ca',
+      url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/application/medical-police/police-certificates/how/china.html',
+    },
+    {
+      title: 'Document authentication: notices and updates (Apostille Convention in Canada) — Global Affairs Canada',
+      url: 'https://international.canada.ca/en/global-affairs/services/document-authentication/updates',
+    },
+    {
+      title: 'Apostille Convention status table — HCCH',
+      url: 'https://www.hcch.net/en/instruments/conventions/status-table/?cid=41',
+    },
+    {
       title: 'Express Entry: Medical exams',
       url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/medical-exams.html',
     },
@@ -294,6 +306,22 @@ export const skilledMigrationCa: Playbook = {
         '1. The application lists the documents it expects once the form is filled in.\n2. Documents are usually uploaded as scans.',
     },
     {
+      id: 'apostille',
+      title: 'Check which Chinese documents need an apostille',
+      offsetDays: -40,
+      durationDays: 30,
+      dependsOn: ['passport'],
+      documents: ['Notarial certificates (公证书)', 'Apostille (附加证明书)'],
+      prepare: [
+        'List the Chinese birth, marriage, degree and other documents going to Canadian offices',
+        'Check what each office asks for: IRCC, the credential assessor, a regulator',
+        'Certified translations where needed',
+      ],
+      howTo:
+        '1. China joined the Apostille Convention in November 2023 and it entered into force for Canada on January 11, 2024.\n2. Between the two, a Chinese public document that needs authenticating gets an apostille from China\'s foreign affairs authorities instead of consular legalisation at a Canadian mission.\n3. IRCC applications are usually uploaded as scans with translations; an apostille matters where a receiving office asks for authenticated documents, so check each office\'s list.',
+      conditions: ['Only if some of your documents were issued in mainland China'],
+    },
+    {
       id: 'police',
       title: 'Order police certificates',
       offsetDays: -5,
@@ -305,9 +333,10 @@ export const skilledMigrationCa: Playbook = {
         'List countries stayed in 6 months in a row or longer in the last 10 years, since age 18',
         'Look up each country\'s process',
         'Keep receipts and tracking numbers',
+        'China: national ID card and household register (户口簿) for the Certificate of No Criminal Record (无犯罪记录证明)',
       ],
       howTo:
-        '1. The certificate for the current country of residence counts if issued within 6 months before the application is submitted.\n2. Others count if issued after the last stay of 6 months or more there.\n3. Colour scans of the originals are uploaded.\n4. If one is late, a written explanation with proof of the request is usually attached instead.',
+        '1. The certificate for the current country of residence counts if issued within 6 months before the application is submitted.\n2. Others count if issued after the last stay of 6 months or more there.\n3. Colour scans of the originals are uploaded.\n4. If one is late, a written explanation with proof of the request is usually attached instead.\n5. China: IRCC takes a Certificate of No Criminal Record (无犯罪记录证明), or a notification that one cannot be issued, covering from birth to the present, ideally with a QR code. In China it comes from the Public Security Bureau or police station where the hukou is registered or where you usually live, or through local government apps; from outside China, the hukou office explains how to apply online, by mail or in person.',
     },
     {
       id: 'medical',
@@ -329,6 +358,7 @@ export const skilledMigrationCa: Playbook = {
       dependsOn: [
         'invitation',
         'identity-docs',
+        'apostille',
         'police',
         'medical',
         'language-test',

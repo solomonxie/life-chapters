@@ -86,6 +86,18 @@ export const newbornOn: Playbook = {
       title: "Canadian Dental Association: Your child's first visit",
       url: 'https://www.cda-adc.ca/en/oral_health/cfyt/dental_care_children/first_visit.asp',
     },
+    {
+      title: 'Child disability benefit — Canada.ca',
+      url: 'https://www.canada.ca/en/revenue-agency/services/child-family-benefits/child-disability-benefit.html',
+    },
+    {
+      title: 'Disability tax credit (DTC) — Canada.ca',
+      url: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/segments/tax-credits-deductions-persons-disabilities/disability-tax-credit.html',
+    },
+    {
+      title: 'Registered disability savings plan (RDSP) — Canada.ca',
+      url: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/registered-disability-savings-plan-rdsp.html',
+    },
   ],
   steps: [
     {
@@ -116,6 +128,19 @@ export const newbornOn: Playbook = {
       ages: { from: 0, to: 0 },
       howTo:
         '1. A birth in Ontario must be registered within 30 days.\n2. The online bundle registers the birth and applies for a birth certificate, the baby\'s SIN, Canada child benefits and an Education Savings Referral in one go.\n3. Registration is free within 12 months of the birth.\n4. Ask for the long-form birth certificate listing parents if a passport is planned.',
+    },
+    {
+      id: 'workplace-benefits',
+      title: 'Add the baby to the workplace health and dental plan',
+      offsetDays: 21,
+      durationDays: 7,
+      dependsOn: [],
+      documents: ['Benefits change confirmation'],
+      prepare: ['Baby\'s full name and birth date', 'Plan member ID', 'Which parent\'s plan is primary, if both have one'],
+      ages: { from: 0, to: 0 },
+      conditions: ['Only if a parent has health or dental benefits through work'],
+      howTo:
+        '1. A birth is a life event that lets a dependant be added outside open enrolment, usually within a set window, often around 31 days; the benefits booklet has the real limit.\n2. Adding the baby late can mean waiting for the next open enrolment or giving proof of good health.\n3. With two plans, children are usually claimed first on the plan of the parent whose birthday comes first in the year.',
     },
     {
       id: 'family-doctor',
@@ -247,6 +272,19 @@ export const newbornOn: Playbook = {
       conditions: ['Only if a parent is on pregnancy or parental leave'],
       howTo:
         '1. Parental leave is up to 61 weeks after pregnancy leave, or 63 weeks otherwise.\n2. One year is a planning estimate for standard benefits; move this to your real date.',
+    },
+    {
+      id: 'disability',
+      title: 'Apply for the disability tax credit, Child Disability Benefit and RDSP',
+      offsetDays: 365,
+      durationDays: 60,
+      dependsOn: ['ccb'],
+      documents: ['Form T2201 (Disability Tax Credit Certificate)', 'RDSP contract'],
+      prepare: ['Medical practitioner to fill in the medical part of T2201', 'Child\'s SIN, for the RDSP', 'Compare RDSP issuers'],
+      ages: { from: 0, to: 1 },
+      conditions: ['Only if the child has a severe and prolonged impairment'],
+      howTo:
+        '1. The disability tax credit is applied for with Form T2201, part filled in by a medical practitioner, or through the CRA digital application.\n2. Once the child is approved for the DTC and gets the Canada Child Benefit, the Child Disability Benefit is added to the CCB payments automatically.\n3. DTC eligibility also opens a registered disability savings plan (RDSP): the Canada Disability Savings Grant matches contributions, and the Canada Disability Savings Bond is paid for lower-income families without contributions.\n4. CRA processing takes several weeks; the dates here are estimates. Move this step to when a diagnosis is made.',
     },
     {
       id: 'dentist',
