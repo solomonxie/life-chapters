@@ -62,16 +62,25 @@ Grouped as in the `What` picker. `○` = a moment: on the line, cuts no chapter.
 | Group | Kind | Opens |
 |---|---|---|
 | Life | Born | every life stage, counted from it |
-| School | Graduated · Starts primary school | — |
-| Work | First job · New job · Retire | — |
+| School | Starts primary school | School years (counted from their Born) |
+| School | Graduated | After graduation (Canada, China) |
+| Work | First job · New job | Starting a job (Canada, China) |
+| Work | Retire | Retirement (counted from their Born) |
 | Moving | Relocated to a country | Relocating · work or study (BC, Ontario) · Relocating to China |
-| Moving | Permit or visa granted · Moved city | — |
+| Moving | Permit or visa granted | — |
+| Moving | Moved city | Moving home (BC, Ontario, China) |
 | Moving | Apply for permanent residence | Express Entry · Provincial nomination (BC, Ontario) |
 | Moving | Became a permanent resident | Citizenship |
 | Moving | ○ Trip abroad | Travelling to China |
 | Family | Married · Baby due | Getting married · Expecting a baby |
-| Family | Child born · Bought a home | — (a child's plans hang off her own Born) |
+| Family | Child born | Newborn · Early years, on the child's board, counted from her Born |
+| Family | Bought a home | Buying a home (BC, Ontario, China) |
 | Family | ○ Visitors arrive | Visitors to Canada |
+
+`PLANS THIS UNLOCKS` lists them as the event is filled in. A plan counted from
+Born reads `counts from Born` and only shows once that Born exists; a child's
+reads `on Ava's board` once her name is typed. `alsoOpens` on the kind says
+which.
 
 Relocated is a move on a permit, for work or study; permanent residence has
 its own two dates. Older saved dates labelled `Migrated to a country`, `Lodge a

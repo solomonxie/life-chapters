@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { BUNDLED_PLAYBOOKS } from '../content';
 import { resolve, today } from '../domain/dates';
 import { docId, planView, trackAnchorDate, type PlanView } from '../domain/plan';
-import { LINKED_KINDS, ME, ME_PERSON, isLinkedKind, mirrorOf, ownerOf, scopeTo, type Scoped } from '../domain/people';
+import { LINKED_KINDS, ME, ME_PERSON, countsFrom, isLinkedKind, mirrorOf, ownerOf, scopeTo, type Scoped } from '../domain/people';
 import { livesIn, type Where } from '../domain/regions';
 import { recordMoves, summarize, type Moves } from '../domain/radar';
 import { planRedo } from '../domain/schedule';
@@ -337,11 +337,17 @@ export const actions = {
       return a ? { ...t, anchorEventDate: resolve(a.date, a.precision) } : t;
     });
     let instances = plan.instances;
-    const date = resolve(saved.date, saved.precision);
     for (const playbookId of attach) {
       const playbook = playbooks.find(p => p.id === playbookId);
-      if (!playbook) continue;
-      const track: Track = { id: newId(), playbookId, personId, anchorId: saved.id, anchorEventDate: date };
+      const on = playbook && countsFrom(playbook, saved, anchors);
+      if (!playbook || !on) continue;
+      const track: Track = {
+        id: newId(),
+        playbookId,
+        personId: ownerOf(on),
+        anchorId: on.id,
+        anchorEventDate: resolve(on.date, on.precision),
+      };
       tracks = [...tracks, track];
       instances = [...instances, ...instancesFor(track, playbook)];
     }

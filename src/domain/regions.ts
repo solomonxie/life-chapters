@@ -1,3 +1,4 @@
+import { opens } from './kinds';
 import type { Anchor, CivilDate, Playbook } from './types';
 
 /** A country, and within Canada a province: what decides whose rules a plan follows. */
@@ -127,4 +128,4 @@ export function decidedBy(
 
 /** Plans a date opens: the ones whose country and province fit where it counts. */
 export const plansFor = (anchor: Pick<Anchor, 'kind' | 'location'>, lives: Where, playbooks: Playbook[]) =>
-  playbooks.filter(pb => pb.anchorKind === anchor.kind && fits(pb, whereAt(anchor, lives)));
+  playbooks.filter(pb => opens(anchor.kind, pb) && fits(pb, whereAt(anchor, lives)));
