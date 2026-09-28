@@ -73,7 +73,7 @@ Grouped as in the `What` picker. `○` = a moment: on the line, cuts no chapter.
 | Moving | Moved city | Moving home (BC, Ontario, China) |
 | Moving | Apply for permanent residence | Express Entry · Provincial nomination (BC, Ontario) |
 | Moving | Became a permanent resident | Life as a permanent resident · Citizenship |
-| Moving | ○ Trip abroad | Travelling to China; leaving: Travelling abroad from Canada · from China |
+| Moving | ○ Trip abroad | Visiting {country} · {passport} for its Place (US, Canada, China, Philippines, Japan, UK, Schengen; Chinese and Philippine passports); Travelling to China; leaving: Travelling abroad from Canada · from China |
 | Family | Married · Moved in together | Getting married · Moving in together (BC, Ontario) |
 | Family | Baby due | Expecting a baby |
 | Family | Child born | Newborn · Early years, on the child's board, counted from her Born |
@@ -83,7 +83,11 @@ Grouped as in the `What` picker. `○` = a moment: on the line, cuts no chapter.
 | Family | Caring for a family member | Caring for a family member (BC, Ontario) |
 | Family | ○ Parent turns 60 | A parent turns 60 (China) |
 | Family | ○ Death in the family | Death in the family (BC, Ontario, China) |
-| Family | ○ Visitors arrive | Visitors to Canada |
+| Family | ○ Visitors arrive | Visitors to Canada; every passport's visa plan for where they're coming |
+
+Visa plans carry `citizen` (the passport) and `country` (the destination;
+`SCHENGEN` fits any Schengen country). For your own trip only your passport's
+plan shows — read from your Born place; for visitors, every passport's.
 
 "leaving" plans (`leaving: true`) match where the person lived *before* the
 event and show only when it takes them to another country: moving from China

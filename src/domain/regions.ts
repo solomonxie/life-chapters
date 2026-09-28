@@ -7,11 +7,22 @@ export interface Where {
   province?: string;
 }
 
-/** Countries with plans. */
+/** Countries with plans; after Canada and China, the ones with only visa plans. */
 export const COUNTRIES = [
   { code: 'CA', name: 'Canada' },
   { code: 'CN', name: 'China' },
+  { code: 'US', name: 'United States' },
+  { code: 'PH', name: 'Philippines' },
+  { code: 'JP', name: 'Japan' },
+  { code: 'GB', name: 'United Kingdom' },
+  { code: 'SCHENGEN', name: 'Schengen area (Europe)' },
 ];
+
+/** One short-stay visa covers them all; a plan with country 'SCHENGEN' fits any of them. */
+const SCHENGEN = new Set([
+  'AT', 'BE', 'BG', 'HR', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IT', 'LV', 'LI', 'LT',
+  'LU', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'CH',
+]);
 
 export const PROVINCES = [
   { code: 'AB', name: 'Alberta' },
@@ -29,15 +40,51 @@ export const PROVINCES = [
   { code: 'YT', name: 'Yukon' },
 ];
 
+/** Last part of a place label → ISO code, as the city list names countries. */
 const COUNTRY_NAMES: Record<string, string> = {
   canada: 'CA',
   china: 'CN',
   'united states': 'US',
+  philippines: 'PH',
+  japan: 'JP',
+  'united kingdom': 'GB',
+  austria: 'AT',
+  belgium: 'BE',
+  bulgaria: 'BG',
+  croatia: 'HR',
+  czechia: 'CZ',
+  denmark: 'DK',
+  estonia: 'EE',
+  finland: 'FI',
+  france: 'FR',
+  germany: 'DE',
+  greece: 'GR',
+  hungary: 'HU',
+  iceland: 'IS',
+  italy: 'IT',
+  latvia: 'LV',
+  liechtenstein: 'LI',
+  lithuania: 'LT',
+  luxembourg: 'LU',
+  malta: 'MT',
+  'the netherlands': 'NL',
+  netherlands: 'NL',
+  norway: 'NO',
+  poland: 'PL',
+  portugal: 'PT',
+  romania: 'RO',
+  slovakia: 'SK',
+  slovenia: 'SI',
+  spain: 'ES',
+  sweden: 'SE',
+  switzerland: 'CH',
 };
 
 export const provinceName = (code?: string) => PROVINCES.find(p => p.code === code)?.name;
 export const countryName = (code?: string) =>
-  Object.entries(COUNTRY_NAMES).find(([, c]) => c === code)?.[0].replace(/\b\w/g, l => l.toUpperCase()) ?? code;
+  COUNTRIES.find(c => c.code === code)?.name ??
+  Object.entries(COUNTRY_NAMES).find(([, c]) => c === code)?.[0].replace(/\b\w/g, l => l.toUpperCase()) ??
+  code;
 
 /** "Burnaby" or "British Columbia" or "China". */
 export const whereName = (w: Where) => provinceName(w.province) ?? countryName(w.country);
@@ -76,9 +123,12 @@ export const residenceOf = (anchors: Anchor[], now: CivilDate): Anchor | undefin
 export const livesIn = (anchors: Anchor[], now: CivilDate): Where =>
   whereOf(residenceOf(anchors, now)?.location);
 
+const sameCountry = (plan: string, place: string) =>
+  plan === place || (plan === 'SCHENGEN' && SCHENGEN.has(place));
+
 /** A plan fits unless its country or province is known to differ. */
 export const fits = (pb: Playbook, w: Where) =>
-  (!pb.country || !w.country || pb.country === w.country) &&
+  (!pb.country || !w.country || sameCountry(pb.country, w.country)) &&
   (!pb.province || !w.province || pb.province === w.province);
 
 /** The same life stage for somewhere else, if one ships. */
@@ -122,6 +172,10 @@ export function decidedBy(
   return residenceOf(anchors, now) ?? (anchor?.location ? (anchor as Anchor) : undefined);
 }
 
+/** Whose passport they hold, as far as the app can tell: the country they were born in. */
+export const citizenOf = (anchors: Anchor[]): string | undefined =>
+  whereOf(anchors.find(a => a.kind === 'born')?.location).country;
+
 /** Where they lived just before an event: what a plan about leaving is matched against. */
 export const livedBefore = (anchor: Pick<Anchor, 'date'> & { id?: string }, anchors: Anchor[]): Where =>
   livesIn(anchors.filter(a => a.id !== anchor.id && a.date < anchor.date), anchor.date);
@@ -143,8 +197,11 @@ export function plansFor(
 ): Playbook[] {
   const here = whereAt(anchor, lives);
   const before = anchor.date ? livedBefore(anchor as Anchor, anchors) : lives;
+  const passport = citizenOf(anchors);
   return playbooks.filter(pb => {
     if (!opens(anchor.kind, pb)) return false;
+    if (pb.citizen && anchor.kind === 'trip' && passport && pb.citizen !== passport) return false;
+    if (pb.citizen && pb.citizen === here.country) return false;
     if (!pb.leaving) return fits(pb, here);
     return !!before.country && fits(pb, before) && here.country !== before.country;
   });

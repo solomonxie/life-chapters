@@ -12,7 +12,7 @@ import { useStore } from '../state/store';
 import { Button, Card, ListRow, Rows, SectionHeader, space, usePalette } from '../ui';
 import { importPlaybook } from './playbookFiles';
 
-const COMING_SOON = ['United States'];
+const COMING_SOON = ['United States · life stages'];
 /** Places they don't live in show this many, then "Show all". */
 const FOLDED_SHOWN = 3;
 
@@ -141,7 +141,7 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
       ))}
       {soon.length ? (
         <>
-          <SectionHeader title="Coming soon" info="Plans for Canada and China, for now." />
+          <SectionHeader title="Coming soon" info="Life-stage plans cover Canada and China for now; other countries have visa plans." />
           <Card>
             <Rows>
               {soon.map(r => (

@@ -45,7 +45,7 @@ export const ANCHOR_KINDS: AnchorKind[] = [
   { id: 'caregiving', label: 'Caring for a family member', group: 'Family', chapter: 'Caregiving', withDetail: 'Caring for {}' },
   { id: 'parent-60', label: 'Parent turns 60', group: 'Family', chapter: 'Parent turns 60', withDetail: '{} turns 60', moment: true },
   { id: 'family-death', label: 'Death in the family', group: 'Family', chapter: 'Loss', withDetail: '{} died', moment: true },
-  { id: 'visit', label: 'Visitors arrive', group: 'Family', chapter: 'Visit', withDetail: '{} arrive', moment: true },
+  { id: 'visit', label: 'Visitors arrive', group: 'Family', chapter: 'Visit', withDetail: '{} arrive', moment: true, alsoOpens: { kind: 'trip', from: 'self' } },
   { id: 'trip', label: 'Trip abroad', group: 'Moving', chapter: 'Trip', withDetail: 'Trip to {}', moment: true },
 ];
 

@@ -13,7 +13,7 @@ describe('where a place is', () => {
   it('reads country and, in Canada, province', () => {
     expect(whereOf('Vancouver, British Columbia, Canada')).toEqual(BC);
     expect(whereOf('Nanchang, Jiangxi, China')).toEqual({ country: 'CN', province: undefined });
-    expect(whereOf('London, England, United Kingdom')).toEqual({ country: undefined, province: undefined });
+    expect(whereOf('London, England, United Kingdom')).toEqual({ country: 'GB', province: undefined });
   });
 
   it('takes a place typed in Chinese as China', () => {
@@ -95,6 +95,26 @@ describe('plans about leaving', () => {
     expect(plansFor(toBC, BC, [exit, arrive], [born, toBC]).map(p => p.id)).toEqual(['exit', 'arrive']);
     const withinChina = at('2010-01-02', 'Shanghai, China', 'migrated');
     expect(plansFor(withinChina, {}, [exit, arrive], [born, withinChina]).map(p => p.id)).toEqual([]);
+  });
+});
+
+describe('visa plans', () => {
+  const cnToJp = { id: 'cn-jp', country: 'JP', citizen: 'CN', anchorKind: 'trip' } as Playbook;
+  const phToJp = { id: 'ph-jp', country: 'JP', citizen: 'PH', anchorKind: 'trip' } as Playbook;
+  const cnToEu = { id: 'cn-eu', country: 'SCHENGEN', citizen: 'CN', anchorKind: 'trip' } as Playbook;
+  const born = at('1988-08-06', 'Nanchang, Jiangxi, China', 'born');
+  const all = [cnToJp, phToJp, cnToEu];
+
+  it('match the destination and, for your own trip, your passport', () => {
+    const tokyo = at('2027-04-01', 'Tokyo, Japan', 'trip');
+    expect(plansFor(tokyo, BC, all, [born, tokyo]).map(p => p.id)).toEqual(['cn-jp']);
+    const paris = at('2027-05-01', 'Paris, Île-de-France, France', 'trip');
+    expect(plansFor(paris, BC, all, [born, paris]).map(p => p.id)).toEqual(['cn-eu']);
+  });
+
+  it('offer every passport for visitors coming to you', () => {
+    const visit = at('2027-06-01', 'Tokyo, Japan', 'visit');
+    expect(plansFor(visit, BC, all, [born, visit]).map(p => p.id)).toEqual(['cn-jp', 'ph-jp']);
   });
 });
 
