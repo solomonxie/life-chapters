@@ -3,11 +3,10 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatPrecise } from '../domain/format';
 import { ME } from '../domain/people';
-import { PROVINCES, whereName, type Where } from '../domain/regions';
 import type { Routes } from '../navigation/routes';
 import { haptic } from '../platform';
 import { actions, useStore } from '../state/store';
-import { Card, DateWheel, ListRow, Rows, SectionHeader, UnfoldingPicker, space, type, usePalette } from '../ui';
+import { Card, DateWheel, ListRow, SectionHeader, UnfoldingPicker, space, type, usePalette } from '../ui';
 
 type Relation = 'child' | 'partner' | 'parent';
 
@@ -17,80 +16,9 @@ const RELATIONS = [
   { value: 'parent', label: 'Parent' },
 ];
 
-/** New person, a person linked to whoever is on screen, a rename, or where they live. */
-export function PersonScreen(props: NativeStackScreenProps<Routes, 'Person'>) {
-  return props.route.params.mode === 'province' ? <LivesIn {...props} /> : <PersonForm {...props} />;
-}
-
-/** Plans follow this; "from their events" reads where they last moved to. */
-function LivesIn({ route, navigation }: NativeStackScreenProps<Routes, 'Person'>) {
-  const p = usePalette();
-  const personId = route.params.personId ?? ME;
-  const person = useStore(s => s.plan.people.find(x => x.id === personId));
-  const current = useStore(s => s.mine);
-  const inferred = current.person.id === personId && !person?.country ? current.where : undefined;
-  const isMe = personId === ME;
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: 'Lives in',
-      headerLeft: () => (
-        <Pressable onPress={() => navigation.goBack()} hitSlop={12} accessibilityRole="button">
-          <Text style={[type.body, { color: p.accent }]}>Done</Text>
-        </Pressable>
-      ),
-    });
-  });
-
-  const pick = (where: Where | undefined) => {
-    actions.setWhere(personId, where);
-    haptic('selection');
-    navigation.goBack();
-  };
-  const is = (country: string, province?: string) =>
-    person?.country === country && person?.province === province;
-  const row = (label: string, selected: boolean, onPress: () => void, key = label) => (
-    <ListRow
-      key={key}
-      label={`${selected ? '✓ ' : '   '}${label}`}
-      chevron={false}
-      accessibilityLabel={label}
-      selected={selected}
-      onPress={onPress}
-    />
-  );
-
-  return (
-    <ScrollView style={{ backgroundColor: p.bg }} contentContainerStyle={styles.content}>
-      <Text style={[type.caption, styles.note, { color: p.dim }]}>
-        School, health cards, licences, marriage and pensions follow where{' '}
-        {isMe ? 'you live' : `${person?.name ?? 'they'} lives`}. A date with a place of its own — a
-        wedding abroad, say — follows that place instead.
-      </Text>
-      <Card>
-        <ListRow
-          label={`${!person?.country ? '✓ ' : '   '}From ${isMe ? 'my' : 'their'} events`}
-          detail={
-            inferred?.country
-              ? `Now: ${whereName(inferred)}, from where ${isMe ? 'you' : 'they'} last moved`
-              : 'Set a place on Born or a move to work it out'
-          }
-          chevron={false}
-          accessibilityLabel="Work it out from the places on their events"
-          selected={!person?.country}
-          onPress={() => pick(undefined)}
-        />
-      </Card>
-      <SectionHeader title="Canada" />
-      <Card>
-        <Rows>
-          {PROVINCES.map(x => row(x.name, is('CA', x.code), () => pick({ country: 'CA', province: x.code }), x.code))}
-        </Rows>
-      </Card>
-      <SectionHeader title="China" />
-      <Card>{row('China', is('CN'), () => pick({ country: 'CN' }))}</Card>
-    </ScrollView>
-  );
+/** New person, a person linked to whoever is on screen, or a rename. */
+export function PersonScreen({ route, navigation }: NativeStackScreenProps<Routes, 'Person'>) {
+  return <PersonForm route={route} navigation={navigation} />;
 }
 
 function PersonForm({ route, navigation }: NativeStackScreenProps<Routes, 'Person'>) {

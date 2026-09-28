@@ -26,9 +26,6 @@ export interface Anchor {
 export interface Person {
   id: string;
   name: string;
-  /** Where they live now; otherwise inferred from their events. */
-  country?: string;
-  province?: string;
 }
 
 export interface LifeEvent {

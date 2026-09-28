@@ -72,11 +72,9 @@ export const residenceOf = (anchors: Anchor[], now: CivilDate): Anchor | undefin
     .filter(a => a.date <= now && RESIDENCE_KINDS.has(a.kind) && whereOf(a.location).country)
     .sort((a, b) => (a.date < b.date ? 1 : -1))[0];
 
-/** Set by hand, or else where they last moved to (or were born). */
-export function livesIn(set: Where | undefined, anchors: Anchor[], now: CivilDate): Where {
-  if (set?.country) return set;
-  return whereOf(residenceOf(anchors, now)?.location);
-}
+/** Where they last moved to (or were born), from the places on their events. */
+export const livesIn = (anchors: Anchor[], now: CivilDate): Where =>
+  whereOf(residenceOf(anchors, now)?.location);
 
 /** A plan fits unless its country or province is known to differ. */
 export const fits = (pb: Playbook, w: Where) =>
@@ -112,18 +110,16 @@ export function whereWhy(anchor: Pick<Anchor, 'kind' | 'label' | 'location'> | u
 }
 
 /**
- * What decided where a plan's date counts: the date's own place, "Lives in"
- * set by hand, or the latest move. The event, when there is one, can be edited.
+ * The event that decided where a plan's date counts: the date's own place,
+ * or else the latest move. Editing its Place is how to change it.
  */
 export function decidedBy(
   anchor: Pick<Anchor, 'kind' | 'location'> | undefined,
-  set: Where | undefined,
   anchors: Anchor[],
   now: CivilDate,
-): { event?: Anchor; byHand?: boolean } {
-  if (anchor && anchor.kind !== 'born' && whereOf(anchor.location).country) return { event: anchor as Anchor };
-  if (set?.country) return { byHand: true };
-  return { event: residenceOf(anchors, now) ?? (anchor?.location ? (anchor as Anchor) : undefined) };
+): Anchor | undefined {
+  if (anchor && anchor.kind !== 'born' && whereOf(anchor.location).country) return anchor as Anchor;
+  return residenceOf(anchors, now) ?? (anchor?.location ? (anchor as Anchor) : undefined);
 }
 
 /** Plans a date opens: the ones whose country and province fit where it counts. */

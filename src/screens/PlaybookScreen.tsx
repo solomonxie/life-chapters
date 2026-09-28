@@ -70,7 +70,7 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
   const buckets = bucketize(trackSteps, now);
   const actNow = buckets.now;
   const nextSteps = [...buckets.d90, ...buckets.year, ...buckets.later].slice(0, NEXT_SHOWN);
-  const decided = decidedBy(anchor, { country: plan.person.country, province: plan.person.province }, plan.anchors, now);
+  const decided = decidedBy(anchor, plan.anchors, now);
   const whose = plan.person.id === ME ? 'your' : `${plan.person.name}'s`;
   const sources = playbook.sources ?? [];
 
@@ -185,18 +185,16 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
         <Card style={[styles.wrong, { backgroundColor: p.accentSoft }]}>
           <Text style={[type.body, { color: p.text }]}>
             This plan follows {rulesName(playbook)} rules, but{' '}
-            {decided.event?.location
-              ? `${whose} "${anchorDisplay(decided.event)}" event is in ${decided.event.location}.`
-              : decided.byHand
-              ? `${whose} Lives in is set to ${whereName(due)}.`
+            {decided?.location
+              ? `${whose} "${anchorDisplay(decided)}" event is in ${decided.location}.`
               : `this counts as ${whereName(due)}.`}
           </Text>
           <View style={styles.row}>
-          {decided.event ? (
+          {decided ? (
             <Button
               title="Edit event"
               kind="plain"
-              onPress={() => navigation.navigate('AnchorEdit', { anchorId: decided.event!.id })}
+              onPress={() => navigation.navigate('AnchorEdit', { anchorId: decided.id })}
             />
           ) : null}
           {twin ? (

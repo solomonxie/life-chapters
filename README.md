@@ -72,8 +72,7 @@ and China:
   travelling to China, a child born in Canada to a Chinese parent
 
 Each says who it's for — an age range and "applies if" lines. A person's
-plans follow where they live (set by hand, or read from where they last
-moved), and a date with its own place — a wedding elsewhere — follows that.
+plans follow where they live, read from where they last moved, and a date with its own place — a wedding elsewhere — follows that.
 China plans are in English with Chinese terms. The United States: coming
 soon.
 

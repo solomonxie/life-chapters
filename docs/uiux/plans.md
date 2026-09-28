@@ -55,8 +55,8 @@ stage (`ages.from`); playbooks with no age range sort last.
  ‹              Library
   🔍 Search
  ╭────────────────────────────────────────╮
- │ Lives in British Columbia            › │  ← accent; opens Lives in
- │ From your "Relocated to Canada" event  │  ← or "Set by hand", or "Where
+ │ Lives in British Columbia            › │  ← accent; opens that event
+ │ From your "Relocated to Canada" event  │  ← or "Where
  │ · Vancouver, British Columbia, Canada  │    do they live?"
  ╰────────────────────────────────────────╯
   FITS YOUR EVENTS  ⓘ                   (4)  ← their event kinds, fit where
@@ -88,8 +88,8 @@ Each plan carries a `country`, a `province` when provincial, and a `family`
 (the same life stage elsewhere — Ontario, British Columbia, China). The library
 groups by country, and within Canada nationwide and each province. Groups
 for where the person lives come first, in full; the rest show 3 then `Show
-all n`. Search shows every match in full. The `Lives in` row says what
-decided it, so a wrong Place on a move is visible. China plans are in
+all n`. Search shows every match in full. The `Lives in` row says which
+event decided it and opens it, so a wrong Place on a move is visible. China plans are in
 English with the Chinese term in parentheses (`Secondary school · 中考 and 高考
 · China`).
 
@@ -115,8 +115,7 @@ and on its detail:
 ```
 
 Which event decided: the plan's own date when it has a place (not Born), else
-`Lives in` set by hand (`your Lives in is set to China`, no Edit), else the
-latest move. With no twin for that place, the switch doesn't show.
+the latest move. With no twin for that place, the switch doesn't show.
 Unattached, the button reads `See British Columbia`.
 
 `Fits your events` hides a plan that counts from a birth once the person on
@@ -234,13 +233,13 @@ detaching     │ Detach "Retirement · CA"?    │
 | `library.fitsInfo` | Plans that hang off a kind of event this person already has, fit where that event happened, and that they haven't aged past. |
 | `library.group` | {Country} · nationwide · {Country} · {Province} · {Country} |
 | `library.more` | Show all {n} · Show fewer |
-| `library.livesIn` | Lives in {place} · From {whose} "{event}" event · {place} · Set by hand · tap to change |
-| `library.livesIn.unknown` | Where do they live? · Pick a place to open the plans that apply |
+| `library.livesIn` | Lives in {place} · From {whose} "{event}" event · {place} |
+| `library.livesIn.unknown` | Where do they live? · Add a place to Born or a move to open the plans that apply |
 | `library.soon` | Coming soon |
 | `library.soonInfo` | Plans for Canada and China, for now. |
 | `plan.flag` | {Rules} rules · {Kind} in {place} · {Rules} rules · lives in {place} |
 | `plan.flag.switch` | Switch to {place} · See {place} |
-| `plan.flag.detail` | This plan follows {Rules} rules, but {whose} "{event}" event is in {place}. · … but {whose} Lives in is set to {place}. |
+| `plan.flag.detail` | This plan follows {Rules} rules, but {whose} "{event}" event is in {place}. |
 | `plan.flag.edit` | Edit event |
 | `playbook.reviewed` | Reviewed {Mon yyyy} · not official advice |
 | `playbook.stale` | Over {n} years old. Check the steps against the current rules. |
