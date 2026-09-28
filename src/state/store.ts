@@ -241,7 +241,8 @@ export const actions = {
         }
       : EMPTY_PLAN;
     const now = today();
-    const settings = stored?.settings ?? DEFAULT_SETTINGS;
+    const saved = stored?.settings ?? DEFAULT_SETTINGS;
+    const settings = plan.people.some(x => x.id === saved.personId) ? saved : { ...saved, personId: ME };
     set({
       ready: true,
       now,
@@ -635,7 +636,10 @@ export const actions = {
     return copy.id;
   },
 
+  /** Back to Me if the person on screen isn't in the new plan. */
   replacePlan(plan: Plan) {
+    const people = plan.people?.length ? plan.people : [ME_PERSON];
+    if (!people.some(x => x.id === personIdNow())) set({ settings: { ...get().settings, personId: ME } });
     commit(plan, { cause: 'Backup imported', toast: () => 'Plan replaced from the backup.' });
   },
 
