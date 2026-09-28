@@ -54,28 +54,29 @@ stage (`ages.from`); playbooks with no age range sort last.
 ```
  ‹              Library
   🔍 Search
- ──────────────────────────────────────────
-  FITS YOUR DATES  ⓘ                    (4)  ← their date kinds, fit where
-  Skilled migration · CA      ✓ attached ›     each date happened, not
-  from "Apply for permanent residence"         aged past
-  · age 18+
-  Relocating · work or s…    ✓ attached ›
-  from "Relocated to a country" · age 18+
-  Getting married · British C… 15 steps ›
-  Retirement · British Colum…  14 steps ›
-  from "Born" · ages 55–72
- ──────────────────────────────────────────
-  CANADA AND BRITISH COLUMBIA          (14)  ← country-wide + the province
-  Newborn · first year · Bri…  17 steps ›
-  from "Born" · ages 0–1
-  Early years · ages 1–4 · B…  12 steps ›
+ ╭────────────────────────────────────────╮
+ │ Lives in British Columbia            › │  ← accent; opens Lives in
+ │ From your "Relocated to Canada" event  │  ← or "Set by hand", or "Where
+ │ · Vancouver, British Columbia, Canada  │    do they live?"
+ ╰────────────────────────────────────────╯
+  FITS YOUR EVENTS  ⓘ                   (4)  ← their event kinds, fit where
+  Skilled migration · CA      ✓ attached ›     each happened, not aged past
+  from "Apply for permanent residence"
   ⋮
-  Visitors to Canada · visa, … 14 steps ›
-  from "Visitors arrive"
-  Lives in British Columbia            ›  ← accent; opens Lives in
-  Plans for other places are below
  ──────────────────────────────────────────
-  OTHER PLACES                     (20) ›  ← collapsed; opens on search
+  CANADA · NATIONWIDE                   (4)  ← where they live: first, open
+  Skilled migration · CA       24 steps ›
+  ⋮
+  CANADA · BRITISH COLUMBIA            (11)
+  Newborn · first year · Bri…  17 steps ›
+  ⋮
+  CANADA · ONTARIO                     (11)  ← elsewhere: first 3, then
+  Expecting a baby · Ontario   16 steps ›     Show all
+  Newborn · first year · Ont…  17 steps ›
+  Early years · ages 1–4 · O…  12 steps ›
+  Show all 11
+  CHINA                                (10)
+  ⋮                                         ← first 3, Show all 10
  ──────────────────────────────────────────
   COMING SOON  ⓘ                            ← "Plans for Canada and China,
   United States                               for now."
@@ -84,10 +85,11 @@ stage (`ages.from`); playbooks with no age range sort last.
 ```
 
 Each plan carries a `country`, a `province` when provincial, and a `family`
-(the same life stage elsewhere — Ontario, British Columbia, China). The first
-section is named for where the person lives: `Canada and British Columbia`,
-`China`, or `Everything` when it's unknown — then the row reads `Where do they
-live?` · `Pick a place to see only the plans that apply`. China plans are in
+(the same life stage elsewhere — Ontario, British Columbia, China). The library
+groups by country, and within Canada nationwide and each province. Groups
+for where the person lives come first, in full; the rest show 3 then `Show
+all n`. Search shows every match in full. The `Lives in` row says what
+decided it, so a wrong Place on a move is visible. China plans are in
 English with the Chinese term in parentheses (`Secondary school · 中考 and 高考
 · China`).
 
@@ -230,10 +232,10 @@ detaching     │ Detach "Retirement · CA"?    │
 | `plans.notif.denied` | Reminders are off, so nothing will warn you. |
 | `library.fits` | Fits your events |
 | `library.fitsInfo` | Plans that hang off a kind of event this person already has, fit where that event happened, and that they haven't aged past. |
-| `library.here` | {Country} and {Province} · {Country} · Everything |
-| `library.livesIn` | Lives in {place} · Plans for other places are below |
-| `library.livesIn.unknown` | Where do they live? · Pick a place to see only the plans that apply |
-| `library.others` | Other places |
+| `library.group` | {Country} · nationwide · {Country} · {Province} · {Country} |
+| `library.more` | Show all {n} · Show fewer |
+| `library.livesIn` | Lives in {place} · From {whose} "{event}" event · {place} · Set by hand · tap to change |
+| `library.livesIn.unknown` | Where do they live? · Pick a place to open the plans that apply |
 | `library.soon` | Coming soon |
 | `library.soonInfo` | Plans for Canada and China, for now. |
 | `plan.flag` | {Rules} rules · {Kind} in {place} · {Rules} rules · lives in {place} |

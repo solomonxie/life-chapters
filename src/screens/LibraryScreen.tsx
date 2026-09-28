@@ -3,8 +3,9 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { formatAges } from '../domain/format';
 import { kindLabel } from '../domain/kinds';
-import { ageOn } from '../domain/plan';
-import { countryName, fits, provinceName, whereAt, whereName } from '../domain/regions';
+import { ME } from '../domain/people';
+import { ageOn, anchorDisplay } from '../domain/plan';
+import { COUNTRIES, decidedBy, fits, provinceName, whereAt, whereName } from '../domain/regions';
 import type { Playbook } from '../domain/types';
 import type { Routes } from '../navigation/routes';
 import { useStore } from '../state/store';
@@ -12,6 +13,15 @@ import { Button, Card, ListRow, Rows, SectionHeader, space, usePalette } from '.
 import { importPlaybook } from './playbookFiles';
 
 const COMING_SOON = ['United States'];
+/** Places they don't live in show this many, then "Show all". */
+const FOLDED_SHOWN = 3;
+
+interface Group {
+  key: string;
+  title: string;
+  items: Playbook[];
+  open: boolean;
+}
 
 export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Library'>) {
   const p = usePalette();
@@ -19,7 +29,7 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
   const plan = useStore(s => s.mine);
   const now = useStore(s => s.now);
   const [q, setQ] = useState('');
-  const [othersOpen, setOthersOpen] = useState(false);
+  const [toggled, setToggled] = useState<string[]>([]);
   const where = plan.where;
 
   useLayoutEffect(() => {
@@ -47,13 +57,26 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
   const age = ageOn(plan.anchors, now);
   const notOutgrown = (pb: Playbook) =>
     pb.anchorKind !== 'born' || !pb.ages?.to || age === null || age <= pb.ages.to;
-  const here = matches.filter(pb => fits(pb, where));
-  const elsewhere = matches.filter(pb => !fits(pb, where));
   const suggested = matches.filter(
     pb =>
       notOutgrown(pb) &&
       plan.anchors.some(a => a.kind === pb.anchorKind && fits(pb, whereAt(a, where))),
   );
+  const groups = byPlace(matches, where).map(g => ({
+    ...g,
+    open: !!needle || (toggled.includes(g.key) ? !g.open : g.open),
+  }));
+  const decided = decidedBy(undefined, { country: plan.person.country, province: plan.person.province }, plan.anchors, now);
+  const whose = plan.person.id === ME ? 'your' : `${plan.person.name}'s`;
+  const livesDetail = !where.country
+    ? 'Pick a place to open the plans that apply'
+    : decided.byHand
+    ? 'Set by hand · tap to change'
+    : decided.event
+    ? `From ${whose} "${anchorDisplay(decided.event)}" event · ${decided.event.location}`
+    : 'Tap to change';
+  const toggle = (key: string) =>
+    setToggled(t => (t.includes(key) ? t.filter(k => k !== key) : [...t, key]));
   const pickProvince = () => navigation.navigate('Person', { mode: 'province', personId: plan.person.id });
 
   const row = (pb: Playbook) => {
@@ -80,6 +103,14 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={styles.content}
       keyboardDismissMode="on-drag">
+      <Card style={styles.lives}>
+        <ListRow
+          label={where.country ? `Lives in ${whereName(where)}` : 'Where do they live?'}
+          detail={livesDetail}
+          tone="accent"
+          onPress={pickProvince}
+        />
+      </Card>
       {suggested.length ? (
         <>
           <SectionHeader
@@ -92,42 +123,24 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
           </Card>
         </>
       ) : null}
-      <SectionHeader
-        title={
-          !where.country
-            ? 'Everything'
-            : where.province
-            ? `${countryName(where.country)} and ${provinceName(where.province)}`
-            : countryName(where.country) ?? 'Everything'
-        }
-        count={here.length}
-      />
-      <Card>
-        <Rows>
-          {here.map(row)}
-          <ListRow
-            label={where.country ? `Lives in ${whereName(where)}` : 'Where do they live?'}
-            detail={where.country ? 'Plans for other places are below' : 'Pick a place to see only the plans that apply'}
-            tone="accent"
-            onPress={pickProvince}
-          />
-        </Rows>
-      </Card>
-      {elsewhere.length ? (
-        <>
-          <SectionHeader
-            title="Other places"
-            count={elsewhere.length}
-            collapsed={!othersOpen && !needle}
-            onToggle={() => setOthersOpen(o => !o)}
-          />
-          {othersOpen || needle ? (
-            <Card>
-              <Rows>{elsewhere.map(row)}</Rows>
-            </Card>
-          ) : null}
-        </>
-      ) : null}
+      {groups.map(g => (
+        <React.Fragment key={g.key}>
+          <SectionHeader title={g.title} count={g.items.length} />
+          <Card>
+            <Rows>
+              {(g.open ? g.items : g.items.slice(0, FOLDED_SHOWN)).map(row)}
+              {g.items.length > FOLDED_SHOWN && !needle ? (
+                <ListRow
+                  label={g.open ? 'Show fewer' : `Show all ${g.items.length}`}
+                  tone="accent"
+                  chevron={false}
+                  onPress={() => toggle(g.key)}
+                />
+              ) : null}
+            </Rows>
+          </Card>
+        </React.Fragment>
+      ))}
       {soon.length ? (
         <>
           <SectionHeader title="Coming soon" info="Plans for Canada and China, for now." />
@@ -156,4 +169,42 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
 const styles = StyleSheet.create({
   content: { paddingBottom: 120 },
   import: { padding: space.lg, paddingTop: space.xl },
+  lives: { marginTop: space.sm },
 });
+
+/**
+ * Country, then within Canada nationwide and each province. Where they live
+ * comes first and open; the rest show their first few.
+ */
+function byPlace(playbooks: Playbook[], where: { country?: string; province?: string }): Group[] {
+  const countries = [...COUNTRIES].sort((a, b) => (a.code === where.country ? -1 : b.code === where.country ? 1 : 0));
+  const groups: Group[] = [];
+  for (const c of countries) {
+    const mine = playbooks.filter(pb => pb.country === c.code);
+    const provinces = [...new Set(mine.map(pb => pb.province).filter((x): x is string => !!x))].sort((a, b) =>
+      a === where.province ? -1 : b === where.province ? 1 : (provinceName(a) ?? a) < (provinceName(b) ?? b) ? -1 : 1,
+    );
+    const nationwide = mine.filter(pb => !pb.province);
+    const fitsHere = (province?: string) =>
+      c.code === where.country && (!province || !where.province || province === where.province);
+    if (nationwide.length) {
+      groups.push({
+        key: c.code,
+        title: provinces.length ? `${c.name} · nationwide` : c.name,
+        items: nationwide,
+        open: fitsHere(),
+      });
+    }
+    for (const pr of provinces) {
+      groups.push({
+        key: `${c.code}-${pr}`,
+        title: `${c.name} · ${provinceName(pr) ?? pr}`,
+        items: mine.filter(pb => pb.province === pr),
+        open: fitsHere(pr),
+      });
+    }
+  }
+  const other = playbooks.filter(pb => !COUNTRIES.some(c => c.code === pb.country));
+  if (other.length) groups.push({ key: 'other', title: 'Other', items: other, open: false });
+  return groups.filter(g => g.items.length);
+}
