@@ -115,3 +115,46 @@ PRODUCT_BUNDLE_IDENTIFIER = com.yourname.lifechapters
 
 QA runs on a real iPhone. Don't fall back to a simulator for anything but a
 compile check.
+
+## Screenshots
+
+Sample data on an iPhone 14 (`scripts/device-shots.sh`).
+
+### Timeline
+Your life line: chapters behind you, today, and the events ahead.
+
+<img src="docs/screenshots/01-timeline.png" width="260">
+
+### Plan
+A plan's page: when it starts and ends, the next steps, then every step.
+
+<img src="docs/screenshots/02-plan.png" width="260">
+
+### Step
+What to get, what to prepare, and when to start so it lands on time.
+
+<img src="docs/screenshots/03-step.png" width="260">
+
+### Chapter
+One stretch of life: how far in, the plans it opens, its steps.
+
+<img src="docs/screenshots/04-chapter.png" width="260">
+
+### Event
+An event with its place, notes, and the plans it unlocks.
+
+<img src="docs/screenshots/05-event.png" width="260">
+
+### Library
+Plans by country and province, with the ones that fit your events first.
+
+<img src="docs/screenshots/06-library.png" width="260">
+
+### A child's board
+Every person gets their own life line and plans; names link between boards.
+
+<img src="docs/screenshots/07-child-board.png" width="260">
+
+### Dark mode
+
+<img src="docs/screenshots/08-timeline-dark.png" width="260">

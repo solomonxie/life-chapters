@@ -144,11 +144,13 @@ old `02-radar.jpg` / `04-journal.jpg`.
 Upload order (3 minimum, 10 maximum — the first two are what people actually see):
 
 1. **Timeline** (`01-timeline`) — the life line, chapters, TODAY, what's ahead
-2. **Plans** (`02-plans`) — expiring documents, your plans with their next step
+2. **Plan** (`02-plan`) — first and last step, next steps, every step
 3. **Step** (`03-step`) — start-by / due-by / valid, documents, prep, how-to
-4. **Chapter** (`05-chapter`) — a chapter's active steps and its notes
-5. **Playbook** (`06-playbook`) — who it's for, projected first and last dates, sources, not-advice line
-6. **Timeline, dark** (`08-timeline-dark`) — the same line at night
+4. **Chapter** (`04-chapter`) — a chapter, the plans it opens, its steps
+5. **Event** (`05-event`) — place, notes, plans this unlocks
+6. **Library** (`06-library`) — plans by country and province, fits your events
+7. **A child's board** (`07-child-board`) — her own life line and plans
+8. **Timeline, dark** (`08-timeline-dark`) — the same line at night
 
 App Preview video: skip for 1.0.
 
