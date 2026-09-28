@@ -75,6 +75,18 @@ import { separatedOn } from './playbooks/separated-on';
 import { skilledMigrationCa } from './playbooks/skilled-migration-ca';
 import { travelCa } from './playbooks/travel-ca';
 import { travelCn } from './playbooks/travel-cn';
+import { visaCaCn } from './playbooks/visa-ca-cn';
+import { visaCaPh } from './playbooks/visa-ca-ph';
+import { visaCnPh } from './playbooks/visa-cn-ph';
+import { visaGbCn } from './playbooks/visa-gb-cn';
+import { visaGbPh } from './playbooks/visa-gb-ph';
+import { visaJpCn } from './playbooks/visa-jp-cn';
+import { visaJpPh } from './playbooks/visa-jp-ph';
+import { visaPhCn } from './playbooks/visa-ph-cn';
+import { visaSchengenCn } from './playbooks/visa-schengen-cn';
+import { visaSchengenPh } from './playbooks/visa-schengen-ph';
+import { visaUsCn } from './playbooks/visa-us-cn';
+import { visaUsPh } from './playbooks/visa-us-ph';
 import { visitCanada } from './playbooks/visit-canada';
 
 /** Shipped with the app. User-imported playbooks live in the plan instead. */
@@ -90,6 +102,18 @@ export const BUNDLED_PLAYBOOKS: Playbook[] = [
   pnpOn,
   leavingCanadaCa,
   emigrationCn,
+  visaCaCn,
+  visaCaPh,
+  visaUsCn,
+  visaUsPh,
+  visaCnPh,
+  visaPhCn,
+  visaJpCn,
+  visaJpPh,
+  visaGbCn,
+  visaGbPh,
+  visaSchengenCn,
+  visaSchengenPh,
   travelCa,
   travelCn,
   outboundTripCn,
