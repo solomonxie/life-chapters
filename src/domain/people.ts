@@ -1,4 +1,5 @@
-import type { Anchor, DocumentRecord, Person, StepInstance, Track } from './types';
+import { opens } from './kinds';
+import type { Anchor, DocumentRecord, Person, Playbook, StepInstance, Track } from './types';
 
 export const ME = 'me';
 export const ME_PERSON: Person = { id: ME, name: 'Me' };
@@ -13,6 +14,22 @@ export const LINKED_KINDS: Record<string, string> = {
 };
 
 export const isLinkedKind = (kind: string) => kind in LINKED_KINDS;
+
+/**
+ * The date a plan opened by `event` hangs on: the event itself, the person's
+ * own Born, or the linked child's Born. Undefined when that date doesn't exist yet.
+ */
+export function countsFrom(
+  pb: Playbook,
+  event: Pick<Anchor, 'kind' | 'personId' | 'linkId'> & { id?: string },
+  anchors: Anchor[],
+): Anchor | undefined {
+  const from = opens(event.kind, pb);
+  if (from === 'self') return anchors.find(a => a.id === event.id) ?? (event as Anchor);
+  if (from === 'born') return anchors.find(a => a.kind === 'born' && ownerOf(a) === ownerOf(event));
+  if (from === 'child') return event.linkId ? anchors.find(a => a.kind === 'born' && a.linkId === event.linkId) : undefined;
+  return undefined;
+}
 
 export function trackOwner(track: Track, anchors: Anchor[]): string {
   if (track.personId) return track.personId;

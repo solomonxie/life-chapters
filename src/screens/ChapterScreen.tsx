@@ -9,6 +9,7 @@ import { useStore } from '../state/store';
 import { Button, Card, ListRow, Rows, SectionHeader, StepRow, space, type, usePalette } from '../ui';
 import { ChapterBar } from './TimelineScreen';
 import { plansFor } from '../domain/regions';
+import { countsFrom, ownerOf } from '../domain/people';
 
 export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Routes, 'Chapter'>) {
   const p = usePalette();
@@ -17,6 +18,8 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
   const view = useStore(s => s.mine.view);
   const playbooks = useStore(s => s.playbooks);
   const moves = useStore(s => s.moves);
+  const allAnchors = useStore(s => s.plan.anchors);
+  const allTracks = useStore(s => s.plan.tracks);
   const now = useStore(s => s.now);
 
   const nodes = useMemo(
@@ -41,7 +44,12 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
     ),
   ).sort((a, b) => (a.startBy < b.startBy ? -1 : 1));
   const past = !!chapter?.end && chapter.end <= now;
-  const unlocks = anchor ? plansFor(anchor, plan.where, playbooks) : [];
+  const unlocks = anchor
+    ? plansFor(anchor, plan.where, playbooks).filter(pb => {
+        const on = countsFrom(pb, anchor, allAnchors);
+        return on && ownerOf(on) === plan.person.id;
+      })
+    : [];
   const years = chapter?.end ? Math.max(1, Math.round(diffDays(chapter.start, chapter.end) / 365.25)) : null;
   const yearN = chapter ? Math.floor(diffDays(chapter.start, now) / 365.25) + 1 : null;
 
@@ -68,9 +76,9 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
           <Card>
             <Rows>
               {unlocks.map(pb => {
-                const attached = plan.tracks.some(
-                  t => t.playbookId === pb.id && t.anchorId === eventId,
-                );
+                const on = anchor && countsFrom(pb, anchor, allAnchors);
+                const track = allTracks.find(t => t.playbookId === pb.id && t.anchorId === on?.id);
+                const attached = !!track;
                 return (
                   <ListRow
                     key={pb.id}
@@ -79,7 +87,7 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
                     onPress={() =>
                       navigation.navigate('Playbook', {
                         playbookId: pb.id,
-                        trackId: plan.tracks.find(t => t.playbookId === pb.id && t.anchorId === eventId)?.id,
+                        trackId: track?.id,
                       })
                     }
                   />

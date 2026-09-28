@@ -3,8 +3,8 @@ import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { resolve } from '../domain/dates';
 import { formatPrecise } from '../domain/format';
-import { kindById } from '../domain/kinds';
-import { isLinkedKind } from '../domain/people';
+import { kindById, opens } from '../domain/kinds';
+import { countsFrom, isLinkedKind } from '../domain/people';
 import { plansFor } from '../domain/regions';
 import type { DatePrecision } from '../domain/types';
 import type { Routes } from '../navigation/routes';
@@ -74,10 +74,19 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
   const linked = isLinkedKind(kind);
   const toggle = (row: Open) => setOpen(o => (o === row ? null : row));
   const where = useStore(s => s.mine.where);
-  const unlocks = plansFor({ kind, location }, where, playbooks);
-  const attachedHere = new Set(
-    plan.tracks.filter(t => t.anchorId === anchorId).map(t => t.playbookId),
-  );
+  const allTracks = useStore(s => s.plan.tracks);
+  const draft = { id: anchorId, kind, personId: existing?.personId ?? me, linkId: existing?.linkId };
+  const who = place.trim();
+  const unlocks = plansFor({ kind, location }, where, playbooks).flatMap(pb => {
+    const from = opens(kind, pb);
+    const on = countsFrom(pb, draft, allAnchors);
+    if (from === 'born' && !on) return [];
+    if (from === 'child' && !on && !who) return [];
+    const attached = !!on?.id && allTracks.some(t => t.playbookId === pb.id && t.anchorId === on.id);
+    const detail =
+      from === 'born' ? ' · counts from Born' : from === 'child' ? ` · on ${who}'s board` : '';
+    return [{ pb, attached, detail }];
+  });
 
   const doSave = () => {
     saved.current = true;
@@ -304,14 +313,14 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
           <SectionHeader title="Plans this unlocks" />
           <Card>
             <Rows>
-              {unlocks.map(pb =>
-                attachedHere.has(pb.id) ? (
+              {unlocks.map(({ pb, attached, detail }) =>
+                attached ? (
                   <ListRow key={pb.id} label={pb.title} value="✓ attached" chevron={false} />
                 ) : (
                   <CheckRow
                     key={pb.id}
                     label={pb.title}
-                    detail={`${pb.steps.length} steps · attaches on Save`}
+                    detail={`${pb.steps.length} steps${detail} · attaches on Save`}
                     checked={attach.includes(pb.id)}
                     onToggle={() =>
                       setAttach(a => (a.includes(pb.id) ? a.filter(x => x !== pb.id) : [...a, pb.id]))
