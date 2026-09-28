@@ -73,6 +73,14 @@ export const highSchoolCn: Playbook = {
       title: '2025 student-origin credit student loan guide (Shenzhen example) — Shenzhen Education Bureau',
       url: 'https://szeb.sz.gov.cn/home/jyfw/fwxsjz/jyjz/fwxx/content/post_12216899.html',
     },
+    {
+      title: 'New national immunization schedule released, 2026 edition (includes HPV for girls at 13) — gov.cn',
+      url: 'https://www.gov.cn/lianbo/202607/content_7074538.htm',
+    },
+    {
+      title: 'National Healthcare Security Administration',
+      url: 'https://www.nhsa.gov.cn/',
+    },
   ],
   steps: [
     {
@@ -346,6 +354,32 @@ export const highSchoolCn: Playbook = {
       prepare: ['Travel to campus', 'Tuition payment or loan receipt'],
       ages: { from: 18, to: 18 },
       howTo: '1. Universities set their own registration dates, usually early to mid-September; this date is an estimate.',
+    },
+    {
+      id: 'hpv',
+      title: 'HPV vaccine for girls at 13 (national immunization program)',
+      offsetDays: 4748,
+      durationDays: 60,
+      ages: { from: 13, to: 13 },
+      conditions: ['Only for girls'],
+      dependsOn: [],
+      documents: ['Vaccination certificate (预防接种证)'],
+      prepare: ['Vaccination certificate', 'Ask the school or community vaccination clinic for the schedule'],
+      howTo:
+        '1. The 2026 national immunization schedule adds the bivalent HPV vaccine for girls aged 13, 2 doses, free.\n2. Local rollout and whether it is given at school or at the clinic differ; check with the local clinic.\n3. Move this to the appointment date.',
+    },
+    {
+      id: 'uni-insurance',
+      title: 'Join student medical insurance at university',
+      offsetDays: 6690,
+      durationDays: 30,
+      ages: { from: 18, to: 18 },
+      conditions: ['Only if they start university'],
+      dependsOn: ['enrol'],
+      documents: ['Medical insurance record'],
+      prepare: ['Where they are insured now', 'The university\'s enrolment notice for medical insurance'],
+      howTo:
+        '1. University students usually join resident medical insurance through the university, in the city where it is.\n2. They can instead stay insured where the hukou is; avoid paying twice, and ask how cross-region care works either way.\n3. It is paid yearly, usually in the autumn term.',
     },
   ],
 };

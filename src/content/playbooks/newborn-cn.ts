@@ -77,6 +77,10 @@ export const newbornCn: Playbook = {
       title: 'National Immigration Administration: Photo guide for exit-entry documents (出入境证件相片照相指引)',
       url: 'http://www.nia.gov.cn/n741445/n741619/n894511/c896346/content.html',
     },
+    {
+      title: 'Interim Measures for Individual Income Tax Special Additional Deductions (国发〔2018〕41号) — State Taxation Administration',
+      url: 'https://fgk.chinatax.gov.cn/zcfgk/c102440/c5209858/content.html',
+    },
   ],
   steps: [
     {
@@ -161,7 +165,7 @@ export const newbornCn: Playbook = {
       prepare: ['Birth medical certificate', 'Household register', 'Bank card or the baby\'s social security card for payment'],
       ages: { from: 0, to: 0 },
       howTo:
-        '1. Since 1 January 2025 a national childcare subsidy is paid yearly for each child under 3, until the third birthday, for first, second and third children alike.\n2. One parent or guardian applies where the baby\'s hukou is registered, mainly online through the national subsidy system, the provincial government service platform, Alipay or WeChat; offline at the township or street office.\n3. It is exempt from income tax; provinces set when it is paid, and some pay more than the national base.\n4. Timing is a planning estimate.',
+        '1. Since 1 January 2025 a national childcare subsidy (育儿补贴) of 3,600 yuan a year is paid for each child under 3, until the third birthday, for first, second and third children alike.\n2. Children born before 2025 who were still under 3 get a pro-rated amount for their months under 3 from 2025 on.\n3. One parent or guardian applies where the baby\'s hukou is registered, mainly online through the national subsidy system, the provincial government service platform, Alipay or WeChat; offline at the township or street office.\n4. It is exempt from income tax; provinces set when it is paid, and some pay more than the national base.\n5. Timing is a planning estimate.',
     },
     {
       id: 'vaccines-2m',
@@ -321,6 +325,45 @@ export const newbornCn: Playbook = {
       ages: { from: 1, to: 1 },
       howTo:
         '1. The schedule gives DTaP dose 4, MMR dose 2 and hepatitis A (live, one dose; or inactivated dose 1) at 18 months, with a health check and blood test.\n2. Next come Japanese encephalitis, and hepatitis A dose 2 if inactivated, at 2 years.\n3. Move this to the appointment date.',
+    },
+    {
+      id: 'infant-deduction',
+      title: 'Claim the infant care tax deduction (3岁以下婴幼儿照护专项附加扣除)',
+      offsetDays: 30,
+      durationDays: 7,
+      ages: { from: 0, to: 0 },
+      conditions: ['Only if a parent pays individual income tax'],
+      dependsOn: ['birth-certificate'],
+      documents: ['Deduction declaration in the app'],
+      prepare: ['Birth medical certificate or household register', 'The 个人所得税 app', 'Agree which parent claims it'],
+      howTo:
+        '1. From the month of birth until the month before the third birthday, parents can deduct 2,000 yuan a month per child (the amount since January 2023).\n2. One parent claims 100%, or each claims 50%; the split cannot change within a tax year.\n3. Declare it in the 个人所得税 app through the employer, or at the annual reconciliation; months missed in the year can be claimed there.',
+    },
+    {
+      id: 'id-card',
+      title: 'Consider a resident ID card for the baby (居民身份证)',
+      offsetDays: 120,
+      durationDays: 30,
+      ages: { from: 0, to: 1 },
+      conditions: ['Only if you want one; under 16 it is optional'],
+      dependsOn: ['hukou'],
+      documents: ['Resident ID card'],
+      prepare: ['Household register', 'A parent\'s ID card', 'Photo taken at the police station'],
+      howTo:
+        '1. Children under 16 can get an ID card if a guardian applies at the police station where the hukou is registered; it is valid for 5 years.\n2. It is handy for flights, trains, hotels and some online services; the household register works for most of these too.\n3. Timing is only a prompt.',
+    },
+    {
+      id: 'insurance-renewal',
+      title: 'Pay next year\'s resident medical insurance for the baby',
+      offsetDays: 300,
+      durationDays: 14,
+      ages: { from: 0, to: 1 },
+      conditions: ['Only if the baby is in resident basic medical insurance (城乡居民医保)'],
+      dependsOn: ['medical-insurance'],
+      documents: ['Payment record'],
+      prepare: ['The payment channel, often the 个人所得税 app, WeChat or Alipay'],
+      howTo:
+        '1. Resident medical insurance is paid once a year for the next calendar year, usually in a window from September to December; the local medical insurance bureau sets it.\n2. Missing the window can bring a waiting period before costs are covered.\n3. It repeats every year; move this date to the local window.',
     },
   ],
 };

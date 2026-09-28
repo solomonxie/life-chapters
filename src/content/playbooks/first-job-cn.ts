@@ -45,6 +45,10 @@ export const firstJobCn: Playbook = {
       title: 'State Taxation Administration',
       url: 'https://www.chinatax.gov.cn/',
     },
+    {
+      title: 'Opinion on promoting the personal pension (国办发〔2022〕7号) — gov.cn',
+      url: 'https://www.gov.cn/zhengce/content/2022-04/21/content_5686402.htm',
+    },
   ],
   steps: [
     {
@@ -206,6 +210,63 @@ export const firstJobCn: Playbook = {
       prepare: ['Income from all employers in the year', 'Special additional deductions', 'Class I bank card'],
       howTo:
         '1. The reconciliation for a tax year runs from March 1 to June 30 of the following year, in the app.\n2. It settles a refund or extra tax; changing jobs mid-year often leaves withholding off, since each employer counted only its own months.\n3. The tax authority sets who is required to file; early in the window the app may ask for a booking.\n4. This date assumes a mid-year start; move it to June 30 of the year after.',
+    },
+    {
+      id: 'insurance-gap',
+      title: 'Check for a social insurance gap between jobs (社保断缴)',
+      offsetDays: 0,
+      durationDays: 7,
+      conditions: ['Only if you left another job'],
+      dependsOn: [],
+      documents: ['Social insurance contribution record'],
+      prepare: ['Last month the previous employer paid', 'First month the new employer pays'],
+      howTo:
+        '1. A month with no contribution can break the continuous months some city rules count: home purchase eligibility, hukou points and school places.\n2. A medical insurance gap can bring a waiting period before costs are covered again.\n3. If there is a gap, some people pay as a flexible worker (灵活就业) for the months between; check the local rule.',
+    },
+    {
+      id: 'contribution-base',
+      title: 'Check the contribution base against real pay (缴费基数)',
+      offsetDays: 60,
+      durationDays: 14,
+      dependsOn: ['first-payslip'],
+      documents: ['Social insurance and provident fund records'],
+      prepare: ['Payslips', 'The social insurance app or local platform'],
+      howTo:
+        '1. Social insurance and the provident fund are paid on a contribution base (缴费基数), usually last year\'s average monthly wage, within the local floor and ceiling.\n2. A base set lower than real pay means lower pension, unemployment and provident fund amounts later.\n3. The base shows in the social insurance and fund centre apps; ask HR if it looks wrong.\n4. Bases are reset each year, often in July; this repeats yearly.',
+    },
+    {
+      id: 'personal-pension',
+      title: 'Consider opening a personal pension account (个人养老金)',
+      offsetDays: 90,
+      durationDays: 14,
+      dependsOn: [],
+      documents: ['Personal pension account'],
+      prepare: ['Social security card or resident ID card', 'A bank that offers personal pension accounts'],
+      howTo:
+        '1. Anyone in the basic pension can open one personal pension account (个人养老金) through a bank or the national platform; the scheme has run nationwide since December 2024.\n2. Contributions of up to 12,000 yuan a year are deducted from taxable income; payouts are taxed at 3%.\n3. The money is locked until retirement age, disability or settling abroad.\n4. Contributions count for the calendar year, so pay by December 31; this repeats yearly. Not financial advice.',
+    },
+    {
+      id: 'annuity',
+      title: 'Check the enterprise or occupational annuity (企业年金 / 职业年金)',
+      offsetDays: 90,
+      durationDays: 7,
+      conditions: ['Only if the employer offers an annuity'],
+      dependsOn: ['contract'],
+      documents: ['Annuity plan details'],
+      prepare: ['Ask HR for the plan rules and your share'],
+      howTo:
+        '1. Some employers run an enterprise annuity (企业年金); public institutions pay an occupational annuity (职业年金).\n2. Employer and employee both pay in; rules on vesting when leaving are in the plan.\n3. The account moves with you to a new employer that has a plan, and pays out at retirement.',
+    },
+    {
+      id: 'annual-leave',
+      title: 'Note paid annual leave (带薪年休假)',
+      offsetDays: 90,
+      durationDays: 1,
+      dependsOn: [],
+      documents: [],
+      prepare: ['Your total years of work, with all employers'],
+      howTo:
+        '1. Employees who have worked continuously for over a year get paid annual leave: 5 days with 1 to under 10 years of total work, 10 days with 10 to under 20, 15 days with 20 or more.\n2. Years with all employers count; a new employer may pro-rate the first year.\n3. Leave not taken at the employer\'s request is paid at 300% of the daily wage.',
     },
   ],
 };

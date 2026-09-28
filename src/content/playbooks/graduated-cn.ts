@@ -49,6 +49,14 @@ export const graduatedCn: Playbook = {
       title: 'Regulations on the Management of Housing Provident Fund — gov.cn',
       url: 'https://www.gov.cn/gongbao/content/2019/content_5468861.htm',
     },
+    {
+      title: 'Ministry of Human Resources and Social Security',
+      url: 'https://www.mohrss.gov.cn/',
+    },
+    {
+      title: 'National Healthcare Security Administration',
+      url: 'https://www.nhsa.gov.cn/',
+    },
   ],
   steps: [
     {
@@ -236,6 +244,53 @@ export const graduatedCn: Playbook = {
       conditions: ['Only if you have a national student loan (国家助学贷款)'],
       howTo:
         '1. Principal repayments begin after the grace period ends; early repayment is allowed.\n2. The loan term is the length of study plus 15 years, up to 22 years.\n3. The due date assumes the full 5-year grace period; set it to the date in the repayment plan.',
+    },
+    {
+      id: 'job-search-subsidy',
+      title: 'Check the one-off job-search subsidy (一次性求职创业补贴)',
+      offsetDays: -180,
+      durationDays: 30,
+      conditions: ['Only if you are from a low-income family, hold a student loan, have a disability or meet another listed group'],
+      dependsOn: [],
+      documents: ['Subsidy application'],
+      prepare: ['Proof of the family situation or disability', 'Student ID', 'Bank card in your name'],
+      howTo:
+        '1. Final-year students in listed groups can get a one-off job-search subsidy; the amount and groups are set by each province.\n2. Applications usually go through the school in the autumn or early in the final year.\n3. Ask the school employment office for the local window.',
+    },
+    {
+      id: 'graduate-settlement',
+      title: 'Check graduate hukou settlement and talent subsidies in the job city (应届生落户 / 人才补贴)',
+      offsetDays: -60,
+      durationDays: 30,
+      conditions: ['Only if you plan to work in a city other than your hukou city'],
+      dependsOn: [],
+      documents: [],
+      prepare: ['Degree and graduation dates', 'Job offer or employment agreement', 'The city\'s talent policy page'],
+      howTo:
+        '1. Many cities let new graduates settle their hukou (落户) and pay rent, living or housing subsidies (人才补贴) within a set time after graduating.\n2. Conditions often include degree, age, a local job and local social insurance; some count "new graduate" (应届生) status for up to 2 years.\n3. Check the city\'s human resources bureau before accepting an offer; the hukou step later covers the move itself.',
+    },
+    {
+      id: 'student-insurance-ends',
+      title: 'Move from student medical insurance to employee or resident insurance',
+      offsetDays: 30,
+      durationDays: 30,
+      dependsOn: [],
+      documents: ['Medical insurance record'],
+      prepare: ['When the student insurance ends, often the end of the year you graduate', 'Employer\'s start date, if any'],
+      howTo:
+        '1. Student medical insurance through the university usually covers you until the end of its insurance year.\n2. A job brings employee medical insurance through the employer; without one, enrol in resident medical insurance (城乡居民医保) where your hukou or residence permit is, or pay as a flexible worker.\n3. Enrolling late can bring a waiting period before costs are covered; the waiting period is set locally.',
+    },
+    {
+      id: 'unemployment-register',
+      title: 'Register as unemployed if no job yet (失业登记)',
+      offsetDays: 30,
+      durationDays: 14,
+      conditions: ['Only if you have no job after graduating'],
+      dependsOn: [],
+      documents: ['Unemployment registration'],
+      prepare: ['Resident ID card', 'Graduation certificate'],
+      howTo:
+        '1. Graduates without a job can register as unemployed with the public employment service where their hukou or residence is, often online.\n2. It opens job referrals, training, internships (就业见习) and some subsidies; it is separate from unemployment insurance benefits.\n3. The registration is cancelled once you find work.',
     },
   ],
 };

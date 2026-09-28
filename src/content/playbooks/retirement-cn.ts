@@ -4,15 +4,16 @@ export const retirementCn: Playbook = {
   id: 'retirement-cn',
   title: 'Retirement · China',
   summary:
-    'Paperwork plan for the basic pension in mainland China from 50 to 65: the rising retirement age and contribution years, flexible retirement, the pension claim, yearly certification, the housing fund and medical insurance.',
+    'Paperwork plan for the basic pension in mainland China from 45 to 80: the rising retirement age and contribution years, flexible retirement, the pension claim, yearly certification, the housing fund, medical insurance and later-life services.',
   region: 'China',
   country: 'CN',
   family: 'retirement',
   anchorKind: 'born',
-  ages: { from: 50, to: 65 },
+  ages: { from: 45, to: 80 },
   conditions: [
     'You are insured in mainland China, in the employee basic pension (职工基本养老保险) or the urban and rural residents\' pension',
     'Retirement ages differ for men and women and by original job type; the dates here assume 60, so move them to your own',
+    'Women whose original retirement age was 50 now retire between about 50 and 55; their first checks come at 45',
   ],
   reviewedAt: '2026-09-27',
   version: 1,
@@ -42,7 +43,7 @@ export const retirementCn: Playbook = {
       url: 'https://www.gov.cn/zhengce/content/2014-02/26/content_8656.htm',
     },
     {
-      title: 'Housing Provident Fund Regulations (住房公积金管理条例), as amended in 2026 — gov.cn',
+      title: 'State Council decision amending the Housing Provident Fund Regulations (住房公积金管理条例, State Council Order No. 844, effective September 20, 2026; check current) — gov.cn',
       url: 'https://www.gov.cn/zhengce/zhengceku/202608/content_7078478.htm',
     },
     {
@@ -64,6 +65,18 @@ export const retirementCn: Playbook = {
     {
       title: 'Order of statutory succession (Civil Code, Article 1127) — Shenzhen Justice Bureau',
       url: 'https://sf.sz.gov.cn/ydmh/cjwt_152766/content/mpost_10569494.html',
+    },
+    {
+      title: 'Opinion on promoting the personal pension (国办发〔2022〕7号) — gov.cn',
+      url: 'https://www.gov.cn/zhengce/content/2022-04/21/content_5686402.htm',
+    },
+    {
+      title: 'Motor Vehicle Driving Licence Application and Use Provisions (MPS Order 162) — gov.cn',
+      url: 'https://www.gov.cn/gongbao/content/2022/content_5679696.htm',
+    },
+    {
+      title: 'National Health Commission',
+      url: 'https://www.nhc.gov.cn/',
     },
   ],
   steps: [
@@ -159,7 +172,7 @@ export const retirementCn: Playbook = {
       documents: ['Resident ID card', 'Retirement proof', 'Bank card'],
       prepare: ['Provident fund account number', 'Any outstanding provident fund loan'],
       howTo:
-        '1. Retirement is one of the grounds for withdrawing the whole housing provident fund (住房公积金) balance, and the account can be closed at the same time.\n2. The fund centre decides within 3 days of accepting the application (as amended from September 20, 2026).\n3. Apply online or at the local fund centre; ask how any outstanding provident fund loan is handled.\n4. The date is an estimate, once retirement is approved.',
+        '1. Retirement is one of the grounds for withdrawing the whole housing provident fund (住房公积金) balance, and the account can be closed at the same time.\n2. The fund centre decides within 3 days of accepting the application (as amended from September 20, 2026; check current).\n3. Apply online or at the local fund centre; ask how any outstanding provident fund loan is handled.\n4. The date is an estimate, once retirement is approved.',
     },
     {
       id: 'certify',
@@ -197,6 +210,133 @@ export const retirementCn: Playbook = {
       prepare: ['Who should inherit', 'Who should decide for you if you cannot', 'A notary office (公证处) near you'],
       howTo:
         '1. Without a will, the Civil Code gives the estate first to the spouse, children and parents (Article 1127).\n2. A will (遗嘱) can change that; the Civil Code allows handwritten, witnessed, printed, audio or video, and notarised wills.\n3. Voluntary guardianship (意定监护) lets an adult choose in writing, in advance, who will be their guardian if they lose capacity.\n4. For information only, not legal advice; age 60 here is only a prompt.',
+    },
+    {
+      id: 'record-45',
+      title: 'Check your social insurance record early (original retirement age 50)',
+      offsetDays: 16436,
+      durationDays: 14,
+      ages: { from: 45, to: 45 },
+      conditions: ['Only for women whose original retirement age was 50'],
+      dependsOn: [],
+      documents: ['Social insurance contribution record'],
+      prepare: ['Resident ID card', 'A list of employers and cities you paid in, with dates'],
+      howTo:
+        '1. Women whose original retirement age was 50 now retire between about 50 and 55, depending on birth month; the calculator on the national platform or 掌上12333 gives the exact month.\n2. Look up the contribution record now and compare it with your work history; gaps and records in other cities are easier to fix years ahead.\n3. The later steps in this plan assume 60; move them to your own dates.',
+    },
+    {
+      id: 'min-years-45',
+      title: 'Check the minimum contribution years for your retirement date',
+      offsetDays: 16466,
+      durationDays: 30,
+      ages: { from: 45, to: 45 },
+      conditions: ['Only for women whose original retirement age was 50'],
+      dependsOn: ['record-45'],
+      documents: ['Social insurance contribution record'],
+      prepare: ['Years paid so far', 'Your statutory retirement month from the calculator'],
+      howTo:
+        '1. A monthly basic pension needs 15 contribution years now; from January 1, 2030 the minimum rises by 6 months a year to 20.\n2. With retirement only a few years away, a shortfall may mean extending contributions or paying as the rules allow.\n3. Not financial advice; the local social insurance office can confirm your count.',
+    },
+    {
+      id: 'chronic-illness',
+      title: 'Apply for chronic and special disease outpatient cover (门诊慢特病认定)',
+      offsetDays: 21915,
+      durationDays: 30,
+      ages: { from: 60, to: 65 },
+      conditions: ['Only if you have a long-term condition such as high blood pressure, diabetes or another listed illness'],
+      dependsOn: [],
+      documents: ['Chronic disease approval'],
+      prepare: ['Medical records and diagnosis', 'Medical insurance card or e-voucher'],
+      howTo:
+        '1. Medical insurance pays more for outpatient care of listed chronic and special diseases (门诊慢特病) once the condition is approved.\n2. The list, the approving hospitals and the cover are set locally; many places approve online or at a named hospital.\n3. It can be applied for at any age; 60 here is only a prompt.',
+    },
+    {
+      id: 'senior-card',
+      title: 'Get the senior citizen card (老年人优待证)',
+      offsetDays: 21915,
+      durationDays: 30,
+      ages: { from: 60, to: 60 },
+      dependsOn: [],
+      documents: ['Senior citizen card (老年人优待证) or its electronic version'],
+      prepare: ['Resident ID card', 'Photo'],
+      howTo:
+        '1. From 60, many places issue a senior card for free or reduced fares, park and museum entry and other local benefits; in many cities the ID card alone works.\n2. Benefits and the age for each are set locally.\n3. Apply at the community or street office, or online.',
+    },
+    {
+      id: 'personal-pension-payout',
+      title: 'Draw the personal pension (个人养老金领取)',
+      offsetDays: 21946,
+      durationDays: 30,
+      ages: { from: 60, to: 63 },
+      conditions: ['Only if you have a personal pension account'],
+      dependsOn: ['apply'],
+      documents: ['Payout arrangement'],
+      prepare: ['Bank holding the personal pension account', 'Retirement approval'],
+      howTo:
+        '1. The personal pension (个人养老金) can be drawn once you reach the basic pension retirement age, as a lump sum, in instalments or monthly.\n2. Payouts are taxed at 3% and go to your social security card\'s bank account.\n3. Apply through the bank that holds the account.',
+    },
+    {
+      id: 'annuity-payout',
+      title: 'Draw the enterprise or occupational annuity (企业年金 / 职业年金领取)',
+      offsetDays: 21946,
+      durationDays: 30,
+      ages: { from: 60, to: 63 },
+      conditions: ['Only if you have an enterprise or occupational annuity'],
+      dependsOn: ['apply'],
+      documents: ['Annuity payout application'],
+      prepare: ['Retirement approval', 'Annuity account details from HR or the plan manager'],
+      howTo:
+        '1. An enterprise annuity (企业年金) or occupational annuity (职业年金) pays out after retirement, monthly, in instalments or as a lump sum as the plan allows.\n2. Payouts are taxed as income; the choice of method changes the tax.\n3. Ask HR or the plan manager how to apply.',
+    },
+    {
+      id: 'health-check-65',
+      title: 'Book the free yearly health check for people 65 and over',
+      offsetDays: 23741,
+      durationDays: 30,
+      ages: { from: 65, to: 80 },
+      dependsOn: [],
+      documents: ['Health check report'],
+      prepare: ['Resident ID card', 'The community health service centre (社区卫生服务中心) or village clinic'],
+      howTo:
+        '1. Under the national basic public health service (国家基本公共卫生服务), residents aged 65 and over get a free health check once a year, with lifestyle, blood and other basic tests.\n2. The community or township health centre books it and keeps a health record.\n3. It repeats every year.',
+    },
+    {
+      id: 'ltc-insurance',
+      title: 'Check long-term care insurance (长期护理保险)',
+      offsetDays: 23741,
+      durationDays: 14,
+      ages: { from: 65, to: 80 },
+      conditions: ['Only if you live in a city that runs long-term care insurance'],
+      dependsOn: [],
+      documents: [],
+      prepare: ['Your medical insurance city', 'The local long-term care insurance rules'],
+      howTo:
+        '1. Long-term care insurance (长期护理保险) pays for care for people who have lost the ability to look after themselves; it runs in pilot cities, usually linked to employee medical insurance.\n2. It usually needs an assessment of care needs; the benefits and who is covered are local.\n3. Ask the local medical insurance bureau whether your city has it.',
+    },
+    {
+      id: 'driving-70',
+      title: 'Driving from 70: yearly health report and the three-ability test (三力测试)',
+      offsetDays: 25567,
+      durationDays: 30,
+      ages: { from: 70, to: 80 },
+      conditions: ['Only if you drive'],
+      dependsOn: [],
+      documents: ['Health condition certificate (身体条件证明)'],
+      prepare: ['Driving licence', 'Health check at a qualified hospital', 'Account on 交管12123'],
+      howTo:
+        '1. From 70, drivers of small cars submit a health condition certificate every year, often online through 交管12123.\n2. Drivers of 70 and over also take a test of memory, judgement and reaction (记忆力、判断力、反应力, 三力测试); check current when it is due.\n3. The licence classes allowed from 70 are limited, mainly to small cars and motorcycles; check current.',
+    },
+    {
+      id: 'longevity-allowance',
+      title: 'Apply for the old-age allowance at 80 (高龄津贴)',
+      offsetDays: 29220,
+      durationDays: 30,
+      ages: { from: 80, to: 80 },
+      dependsOn: [],
+      documents: ['Allowance application'],
+      prepare: ['Resident ID card', 'Hukou book', 'Bank card'],
+      howTo:
+        '1. Most provinces pay an old-age allowance (高龄津贴) from 80, some from an earlier or later age; the amount rises with age and is set locally.\n2. Apply at the community or street office, or it is paid automatically in some places.\n3. Many provinces have extra benefits on the senior card at this age.',
     },
   ],
 };

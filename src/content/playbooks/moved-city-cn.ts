@@ -30,7 +30,7 @@ export const movedCityCn: Playbook = {
       url: 'https://www.nhsa.gov.cn/',
     },
     {
-      title: 'Housing Provident Fund Regulations (住房公积金管理条例), as amended in 2026 — gov.cn',
+      title: 'State Council decision amending the Housing Provident Fund Regulations (住房公积金管理条例, State Council Order No. 844, effective September 20, 2026; check current) — gov.cn',
       url: 'https://www.gov.cn/zhengce/zhengceku/202608/content_7078478.htm',
     },
     {
@@ -48,6 +48,10 @@ export const movedCityCn: Playbook = {
     {
       title: '市教委关于2026年上海市义务教育阶段学校招生入学工作的实施意见 (Shanghai enrollment 2026) — Shanghai Municipal Government (example)',
       url: 'https://www.shanghai.gov.cn/nw12344/20260326/6869dfccd29f4d88966a526eb4252b47.html',
+    },
+    {
+      title: 'Interim Measures for Individual Income Tax Special Additional Deductions (国发〔2018〕41号) — State Taxation Administration',
+      url: 'https://fgk.chinatax.gov.cn/zcfgk/c102440/c5209858/content.html',
     },
   ],
   steps: [
@@ -212,6 +216,89 @@ export const movedCityCn: Playbook = {
       howTo:
         '1. Most smaller cities have eased or removed limits on moving a hukou in; large cities use conditions such as years of social insurance or points (积分落户).\n2. Moving within the same city, a hukou can often follow a home the family owns.\n3. Many cities now handle the move-out and move-in in one place (跨省通办); ask the new police station.\n4. The ID card address follows the hukou, so a new ID card is applied for after the move.\n5. The timing here is an estimate.',
       conditions: ['Only if you want to move your hukou (户口) and meet the new city\'s conditions'],
+    },
+    {
+      id: 'insurance-continuity',
+      title: 'Keep social insurance contributions unbroken (避免社保断缴)',
+      offsetDays: 0,
+      durationDays: 7,
+      dependsOn: [],
+      documents: ['Social insurance contribution record'],
+      prepare: ['Last month paid in the old city', 'First month the new employer or you will pay'],
+      howTo:
+        '1. Many city rules count continuous months of local social insurance: home purchase eligibility, hukou points (积分落户) and school places for children without a local hukou.\n2. A gap between the old and new city can reset that count, and a medical insurance gap can bring a waiting period.\n3. Between jobs, some people pay as a flexible worker (灵活就业) to avoid a gap; check the local rule.\n4. The count is set city by city; check the new city\'s rule.',
+    },
+    {
+      id: 'school-transfer',
+      title: 'Transfer the children\'s school and student status (转学 / 学籍转接)',
+      offsetDays: 14,
+      durationDays: 14,
+      conditions: ['Only if you have school-age children who change school'],
+      dependsOn: [],
+      documents: ['Transfer approval', 'Student status record (学籍)'],
+      prepare: ['Place at the new school', 'Student ID number (学籍号)', 'Old school\'s consent'],
+      howTo:
+        '1. After the new school accepts the child, the transfer is made in the national student status system (全国中小学生学籍信息管理系统); the old school confirms it.\n2. Transfers are usually handled at the start of a term; ask both schools early.\n3. The school place itself follows the new city\'s enrolment rules; see the school step.',
+    },
+    {
+      id: 'rent-deduction',
+      title: 'Claim the housing rent deduction (住房租金专项附加扣除)',
+      offsetDays: 30,
+      durationDays: 7,
+      conditions: ['Only if you rent', 'Only if you or your spouse own no home in the city where you work and do not claim the mortgage interest deduction'],
+      dependsOn: ['lease'],
+      documents: ['Deduction declaration in the app'],
+      prepare: ['Rental contract', 'Landlord\'s name and ID or company details', 'The 个人所得税 app'],
+      howTo:
+        '1. Rent in the city of work can be deducted each month: 1,500 yuan in municipalities, provincial capitals and other listed cities; 1,100 yuan in other cities with a registered population over 1 million; 800 yuan elsewhere.\n2. A married couple working in the same city: only one of them claims it.\n3. It cannot be combined with the housing loan interest deduction.\n4. Declare it in the 个人所得税 app; it is confirmed again each December.',
+    },
+    {
+      id: 'family-insurance',
+      title: 'Arrange medical insurance for family members without a job',
+      offsetDays: 30,
+      durationDays: 14,
+      conditions: ['Only if parents or family members without a job move with you'],
+      dependsOn: [],
+      documents: ['Medical insurance enrolment or cross-region medical care filing'],
+      prepare: ['Their resident ID cards and hukou', 'Residence permit, if they have one', 'Where they are insured now'],
+      howTo:
+        '1. They can keep resident medical insurance (城乡居民医保) where their hukou is and file for cross-region medical care (异地就医备案) in the national medical insurance app, so costs in the new city are settled directly.\n2. Many cities also let people with a residence permit join the local resident insurance.\n3. Resident insurance is paid yearly, usually in a window near the year end; check the local dates.',
+    },
+    {
+      id: 'rent-withdrawal',
+      title: 'Withdraw the housing provident fund for rent (租房提取公积金)',
+      offsetDays: 45,
+      durationDays: 14,
+      conditions: ['Only if you rent', 'Only if you pay into a housing provident fund and own no home in the city'],
+      dependsOn: ['lease'],
+      documents: ['Withdrawal approval'],
+      prepare: ['Rental contract or lease filing', 'Provident fund account number', 'Bank card in your name'],
+      howTo:
+        '1. The regulations list paying rent as a ground for withdrawal; the amount and how often are set by each fund centre, often monthly or quarterly up to a cap.\n2. Many centres accept it online without a contract if you own no home in the city.\n3. Fund centres decide within 3 days of accepting the application under the regulations as amended from September 20, 2026 (check current).',
+    },
+    {
+      id: 'car-transfer',
+      title: 'Transfer the car\'s registration to the new city (转籍)',
+      offsetDays: 60,
+      durationDays: 30,
+      conditions: ['Only if you own a car registered in another city'],
+      dependsOn: ['driving'],
+      documents: ['New vehicle registration and plates'],
+      prepare: ['Vehicle registration certificate (机动车登记证书)', 'Residence permit or hukou in the new city', 'Vehicle inspection'],
+      howTo:
+        '1. A car registered elsewhere can be moved to the new city\'s plates (转籍 / 迁入) at the vehicle office; many cities handle it without going back to the old city.\n2. Big cities with plate quotas may limit or bar moving plates in, and restrict out-of-town plates on some roads or days.\n3. Emission standards for moving a car in are set locally; check before moving.',
+    },
+    {
+      id: 'permit-renewal',
+      title: 'Renew the residence permit each year (居住证签注)',
+      offsetDays: 555,
+      durationDays: 14,
+      conditions: ['Only if your hukou (户口) is not in the new city'],
+      dependsOn: ['residence-permit'],
+      documents: ['Endorsed residence permit'],
+      prepare: ['Residence permit', 'Proof you still live, work or study in the city'],
+      howTo:
+        '1. The residence permit is endorsed (签注) once a year to stay valid; many cities do it online or at self-service machines.\n2. A lapsed permit can break the count of years that school places or hukou points rely on.\n3. It repeats every year; the date here assumes the permit was issued at about 6 months.',
     },
   ],
 };

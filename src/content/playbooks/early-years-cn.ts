@@ -69,6 +69,14 @@ export const earlyYearsCn: Playbook = {
       title: '关于做好2026年上海市学前教育阶段适龄幼儿入园工作的通知 (Shanghai kindergarten admissions 2026) — Shanghai Municipal Government (example)',
       url: 'https://www.shanghai.gov.cn/nw12344/20260409/2f73c443fd6b409c9ecc48b6d9cf04cc.html',
     },
+    {
+      title: 'Interim Measures for Individual Income Tax Special Additional Deductions (国发〔2018〕41号) — State Taxation Administration',
+      url: 'https://fgk.chinatax.gov.cn/zcfgk/c102440/c5209858/content.html',
+    },
+    {
+      title: 'National Healthcare Security Administration',
+      url: 'https://www.nhsa.gov.cn/',
+    },
   ],
   steps: [
     {
@@ -258,6 +266,30 @@ export const earlyYearsCn: Playbook = {
       prepare: ['This term\'s fee notice from the kindergarten'],
       howTo:
         '1. From autumn term 2025, childcare and education fees (保育教育费) for the final year before primary school (学前一年, the 大班) are waived at public kindergartens.\n2. At private kindergartens approved by the education department, fees are cut by the same amount as at a similar local public kindergarten; the private kindergarten may still charge the difference.\n3. Meals, boarding and other charges (伙食费、住宿费、杂费) are not covered.\n4. The kindergarten and the education system handle it; there is no family application in the national rules.\n5. Tibet, Xinjiang and some other areas keep their own existing free-preschool policies.\n6. The due date here is a planning estimate at the start of the final year; check the fee notice then.',
+    },
+    {
+      id: 'resident-insurance',
+      title: 'Pay the yearly resident medical insurance (城乡居民医保)',
+      offsetDays: 730,
+      durationDays: 14,
+      conditions: ['Only if the child is in resident basic medical insurance'],
+      dependsOn: [],
+      documents: ['Payment record'],
+      prepare: ['The payment channel, often the 个人所得税 app, WeChat or Alipay'],
+      howTo:
+        '1. Resident medical insurance is paid once a year for the next calendar year, usually in a window from September to December; the local medical insurance bureau sets it.\n2. Missing the window can bring a waiting period before costs are covered.\n3. It repeats every year; move this date to the local window.',
+    },
+    {
+      id: 'deduction-switch',
+      title: 'Switch from the infant care to the children\'s education deduction (子女教育)',
+      offsetDays: 1095,
+      durationDays: 14,
+      conditions: ['Only if a parent claims the infant care deduction'],
+      dependsOn: [],
+      documents: ['Updated deduction declaration'],
+      prepare: ['The 个人所得税 app', 'Kindergarten or school details, if any'],
+      howTo:
+        '1. The infant care deduction ends the month before the third birthday; the children\'s education deduction (子女教育专项附加扣除) starts from the month the child turns 3.\n2. Both are 2,000 yuan a month per child (since January 2023), split 100% or 50/50 between parents.\n3. Update the declaration in the 个人所得税 app; it runs through preschool, school and university.',
     },
   ],
 };

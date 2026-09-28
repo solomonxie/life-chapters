@@ -49,6 +49,14 @@ export const pregnancyCn: Playbook = {
       title: 'Household Registration Regulations of the PRC (户口登记条例)',
       url: 'http://www.gd.gov.cn/zwgk/wjk/zcfgk/content/post_2531969.html',
     },
+    {
+      title: 'National Health Commission',
+      url: 'https://www.nhc.gov.cn/',
+    },
+    {
+      title: 'National Healthcare Security Administration',
+      url: 'https://www.nhsa.gov.cn/',
+    },
   ],
   steps: [
     {
@@ -226,6 +234,41 @@ export const pregnancyCn: Playbook = {
       conditions: ['Only if you are covered by maternity insurance'],
       howTo:
         '1. For insured employees the maternity allowance is paid from the maternity insurance fund at the employer\'s average monthly wage for the previous year; without insurance the employer pays the pre-leave wage.\n2. Birth costs at a designated hospital are often settled directly; otherwise claim them with the invoices, itemised bill and discharge record.\n3. Depending on the city, the employer or you apply, and some provinces include it in the birth "one thing" service.\n4. Timing is a planning estimate.',
+    },
+    {
+      id: 'flexible-maternity',
+      title: 'Check maternity cover as a flexible worker (灵活就业人员生育保险)',
+      offsetDays: -182,
+      durationDays: 14,
+      conditions: ['Only if you are self-employed or a flexible worker paying employee medical insurance yourself'],
+      dependsOn: [],
+      documents: ['Medical insurance contribution record'],
+      prepare: ['Your contribution record', 'The local medical insurance bureau\'s rule for flexible workers'],
+      howTo:
+        '1. Maternity insurance has mostly covered employees; a growing number of provinces let flexible workers who pay employee medical insurance join it or get birth medical costs covered.\n2. Whether an allowance is paid, and how long you have to have paid in, is local; check current rules with the local medical insurance bureau (医疗保障局).\n3. This date is a planning estimate.',
+    },
+    {
+      id: 'birth-registration',
+      title: 'Do the birth registration (生育登记)',
+      offsetDays: -180,
+      durationDays: 14,
+      dependsOn: ['registration'],
+      documents: ['Birth registration record'],
+      prepare: ['Both parents\' ID cards', 'Marriage certificate, if asked', 'The provincial government service app or platform'],
+      howTo:
+        '1. Birth registration (生育登记) is a free service record, done online in most provinces, for first, second and third children alike.\n2. Some provinces ask for it before paying the maternity allowance or other birth benefits; others do not.\n3. Ask the local health commission or community office what it is used for where you live.',
+    },
+    {
+      id: 'work-protections',
+      title: 'Note the workplace protections during pregnancy',
+      offsetDays: -150,
+      durationDays: 7,
+      conditions: ['Only if you are an employee'],
+      dependsOn: [],
+      documents: [],
+      prepare: ['Your labour contract', 'Dates of prenatal checks'],
+      howTo:
+        '1. Under the Special Provisions on Labour Protection for Female Employees, time for prenatal checks during work hours counts as working time.\n2. The employer cannot cut wages, dismiss or end the contract because of pregnancy, birth or breastfeeding.\n3. From 7 months pregnant, no overtime or night shifts, and rest time in the working day.\n4. Provinces may add more; this is information, not legal advice.',
     },
   ],
 };
