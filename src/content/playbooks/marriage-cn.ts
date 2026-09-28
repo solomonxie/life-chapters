@@ -72,7 +72,7 @@ export const marriageCn: Playbook = {
       url: 'https://fgk.chinatax.gov.cn/zcfgk/c102440/c5209858/content.html',
     },
     {
-      title: 'Housing Provident Fund Regulations (住房公积金管理条例), as amended in 2026 — gov.cn',
+      title: 'State Council decision amending the Housing Provident Fund Regulations (住房公积金管理条例, State Council Order No. 844, effective September 20, 2026; check current) — gov.cn',
       url: 'https://www.gov.cn/zhengce/zhengceku/202608/content_7078478.htm',
     },
   ],
@@ -207,7 +207,7 @@ export const marriageCn: Playbook = {
         'Ask the local housing provident fund centre (公积金中心) about spouse withdrawals and joint loans',
       ],
       howTo:
-        '1. The national regulations let a contributor withdraw the fund (住房公积金) to buy, build or repair a home, repay a home loan, pay rent and more, and apply for a provident fund loan.\n2. Whether a spouse can withdraw for a home in the other\'s name, and how both balances count toward a joint loan, is set by each city\'s fund centre.\n3. Centres decide on a withdrawal within 3 days and a loan within 10 days of accepting the application (as amended from September 20, 2026).\n4. Not financial advice; the date here is only a prompt.',
+        '1. The national regulations let a contributor withdraw the fund (住房公积金) to buy, build or repair a home, repay a home loan, pay rent and more, and apply for a provident fund loan.\n2. Whether a spouse can withdraw for a home in the other\'s name, and how both balances count toward a joint loan, is set by each city\'s fund centre.\n3. Centres decide on a withdrawal within 3 days and a loan within 10 days of accepting the application (as amended from September 20, 2026; check current).\n4. Not financial advice; the date here is only a prompt.',
     },
     {
       id: 'estate',
@@ -219,6 +219,18 @@ export const marriageCn: Playbook = {
       prepare: ['What each of you owns, and whether it is joint or separate property'],
       howTo:
         '1. Without a will, the Civil Code puts the spouse in the first order of heirs, together with children and parents (Article 1127).\n2. Property acquired during the marriage, such as wages and investment income, is generally joint property of the couple unless you agree otherwise.\n3. A will (遗嘱) can change who inherits; the Civil Code allows handwritten, witnessed, printed, audio or video, and notarised wills.\n4. For information only, not legal advice; see a lawyer or notary for your situation.',
+    },
+    {
+      id: 'property-agreement',
+      title: 'Consider a written property agreement (婚前 / 婚内财产约定)',
+      offsetDays: -30,
+      durationDays: 14,
+      conditions: ['Only if you want to set your own property arrangement'],
+      dependsOn: [],
+      documents: ['Written property agreement'],
+      prepare: ['List of each person\'s property and debts', 'A notary office (公证处), if you want it notarised'],
+      howTo:
+        '1. Under Article 1065 of the Civil Code, a couple can agree in writing that property is separate, joint or partly joint; without it, most property acquired during the marriage is joint.\n2. It can be signed before or during the marriage; notarising is optional but common.\n3. For information only, not legal advice.',
     },
   ],
 };

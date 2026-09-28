@@ -73,6 +73,10 @@ export const comingOfAgeCn: Playbook = {
       title: 'When to do the annual individual income tax reconciliation — Shanxi Tax Service, State Taxation Administration',
       url: 'http://shanxi.chinatax.gov.cn/web/detail/sx-11400-548-1805765',
     },
+    {
+      title: 'Exit and Entry Administration Law of the PRC — National Immigration Administration',
+      url: 'https://en.nia.gov.cn/n147418/n147458/c155978/content.html',
+    },
   ],
   steps: [
     {
@@ -223,9 +227,9 @@ export const comingOfAgeCn: Playbook = {
       documents: ['Social insurance record'],
       prepare: ['Resident ID card', 'Class I bank account', 'Employment contract'],
       ages: { from: 18, to: 22 },
-      conditions: ['Only once they start a job with an employer'],
+      conditions: ['Only once they start a job with an employer', 'Only if no Starting a job or After graduation plan is tracking this'],
       howTo:
-        '1. Under the Social Insurance Law, the employer applies for the employee\'s social insurance registration within 30 days of the start date.\n2. Self-employed people and flexible workers can register themselves.\n3. This date assumes a first job at about 21; move it to the real start date.',
+        '1. Under the Social Insurance Law, the employer applies for the employee\'s social insurance registration within 30 days of the start date.\n2. Self-employed people and flexible workers can register themselves.\n3. This date assumes a first job at about 21; move it to the real start date.\n4. The Starting a job · China and After graduation · China plans cover this in more detail; mark this one "Not for me" if one of those is on the board.',
     },
     {
       id: 'provident-fund',
@@ -236,9 +240,9 @@ export const comingOfAgeCn: Playbook = {
       documents: ['Housing provident fund account'],
       prepare: ['Resident ID card', 'Employment contract'],
       ages: { from: 18, to: 22 },
-      conditions: ['Only once they start a job with an employer'],
+      conditions: ['Only once they start a job with an employer', 'Only if no Starting a job or After graduation plan is tracking this'],
       howTo:
-        '1. Under the provident fund regulations, an employer registers a new employee with the housing provident fund centre within 30 days of hiring and opens or transfers their account.\n2. This date assumes a first job at about 21; move it to the real start date.',
+        '1. Under the provident fund regulations, an employer registers a new employee with the housing provident fund centre within 30 days of hiring and opens or transfers their account.\n2. This date assumes a first job at about 21; move it to the real start date.\n3. The Starting a job · China and After graduation · China plans cover this in more detail; mark this one "Not for me" if one of those is on the board.',
     },
     {
       id: 'tax-app',
@@ -249,9 +253,9 @@ export const comingOfAgeCn: Playbook = {
       documents: ['Individual income tax app account'],
       prepare: ['Resident ID card', 'Mobile number in their own name', 'Class I bank card for refunds'],
       ages: { from: 18, to: 22 },
-      conditions: ['Only once they have earned income, e.g. from a job'],
+      conditions: ['Only once they have earned income, e.g. from a job', 'Only if no Starting a job or After graduation plan is tracking this'],
       howTo:
-        '1. Employers withhold tax from pay; the app shows income and tax reported under their ID.\n2. This date assumes a first job at about 21; move it to the real start date.',
+        '1. Employers withhold tax from pay; the app shows income and tax reported under their ID.\n2. This date assumes a first job at about 21; move it to the real start date.\n3. The Starting a job · China and After graduation · China plans cover this in more detail; mark this one "Not for me" if one of those is on the board.',
     },
     {
       id: 'tax-reconciliation',
@@ -262,9 +266,22 @@ export const comingOfAgeCn: Playbook = {
       documents: ['Reconciliation result'],
       prepare: ['Special additional deductions (专项附加扣除), if any', 'Class I bank card'],
       ages: { from: 21, to: 22 },
-      conditions: ['Only once they have earned income, e.g. from a job'],
+      conditions: ['Only once they have earned income, e.g. from a job', 'Only if no Starting a job or After graduation plan is tracking this'],
       howTo:
-        '1. The reconciliation for a tax year runs from March 1 to June 30 of the following year, in the app.\n2. It settles a refund or extra tax; the tax authority sets who is required to file.\n3. Early in the window, the app may ask for a booking.\n4. This date assumes income the year they turn 21; move it to June 30 of the year after.',
+        '1. The reconciliation for a tax year runs from March 1 to June 30 of the following year, in the app.\n2. It settles a refund or extra tax; the tax authority sets who is required to file.\n3. Early in the window, the app may ask for a booking.\n4. This date assumes income the year they turn 21; move it to June 30 of the year after.\n5. The Starting a job · China and After graduation · China plans cover this in more detail; mark this one "Not for me" if one of those is on the board.',
+    },
+    {
+      id: 'passport',
+      title: 'Apply for a first passport and Mainland travel permit for Hong Kong and Macao (护照 / 港澳通行证)',
+      offsetDays: 6604,
+      durationDays: 30,
+      ages: { from: 18, to: 22 },
+      conditions: ['Only if they plan to travel abroad, or to Hong Kong or Macao'],
+      dependsOn: ['majority'],
+      documents: ['Passport (普通护照)', 'Mainland travel permit for Hong Kong and Macao (往来港澳通行证)'],
+      prepare: ['Resident ID card', 'Photo to the exit-entry photo standard, or taken on site'],
+      howTo:
+        '1. Passports and Hong Kong and Macao permits are issued by exit-entry offices (出入境管理) of public security; many cities accept applications from people whose hukou is elsewhere.\n2. An adult passport is valid for 10 years; the Hong Kong and Macao permit also needs an endorsement (签注) for each kind of trip.\n3. Under 16 a guardian applies, and the passport is valid for 5 years.\n4. Processing time is set locally; age 18 here is only a prompt.',
     },
   ],
 };

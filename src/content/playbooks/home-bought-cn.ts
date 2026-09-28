@@ -23,7 +23,7 @@ export const homeBoughtCn: Playbook = {
       url: 'https://www.gov.cn/zhengce/content/2014-12/22/content_9325.htm',
     },
     {
-      title: 'Housing Provident Fund Regulations (住房公积金管理条例), as amended in 2026 — gov.cn',
+      title: 'State Council decision amending the Housing Provident Fund Regulations (住房公积金管理条例, State Council Order No. 844, effective September 20, 2026; check current) — gov.cn',
       url: 'https://www.gov.cn/zhengce/zhengceku/202608/content_7078478.htm',
     },
     {
@@ -134,7 +134,7 @@ export const homeBoughtCn: Playbook = {
         'The online-signed purchase contract and down payment receipt',
       ],
       howTo:
-        '1. The bank, or the fund centre for a provident fund loan, reviews the application and signs the loan and mortgage contracts.\n2. Fund centres decide on a loan within 10 days of accepting the application under the 2026 amended regulations; banks set their own times.\n3. The loan is released after the mortgage is registered or a pre-registration (预告登记) is made.\n4. The 30 days is an estimate.',
+        '1. The bank, or the fund centre for a provident fund loan, reviews the application and signs the loan and mortgage contracts.\n2. Fund centres decide on a loan within 10 days of accepting the application under the regulations as amended from September 20, 2026 (check current); banks set their own times.\n3. The loan is released after the mortgage is registered or a pre-registration (预告登记) is made.\n4. The 30 days is an estimate.',
     },
     {
       id: 'deed-tax',
@@ -209,7 +209,7 @@ export const homeBoughtCn: Playbook = {
       documents: ['Withdrawal approval'],
       prepare: ['Purchase contract, invoice or title certificate', 'Marriage certificate, for a spouse\'s withdrawal', 'Bank card in your name'],
       howTo:
-        '1. The provident fund (住房公积金) can be withdrawn to buy or build a home, or to repay the loan on it.\n2. Fund centres decide on a withdrawal within 3 days of accepting the application under the 2026 amended regulations.\n3. Whether a spouse or parents can withdraw for the same home, and time limits after the purchase, are set by the local centre.\n4. Many centres offer the withdrawal in an app or online.',
+        '1. The provident fund (住房公积金) can be withdrawn to buy or build a home, or to repay the loan on it.\n2. Fund centres decide on a withdrawal within 3 days of accepting the application under the regulations as amended from September 20, 2026 (check current).\n3. Whether a spouse or parents can withdraw for the same home, and time limits after the purchase, are set by the local centre.\n4. Many centres offer the withdrawal in an app or online.',
     },
     {
       id: 'tax-deduction',
@@ -234,6 +234,113 @@ export const homeBoughtCn: Playbook = {
       prepare: ['Ask the local police station (派出所) about moving hukou by home purchase (购房落户)'],
       howTo:
         '1. Owning a home does not move your hukou; moving it is optional.\n2. Many cities now let owners move hukou by home purchase; some set limits on area, time lived there or social insurance.\n3. Apply at the police station for the new address, or online where offered; the 30 days is an estimate.\n4. Hukou can matter for school places; check the local school district rules.',
+    },
+    {
+      id: 'hpf-repay',
+      title: 'Set up monthly loan repayment from the provident fund (公积金按月还贷 / 冲还贷)',
+      offsetDays: 45,
+      durationDays: 14,
+      conditions: ['Only if you borrowed and pay into a housing provident fund'],
+      dependsOn: ['loan'],
+      documents: ['Repayment withdrawal agreement'],
+      prepare: ['Loan contract and repayment account', 'Provident fund account number', 'Bank card in your name'],
+      howTo:
+        '1. Many fund centres let the balance repay the home loan automatically each month (按月提取还贷), or offset a provident fund loan directly (冲还贷).\n2. It works for provident fund loans and, in many cities, commercial loans too; a spouse\'s account can often be added.\n3. It is set up in the fund centre app, at the centre or at the lending bank; rules are local.\n4. The date is only a prompt; it can be set up any time during the loan.',
+    },
+    {
+      id: 'local-subsidy',
+      title: 'Check for a local home purchase or deed tax subsidy (购房补贴 / 契税补贴)',
+      offsetDays: 30,
+      durationDays: 14,
+      dependsOn: ['deed-tax'],
+      documents: ['Subsidy application, if one applies'],
+      prepare: ['Deed tax receipt and invoice', 'Purchase contract', 'Talent, family or hukou proof, if the subsidy asks for it'],
+      howTo:
+        '1. Many cities and districts pay a purchase subsidy (购房补贴) or refund part of the deed tax (契税补贴), often for first homes, families with several children, graduates or talent programmes.\n2. Each has its own window, usually counted from the deed tax payment or registration date.\n3. Check the city housing bureau or district government notices; schemes start and end often.',
+    },
+    {
+      id: 'swap-refund',
+      title: 'Claim the income tax refund for replacing a home (换购住房个税退税)',
+      offsetDays: 60,
+      durationDays: 30,
+      conditions: ['Only if you sold your own home within a year before this purchase, in the same city, and paid income tax on the sale'],
+      dependsOn: ['deed-tax'],
+      documents: ['Refund application', 'Sale and purchase contracts', 'Tax payment certificate for the sale'],
+      prepare: ['Both contracts and deed tax receipt', 'Bank card for the refund'],
+      howTo:
+        '1. A national policy lets a person who sells their home and buys another in the same city within a year have the income tax paid on the sale refunded, in full or in proportion to the new price.\n2. The policy has a set end date and has been extended before; check current whether it covers your sale and purchase dates.\n3. Apply at the tax office or in the 个人所得税 app.',
+    },
+    {
+      id: 'school-place',
+      title: 'Check the school place rules tied to the home (学位 / 学区)',
+      offsetDays: 30,
+      durationDays: 14,
+      conditions: ['Only if you have or plan children who may use the home for a school place'],
+      dependsOn: ['registration'],
+      documents: ['Real estate title certificate'],
+      prepare: ['The catchment (划片) the home falls in', 'Whether the home\'s school place has been used, and when'],
+      howTo:
+        '1. Many cities tie a public school place to the home and hukou, and limit how often one home can be used, e.g. one place per home per 6 years in some districts (学位占用).\n2. For a resale home, a place already used by the seller\'s child can block a new one for years; ask the school or education bureau.\n3. Catchments are redrawn; check the current year\'s rules.',
+    },
+    {
+      id: 'renovation',
+      title: 'File the renovation plan with property management (装修备案)',
+      offsetDays: 10,
+      durationDays: 3,
+      conditions: ['Only if you plan to renovate'],
+      dependsOn: ['handover'],
+      documents: ['Renovation filing (装修备案) and agreement'],
+      prepare: ['Renovation plan and contractor details', 'Contractor\'s licence, if asked', 'Any renovation deposit'],
+      howTo:
+        '1. Before renovating, the owner files the plan with the property management company and signs its renovation rules; some ask for a deposit.\n2. Load-bearing walls and shared parts cannot be changed; structural or gas work may need approval.\n3. Work hours and waste removal follow the management rules.',
+    },
+    {
+      id: 'heating',
+      title: 'Pay the heating fee (供暖费) before the heating season',
+      offsetDays: 60,
+      durationDays: 14,
+      conditions: ['Only if the home has central heating, mostly in northern cities'],
+      dependsOn: ['handover'],
+      documents: ['Heating fee receipt'],
+      prepare: ['Heating account number', 'Floor area'],
+      howTo:
+        '1. In northern cities with central heating, the heating season usually starts around November 15; the fee is paid before it, by floor area.\n2. It is paid to the heating company, often online; new owners may need to open or transfer the account.\n3. It repeats every year; move this date to the local deadline.',
+    },
+    {
+      id: 'property-tax',
+      title: 'Check the property tax pilot (房产税试点)',
+      offsetDays: 90,
+      durationDays: 14,
+      conditions: ['Only if the home is in Shanghai or Chongqing'],
+      dependsOn: ['registration'],
+      documents: [],
+      prepare: ['Real estate title certificate', 'Hukou and number of homes the family owns'],
+      howTo:
+        '1. Shanghai and Chongqing run pilot property taxes on some personal homes; the rest of the mainland has none on personal homes for now.\n2. Who pays depends on local rules such as hukou, the number of homes and price; check the local tax bureau.\n3. It repeats yearly if it applies.',
+    },
+    {
+      id: 'add-name',
+      title: 'Add a spouse to the title after marriage (不动产加名)',
+      offsetDays: 180,
+      durationDays: 14,
+      conditions: ['Only if you marry after buying and both want to be on the title'],
+      dependsOn: ['registration'],
+      documents: ['Updated real estate title certificate'],
+      prepare: ['Marriage certificate', 'Both resident ID cards', 'Current title certificate', 'Bank consent, if the home is mortgaged'],
+      howTo:
+        '1. Spouses can be added to the title through a change registration at the real estate registration centre.\n2. Changes of ownership between spouses during a marriage are exempt from deed tax.\n3. A mortgaged home usually needs the bank\'s consent; the date is only a prompt.',
+    },
+    {
+      id: 'mortgage-release',
+      title: 'Get the loan settlement certificate and cancel the mortgage (结清证明 / 抵押注销登记)',
+      offsetDays: 10950,
+      durationDays: 30,
+      conditions: ['Only if you borrowed to buy'],
+      dependsOn: ['loan'],
+      documents: ['Loan settlement certificate (贷款结清证明)', 'Mortgage cancellation record'],
+      prepare: ['Real estate title certificate', 'Resident ID card', 'Mortgage certificate held by the bank'],
+      howTo:
+        '1. After the final or an early full repayment, the bank issues a settlement certificate.\n2. The mortgage is then cancelled at the real estate registration centre (抵押注销登记); many banks and cities do it online together.\n3. Until it is cancelled, selling or re-mortgaging is harder.\n4. This date assumes a 30-year loan; move it to the real payoff date.',
     },
   ],
 };
