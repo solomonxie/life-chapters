@@ -16,6 +16,50 @@ export interface StemNode {
   noted?: boolean;
   /** Town it happened in, shown dim after the label. */
   where?: string;
+  /** The other person in it, whose name opens their board. */
+  person?: { id: string; name: string; role?: string };
+}
+
+/** The label with the other person's name as a link: "Ava born", "Born · parent Sam". */
+function Label({
+  node,
+  color,
+  link,
+  onPressPerson,
+}: {
+  node: StemNode;
+  color: string;
+  link: string;
+  onPressPerson?: (personId: string) => void;
+}) {
+  const who = node.person;
+  if (!who || !onPressPerson) return <>{node.label}</>;
+  const name = (
+    <Text
+      style={{ color: link }}
+      onPress={() => onPressPerson(who.id)}
+      accessibilityRole="link"
+      accessibilityLabel={`Open ${who.name}'s board`}>
+      {who.name}
+    </Text>
+  );
+  const at = node.label.indexOf(who.name);
+  if (at < 0) {
+    return (
+      <Text style={{ color }}>
+        {node.label}
+        <Text style={{ color: link }}> · {who.role ? `${who.role} ` : ''}</Text>
+        {name}
+      </Text>
+    );
+  }
+  return (
+    <Text style={{ color }}>
+      {node.label.slice(0, at)}
+      {name}
+      {node.label.slice(at + who.name.length)}
+    </Text>
+  );
 }
 
 const YEAR_W = 44;
@@ -36,6 +80,7 @@ export function TimelineStem({
   onPressNode,
   onPressBadge,
   onPressLate,
+  onPressPerson,
 }: {
   nodes: StemNode[];
   now: CivilDate;
@@ -43,6 +88,7 @@ export function TimelineStem({
   onPressNode?: (node: StemNode) => void;
   onPressBadge?: (node: StemNode) => void;
   onPressLate?: () => void;
+  onPressPerson?: (personId: string) => void;
 }) {
   const p = usePalette();
   const firstFuture = nodes.findIndex(n => n.date > now);
@@ -104,7 +150,7 @@ export function TimelineStem({
               <Text
                 numberOfLines={1}
                 style={[type.label, styles.flex, { color: past ? p.dim : p.text }]}>
-                {node.label}
+                <Label node={node} color={past ? p.dim : p.text} link={p.accent} onPressPerson={onPressPerson} />
                 {node.where ? <Text style={{ color: p.faint }}> · {node.where}</Text> : null}
               </Text>
               {node.noted ? (

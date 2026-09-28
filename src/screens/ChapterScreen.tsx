@@ -5,7 +5,7 @@ import { diffDays } from '../domain/dates';
 import { formatPrecise } from '../domain/format';
 import { lifeChapters, openSteps, chapterSteps, timelineNodes } from '../domain/plan';
 import type { Routes } from '../navigation/routes';
-import { useStore } from '../state/store';
+import { actions, useStore } from '../state/store';
 import { Button, Card, ListRow, Rows, SectionHeader, StepRow, space, type, usePalette } from '../ui';
 import { ChapterBar } from './TimelineScreen';
 import { plansFor } from '../domain/regions';
@@ -29,6 +29,7 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
   const node = nodes.find(n => n.id === eventId);
   const chapter = lifeChapters(nodes, now).find(x => x.eventId === eventId);
   const anchor = plan.anchors.find(a => a.id === eventId);
+  const other = useStore(s => s.plan.people.find(x => x.id === anchor?.withPersonId));
   const nextNode = node ? nodes.find(n => n.date > node.date && !n.moment) : undefined;
 
   useLayoutEffect(() => {
@@ -69,6 +70,19 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
           {anchor?.location ? ` · ${anchor.location}` : ''}
         </Text>
       </Card>
+      {other ? (
+        <Card style={styles.other}>
+          <ListRow
+            label={`${other.name}'s life`}
+            detail="Their board: their events and plans"
+            tone="accent"
+            onPress={() => {
+              actions.switchPerson(other.id);
+              navigation.popToTop();
+            }}
+          />
+        </Card>
+      ) : null}
 
       {unlocks.length ? (
         <>
@@ -175,5 +189,6 @@ const styles = StyleSheet.create({
   empty: { paddingHorizontal: space.lg },
   edit: { padding: space.lg, paddingTop: space.xl },
   note: { padding: space.lg },
+  other: { marginTop: space.sm },
   write: { alignSelf: 'flex-start', marginLeft: space.lg, marginTop: space.sm },
 });

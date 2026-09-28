@@ -2,9 +2,8 @@ import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { diffDays } from '../domain/dates';
 import { formatMonth } from '../domain/format';
-import { ME } from '../domain/people';
+import { ME, menuPeople } from '../domain/people';
 import { placeShort } from '../domain/places';
-import { whereName } from '../domain/regions';
 import { ageOn, lateSteps, lifeChapters, openSteps, timelineNodes } from '../domain/plan';
 import { useNav } from '../navigation/routes';
 import { actions, useStore } from '../state/store';
@@ -19,6 +18,7 @@ export function TimelineScreen() {
   const plan = useStore(s => s.mine);
   const view = useStore(s => s.mine.view);
   const people = useStore(s => s.plan.people);
+  const allAnchors = useStore(s => s.plan.anchors);
   const now = useStore(s => s.now);
   const [menu, setMenu] = useState(false);
   const scroll = useRef<React.ComponentRef<typeof ScrollView>>(null);
@@ -53,9 +53,15 @@ export function TimelineScreen() {
     () =>
       timelineNodes(plan.anchors, plan.tracks, view.steps, now).map(n => {
         const a = plan.anchors.find(x => x.id === n.anchorId);
-        return { ...n, noted: !!a?.note, where: a?.location ? placeShort(a.location) : undefined };
+        const other = a?.withPersonId ? people.find(x => x.id === a.withPersonId) : undefined;
+        return {
+          ...n,
+          noted: !!a?.note,
+          where: a?.location ? placeShort(a.location) : undefined,
+          person: other && { id: other.id, name: other.name, role: a?.kind === 'born' ? 'parent' : undefined },
+        };
       }),
-    [plan.anchors, plan.tracks, view.steps, now],
+    [plan.anchors, plan.tracks, view.steps, now, people],
   );
   const chapter = useMemo(() => lifeChapters(nodes, now).find(x => x.isCurrent), [nodes, now]);
   const age = ageOn(plan.anchors, now);
@@ -85,7 +91,7 @@ export function TimelineScreen() {
       {menu ? (
         <Card style={styles.menu}>
           <Rows>
-            {people.map(x => (
+            {menuPeople(people, allAnchors, person.id).map(x => (
               <ListRow
                 key={x.id}
                 label={`${x.id === person.id ? '✓ ' : '   '}${x.name}`}
@@ -99,12 +105,6 @@ export function TimelineScreen() {
               label={`Link a person to ${person.name}`}
               detail="A child, partner or parent, joined by the event that ties you"
               onPress={() => go(() => nav.navigate('Person', { mode: 'link' }))}
-            />
-            <ListRow
-              label="Lives in"
-              value={whereName(plan.where) ?? 'not set'}
-              detail={person.country ? undefined : plan.where.country ? 'from the latest place' : 'Picks the plans for where they live'}
-              onPress={() => go(() => nav.navigate('Person', { mode: 'province', personId: person.id }))}
             />
             <ListRow
               label={`Rename ${person.name}`}
@@ -163,6 +163,10 @@ export function TimelineScreen() {
                   : nav.navigate('Chapter', { eventId: n.id })
               }
               onPressBadge={n => nav.navigate('Chapter', { eventId: n.id })}
+              onPressPerson={id => {
+                actions.switchPerson(id);
+                scroll.current?.scrollTo({ y: 0, animated: false });
+              }}
             />
           </View>
 

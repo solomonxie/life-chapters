@@ -31,6 +31,14 @@ export function countsFrom(
   return undefined;
 }
 
+/**
+ * Who the person menu lists: Me, whoever is on screen, and anyone with an
+ * event of their own. Someone who only exists through a linked event (a
+ * partner from a wedding) is reached by tapping their name instead.
+ */
+export const menuPeople = (people: Person[], anchors: Anchor[], showing: string) =>
+  people.filter(p => p.id === ME || p.id === showing || anchors.some(a => ownerOf(a) === p.id && !a.linkId));
+
 export function trackOwner(track: Track, anchors: Anchor[]): string {
   if (track.personId) return track.personId;
   const anchor = anchors.find(a => a.id === track.anchorId);
