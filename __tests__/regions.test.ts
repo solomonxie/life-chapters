@@ -85,6 +85,19 @@ describe('which plans fit', () => {
   });
 });
 
+describe('plans about leaving', () => {
+  const exit = { id: 'exit', country: 'CN', leaving: true, anchorKind: 'migrated' } as Playbook;
+  const arrive = { id: 'arrive', country: 'CA', province: 'BC', anchorKind: 'migrated' } as Playbook;
+  const born = at('1988-08-06', 'Nanchang, Jiangxi, China', 'born');
+
+  it('match where they lived before, and only when the event takes them elsewhere', () => {
+    const toBC = at('2023-01-02', 'Vancouver, British Columbia, Canada', 'migrated');
+    expect(plansFor(toBC, BC, [exit, arrive], [born, toBC]).map(p => p.id)).toEqual(['exit', 'arrive']);
+    const withinChina = at('2010-01-02', 'Shanghai, China', 'migrated');
+    expect(plansFor(withinChina, {}, [exit, arrive], [born, withinChina]).map(p => p.id)).toEqual([]);
+  });
+});
+
 describe('where, in the store', () => {
   beforeAll(async () => {
     await actions.load(createMemoryRepository());

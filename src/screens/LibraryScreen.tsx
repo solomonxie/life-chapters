@@ -5,7 +5,7 @@ import { formatAges } from '../domain/format';
 import { kindLabel } from '../domain/kinds';
 import { ME } from '../domain/people';
 import { ageOn, anchorDisplay } from '../domain/plan';
-import { COUNTRIES, decidedBy, fits, provinceName, whereAt, whereName } from '../domain/regions';
+import { COUNTRIES, decidedBy, fits, provinceName, whereFor, whereName } from '../domain/regions';
 import type { Playbook } from '../domain/types';
 import type { Routes } from '../navigation/routes';
 import { useStore } from '../state/store';
@@ -60,7 +60,7 @@ export function LibraryScreen({ navigation }: NativeStackScreenProps<Routes, 'Li
   const suggested = matches.filter(
     pb =>
       notOutgrown(pb) &&
-      plan.anchors.some(a => a.kind === pb.anchorKind && fits(pb, whereAt(a, where))),
+      plan.anchors.some(a => a.kind === pb.anchorKind && fits(pb, whereFor(pb, a, where, plan.anchors))),
   );
   const groups = byPlace(matches, where).map(g => ({
     ...g,

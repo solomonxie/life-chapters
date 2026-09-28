@@ -61,21 +61,33 @@ Grouped as in the `What` picker. `○` = a moment: on the line, cuts no chapter.
 
 | Group | Kind | Opens |
 |---|---|---|
-| Life | Born | every life stage, counted from it |
+| Life | Born | every life stage, counted from it; adult paperwork (BC, Ontario, China) |
 | School | Starts primary school | School years (counted from their Born) |
 | School | Graduated | After graduation (Canada, China) |
 | Work | First job · New job | Starting a job (Canada, China) |
-| Work | Retire | Retirement (counted from their Born) |
-| Moving | Relocated to a country | Relocating · work or study (BC, Ontario) · Relocating to China |
-| Moving | Permit or visa granted | — |
+| Work | Job ended | Job ended (BC, Ontario, China) |
+| Work | Started a business | Self-employed or starting a business (BC, Ontario, China) |
+| Work | Retire | Leaving work (Canada); Retirement (counted from their Born) |
+| Moving | Relocated to a country | Relocating (BC, Ontario) · Relocating to China; leaving: Leaving Canada · Leaving China |
+| Moving | Permit or visa granted | On a work or study permit (Canada) |
 | Moving | Moved city | Moving home (BC, Ontario, China) |
 | Moving | Apply for permanent residence | Express Entry · Provincial nomination (BC, Ontario) |
-| Moving | Became a permanent resident | Citizenship |
-| Moving | ○ Trip abroad | Travelling to China |
-| Family | Married · Baby due | Getting married · Expecting a baby |
+| Moving | Became a permanent resident | Life as a permanent resident · Citizenship |
+| Moving | ○ Trip abroad | Travelling to China; leaving: Travelling abroad from Canada · from China |
+| Family | Married · Moved in together | Getting married · Moving in together (BC, Ontario) |
+| Family | Baby due | Expecting a baby |
 | Family | Child born | Newborn · Early years, on the child's board, counted from her Born |
-| Family | Bought a home | Buying a home (BC, Ontario, China) |
+| Family | Bought a home · ○ Sold a home | Buying a home · Selling a home (BC, Ontario, China) |
+| Family | ○ Bought a car | Buying a car (BC, Ontario, China) |
+| Family | Separated or divorced | Separation and divorce (BC, Ontario, China) |
+| Family | Caring for a family member | Caring for a family member (BC, Ontario) |
+| Family | ○ Parent turns 60 | A parent turns 60 (China) |
+| Family | ○ Death in the family | Death in the family (BC, Ontario, China) |
 | Family | ○ Visitors arrive | Visitors to Canada |
+
+"leaving" plans (`leaving: true`) match where the person lived *before* the
+event and show only when it takes them to another country: moving from China
+to BC opens Leaving China and Relocating · BC.
 
 `PLANS THIS UNLOCKS` lists them as the event is filled in. A plan counted from
 Born reads `counts from Born` and only shows once that Born exists; a child's

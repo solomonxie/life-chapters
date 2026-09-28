@@ -24,6 +24,8 @@ export const ANCHOR_KINDS: AnchorKind[] = [
   { id: 'graduated', label: 'Graduated', group: 'School', chapter: 'Early career' },
   { id: 'school-start', label: 'Starts primary school', group: 'School', chapter: 'School years', withDetail: '{} starts primary school', alsoOpens: { kind: 'born', families: ['school-years'], from: 'born' } },
   { id: 'first-job', label: 'First job', group: 'Work', chapter: 'Working' },
+  { id: 'job-lost', label: 'Job ended', group: 'Work', chapter: 'Between jobs' },
+  { id: 'business-started', label: 'Started a business', group: 'Work', chapter: 'Self-employed' },
   { id: 'new-job', label: 'New job', group: 'Work', chapter: 'New role', alsoOpens: { kind: 'first-job', from: 'self' } },
   { id: 'retire', label: 'Retire', group: 'Work', chapter: 'Retirement', alsoOpens: { kind: 'born', families: ['retirement'], from: 'born' } },
   // Ids stay as first shipped; saved dates keep working. Labels are what people see.
@@ -36,6 +38,13 @@ export const ANCHOR_KINDS: AnchorKind[] = [
   { id: 'baby-due', label: 'Baby due', group: 'Family', chapter: 'Expecting' },
   { id: 'child-born', label: 'Child born', group: 'Family', chapter: 'Young family', withDetail: '{} born', alsoOpens: { kind: 'born', families: ['newborn', 'early-years'], from: 'child' } },
   { id: 'home-bought', label: 'Bought a home', group: 'Family', chapter: 'Homeowner' },
+  { id: 'home-sold', label: 'Sold a home', group: 'Family', chapter: 'Sold a home', moment: true },
+  { id: 'car-bought', label: 'Bought a car', group: 'Family', chapter: 'New car', moment: true },
+  { id: 'cohabiting', label: 'Moved in together', group: 'Family', chapter: 'Living together', withDetail: 'Moved in with {}' },
+  { id: 'separated', label: 'Separated or divorced', group: 'Family', chapter: 'On my own' },
+  { id: 'caregiving', label: 'Caring for a family member', group: 'Family', chapter: 'Caregiving', withDetail: 'Caring for {}' },
+  { id: 'parent-60', label: 'Parent turns 60', group: 'Family', chapter: 'Parent turns 60', withDetail: '{} turns 60', moment: true },
+  { id: 'family-death', label: 'Death in the family', group: 'Family', chapter: 'Loss', withDetail: '{} died', moment: true },
   { id: 'visit', label: 'Visitors arrive', group: 'Family', chapter: 'Visit', withDetail: '{} arrive', moment: true },
   { id: 'trip', label: 'Trip abroad', group: 'Moving', chapter: 'Trip', withDetail: 'Trip to {}', moment: true },
 ];

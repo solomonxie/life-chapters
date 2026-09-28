@@ -122,6 +122,30 @@ export function decidedBy(
   return residenceOf(anchors, now) ?? (anchor?.location ? (anchor as Anchor) : undefined);
 }
 
-/** Plans a date opens: the ones whose country and province fit where it counts. */
-export const plansFor = (anchor: Pick<Anchor, 'kind' | 'location'>, lives: Where, playbooks: Playbook[]) =>
-  playbooks.filter(pb => opens(anchor.kind, pb) && fits(pb, whereAt(anchor, lives)));
+/** Where they lived just before an event: what a plan about leaving is matched against. */
+export const livedBefore = (anchor: Pick<Anchor, 'date'> & { id?: string }, anchors: Anchor[]): Where =>
+  livesIn(anchors.filter(a => a.id !== anchor.id && a.date < anchor.date), anchor.date);
+
+/** Whose rules a plan on this date follows: where it counts, or for a plan about leaving, where they left. */
+export const whereFor = (pb: Playbook, anchor: Anchor | undefined, lives: Where, anchors: Anchor[]): Where =>
+  pb.leaving && anchor ? livedBefore(anchor, anchors) : whereAt(anchor, lives);
+
+/**
+ * Plans a date opens: the ones whose country and province fit where it
+ * counts, or, for a plan about leaving (emigrating, a trip out), where they
+ * lived before it — and then only when the event takes them somewhere else.
+ */
+export function plansFor(
+  anchor: Pick<Anchor, 'kind' | 'location'> & Partial<Pick<Anchor, 'id' | 'date'>>,
+  lives: Where,
+  playbooks: Playbook[],
+  anchors: Anchor[] = [],
+): Playbook[] {
+  const here = whereAt(anchor, lives);
+  const before = anchor.date ? livedBefore(anchor as Anchor, anchors) : lives;
+  return playbooks.filter(pb => {
+    if (!opens(anchor.kind, pb)) return false;
+    if (!pb.leaving) return fits(pb, here);
+    return !!before.country && fits(pb, before) && here.country !== before.country;
+  });
+}

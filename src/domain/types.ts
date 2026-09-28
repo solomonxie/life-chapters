@@ -89,6 +89,8 @@ export interface Playbook {
   province?: string;
   /** Same life stage across provinces ("school-years"), so a plan can swap for its twin. */
   family?: string;
+  /** About leaving a place: its country and province are matched against where they lived before the event. */
+  leaving?: boolean;
   anchorKind: string;
   ages?: AgeRange;
   /** Who this is for, in plain language. */

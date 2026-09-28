@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { formatDate, formatMonth, formatRelative, formatShort } from '../domain/format';
 import { documentViews, groupDocuments, type PlannedStep } from '../domain/plan';
-import { fits, rulesName, whereAt, whereWhy } from '../domain/regions';
+import { fits, rulesName, whereFor, whereWhy } from '../domain/regions';
 import { isOpen } from '../domain/radar';
 import type { Nav } from '../navigation/routes';
 import { useStore } from '../state/store';
@@ -35,6 +35,7 @@ export function RunningPlans({ navigation }: { navigation: Nav }) {
   const p = usePalette();
   const now = useStore(s => s.now);
   const where = useStore(s => s.mine.where);
+  const anchors = useStore(s => s.mine.anchors);
   const { running } = usePlans();
   if (!running.length) return null;
   return (
@@ -66,7 +67,7 @@ export function RunningPlans({ navigation }: { navigation: Nav }) {
                 <Text style={[type.caption, { color: p.dim }]} numberOfLines={1}>
                   {nextLabel(x.next, now)}
                 </Text>
-                {x.playbook && !fits(x.playbook, whereAt(x.anchor, where)) ? (
+                {x.playbook && !fits(x.playbook, whereFor(x.playbook, x.anchor, where, anchors)) ? (
                   <Text style={[type.caption, { color: p.warn }]}>
                     {rulesName(x.playbook)} rules · {whereWhy(x.anchor, where)}
                   </Text>

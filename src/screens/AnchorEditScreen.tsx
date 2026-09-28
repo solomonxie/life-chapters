@@ -77,7 +77,7 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
   const allTracks = useStore(s => s.plan.tracks);
   const draft = { id: anchorId, kind, personId: existing?.personId ?? me, linkId: existing?.linkId };
   const who = place.trim();
-  const unlocks = plansFor({ kind, location }, where, playbooks).flatMap(pb => {
+  const unlocks = plansFor({ kind, location, id: anchorId, date }, where, playbooks, plan.anchors).flatMap(pb => {
     const from = opens(kind, pb);
     const on = countsFrom(pb, draft, allAnchors);
     if (from === 'born' && !on) return [];
