@@ -34,6 +34,24 @@ describe('what an event opens', () => {
   });
 });
 
+describe('visa plans in the bundle', () => {
+  const at = (kind: string, date: string, location: string) =>
+    ({ id: `${kind}-${date}`, kind, label: kind, date, precision: 'day' as const, location });
+  const born = at('born', '1988-08-06', 'Nanchang, Jiangxi, China');
+  const visaIds = (a: ReturnType<typeof at>) =>
+    plansFor(a, BC, BUNDLED_PLAYBOOKS, [born, a]).map(p => p.id).filter(id => id.startsWith('visa-')).sort();
+
+  it('a Chinese-born traveller gets the Chinese-passport plan for the destination', () => {
+    expect(visaIds(at('trip', '2027-04-01', 'Tokyo, Tokyo, Japan'))).toEqual(['visa-jp-cn']);
+    expect(visaIds(at('trip', '2027-05-01', 'Rome, Latium, Italy'))).toEqual(['visa-schengen-cn']);
+    expect(visaIds(at('trip', '2027-06-01', 'Manila, National Capital Region, Philippines'))).toEqual(['visa-ph-cn']);
+  });
+
+  it("visitors coming to Vancouver get every passport's Canada plan", () => {
+    expect(visaIds(at('visit', '2027-07-01', 'Vancouver, British Columbia, Canada'))).toEqual(['visa-ca-cn', 'visa-ca-ph']);
+  });
+});
+
 describe('attaching from the event form', () => {
   beforeAll(async () => {
     await actions.load(createMemoryRepository());
