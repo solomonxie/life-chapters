@@ -9,11 +9,13 @@ set -e
 OUT=${1:-/tmp/lifechapters-shots}
 DEVICE=${DEVICE:-$(xcrun devicectl list devices 2>/dev/null | awk '/physical/ && /connected/ {print $3; exit}')}
 [ -n "$DEVICE" ] || { echo "no connected iPhone"; exit 1; }
+APP_ID=$(sed -n 's/^PRODUCT_BUNDLE_IDENTIFIER *= *//p' "$(dirname "$0")/../ios/Local.xcconfig" 2>/dev/null)
+[ -n "$APP_ID" ] || { echo "PRODUCT_BUNDLE_IDENTIFIER not set in ios/Local.xcconfig"; exit 1; }
 mkdir -p "$OUT"
 
 shot() { # <name> <qa-spec>
   xcrun devicectl device process launch --device "$DEVICE" --terminate-existing \
-    -e "{\"LC_QA\":\"$2\"}" com.example.lifechapters >/dev/null
+    -e "{\"LC_QA\":\"$2\"}" "$APP_ID" >/dev/null
   sleep 7
   xcrun devicectl device capture screenshot --device "$DEVICE" --destination "$OUT/$1.png" >/dev/null
   echo "$1"
