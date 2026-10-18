@@ -6,8 +6,6 @@ import UserNotifications
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-  var window: UIWindow?
-
   var reactNativeDelegate: ReactNativeDelegate?
   var reactNativeFactory: RCTReactNativeFactory?
 
@@ -24,8 +22,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     reactNativeDelegate = delegate
     reactNativeFactory = factory
 
-    window = UIWindow(frame: UIScreen.main.bounds)
+    return true
+  }
 
+  func application(
+    _ application: UIApplication,
+    configurationForConnecting connectingSceneSession: UISceneSession,
+    options: UIScene.ConnectionOptions
+  ) -> UISceneConfiguration {
+    let config = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
+    config.delegateClass = SceneDelegate.self
+    return config
+  }
+}
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+  var window: UIWindow?
+
+  func scene(
+    _ scene: UIScene,
+    willConnectTo session: UISceneSession,
+    options connectionOptions: UIScene.ConnectionOptions
+  ) {
+    guard
+      let windowScene = scene as? UIWindowScene,
+      let factory = (UIApplication.shared.delegate as? AppDelegate)?.reactNativeFactory
+    else { return }
+    let window = UIWindow(windowScene: windowScene)
+    self.window = window
     // LC_QA opens a throwaway qa.db with a sample plan; the real plan is untouched.
     var props: [String: Any] = ["store": Bundle.main.object(forInfoDictionaryKey: "AppStoreRegion") as? String ?? "us"]
     props["qa"] = ProcessInfo.processInfo.environment["LC_QA"]
@@ -33,10 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       withModuleName: "LifeChapters",
       in: window,
       initialProperties: props,
-      launchOptions: launchOptions
+      launchOptions: nil
     )
-
-    return true
   }
 }
 
