@@ -54,7 +54,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var props: [String: Any] = ["store": Bundle.main.object(forInfoDictionaryKey: "AppStoreRegion") as? String ?? "us"]
     props["qa"] = ProcessInfo.processInfo.environment["LC_QA"]
     factory.startReactNative(
-      withModuleName: "LifeChapters",
+      withModuleName: "PaperWorks",
       in: window,
       initialProperties: props,
       launchOptions: nil

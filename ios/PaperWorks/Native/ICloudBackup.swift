@@ -1,7 +1,7 @@
 import Foundation
 import React
 
-/// One file a day in the user's own iCloud Drive › Life Chapters. The app only
+/// One file a day in the user's own iCloud Drive › Paper Works. The app only
 /// touches the file system; iOS does the syncing, under the user's account.
 @objc(ICloudBackup)
 class ICloudBackup: NSObject {

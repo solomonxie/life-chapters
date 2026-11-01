@@ -6,7 +6,7 @@
 # Usage: scripts/device-shots.sh [out-dir]     then: make screenshots SHOTS=<out-dir>
 # README copies: sips --resampleWidth 390 <out-dir>/0*.png into docs/screenshots/
 set -e
-OUT=${1:-/tmp/lifechapters-shots}
+OUT=${1:-/tmp/paperworks-shots}
 DEVICE=${DEVICE:-$(xcrun devicectl list devices 2>/dev/null | awk '/physical/ && /connected/ {print $3; exit}')}
 [ -n "$DEVICE" ] || { echo "no connected iPhone"; exit 1; }
 APP_ID=$(sed -n 's/^PRODUCT_BUNDLE_IDENTIFIER *= *//p' "$(dirname "$0")/../ios/Local.xcconfig" 2>/dev/null)

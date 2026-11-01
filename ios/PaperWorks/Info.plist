@@ -9,7 +9,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Life Chapters</string>
+	<string>Paper Works</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -40,9 +40,9 @@
 		<true/>
 	</dict>
 	<key>NSCalendarsFullAccessUsageDescription</key>
-	<string>Only if you turn on Calendar export: start-by dates are written into a Life Chapters calendar.</string>
+	<string>Only if you turn on Calendar export: start-by dates are written into a Paper Works calendar.</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Only if you turn on Calendar export: start-by dates are written into a Life Chapters calendar.</string>
+	<string>Only if you turn on Calendar export: start-by dates are written into a Paper Works calendar.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Take a photo of a document to keep with the step that needs it.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -54,7 +54,7 @@
 			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
 			<true/>
 			<key>NSUbiquitousContainerName</key>
-			<string>Life Chapters</string>
+			<string>Paper Works</string>
 			<key>NSUbiquitousContainerSupportedFolderLevels</key>
 			<string>Any</string>
 		</dict>

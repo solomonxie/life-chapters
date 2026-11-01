@@ -10,9 +10,9 @@
 set -e
 cd "$(dirname "$0")/.."
 
-SCHEME=LifeChapters
+SCHEME=PaperWorks
 BUILD=${1:-$(date +%Y%m%d%H%M)}
-ARCHIVE=/tmp/lifechapters-release/$SCHEME-$BUILD.xcarchive
+ARCHIVE=/tmp/paperworks-release/$SCHEME-$BUILD.xcarchive
 
 [ -f ios/Local.xcconfig ] || { echo "ios/Local.xcconfig missing — copy ios/Local.xcconfig.example"; exit 1; }
 
@@ -23,6 +23,6 @@ xcodebuild -workspace "ios/$SCHEME.xcworkspace" -scheme "$SCHEME" \
 
 xcodebuild -exportArchive -archivePath "$ARCHIVE" \
   -exportOptionsPlist ios/ExportOptions.plist \
-  -exportPath /tmp/lifechapters-release/export -allowProvisioningUpdates
+  -exportPath /tmp/paperworks-release/export -allowProvisioningUpdates
 
 echo "Uploaded build $BUILD. Processing in App Store Connect takes 15–60 min."
