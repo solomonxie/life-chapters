@@ -200,6 +200,7 @@ Scheduling, per step:
 
 ```
 dueBy    = anchorDate + offsetDays        offset negative = before the event
+         = anchorEnd + endOffsetDays      once the event has an end and the step names one
 latest   = dueBy − durationDays           how long the thing takes to obtain
 earliest = dueBy − validForDays − durationDays
 startBy  = max(latest, when every dependency actually finishes)

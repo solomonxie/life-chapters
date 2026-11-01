@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { formatDate, formatPrecise } from '../domain/format';
+import { formatDate, formatLasts, formatPrecise } from '../domain/format';
 import type { CivilDate, DatePrecision } from '../domain/types';
 import { space, type } from './theme';
 import { usePalette } from './usePalette';
@@ -16,6 +16,8 @@ export interface StemNode {
   noted?: boolean;
   /** Town it happened in, shown dim after the label. */
   where?: string;
+  /** When it ends, for kinds that last. */
+  end?: CivilDate;
   /** The other person in it, whose name opens their board. */
   person?: { id: string; name: string; role?: string };
 }
@@ -136,6 +138,8 @@ export function TimelineStem({
               style={({ pressed }) => [styles.row, pressed && { backgroundColor: p.hairline }]}
               accessibilityRole="button"
               accessibilityLabel={`${node.label}, ${formatPrecise(node.date, node.precision)}${
+                node.end ? `, ${formatLasts(node.date, node.end)}` : ''
+              }${
                 node.where ? `, ${node.where}` : ''
               }${node.noted ? ', has notes' : ''
               }${node.pendingSteps ? `, ${node.pendingSteps} open steps` : ''}`}>
@@ -152,6 +156,7 @@ export function TimelineStem({
                 style={[type.label, styles.flex, { color: past ? p.dim : p.text }]}>
                 <Label node={node} color={past ? p.dim : p.text} link={p.accent} onPressPerson={onPressPerson} />
                 {node.where ? <Text style={{ color: p.faint }}> · {node.where}</Text> : null}
+                {node.end ? <Text style={{ color: p.faint }}> · {formatLasts(node.date, node.end)}</Text> : null}
               </Text>
               {node.noted ? (
                 <Text style={[type.caption, { color: p.dim }]} accessibilityElementsHidden>

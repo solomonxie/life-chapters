@@ -13,6 +13,10 @@ export interface Anchor {
   location?: string;
   date: CivilDate;
   precision: DatePrecision;
+  /** When it ended or ends, for kinds that last: a trip's return, a permit's expiry. */
+  end?: CivilDate;
+  /** What a trip is for ("leisure", "visiting", "business"); picks the steps that apply. */
+  purpose?: string;
   /** The user's own words about what happened. */
   note?: string;
   /** Whose board this sits on; absent means "me". */
@@ -57,6 +61,10 @@ export interface StepTemplate {
   title: string;
   /** Relative to the anchor event. Negative means before it. */
   offsetDays: number;
+  /** Relative to the event's end, once it has one; `offsetDays` stands in until then. */
+  endOffsetDays?: number;
+  /** Only for these trip purposes; absent means any. */
+  purposes?: string[];
   /** How long the thing takes to obtain or complete. */
   durationDays: number;
   /** How long the result stays valid once obtained. */
@@ -126,6 +134,10 @@ export interface Track {
   /** The anchor this track hangs off; its date wins over `anchorEventDate`. */
   anchorId?: string;
   anchorEventDate: CivilDate;
+  /** The anchor's end, for steps that count from it. */
+  anchorEnd?: CivilDate;
+  /** The anchor's trip purpose; steps for other purposes drop out. */
+  purpose?: string;
   /** Steps the user added to this track only, e.g. a planned redo. */
   extraSteps?: StepTemplate[];
   /** Extra dependencies per step id, e.g. a consumer waiting on a redo. */

@@ -1,4 +1,5 @@
 import type { Playbook } from '../../domain/types';
+import { borderPrep, businessLetter, insuranceCheck } from '../trip-steps';
 
 const IRCC = 'https://www.canada.ca/en/immigration-refugees-citizenship/services';
 
@@ -91,6 +92,7 @@ export const visaCaCn: Playbook = {
     {
       id: 'host-letter',
       title: 'Ask your host for an invitation letter and status proof',
+      purposes: ['visiting'],
       offsetDays: -170,
       durationDays: 14,
       conditions: ['Only if visiting family or friends in Canada'],
@@ -212,6 +214,9 @@ export const visaCaCn: Playbook = {
       howTo:
         '1. Book after the visa is in the passport, so a refusal or delay does not cost the fare.\n2. Visitors are generally not covered by provincial health insurance; travel medical insurance for a regular visitor visa is recommended rather than asked for.\n3. Match the return date to the stay in the invitation letter.',
     },
+    businessLetter(-170),
+    insuranceCheck(),
+    borderPrep(),
     {
       id: 'arrival',
       title: 'Arrival: meet the border officer',
@@ -239,12 +244,13 @@ export const visaCaCn: Playbook = {
       id: 'leave',
       title: 'Leave on time and keep the records',
       offsetDays: 180,
+      endOffsetDays: 0,
       durationDays: 1,
       dependsOn: ['arrival'],
       documents: ['Passport', 'Boarding pass'],
       prepare: ['Copies of the visa, stamps and visitor record', 'Boarding passes'],
       howTo:
-        '1. Leave by the date on the stamp or visitor record, or 6 months after arrival if there is neither.\n2. Keep the visa, stamps and boarding passes; the next application asks about travel in the last 10 years.\n3. A multiple-entry visa can be used again while it and the passport are valid.\n4. The 180 days here is an estimate; move it to your real departure.',
+        '1. Leave by the date on the stamp or visitor record, or 6 months after arrival if there is neither.\n2. Keep the visa, stamps and boarding passes; the next application asks about travel in the last 10 years.\n3. A multiple-entry visa can be used again while it and the passport are valid.\n4. Until the trip has a Back home date, the 180 days here is an estimate; setting one moves this step to it.',
     },
   ],
 };

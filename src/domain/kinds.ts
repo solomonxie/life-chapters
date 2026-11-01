@@ -17,12 +17,22 @@ export interface AnchorKind {
    * person's own Born, `child` from the linked child's; `self` from this event.
    */
   alsoOpens?: { kind: string; families?: string[]; from: 'self' | 'born' | 'child' };
+  /** It lasts, and this names its optional end date: "Back home". */
+  ends?: string;
+  /** What it can be for; a step can apply to only some. */
+  purposes?: { id: string; label: string }[];
 }
+
+export const TRIP_PURPOSES = [
+  { id: 'leisure', label: 'Holiday' },
+  { id: 'visiting', label: 'Visiting family or friends' },
+  { id: 'business', label: 'Business' },
+];
 
 export const ANCHOR_KINDS: AnchorKind[] = [
   { id: 'born', label: 'Born', group: 'Life', chapter: 'Growing up' },
   { id: 'graduated', label: 'Graduated', group: 'School', chapter: 'Early career' },
-  { id: 'school-start', label: 'Starts primary school', group: 'School', chapter: 'School years', withDetail: '{} starts primary school', alsoOpens: { kind: 'born', families: ['school-years'], from: 'born' } },
+  { id: 'school-start', label: 'Starts primary school', group: 'School', chapter: 'School years', withDetail: '{} starts primary school', ends: 'Finishes primary school', alsoOpens: { kind: 'born', families: ['school-years'], from: 'born' } },
   { id: 'first-job', label: 'First job', group: 'Work', chapter: 'Working' },
   { id: 'job-lost', label: 'Job ended', group: 'Work', chapter: 'Between jobs' },
   { id: 'business-started', label: 'Started a business', group: 'Work', chapter: 'Self-employed' },
@@ -31,7 +41,7 @@ export const ANCHOR_KINDS: AnchorKind[] = [
   // Ids stay as first shipped; saved dates keep working. Labels are what people see.
   { id: 'migrated', label: 'Relocated to a country', group: 'Moving', chapter: 'Settling in', withDetail: 'Relocated to {}' },
   { id: 'moved-city', label: 'Moved city', group: 'Moving', chapter: 'New city', withDetail: 'Moved to {}' },
-  { id: 'visa-granted', label: 'Permit or visa granted', group: 'Moving', chapter: 'On a permit' },
+  { id: 'visa-granted', label: 'Permit or visa granted', group: 'Moving', chapter: 'On a permit', ends: 'Expires' },
   { id: 'visa-lodge', label: 'Apply for permanent residence', group: 'Moving', chapter: 'Applying for PR' },
   { id: 'pr-landed', label: 'Became a permanent resident', group: 'Moving', chapter: 'Permanent resident' },
   { id: 'married', label: 'Married', group: 'Family', chapter: 'Married life' },
@@ -42,11 +52,11 @@ export const ANCHOR_KINDS: AnchorKind[] = [
   { id: 'car-bought', label: 'Bought a car', group: 'Family', chapter: 'New car', moment: true },
   { id: 'cohabiting', label: 'Moved in together', group: 'Family', chapter: 'Living together', withDetail: 'Moved in with {}' },
   { id: 'separated', label: 'Separated or divorced', group: 'Family', chapter: 'On my own' },
-  { id: 'caregiving', label: 'Caring for a family member', group: 'Family', chapter: 'Caregiving', withDetail: 'Caring for {}' },
+  { id: 'caregiving', label: 'Caring for a family member', group: 'Family', chapter: 'Caregiving', withDetail: 'Caring for {}', ends: 'Care ended' },
   { id: 'parent-60', label: 'Parent turns 60', group: 'Family', chapter: 'Parent turns 60', withDetail: '{} turns 60', moment: true },
   { id: 'family-death', label: 'Death in the family', group: 'Family', chapter: 'Loss', withDetail: '{} died', moment: true },
-  { id: 'visit', label: 'Visitors arrive', group: 'Family', chapter: 'Visit', withDetail: '{} arrive', moment: true, alsoOpens: { kind: 'trip', from: 'self' } },
-  { id: 'trip', label: 'Trip abroad', group: 'Moving', chapter: 'Trip', withDetail: 'Trip to {}', moment: true },
+  { id: 'visit', label: 'Visitors arrive', group: 'Family', chapter: 'Visit', withDetail: '{} arrive', moment: true, ends: 'They leave', purposes: TRIP_PURPOSES, alsoOpens: { kind: 'trip', from: 'self' } },
+  { id: 'trip', label: 'Trip abroad', group: 'Moving', chapter: 'Trip', withDetail: 'Trip to {}', moment: true, ends: 'Back home', purposes: TRIP_PURPOSES },
 ];
 
 export const kindById = (id: string): AnchorKind | undefined =>

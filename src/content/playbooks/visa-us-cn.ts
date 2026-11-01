@@ -1,4 +1,5 @@
 import type { Playbook } from '../../domain/types';
+import { US_BORDER, US_BORDER_SOURCES, borderPrep, businessLetter, i94Check, insuranceCheck } from '../trip-steps';
 
 const TSG = 'https://travel.state.gov/content/travel/en';
 
@@ -33,6 +34,7 @@ export const visaUsCn: Playbook = {
     { title: 'I-94 arrival record — U.S. Customs and Border Protection', url: 'https://i94.cbp.dhs.gov/' },
     { title: 'Form I-539, Application to Extend/Change Nonimmigrant Status — USCIS', url: 'https://www.uscis.gov/i-539' },
     { title: 'Fee schedule (G-1055) — USCIS', url: 'https://www.uscis.gov/g-1055' },
+    ...US_BORDER_SOURCES,
   ],
   steps: [
     {
@@ -67,6 +69,7 @@ export const visaUsCn: Playbook = {
     {
       id: 'host-letter',
       title: 'Ask your host for an invitation letter and status proof',
+      purposes: ['visiting'],
       offsetDays: -255,
       durationDays: 14,
       conditions: ['Only if visiting family or friends in the United States'],
@@ -197,6 +200,9 @@ export const visaUsCn: Playbook = {
       howTo:
         '1. Book after the visa is in hand, so a refusal or delay does not cost the fare.\n2. US medical care is expensive and visitors are generally not covered by any public plan; travel medical insurance is not asked for by the visa but is widely bought.\n3. Keep the return booking consistent with what you said at the interview.',
     },
+    businessLetter(-255),
+    insuranceCheck(),
+    borderPrep(US_BORDER),
     {
       id: 'arrival',
       title: 'Arrival: entry inspection and the I-94 record',
@@ -233,12 +239,14 @@ export const visaUsCn: Playbook = {
       id: 'leave',
       title: 'Leave on time and keep the records',
       offsetDays: 180,
+      endOffsetDays: 0,
       durationDays: 1,
       dependsOn: ['arrival'],
       documents: ['Passport', 'Boarding pass', 'I-94 record'],
       prepare: ['Copy of the I-94 and travel history from the CBP site', 'Boarding passes'],
       howTo:
-        '1. Leave by the I-94 date, or by the date USCIS grants if an extension was approved.\n2. Staying past it, even by a day, voids the visa and makes later visas harder to get.\n3. Keep boarding passes and the I-94 history; the next DS-160 asks about earlier trips.\n4. The 180 days here is an estimate; move it to your real departure.',
+        '1. Leave by the I-94 date, or by the date USCIS grants if an extension was approved.\n2. Staying past it, even by a day, voids the visa and makes later visas harder to get.\n3. Keep boarding passes and the I-94 history; the next DS-160 asks about earlier trips.\n4. Until the trip has a Back home date, the 180 days here is an estimate; setting one moves this step to it.',
     },
+    i94Check('leave', 187),
   ],
 };

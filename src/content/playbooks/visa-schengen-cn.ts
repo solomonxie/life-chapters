@@ -1,4 +1,5 @@
 import type { Playbook } from '../../domain/types';
+import { borderPrep, businessLetter, insuranceCheck } from '../trip-steps';
 
 const HOME = 'https://home-affairs.ec.europa.eu/policies/schengen';
 
@@ -74,6 +75,7 @@ export const visaSchengenCn: Playbook = {
     {
       id: 'host-docs',
       title: 'Ask your host for an invitation and proof of their status',
+      purposes: ['visiting'],
       offsetDays: -150,
       durationDays: 30,
       conditions: ['Only if visiting family or friends, or staying at their home'],
@@ -178,6 +180,9 @@ export const visaSchengenCn: Playbook = {
       howTo:
         '1. Book after the visa is issued, so a refusal or delay does not cost the fare.\n2. Match the route to the itinerary you filed.',
     },
+    businessLetter(-120),
+    insuranceCheck(),
+    borderPrep(),
     {
       id: 'arrival',
       title: 'Arrival: register in the Entry/Exit System',
@@ -205,12 +210,13 @@ export const visaSchengenCn: Playbook = {
       id: 'leave',
       title: 'Leave within 90 days in any 180',
       offsetDays: 90,
+      endOffsetDays: 0,
       durationDays: 1,
       dependsOn: ['arrival'],
       documents: ['Passport', 'Boarding pass'],
       prepare: ['Days used in the last 180, from the EU short-stay calculator', 'The end date on the visa sticker'],
       howTo:
-        '1. Leave by the earlier of the visa end date and the day you reach 90 days in the last 180.\n2. EES records the exit and flags overstays automatically; an overstay can lead to fines, an entry ban and refusals later.\n3. Keep boarding passes and hotel receipts; the next application asks about earlier Schengen visas.\n4. The 90 days here is the maximum; move it to your real date.',
+        '1. Leave by the earlier of the visa end date and the day you reach 90 days in the last 180.\n2. EES records the exit and flags overstays automatically; an overstay can lead to fines, an entry ban and refusals later.\n3. Keep boarding passes and hotel receipts; the next application asks about earlier Schengen visas.\n4. Until the trip has a Back home date, the 90 days here is the maximum; setting one moves this step to it.',
     },
   ],
 };

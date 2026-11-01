@@ -68,6 +68,12 @@ export function validatePlaybook(input: unknown): Validation {
         return fail(`Step "${name}" has a malformed ${key} list.`);
       }
     }
+    if (raw.endOffsetDays !== undefined && !int(raw.endOffsetDays)) {
+      return fail(`Step "${name}" has an end offset that isn't whole days.`);
+    }
+    if (raw.purposes !== undefined && !strings(raw.purposes)) {
+      return fail(`Step "${name}" has a malformed purposes list.`);
+    }
     if (raw.howTo !== undefined && typeof raw.howTo !== 'string') {
       return fail(`Step "${name}" has a malformed how-to.`);
     }

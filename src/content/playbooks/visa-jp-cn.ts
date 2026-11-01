@@ -1,4 +1,5 @@
 import type { Playbook } from '../../domain/types';
+import { borderPrep, businessLetter, insuranceCheck } from '../trip-steps';
 
 const MOFA = 'https://www.mofa.go.jp';
 
@@ -86,6 +87,7 @@ export const visaJpCn: Playbook = {
     {
       id: 'host-docs',
       title: 'Ask your host in Japan for the invitation and guarantor papers',
+      purposes: ['visiting'],
       offsetDays: -100,
       durationDays: 30,
       conditions: ['Only if visiting family or friends in Japan, or staying at their home'],
@@ -186,6 +188,9 @@ export const visaJpCn: Playbook = {
       howTo:
         '1. Visit Japan Web is the Digital Agency site for entering immigration and customs details online before arrival; it gives QR codes to show at the airport.\n2. It is optional; paper cards on the plane still work.\n3. Register each traveller, including children, in one account if you like.',
     },
+    businessLetter(-75),
+    insuranceCheck(),
+    borderPrep(),
     {
       id: 'arrival',
       title: 'Arrival: landing examination',
@@ -213,12 +218,13 @@ export const visaJpCn: Playbook = {
       id: 'leave',
       title: 'Leave on time and keep the records',
       offsetDays: 30,
+      endOffsetDays: 0,
       durationDays: 1,
       dependsOn: ['arrival'],
       documents: ['Passport', 'Boarding pass'],
       prepare: ['The last day on the landing sticker', 'Copies of the visa and boarding passes'],
       howTo:
-        '1. Leave by the last day of your period of stay; overstaying can lead to removal and a ban on returning.\n2. Keep the visa, stamps and boarding passes; multiple-entry tiers and later applications look at past trips to Japan.\n3. The 30 days here is an estimate; move it to your real date.',
+        '1. Leave by the last day of your period of stay; overstaying can lead to removal and a ban on returning.\n2. Keep the visa, stamps and boarding passes; multiple-entry tiers and later applications look at past trips to Japan.\n3. Until the trip has a Back home date, the 30 days here is an estimate; setting one moves this step to it.',
     },
   ],
 };

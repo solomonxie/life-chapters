@@ -73,7 +73,7 @@ Grouped as in the `What` picker. `○` = a moment: on the line, cuts no chapter.
 | Moving | Moved city | Moving home (BC, Ontario, China) |
 | Moving | Apply for permanent residence | Express Entry · Provincial nomination (BC, Ontario) |
 | Moving | Became a permanent resident | Life as a permanent resident · Citizenship |
-| Moving | ○ Trip abroad | Visiting {country} · {passport} for its Place (US, Canada, China, Philippines, Japan, UK, Schengen; Chinese and Philippine passports); Travelling to China; leaving: Travelling abroad from Canada · from China |
+| Moving | ○ Trip abroad | Visiting {country} · {passport} for its Place, yours first (US, Canada, China, Philippines, Japan, UK, Schengen; Chinese and Philippine passports); Travelling to China; leaving: Travelling abroad from Canada · from China |
 | Family | Married · Moved in together | Getting married · Moving in together (BC, Ontario) |
 | Family | Baby due | Expecting a baby |
 | Family | Child born | Newborn · Early years, on the child's board, counted from her Born |
@@ -86,8 +86,9 @@ Grouped as in the `What` picker. `○` = a moment: on the line, cuts no chapter.
 | Family | ○ Visitors arrive | Visitors to Canada; every passport's visa plan for where they're coming |
 
 Visa plans carry `citizen` (the passport) and `country` (the destination;
-`SCHENGEN` fits any Schengen country). For your own trip only your passport's
-plan shows — read from your Born place; for visitors, every passport's.
+`SCHENGEN` fits any Schengen country). Every passport's plan shows, for a trip
+and for visitors; on a trip your own (read from your Born place) is listed
+first — the others are for whoever travels with you.
 
 "leaving" plans (`leaving: true`) match where the person lived *before* the
 event and show only when it takes them to another country: moving from China
@@ -128,14 +129,32 @@ destination, so the plan follows it.
 ```
  ╭────────────────────────────────────────╮
  │ What          Trip abroad            › │
- │ Place     Shanghai, China            › │  ← the destination
+ │ Place     New York, New York, Un…    › │  ← the destination
  │ When          Jan 20, 2027           › │
- │ Event name                    China▌   │  ← "a country"
+ │ Back home     Feb 6, 2027            › │  ← "optional"; unfolds a wheel + ( No end date )
+ │ Precision     to the day             › │
+ │ Purpose       Business               › │  ← Holiday · Visiting family or friends · Business · Not set
+ │ Event name           United States▌    │  ← "a country"
  ╰────────────────────────────────────────╯
-  PLANS THIS UNLOCKS
-  [ ] Travelling to China · visa and …  ›
-      14 steps · attaches on Save
+  PLANS THIS UNLOCKS                        ← every passport's; yours first
+  [ ] Visiting the United States · Chi… ›
+  [ ] Visiting the United States · Phi… ›
+      22 steps · attaches on Save
 ```
+
+Kinds that last get an optional end row, named for the kind: Trip abroad
+`Back home`, Visitors arrive `They leave`, Caring for a family member
+`Care ended`, Permit or visa granted `Expires`, Starts primary school
+`Finishes primary school`. A trip or visit also gets `Purpose`.
+
+- End before the start → red `{End} is before it starts.` under the form; Save
+  stays off.
+- Steps with `endOffsetDays` (leave on time, eTravel home, the I-94 check)
+  follow the end; without one they keep their estimate.
+- Steps with `purposes` drop out for another purpose (host letter → visiting,
+  business letter → business); `Not set` keeps them all.
+- Changing end or purpose on an event with steps asks `Update "{label}"?` with
+  the same reschedule count as a move.
 
 On the stem: `Mom and Dad arrive`, `Trip to China` — drawn in
 [`timeline.md`](timeline.md).
@@ -246,6 +265,11 @@ precision open     Precision  to the day         ⌄
 | `anchor.field.what` | What |
 | `anchor.field.name` | Event name |
 | `anchor.field.when` | When |
+| `anchor.field.end` | Back home · They leave · Care ended · Expires · Finishes primary school |
+| `anchor.field.end.empty` | optional |
+| `anchor.field.end.clear` | No end date |
+| `anchor.field.end.invalid` | {End} is before it starts. |
+| `anchor.field.purpose` | Purpose |
 | `anchor.field.precision` | Precision |
 | `anchor.field.who` | Who |
 | `anchor.notes` | NOTES |

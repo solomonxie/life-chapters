@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { BUNDLED_PLAYBOOKS } from '../content';
-import { resolve, today } from '../domain/dates';
-import { docId, planView, trackAnchorDate, type PlanView } from '../domain/plan';
+import { today } from '../domain/dates';
+import { anchoredTrack, docId, fromAnchor, planView, type PlanView } from '../domain/plan';
 import { LINKED_KINDS, ME, ME_PERSON, countsFrom, isLinkedKind, mirrorOf, ownerOf, scopeTo, type Scoped } from '../domain/people';
 import { livesIn, type Where } from '../domain/regions';
 import { recordMoves, summarize, type Moves } from '../domain/radar';
@@ -186,6 +186,17 @@ function instancesFor(track: Track, playbook: Playbook): StepInstance[] {
   }));
 }
 
+/** Steps a shipped plan gained after it was attached get their own instance. */
+function withNewSteps(tracks: Track[], instances: StepInstance[], userPlaybooks: Playbook[]): StepInstance[] {
+  const have = new Set(instances.map(i => i.id));
+  const all = [...BUNDLED_PLAYBOOKS, ...userPlaybooks];
+  const missing = tracks.flatMap(t => {
+    const pb = all.find(p => p.id === t.playbookId);
+    return pb ? instancesFor(t, pb).filter(i => !have.has(i.id)) : [];
+  });
+  return missing.length ? [...instances, ...missing] : instances;
+}
+
 function linkParent(name: string, date: CivilDate, precision: Anchor['precision']) {
   const { plan, mine } = get();
   const childId = mine.person.id;
@@ -230,13 +241,14 @@ export const actions = {
   async load(repository: Repository) {
     repo = repository;
     const stored = await repository.load();
+    const tracks = stored?.tracks.map(t => ({ ...t, playbookId: RENAMED[t.playbookId] ?? t.playbookId })) ?? [];
     const plan = stored
       ? {
           people: stored.people?.length ? stored.people : [ME_PERSON],
           anchors: stored.anchors.map(a => ({ ...a, label: RELABELED[a.label] ?? a.label })),
           playbooks: stored.playbooks,
-          tracks: stored.tracks.map(t => ({ ...t, playbookId: RENAMED[t.playbookId] ?? t.playbookId })),
-          instances: stored.instances,
+          tracks,
+          instances: withNewSteps(tracks, stored.instances, stored.playbooks),
           documents: stored.documents,
         }
       : EMPTY_PLAN;
@@ -250,6 +262,9 @@ export const actions = {
       settings,
       moves: stored?.moves ?? {},
       ...derive(plan, now, settings.personId),
+      toast: null,
+      undoSnapshot: null,
+      lastChange: null,
     });
   },
 
@@ -323,7 +338,7 @@ export const actions = {
     } else if (saved.linkId) {
       anchors = anchors.map(a =>
         a.linkId === saved.linkId && a.id !== saved.id
-          ? { ...a, date: saved.date, precision: saved.precision, location: saved.location }
+          ? { ...a, date: saved.date, precision: saved.precision, end: saved.end, location: saved.location }
           : a,
       );
     }
@@ -335,7 +350,7 @@ export const actions = {
     moved.set(saved.id, saved);
     let tracks = plan.tracks.map(t => {
       const a = t.anchorId ? moved.get(t.anchorId) : undefined;
-      return a ? { ...t, anchorEventDate: resolve(a.date, a.precision) } : t;
+      return a ? { ...t, ...fromAnchor(a) } : t;
     });
     let instances = plan.instances;
     for (const playbookId of attach) {
@@ -347,7 +362,7 @@ export const actions = {
         playbookId,
         personId: ownerOf(on),
         anchorId: on.id,
-        anchorEventDate: resolve(on.date, on.precision),
+        ...fromAnchor(on),
       };
       tracks = [...tracks, track];
       instances = [...instances, ...instancesFor(track, playbook)];
@@ -393,7 +408,7 @@ export const actions = {
       playbookId,
       personId: ownerOf(anchor),
       anchorId,
-      anchorEventDate: resolve(anchor.date, anchor.precision),
+      ...fromAnchor(anchor),
     };
     commit(
       {
@@ -418,7 +433,7 @@ export const actions = {
         ...plan,
         tracks: plan.tracks.map(t =>
           t.id === trackId
-            ? { ...t, anchorId, anchorEventDate: resolve(anchor.date, anchor.precision) }
+            ? { ...t, anchorId, ...fromAnchor(anchor) }
             : t,
         ),
       },
@@ -445,7 +460,7 @@ export const actions = {
     const track = plan.tracks.find(t => t.id === trackId);
     const playbook = playbooks.find(p => p.id === track?.playbookId);
     if (!track || !playbook) return null;
-    const anchored = { ...track, anchorEventDate: trackAnchorDate(track, plan.anchors) };
+    const anchored = anchoredTrack(track, plan.anchors);
     const scheduled = view.steps.filter(s => s.trackId === trackId);
     const next = planRedo(playbook, anchored, sourceStepId, consumerStepId, scheduled);
     const redo = next.extraSteps?.[next.extraSteps.length - 1];

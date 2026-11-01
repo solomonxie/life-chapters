@@ -245,3 +245,64 @@ describe('plan a redo', () => {
     expect(expiryClashes(schedule(chain, track, instances), chain)).toEqual([]);
   });
 });
+
+describe('events with an end', () => {
+  const trip = playbook([
+    { id: 'insure', title: 'Insure', offsetDays: -14, durationDays: 3, dependsOn: [], documents: [], prepare: [] },
+    { id: 'i94', title: 'Check departure', offsetDays: 30, endOffsetDays: 14, durationDays: 1, dependsOn: [], documents: [], prepare: [] },
+  ]);
+
+  it('counts a step from the end once there is one', () => {
+    const s = index(schedule(trip, { ...track, anchorEnd: '2027-01-20' }, pending(['insure', 'i94'])));
+    expect(s.get('insure')!.dueBy).toBe('2026-12-18');
+    expect(s.get('i94')!.dueBy).toBe('2027-02-03');
+  });
+
+  it('uses the start-based estimate while no end is set', () => {
+    const s = index(schedule(trip, track, pending(['insure', 'i94'])));
+    expect(s.get('i94')!.dueBy).toBe('2027-01-31');
+  });
+
+  it('keeps a done end-based step pinned when the end moves', () => {
+    const inst = done(pending(['insure', 'i94']), 'i94', '2027-01-25');
+    const s = index(schedule(trip, { ...track, anchorEnd: '2027-03-01' }, inst));
+    expect(s.get('i94')!.startBy).toBe('2027-01-25');
+  });
+
+  it('a redo of an end-based step lands where the consumer needs it', () => {
+    const pb = playbook([
+      { id: 'a', title: 'A', offsetDays: 0, endOffsetDays: 0, durationDays: 2, validForDays: 5, dependsOn: [], documents: [], prepare: [] },
+      { id: 'b', title: 'B', offsetDays: 40, durationDays: 1, dependsOn: ['a'], documents: [], prepare: [] },
+    ]);
+    const t = { ...track, anchorEnd: '2027-01-10' };
+    const scheduled = schedule(pb, t, pending(['a', 'b']));
+    const next = planRedo(pb, t, 'a', 'b', scheduled);
+    const redo = next.extraSteps![0];
+    expect(redo.endOffsetDays).toBeUndefined();
+    expect(addDays(ANCHOR, redo.offsetDays)).toBe(index(scheduled).get('b')!.startBy);
+  });
+});
+
+describe('trip purposes', () => {
+  const pb = playbook([
+    { id: 'ticket', title: 'Return ticket', offsetDays: -30, durationDays: 1, dependsOn: [], documents: [], prepare: [] },
+    { id: 'invite', title: 'Invitation letter', offsetDays: -20, durationDays: 7, purposes: ['business'], dependsOn: [], documents: [], prepare: [] },
+    { id: 'pack', title: 'Pack', offsetDays: -1, durationDays: 1, dependsOn: ['invite', 'ticket'], documents: [], prepare: [] },
+  ]);
+
+  it('drops steps for another purpose, and what waited on them', () => {
+    const s = index(schedule(pb, { ...track, purpose: 'leisure' }, pending(['ticket', 'invite', 'pack'])));
+    expect([...s.keys()]).toEqual(['ticket', 'pack']);
+    expect(s.get('pack')!.blockedBy).toEqual(['ticket']);
+  });
+
+  it('keeps every step while the purpose is unset', () => {
+    const s = schedule(pb, track, pending(['ticket', 'invite', 'pack']));
+    expect(s.map(x => x.stepId)).toEqual(['ticket', 'invite', 'pack']);
+  });
+
+  it('still names a dependency that does not exist', () => {
+    const broken = playbook([{ id: 'x', title: 'X', offsetDays: 0, durationDays: 1, dependsOn: ['ghost'], documents: [], prepare: [] }]);
+    expect(() => schedule(broken, { ...track, purpose: 'leisure' }, [])).toThrow(MissingDependencyError);
+  });
+});

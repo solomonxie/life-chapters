@@ -1,4 +1,5 @@
 import type { Playbook } from '../../domain/types';
+import { US_BORDER, US_BORDER_SOURCES, borderPrep, businessLetter, i94Check, insuranceCheck } from '../trip-steps';
 
 const TSG = 'https://travel.state.gov/content/travel/en/us-visas';
 
@@ -37,6 +38,7 @@ export const visaUsPh: Playbook = {
     { title: 'Commission on Filipinos Overseas', url: 'https://cfo.gov.ph/' },
     { title: 'Travel clearance for minors — DSWD', url: 'https://www.dswd.gov.ph/' },
     { title: 'eTravel — Philippine travel information system', url: 'https://etravel.gov.ph/' },
+    ...US_BORDER_SOURCES,
   ],
   steps: [
     {
@@ -83,6 +85,7 @@ export const visaUsPh: Playbook = {
     {
       id: 'host-invitation',
       title: 'Get an invitation letter and your host\'s status proof',
+      purposes: ['visiting'],
       offsetDays: -240,
       durationDays: 21,
       conditions: ['Only if visiting family or friends'],
@@ -264,6 +267,9 @@ export const visaUsPh: Playbook = {
       howTo:
         '1. Check in, then go through BI departure; answer questions about the trip plainly.\n2. If referred to secondary inspection, show the papers from the previous step.\n3. The date here is the day before arrival; move it to the real flight.',
     },
+    businessLetter(-240),
+    insuranceCheck(),
+    borderPrep(US_BORDER),
     {
       id: 'arrival',
       title: 'Arrival: meet US Customs and Border Protection',
@@ -291,6 +297,7 @@ export const visaUsPh: Playbook = {
       id: 'etravel',
       title: 'Register on eTravel before flying home',
       offsetDays: 27,
+      endOffsetDays: -3,
       durationDays: 3,
       dependsOn: ['arrival'],
       documents: ['eTravel QR code'],
@@ -302,12 +309,14 @@ export const visaUsPh: Playbook = {
       id: 'return',
       title: 'Leave the US on time and keep the records',
       offsetDays: 30,
+      endOffsetDays: 0,
       durationDays: 1,
       dependsOn: ['etravel'],
       documents: ['Passport', 'Boarding pass', 'I-94 record'],
       prepare: ['Copies of the visa, I-94 and boarding passes'],
       howTo:
-        '1. Leave by the I-94 date; the airline reports the departure to CBP.\n2. Keep boarding passes and the I-94 printout; later visa applications ask about US travel history.\n3. A multiple-entry visa can be used again while it is valid, but each entry has its own I-94 date.\n4. The 30 days here is an estimate; move it to the real return flight.',
+        '1. Leave by the I-94 date; the airline reports the departure to CBP.\n2. Keep boarding passes and the I-94 printout; later visa applications ask about US travel history.\n3. A multiple-entry visa can be used again while it is valid, but each entry has its own I-94 date.\n4. Until the trip has a Back home date, the 30 days here is an estimate; setting one moves this step to it.',
     },
+    i94Check('return', 37),
   ],
 };

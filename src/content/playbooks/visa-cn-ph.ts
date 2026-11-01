@@ -1,4 +1,5 @@
 import type { Playbook } from '../../domain/types';
+import { borderPrep, businessLetter, insuranceCheck } from '../trip-steps';
 
 const EMB = 'https://ph.china-embassy.gov.cn/eng/lsfw';
 const NIA = 'https://en.nia.gov.cn/n147418';
@@ -102,6 +103,7 @@ export const visaCnPh: Playbook = {
     {
       id: 'host-invitation',
       title: 'Get the invitation letter and the inviter\'s ID copy',
+      purposes: ['visiting'],
       offsetDays: -70,
       durationDays: 14,
       conditions: ['Only if visiting family or friends in China'],
@@ -241,6 +243,9 @@ export const visaCnPh: Playbook = {
       howTo:
         '1. Since November 20, 2025, foreigners can submit the arrival card (入境卡, rùjìng kǎ) before travelling on the NIA website, the "NIA 12367" app, or WeChat and Alipay mini-programs.\n2. It is free; use only the official channels.\n3. Kiosks and paper cards are still available at the port.',
     },
+    businessLetter(-70),
+    insuranceCheck(),
+    borderPrep(),
     {
       id: 'entry',
       title: 'Enter China and note your stay limit',
@@ -279,6 +284,7 @@ export const visaCnPh: Playbook = {
       id: 'etravel',
       title: 'Register on eTravel before flying home',
       offsetDays: 26,
+      endOffsetDays: -3,
       durationDays: 3,
       dependsOn: ['entry'],
       documents: ['eTravel QR code'],
@@ -290,12 +296,13 @@ export const visaCnPh: Playbook = {
       id: 'return',
       title: 'Leave China before the permitted stay ends',
       offsetDays: 29,
+      endOffsetDays: 0,
       durationDays: 1,
       dependsOn: ['etravel'],
       documents: ['Passport', 'Boarding pass'],
       prepare: ['Your last permitted day', 'Copies of the visa and boarding passes'],
       howTo:
-        '1. Leave by the last day of your visa stay or extension; overstaying brings fines or detention and can affect later visas.\n2. Keep the visa and boarding passes; later applications ask about past trips.\n3. The date here assumes a 30-day stay; move it to the real return flight.',
+        '1. Leave by the last day of your visa stay or extension; overstaying brings fines or detention and can affect later visas.\n2. Keep the visa and boarding passes; later applications ask about past trips.\n3. Until the trip has a Back home date, the date here assumes a 30-day stay; setting one moves this step to it.',
     },
   ],
 };

@@ -47,20 +47,30 @@ export function topoSort(steps: StepTemplate[]): StepTemplate[] {
   return out;
 }
 
-/** The playbook as this track sees it: its own steps plus any the user added. */
+const forPurpose = (step: StepTemplate, purpose?: string) =>
+  !purpose || !step.purposes || step.purposes.includes(purpose);
+
+/**
+ * The playbook as this track sees it: its own steps plus any the user added,
+ * minus steps for another trip purpose. A dropped step no longer holds up the
+ * steps after it.
+ */
 export function effectiveSteps(playbook: Playbook, track: Track): StepTemplate[] {
   const extraDeps = track.extraDependsOn ?? {};
-  return [...playbook.steps, ...(track.extraSteps ?? [])].map(step =>
-    extraDeps[step.id]
-      ? { ...step, dependsOn: [...step.dependsOn, ...extraDeps[step.id]] }
-      : step,
-  );
+  const all = [...playbook.steps, ...(track.extraSteps ?? [])];
+  const dropped = new Set(all.filter(s => !forPurpose(s, track.purpose)).map(s => s.id));
+  return all
+    .filter(s => !dropped.has(s.id))
+    .map(step => ({
+      ...step,
+      dependsOn: [...step.dependsOn, ...(extraDeps[step.id] ?? [])].filter(id => !dropped.has(id)),
+    }));
 }
 
 /**
  * Schedules a track backward from its anchor event.
  *
- *   dueBy         = anchorDate + offsetDays
+ *   dueBy         = anchorDate + offsetDays, or anchorEnd + endOffsetDays once it has an end
  *   latestStart   = dueBy − durationDays
  *   earliestStart = dueBy − validForDays − durationDays
  *   startBy       = max(latestStart, when every dependency actually finishes)
@@ -84,7 +94,10 @@ export function schedule(
     const instance = byStepId.get(step.id);
     const status = instance?.status ?? 'pending';
     const dueBy =
-      instance?.dueOverride ?? addDays(track.anchorEventDate, step.offsetDays);
+      instance?.dueOverride ??
+      (track.anchorEnd && step.endOffsetDays !== undefined
+        ? addDays(track.anchorEnd, step.endOffsetDays)
+        : addDays(track.anchorEventDate, step.offsetDays));
     const latestStart = addDays(dueBy, -step.durationDays);
     const earliestStart =
       step.validForDays === undefined
@@ -205,6 +218,7 @@ export function planRedo(
     id,
     title: `${source.title} (redo)`,
     offsetDays: diffDays(track.anchorEventDate, consumer.startBy),
+    endOffsetDays: undefined,
     redoOf: sourceId,
   };
   const deps = track.extraDependsOn?.[consumerId] ?? [];

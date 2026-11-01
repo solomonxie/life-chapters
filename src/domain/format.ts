@@ -72,6 +72,12 @@ export function formatDuration(days: number): string {
   return `${days} day${days === 1 ? '' : 's'}`;
 }
 
+/** How long something with an end lasts: 17 days · until Mar 2029. */
+export function formatLasts(start: CivilDate, end: CivilDate): string {
+  const days = diffDays(start, end);
+  return days < 60 ? `${days} day${days === 1 ? '' : 's'}` : `until ${formatMonth(end)}`;
+}
+
 /** age 18 · ages 4–5 · age 16+ */
 export function formatAges(ages: { from: number; to?: number }): string {
   if (ages.to === undefined) return `age ${ages.from}+`;

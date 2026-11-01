@@ -43,6 +43,19 @@ export function trackAnchorDate(track: Track, anchors: Anchor[]): CivilDate {
   return anchor ? resolve(anchor.date, anchor.precision) : track.anchorEventDate;
 }
 
+/** What a track reads off its anchor: start, end and trip purpose. */
+export const fromAnchor = (a: Anchor): Pick<Track, 'anchorEventDate' | 'anchorEnd' | 'purpose'> => ({
+  anchorEventDate: resolve(a.date, a.precision),
+  anchorEnd: a.end ? resolve(a.end, a.precision) : undefined,
+  purpose: a.purpose,
+});
+
+/** The track with its anchor's current dates and purpose. */
+export function anchoredTrack(track: Track, anchors: Anchor[]): Track {
+  const anchor = anchors.find(a => a.id === track.anchorId);
+  return anchor ? { ...track, ...fromAnchor(anchor) } : track;
+}
+
 /** Every attached track, scheduled. The only place the screens get dates from. */
 export function planView(
   playbooks: Playbook[],
@@ -59,7 +72,7 @@ export function planView(
       view.broken.push({ trackId: t.id, error: 'Its playbook is missing.' });
       continue;
     }
-    const track = { ...t, anchorEventDate: trackAnchorDate(t, anchors) };
+    const track = anchoredTrack(t, anchors);
     const mine = instances.filter(i => i.trackId === t.id);
     try {
       const scheduled = schedule(playbook, track, mine, now);
@@ -98,6 +111,8 @@ export interface TimelineNode extends LifeEvent {
   pendingSteps: number;
   /** On the line, but doesn't open a chapter. */
   moment?: boolean;
+  /** When it ends, for kinds that last. */
+  end?: CivilDate;
 }
 
 export function anchorDisplay(anchor: Anchor): string {
@@ -127,6 +142,7 @@ export function timelineNodes(
       precision: a.precision,
       pendingSteps: openSteps(steps).filter(s => trackIds.has(s.trackId)).length,
       moment: kind?.moment,
+      end: a.end ? resolve(a.end, a.precision) : undefined,
     };
   });
 

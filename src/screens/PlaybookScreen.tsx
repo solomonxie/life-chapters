@@ -32,7 +32,11 @@ export function PlaybookScreen({ route, navigation }: NativeStackScreenProps<Rou
   const now = useStore(s => s.now);
   const track = plan.tracks.find(t => t.id === trackId);
   const candidates = plan.anchors.filter(a => a.kind === playbook?.anchorKind);
-  const [previewId, setPreviewId] = useState(candidates[0]?.id);
+  const [previewId, setPreviewId] = useState(
+    () =>
+      (playbook && candidates.find(a => fits(playbook, whereFor(playbook, a, plan.where, plan.anchors))))?.id ??
+      candidates[0]?.id,
+  );
   const anchor = plan.anchors.find(a => a.id === (track?.anchorId ?? previewId));
   const [aboutOpen, setAboutOpen] = useState(false);
   const [allSources, setAllSources] = useState(false);

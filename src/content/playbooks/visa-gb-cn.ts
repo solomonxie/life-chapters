@@ -1,4 +1,5 @@
 import type { Playbook } from '../../domain/types';
+import { borderPrep, businessLetter, insuranceCheck } from '../trip-steps';
 
 const GOV = 'https://www.gov.uk';
 
@@ -75,6 +76,7 @@ export const visaGbCn: Playbook = {
     {
       id: 'host-letter',
       title: 'Ask your host for an invitation letter and status proof',
+      purposes: ['visiting'],
       offsetDays: -105,
       durationDays: 14,
       conditions: ['Only if visiting family or friends in the UK'],
@@ -163,6 +165,9 @@ export const visaGbCn: Playbook = {
       howTo:
         '1. Book after the visa is in the passport, so a refusal or delay does not cost the fare.\n2. Visitors generally pay for NHS hospital care; travel medical insurance is not a visa requirement but is widely bought.\n3. Arrive on or after the visa start date.',
     },
+    businessLetter(-105),
+    insuranceCheck(),
+    borderPrep(),
     {
       id: 'arrival',
       title: 'Arrival: UK border control',
@@ -190,12 +195,13 @@ export const visaGbCn: Playbook = {
       id: 'leave',
       title: 'Leave on time and keep the records',
       offsetDays: 180,
+      endOffsetDays: 0,
       durationDays: 1,
       dependsOn: ['arrival'],
       documents: ['Passport', 'Boarding pass'],
       prepare: ['Copies of the visa and boarding passes'],
       howTo:
-        '1. Leave within 6 months of entry, or by the end of any extension.\n2. Overstaying makes later UK visas harder to get.\n3. Keep boarding passes; the next application asks about earlier trips.\n4. The 180 days here is an estimate; move it to your real departure.',
+        '1. Leave within 6 months of entry, or by the end of any extension.\n2. Overstaying makes later UK visas harder to get.\n3. Keep boarding passes; the next application asks about earlier trips.\n4. Until the trip has a Back home date, the 180 days here is an estimate; setting one moves this step to it.',
     },
   ],
 };

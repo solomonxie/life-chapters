@@ -1,4 +1,5 @@
 import type { Playbook } from '../../domain/types';
+import { borderPrep, businessLetter, insuranceCheck } from '../trip-steps';
 
 const GOV = 'https://www.gov.uk';
 
@@ -82,6 +83,7 @@ export const visaGbPh: Playbook = {
     {
       id: 'host-invitation',
       title: 'Get an invitation letter and your host\'s status proof',
+      purposes: ['visiting'],
       offsetDays: -120,
       durationDays: 21,
       conditions: ['Only if visiting family or friends'],
@@ -228,6 +230,9 @@ export const visaGbPh: Playbook = {
       howTo:
         '1. Check in, then go through BI departure; answer questions about the trip plainly.\n2. If referred to secondary inspection, show the papers from the previous step.\n3. The date here is the day before arrival; move it to the real flight.',
     },
+    businessLetter(-120),
+    insuranceCheck(),
+    borderPrep(),
     {
       id: 'arrival',
       title: 'Arrival: UK Border Force',
@@ -255,6 +260,7 @@ export const visaGbPh: Playbook = {
       id: 'etravel',
       title: 'Register on eTravel before flying home',
       offsetDays: 27,
+      endOffsetDays: -3,
       durationDays: 3,
       dependsOn: ['arrival'],
       documents: ['eTravel QR code'],
@@ -266,12 +272,13 @@ export const visaGbPh: Playbook = {
       id: 'return',
       title: 'Leave the UK on time and keep the records',
       offsetDays: 30,
+      endOffsetDays: 0,
       durationDays: 1,
       dependsOn: ['etravel'],
       documents: ['Passport', 'Boarding pass'],
       prepare: ['Copies of the visa and boarding passes'],
       howTo:
-        '1. Leave before the 6-month limit and the visa end date.\n2. Keep boarding passes; later UK applications ask about travel history, and a clean record helps long-term visa applications.\n3. The 30 days here is an estimate; move it to the real return flight.',
+        '1. Leave before the 6-month limit and the visa end date.\n2. Keep boarding passes; later UK applications ask about travel history, and a clean record helps long-term visa applications.\n3. Until the trip has a Back home date, the 30 days here is an estimate; setting one moves this step to it.',
     },
   ],
 };

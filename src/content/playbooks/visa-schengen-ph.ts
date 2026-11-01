@@ -1,4 +1,5 @@
 import type { Playbook } from '../../domain/types';
+import { borderPrep, businessLetter, insuranceCheck } from '../trip-steps';
 
 const HOME = 'https://home-affairs.ec.europa.eu/policies/schengen';
 
@@ -103,6 +104,7 @@ export const visaSchengenPh: Playbook = {
     {
       id: 'host-invitation',
       title: 'Get an invitation and your host\'s papers',
+      purposes: ['visiting'],
       offsetDays: -120,
       durationDays: 21,
       conditions: ['Only if visiting family or friends'],
@@ -235,6 +237,9 @@ export const visaSchengenPh: Playbook = {
       howTo:
         '1. Check in, then go through BI departure; answer questions about the trip plainly.\n2. If referred to secondary inspection, show the papers from the previous step.\n3. The date here is the day before arrival; move it to the real flight.',
     },
+    businessLetter(-120),
+    insuranceCheck(),
+    borderPrep(),
     {
       id: 'arrival',
       title: 'Arrival: border check and EES registration',
@@ -262,6 +267,7 @@ export const visaSchengenPh: Playbook = {
       id: 'etravel',
       title: 'Register on eTravel before flying home',
       offsetDays: 27,
+      endOffsetDays: -3,
       durationDays: 3,
       dependsOn: ['arrival'],
       documents: ['eTravel QR code'],
@@ -273,12 +279,13 @@ export const visaSchengenPh: Playbook = {
       id: 'return',
       title: 'Leave the Schengen area on time and keep the records',
       offsetDays: 30,
+      endOffsetDays: 0,
       durationDays: 1,
       dependsOn: ['etravel'],
       documents: ['Passport', 'Boarding pass'],
       prepare: ['Days used in the last 180', 'Copies of the visa and boarding passes'],
       howTo:
-        '1. Leave by the visa end date and within 90 days in any 180; EES records the exit, and overstays show up on later applications.\n2. Keep the visa and boarding passes; lawful use of past visas helps later multiple-entry applications.\n3. The 30 days here is an estimate; move it to the real return flight.',
+        '1. Leave by the visa end date and within 90 days in any 180; EES records the exit, and overstays show up on later applications.\n2. Keep the visa and boarding passes; lawful use of past visas helps later multiple-entry applications.\n3. Until the trip has a Back home date, the 30 days here is an estimate; setting one moves this step to it.',
     },
   ],
 };

@@ -105,9 +105,11 @@ describe('visa plans', () => {
   const born = at('1988-08-06', 'Nanchang, Jiangxi, China', 'born');
   const all = [cnToJp, phToJp, cnToEu];
 
-  it('match the destination and, for your own trip, your passport', () => {
+  it('match the destination, your own passport first', () => {
     const tokyo = at('2027-04-01', 'Tokyo, Japan', 'trip');
-    expect(plansFor(tokyo, BC, all, [born, tokyo]).map(p => p.id)).toEqual(['cn-jp']);
+    expect(plansFor(tokyo, BC, all, [born, tokyo]).map(p => p.id)).toEqual(['cn-jp', 'ph-jp']);
+    const phBorn = at('1990-01-01', 'Manila, National Capital Region, Philippines', 'born');
+    expect(plansFor(tokyo, BC, all, [phBorn, tokyo]).map(p => p.id)).toEqual(['ph-jp', 'cn-jp']);
     const paris = at('2027-05-01', 'Paris, Île-de-France, France', 'trip');
     expect(plansFor(paris, BC, all, [born, paris]).map(p => p.id)).toEqual(['cn-eu']);
   });

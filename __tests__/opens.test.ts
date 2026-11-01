@@ -41,10 +41,16 @@ describe('visa plans in the bundle', () => {
   const visaIds = (a: ReturnType<typeof at>) =>
     plansFor(a, BC, BUNDLED_PLAYBOOKS, [born, a]).map(p => p.id).filter(id => id.startsWith('visa-')).sort();
 
-  it('a Chinese-born traveller gets the Chinese-passport plan for the destination', () => {
-    expect(visaIds(at('trip', '2027-04-01', 'Tokyo, Tokyo, Japan'))).toEqual(['visa-jp-cn']);
-    expect(visaIds(at('trip', '2027-05-01', 'Rome, Latium, Italy'))).toEqual(['visa-schengen-cn']);
+  it("a trip gets every passport's plan for the destination", () => {
+    expect(visaIds(at('trip', '2027-04-01', 'Tokyo, Tokyo, Japan'))).toEqual(['visa-jp-cn', 'visa-jp-ph']);
+    expect(visaIds(at('trip', '2027-05-01', 'Rome, Latium, Italy'))).toEqual(['visa-schengen-cn', 'visa-schengen-ph']);
     expect(visaIds(at('trip', '2027-06-01', 'Manila, National Capital Region, Philippines'))).toEqual(['visa-ph-cn']);
+  });
+
+  it('a Chinese-born traveller to the US can attach the Philippine-passport plan too', () => {
+    const trip = at('trip', '2027-08-01', 'New York, New York, United States');
+    const ids = plansFor(trip, BC, BUNDLED_PLAYBOOKS, [born, trip]).map(p => p.id).filter(id => id.startsWith('visa-'));
+    expect(ids).toEqual(['visa-us-cn', 'visa-us-ph']);
   });
 
   it("visitors coming to Vancouver get every passport's Canada plan", () => {

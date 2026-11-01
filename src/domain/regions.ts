@@ -188,6 +188,8 @@ export const whereFor = (pb: Playbook, anchor: Anchor | undefined, lives: Where,
  * Plans a date opens: the ones whose country and province fit where it
  * counts, or, for a plan about leaving (emigrating, a trip out), where they
  * lived before it — and then only when the event takes them somewhere else.
+ * On a trip, your own passport's visa plan comes first; the others stay for
+ * whoever travels with you.
  */
 export function plansFor(
   anchor: Pick<Anchor, 'kind' | 'location'> & Partial<Pick<Anchor, 'id' | 'date'>>,
@@ -198,11 +200,13 @@ export function plansFor(
   const here = whereAt(anchor, lives);
   const before = anchor.date ? livedBefore(anchor as Anchor, anchors) : lives;
   const passport = citizenOf(anchors);
-  return playbooks.filter(pb => {
+  const matched = playbooks.filter(pb => {
     if (!opens(anchor.kind, pb)) return false;
-    if (pb.citizen && anchor.kind === 'trip' && passport && pb.citizen !== passport) return false;
     if (pb.citizen && pb.citizen === here.country) return false;
     if (!pb.leaving) return fits(pb, here);
     return !!before.country && fits(pb, before) && here.country !== before.country;
   });
+  if (anchor.kind !== 'trip' || !passport) return matched;
+  const otherPassport = (pb: Playbook) => (pb.citizen && pb.citizen !== passport ? 1 : 0);
+  return [...matched].sort((a, b) => otherPassport(a) - otherPassport(b));
 }

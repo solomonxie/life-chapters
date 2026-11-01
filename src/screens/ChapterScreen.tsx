@@ -2,12 +2,13 @@ import React, { useLayoutEffect, useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { diffDays } from '../domain/dates';
-import { formatPrecise } from '../domain/format';
+import { formatLasts, formatPrecise } from '../domain/format';
 import { lifeChapters, openSteps, chapterSteps, timelineNodes } from '../domain/plan';
 import type { Routes } from '../navigation/routes';
 import { actions, useStore } from '../state/store';
 import { Button, Card, ListRow, Rows, SectionHeader, StepRow, space, type, usePalette } from '../ui';
 import { ChapterBar } from './TimelineScreen';
+import { kindById } from '../domain/kinds';
 import { plansFor } from '../domain/regions';
 import { countsFrom, ownerOf } from '../domain/people';
 
@@ -30,6 +31,7 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
   const chapter = lifeChapters(nodes, now).find(x => x.eventId === eventId);
   const anchor = plan.anchors.find(a => a.id === eventId);
   const other = useStore(s => s.plan.people.find(x => x.id === anchor?.withPersonId));
+  const purpose = kindById(anchor?.kind ?? '')?.purposes?.find(x => x.id === anchor?.purpose)?.label;
   const nextNode = node ? nodes.find(n => n.date > node.date && !n.moment) : undefined;
 
   useLayoutEffect(() => {
@@ -62,12 +64,15 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
       <Card style={styles.head}>
         {chapter ? <ChapterBar start={chapter.start} end={chapter.end} now={now} /> : null}
         <Text style={[type.caption, { color: p.dim }]}>
-          {chapter?.isCurrent && years && yearN
+          {node.end
+            ? `${formatPrecise(node.date, node.precision)} – ${formatPrecise(node.end, node.precision)} · ${formatLasts(node.date, node.end)}`
+            : chapter?.isCurrent && years && yearN
             ? `year ${yearN} of ${years}`
             : node.date > now
             ? `starts ${formatPrecise(node.date, node.precision)}`
             : `since ${formatPrecise(node.date, node.precision)}`}
           {anchor?.location ? ` · ${anchor.location}` : ''}
+          {purpose ? ` · ${purpose}` : ''}
         </Text>
       </Card>
       {other ? (

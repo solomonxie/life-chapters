@@ -26,7 +26,7 @@ import {
   usePalette,
 } from '../ui';
 
-type Open = 'what' | 'where' | 'when' | 'precision' | null;
+type Open = 'what' | 'where' | 'when' | 'end' | 'precision' | 'purpose' | null;
 
 const PRECISIONS = [
   { value: 'year', label: 'just the year' },
@@ -55,11 +55,13 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
   const [location, setLocation] = useState(existing?.location);
   const [date, setDate] = useState(existing?.date ?? (startKind === 'born' ? '1990-01-01' : now));
   const [precision, setPrecision] = useState<DatePrecision>(existing?.precision ?? 'day');
+  const [end, setEnd] = useState(existing?.end);
+  const [purpose, setPurpose] = useState(existing?.purpose);
   const [open, setOpen] = useState<Open>(existing ? null : 'what');
   const [attach, setAttach] = useState<string[]>([]);
   const saved = useRef(false);
 
-  const [start] = useState({ kind, label, place, note, location, date, precision });
+  const [start] = useState({ kind, label, place, note, location, date, precision, end, purpose });
   const changed =
     start.kind !== kind ||
     start.label !== label ||
@@ -68,8 +70,12 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
     start.location !== location ||
     start.date !== date ||
     start.precision !== precision ||
+    start.end !== end ||
+    start.purpose !== purpose ||
     attach.length > 0;
-  const dirty = !existing || changed;
+  const kindDef = kindById(kind);
+  const endsBeforeStart = !!end && kindDef?.ends !== undefined && resolve(end, precision) < resolve(date, precision);
+  const dirty = (!existing || changed) && !endsBeforeStart;
 
   const linked = isLinkedKind(kind);
   const toggle = (row: Open) => setOpen(o => (o === row ? null : row));
@@ -100,6 +106,8 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
         location,
         date,
         precision,
+        end: kindDef?.ends ? end : undefined,
+        purpose: kindDef?.purposes ? purpose : undefined,
       },
       attach,
       linked ? place : undefined,
@@ -109,19 +117,25 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
   };
 
   const save = () => {
-    const moved = existing && resolve(existing.date, existing.precision) !== resolve(date, precision);
+    const moved =
+      existing &&
+      (resolve(existing.date, existing.precision) !== resolve(date, precision) ||
+        existing.end !== end ||
+        existing.purpose !== purpose);
     const trackIds = new Set(plan.tracks.filter(t => t.anchorId === anchorId).map(t => t.id));
     const steps = view.steps.filter(s => trackIds.has(s.trackId));
     if (moved && steps.length) {
       const doneCount = steps.filter(s => s.status === 'done').length;
       Alert.alert(
-        `Move "${existing!.label}" to ${formatPrecise(date, precision)}?`,
+        existing!.date === date
+          ? `Update "${existing!.label}"?`
+          : `Move "${existing!.label}" to ${formatPrecise(date, precision)}?`,
         `${steps.length - doneCount} steps get rescheduled.${
           doneCount ? ` ${doneCount} already done keep their real dates.` : ''
         }`,
         [
           { text: 'Cancel', style: 'cancel' },
-          { text: 'Move it', style: 'default', onPress: doSave },
+          { text: existing!.date === date ? 'Update' : 'Move it', style: 'default', onPress: doSave },
         ],
       );
     } else {
@@ -245,6 +259,33 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
             maxYear={thisYear + 40}
           />
         ) : null}
+        {kindDef?.ends ? (
+          <>
+            <View style={[styles.divider, { backgroundColor: p.hairline }]} />
+            <ListRow
+              label={kindDef.ends}
+              value={end ? formatPrecise(end, precision) : 'optional'}
+              open={open === 'end'}
+              onPress={() => {
+                if (!end) setEnd(date);
+                toggle('end');
+              }}
+            />
+            {open === 'end' ? (
+              <>
+                <DateWheel value={end ?? date} precision={precision} onChange={setEnd} minYear={1900} maxYear={thisYear + 40} />
+                <Button
+                  title="No end date"
+                  kind="plain"
+                  onPress={() => {
+                    setEnd(undefined);
+                    setOpen(null);
+                  }}
+                />
+              </>
+            ) : null}
+          </>
+        ) : null}
         <View style={[styles.divider, { backgroundColor: p.hairline }]} />
         <UnfoldingPicker
           label="Precision"
@@ -257,6 +298,22 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
             setOpen(null);
           }}
         />
+        {kindDef?.purposes ? (
+          <>
+            <View style={[styles.divider, { backgroundColor: p.hairline }]} />
+            <UnfoldingPicker
+              label="Purpose"
+              value={purpose ?? ''}
+              options={[...kindDef.purposes.map(x => ({ value: x.id, label: x.label })), { value: '', label: 'Not set' }]}
+              open={open === 'purpose'}
+              onToggle={() => toggle('purpose')}
+              onSelect={v => {
+                setPurpose(v || undefined);
+                setOpen(null);
+              }}
+            />
+          </>
+        ) : null}
         <View style={[styles.divider, { backgroundColor: p.hairline }]} />
         <View style={styles.inputRow}>
           <Text style={[type.body, { color: p.text }]}>{linked ? 'Who' : 'Event name'}</Text>
@@ -301,6 +358,12 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
           accessibilityLabel="Notes"
         />
       </Card>
+
+      {endsBeforeStart ? (
+        <Text style={[type.caption, styles.note, { color: p.late }]}>
+          {kindDef?.ends} is before it starts.
+        </Text>
+      ) : null}
 
       {future ? (
         <Text style={[type.caption, styles.note, { color: p.dim }]}>

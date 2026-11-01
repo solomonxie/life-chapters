@@ -1,4 +1,5 @@
 import type { Playbook } from '../../domain/types';
+import { borderPrep, businessLetter, insuranceCheck } from '../trip-steps';
 
 const IRCC = 'https://www.canada.ca/en/immigration-refugees-citizenship/services';
 
@@ -122,6 +123,7 @@ export const visaCaPh: Playbook = {
     {
       id: 'invitation',
       title: 'Get an invitation letter and your host\'s status proof',
+      purposes: ['visiting'],
       offsetDays: -150,
       durationDays: 14,
       conditions: ['Only if visiting family or friends'],
@@ -289,6 +291,9 @@ export const visaCaPh: Playbook = {
       howTo:
         '1. Check in, then go through BI departure; answer questions about the trip plainly.\n2. If referred to secondary inspection, show the papers from the previous step.\n3. The date here is the day before arrival; move it to the real flight.',
     },
+    businessLetter(-150),
+    insuranceCheck(),
+    borderPrep(),
     {
       id: 'arrival',
       title: 'Arrival: meet the border officer',
@@ -316,6 +321,7 @@ export const visaCaPh: Playbook = {
       id: 'etravel',
       title: 'Register on eTravel before flying home',
       offsetDays: 27,
+      endOffsetDays: -3,
       durationDays: 3,
       dependsOn: ['arrival'],
       documents: ['eTravel QR code'],
@@ -327,12 +333,13 @@ export const visaCaPh: Playbook = {
       id: 'return',
       title: 'Leave Canada on time and keep the records',
       offsetDays: 30,
+      endOffsetDays: 0,
       durationDays: 1,
       dependsOn: ['etravel'],
       documents: ['Passport', 'Boarding pass'],
       prepare: ['Copies of the visa, eTA, stamps and visitor record'],
       howTo:
-        '1. Leave by the stamped or visitor record date, or 6 months after arrival if there is neither.\n2. Keep the visa, stamps and boarding passes; a Canadian visa held in the past 10 years is what makes a later eTA possible.\n3. The 30 days here is an estimate; move it to the real return flight.',
+        '1. Leave by the stamped or visitor record date, or 6 months after arrival if there is neither.\n2. Keep the visa, stamps and boarding passes; a Canadian visa held in the past 10 years is what makes a later eTA possible.\n3. Until the trip has a Back home date, the 30 days here is an estimate; setting one moves this step to it.',
     },
   ],
 };

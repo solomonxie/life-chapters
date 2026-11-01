@@ -1,4 +1,5 @@
 import type { Playbook } from '../../domain/types';
+import { borderPrep, businessLetter, insuranceCheck } from '../trip-steps';
 
 const BI = 'https://immigration.gov.ph';
 
@@ -79,6 +80,7 @@ export const visaPhCn: Playbook = {
     {
       id: 'host-docs',
       title: 'Ask your host in the Philippines for an invitation letter',
+      purposes: ['visiting'],
       offsetDays: -80,
       durationDays: 21,
       conditions: ['Only if visiting family or friends, or a sponsor is paying for the trip'],
@@ -164,6 +166,9 @@ export const visaPhCn: Playbook = {
       howTo:
         '1. All inbound travellers fill in eTravel at etravel.gov.ph or in the eGovPH app; it is free.\n2. Register no earlier than 72 hours before arrival; airlines can ask for the QR code at boarding.\n3. Beware of paid look-alike sites.',
     },
+    businessLetter(-60),
+    insuranceCheck(),
+    borderPrep(),
     {
       id: 'arrival',
       title: 'Arrival: meet the immigration officer',
@@ -191,12 +196,13 @@ export const visaPhCn: Playbook = {
       id: 'leave',
       title: 'Leave on time and keep the records',
       offsetDays: 14,
+      endOffsetDays: 0,
       durationDays: 1,
       dependsOn: ['arrival'],
       documents: ['Passport', 'Boarding pass'],
       prepare: ['The last day of your authorised stay', 'Copies of the visa and extension receipts'],
       howTo:
-        '1. Leave by the last day stamped in the passport or given in an extension.\n2. Staying 6 months or more can bring an emigration clearance certificate at departure; check current with the BI.\n3. The 14 days here match the eVisa stay; move it to your real date.',
+        '1. Leave by the last day stamped in the passport or given in an extension.\n2. Staying 6 months or more can bring an emigration clearance certificate at departure; check current with the BI.\n3. Until the trip has a Back home date, the 14 days here match the eVisa stay; setting one moves this step to it.',
     },
   ],
 };

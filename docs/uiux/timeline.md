@@ -1,7 +1,7 @@
 # Timeline — the one page
 
 The whole app is one scrolling page for whoever is on screen: header, life
-line, Plans, Settings. No tab bar, no ⚙. Everything else pushes on top.
+line, Plans, then a Settings link. No tab bar, no ⚙. Everything else pushes on top.
 
 ```
             Life Chapters ▾                     ← person dropdown, people.md
@@ -26,7 +26,7 @@ line, Plans, Settings. No tab bar, no ⚙. Everything else pushes on top.
   ══════ TODAY · Sep 26, 2026 ═════════════
         ┃  ⚠ 2 steps are late             ›  ← scrolls down to Plans
         ┃
-  2027  ○ Mom and Dad arrive         (14) ›  ← a moment: the ┃ runs on
+  2027  ○ Mom and Dad arrive · 3… (14) ›  ← a moment: the ┃ runs on; "· 30 days" once it has an end
         ┃
   2028  ○ Apply for permanent resid… (19) ›
         │
@@ -39,9 +39,9 @@ line, Plans, Settings. No tab bar, no ⚙. Everything else pushes on top.
   step · Done
   ( + Add a plan )
  ──────────────────────────────────────────
-  Settings                                  → settings.md
-  Reminders · Backup · Playbooks · About
-  Life Chapters 1.0 · not advice
+╭────────────────────────────────────────╮
+│ Settings                   demo data ›  │  → settings.md; value only while
+╰────────────────────────────────────────╯     demo data is on
 ```
 
 Reached from: launch · back from any pushed page · a reminder tap (after
@@ -64,7 +64,7 @@ new person ┌──────────────────────
            │   Two events and it starts drawing.     │
            │        [[ When was Ava born? ]]        │
            └────────────────────────────────────────┘
-             Settings still sits below it
+             the Settings link still sits below it
 
 someone     Life Chapters ▾
 else             Ava                        ← whose board, under the title
@@ -123,6 +123,11 @@ moment      ‹         Mom and Dad arrive
             2027 · Vancouver, British Columbia,
             Canada", then OPENS, the steps of
             its plans, NOTES
+with an end "Jun 12, 2027 – Jul 12, 2027 ·
+            30 days · Vancouver, … · Visiting
+            family or friends" in place of
+            "starts …"; over 60 days reads
+            "until Mar 2029"
 no notes    NOTES
             ( + Add notes )                → anchors.md, Notes field
 past        no ACTIVE STEPS header when nothing is open

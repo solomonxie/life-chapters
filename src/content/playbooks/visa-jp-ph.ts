@@ -1,4 +1,5 @@
 import type { Playbook } from '../../domain/types';
+import { borderPrep, businessLetter, insuranceCheck } from '../trip-steps';
 
 const MOFA = 'https://www.mofa.go.jp';
 const EMB = 'https://www.ph.emb-japan.go.jp/itpr_en';
@@ -95,6 +96,7 @@ export const visaJpPh: Playbook = {
     {
       id: 'host-docs',
       title: 'Get the invitation and guarantor papers from Japan',
+      purposes: ['visiting'],
       offsetDays: -95,
       durationDays: 21,
       conditions: ['Only if visiting family or friends in Japan'],
@@ -254,6 +256,9 @@ export const visaJpPh: Playbook = {
       howTo:
         '1. The Embassy of Japan points travellers to Visit Japan Web, the Digital Agency site for entering immigration and customs details before arrival; it gives QR codes to show at the airport.\n2. It is optional; paper cards on the plane still work.\n3. eVISA holders also keep the visa issuance notice open online for the airport.',
     },
+    businessLetter(-95),
+    insuranceCheck(),
+    borderPrep(),
     {
       id: 'arrival',
       title: 'Arrival: landing examination',
@@ -281,6 +286,7 @@ export const visaJpPh: Playbook = {
       id: 'etravel',
       title: 'Register on eTravel before flying home',
       offsetDays: 27,
+      endOffsetDays: -3,
       durationDays: 3,
       dependsOn: ['arrival'],
       documents: ['eTravel QR code'],
@@ -292,12 +298,13 @@ export const visaJpPh: Playbook = {
       id: 'return',
       title: 'Leave Japan on time and keep the records',
       offsetDays: 30,
+      endOffsetDays: 0,
       durationDays: 1,
       dependsOn: ['etravel'],
       documents: ['Passport', 'Boarding pass'],
       prepare: ['The last day on the landing sticker', 'Copies of the visa and boarding passes'],
       howTo:
-        '1. Leave by the last day of your period of stay; overstaying can lead to removal and a ban on returning.\n2. Keep the visa, landing stickers and boarding passes; a multiple-entry visa later looks at trips to Japan in the last 3 years.\n3. The 30 days here is an estimate; move it to the real return flight.',
+        '1. Leave by the last day of your period of stay; overstaying can lead to removal and a ban on returning.\n2. Keep the visa, landing stickers and boarding passes; a multiple-entry visa later looks at trips to Japan in the last 3 years.\n3. Until the trip has a Back home date, the 30 days here is an estimate; setting one moves this step to it.',
     },
   ],
 };
