@@ -88,7 +88,7 @@ export function SettingsSection({ navigation }: { navigation: Nav }) {
 
       <SectionHeader
         title="Backup"
-        info="Every change is saved as a snapshot on this iPhone, and — if you turn it on — as one file a day in your own iCloud Drive. Export sends the same file anywhere through the share sheet. Scans aren't included; they live in Files › Life Chapters."
+        info="Every change is saved as a snapshot on this iPhone, and — if you turn it on — as one file a day in your own iCloud Drive. Export sends the same file anywhere through the share sheet. Scans aren't included; they live in Files › Paper Works."
       />
       <Card>
         <ListRow
@@ -168,7 +168,7 @@ export function SettingsSection({ navigation }: { navigation: Nav }) {
             detail={
               rem.calendarDenied && settings.calendarMirror
                 ? 'Calendar access is off in iOS Settings.'
-                : 'Start-by dates in a "Life Chapters" calendar'
+                : 'Start-by dates in a "Paper Works" calendar'
             }
             chevron={false}
             right={
@@ -200,7 +200,7 @@ export function SettingsSection({ navigation }: { navigation: Nav }) {
         </Rows>
       </Card>
       <Text style={[type.caption, styles.tagline, { color: p.dim }]}>
-        Life Chapters {VERSION} · not advice
+        Paper Works {VERSION} · not advice
       </Text>
     </>
   );

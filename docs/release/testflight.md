@@ -7,12 +7,12 @@ App Store Connect → TestFlight → External Testing → **+** group → add th
 Beta App Description (≤4000):
 
 ```
-Life Chapters is your life on one timeline. Past dates hold notes; key dates cut the line into chapters; future chapters hold plans built from bundled playbooks (Canada federal, Ontario, BC, and China) for life stages, immigration (Express Entry, PR, citizenship), visitors and travel. Plans become dated steps scheduled backward from the event they serve, and marking one done reflows what follows.
+Paper Works gets the paperwork for life's big moves ready on time. Add an event and it lays out every form and document in order, from bundled playbooks (Canada federal, Ontario, BC, and China) for life stages, immigration (Express Entry, PR, citizenship), visitors and travel. Plans become dated steps scheduled backward from the event they serve, and marking one done reflows what follows.
 
-No account, no server. On first launch enter a birth date (or tap Later). To see a filled-in plan: Settings (bottom of the timeline) → Demo data (a sample family in a separate store; your plan is not read or changed while it's on).
+No account, no server. On first launch enter a birth date (or tap Later). To see a filled-in plan: Settings (bottom of the home page) → Demo data (a sample family in a separate store; your plan is not read or changed while it's on).
 
 What's in this beta:
-• Timeline with notes and chapters
+• Home page: paperwork summary, then events coming up and past
 • Plans from playbooks, with step reflow on completion
 • Boards for partner and children
 • Document expiry warnings and local reminders

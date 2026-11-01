@@ -4,7 +4,7 @@ import { addDays } from '../src/domain/dates';
 import {
   documentViews,
   groupDocuments,
-  lifeChapters,
+  eventChapters,
   planView,
   timelineNodes,
 } from '../src/domain/plan';
@@ -55,7 +55,7 @@ describe('timeline', () => {
   });
 
   it('names the current chapter after the kind that opened it', () => {
-    const current = lifeChapters(nodes, NOW).find(p => p.isCurrent)!;
+    const current = eventChapters(nodes, NOW).find(p => p.isCurrent)!;
     expect(current.label).toBe('Settling in · Canada');
   });
 });
@@ -113,5 +113,10 @@ describe('backup', () => {
     const old = JSON.parse(serializePlan(EMPTY_PLAN, NOW));
     const parsed = parseBackup(JSON.stringify({ ...old, entries: [{ id: 'e', body: 'x' }] }));
     expect(parsed.ok && 'entries' in parsed.plan).toBe(false);
+  });
+
+  it('imports a backup exported before the rename', () => {
+    const old = JSON.parse(serializePlan(EMPTY_PLAN, NOW));
+    expect(parseBackup(JSON.stringify({ ...old, format: 'life-chapters-backup' })).ok).toBe(true);
   });
 });

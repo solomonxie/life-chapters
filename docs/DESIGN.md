@@ -1,13 +1,9 @@
-# Design: Life Chapters — the life behind you, and the plan ahead
+# Design: Paper Works — paperwork prep for life's big moves
 
 Product/business reasoning only. Interface lives in [`UIUX_DESIGN.md`](UIUX_DESIGN.md),
 build order in [`IMPLEMENT_PLAN.md`](IMPLEMENT_PLAN.md).
 
 ## Problem
-
-A life has two halves that nobody keeps in one place. Behind you: what
-happened, when, and what it was like — scattered across memory, chat logs and
-old documents. Ahead of you: transitions with paperwork attached.
 
 Big life transitions — migrating, starting a school year, buying a home,
 retiring — have long lead times and ordered prerequisites with their own
@@ -22,12 +18,17 @@ step finishes early, every downstream date should move with it.
 ## Core idea
 
 You enter a handful of **anchors** (born, graduated, relocated, child born).
-Everything else is computed: chapters, upcoming events, and each step's
+Everything else is computed: the paperwork each event brings, and each step's
 *start-by* date, scheduled **backward** from the event it serves. Mark a step
 done and its successors reflow from the real completion date, not the estimate.
 
 So this is a backward-scheduled dependency graph over life anchors — not a
 checklist app with a due-date field.
+
+**Positioning: paperwork, not memoir.** Renamed from Life Chapters to Paper
+Works. Events exist to hang paperwork on; notes on a date stay, but the app no
+longer sells itself as a life record. Home leads with what's late and running,
+then lists events plainly instead of drawing a life line.
 
 The same anchors cut the life into **chapters**. Behind today, a date carries
 **notes** — what happened, in your own words. Ahead of today, a chapter holds
@@ -84,9 +85,9 @@ app covers more than one country's paperwork.
 
 ## Product decisions
 
-**One page, no tabs.** Life line, then Plans, then Settings, in one scroll.
-- Tabs split one idea (dates → steps) into five apps; the late-steps line on
-  the stem and the plans under it are the same fact at two zoom levels.
+**One page, no tabs.** Paperwork summary, events, then Plans, then Settings, in one scroll.
+- Tabs split one idea (dates → steps) into five apps; the late-steps row at
+  the top and the plans under it are the same fact at two zoom levels.
 - Radar and Tracks were two views of the same plans; merged into one section.
 - Expiring documents join Plans — they run out on their own schedule, next to
   the steps they threaten. The rest stay on the steps that ask for them.
@@ -232,7 +233,7 @@ paying twice" explainer rather than as a date the app picks.
     copies say *what the plan was*; the log says *how it got there*. Chosen over
     a copy per change: as traceable, a fraction of the files.
   - *iCloud Drive* — opt-in. One file a day in the user's own iCloud Drive
-    (`Life Chapters` folder), replaced on every change that day. Survives a
+    (`Paper Works` folder), replaced on every change that day. Survives a
     lost phone. It is the user's storage under their Apple account; the app
     talks to the file system, iOS does the syncing, and nothing reaches us.
   - *Export* — the same file out via the share sheet, in by the picker.
@@ -264,7 +265,7 @@ paying twice" explainer rather than as a date the app picks.
 - **Dependencies.** Runtime deps: navigation (2 — no tabs), safe-area, screens, zustand,
   and `@op-engineering/op-sqlite` — taken because SQLite is the store and a
   hand-rolled binding is not a hundred lines. Everything else that touches iOS
-  is hand-rolled Swift in `ios/LifeChapters/Native/` (~400 lines): local
+  is hand-rolled Swift in `ios/PaperWorks/Native/` (~400 lines): local
   notifications (instead of notifee — its RN 0.87 support is unproven and the
   API we use is four calls), document/photo/camera pickers and the share sheet,
   the EventKit calendar mirror, haptics. Date entry is JS wheels, not a native

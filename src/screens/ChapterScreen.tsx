@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { diffDays } from '../domain/dates';
 import { formatLasts, formatPrecise } from '../domain/format';
-import { lifeChapters, openSteps, chapterSteps, timelineNodes } from '../domain/plan';
+import { eventChapters, openSteps, chapterSteps, timelineNodes } from '../domain/plan';
 import type { Routes } from '../navigation/routes';
 import { actions, useStore } from '../state/store';
 import { Button, Card, ListRow, Rows, SectionHeader, StepRow, space, type, usePalette } from '../ui';
@@ -28,7 +28,7 @@ export function ChapterScreen({ route, navigation }: NativeStackScreenProps<Rout
     [plan.anchors, plan.tracks, view.steps, now],
   );
   const node = nodes.find(n => n.id === eventId);
-  const chapter = lifeChapters(nodes, now).find(x => x.eventId === eventId);
+  const chapter = eventChapters(nodes, now).find(x => x.eventId === eventId);
   const anchor = plan.anchors.find(a => a.id === eventId);
   const other = useStore(s => s.plan.people.find(x => x.id === anchor?.withPersonId));
   const purpose = kindById(anchor?.kind ?? '')?.purposes?.find(x => x.id === anchor?.purpose)?.label;

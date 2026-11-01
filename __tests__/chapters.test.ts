@@ -1,4 +1,4 @@
-import { lifeChapters, timelineNodes } from '../src/domain/plan';
+import { eventChapters, timelineNodes } from '../src/domain/plan';
 import type { Anchor } from '../src/domain/types';
 import { currentChapter, deriveChapters } from '../src/domain/chapters';
 import type { LifeEvent } from '../src/domain/types';
@@ -50,6 +50,6 @@ describe('moments', () => {
     ];
     const nodes = timelineNodes(anchors, [], [], '2026-09-27');
     expect(nodes.map(n => n.label)).toContain('Mom and Dad arrive');
-    expect(lifeChapters(nodes, '2026-09-27').map(c => c.eventId)).toEqual(['b']);
+    expect(eventChapters(nodes, '2026-09-27').map(c => c.eventId)).toEqual(['b']);
   });
 });

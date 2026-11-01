@@ -10,11 +10,11 @@ import { backupNow, useBackups } from '../state/autobackup';
 import { actions, useStore } from '../state/store';
 import { Button, Card, ListRow, Rows, SectionHeader, space, type, usePalette } from '../ui';
 
-const LOCAL_INFO = `One copy a day, replaced on every change that day and kept ${KEEP_DAYS} days. What changed, and when, goes into a change log that is only ever added to. Both live in Files › Life Chapters › Backups.`;
+const LOCAL_INFO = `One copy a day, replaced on every change that day and kept ${KEEP_DAYS} days. What changed, and when, goes into a change log that is only ever added to. Both live in Files › Paper Works › Backups.`;
 const LOG_INFO = 'Every change, one line each: when, whose board, what happened. Added to, never rewritten or cleared — one file a year.';
 const LOG_SHOWN = 30;
 const ICLOUD_INFO =
-  'One file a day in iCloud Drive › Life Chapters, replaced on every change that day. It survives losing the phone. Turn it on in Settings.';
+  'One file a day in iCloud Drive › Paper Works, replaced on every change that day. It survives losing the phone. Turn it on in Settings.';
 
 export function BackupsScreen() {
   const p = usePalette();

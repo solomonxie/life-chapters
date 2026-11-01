@@ -70,9 +70,9 @@ export function groupSnapshots(names: string[]): Array<{ day: CivilDate; names: 
 }
 
 /** The one iCloud file for a day, replaced on every change that day. */
-export const dailyName = (day: CivilDate) => `life-chapters-${day}.json`;
+export const dailyName = (day: CivilDate) => `paper-works-${day}.json`;
 
-const DAILY = /^life-chapters-(\d{4}-\d{2}-\d{2})\.json$/;
+const DAILY = /^paper-works-(\d{4}-\d{2}-\d{2})\.json$/;
 
 export const dailyDay = (name: string): CivilDate | null => DAILY.exec(name)?.[1] ?? null;
 

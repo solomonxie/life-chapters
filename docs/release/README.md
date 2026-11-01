@@ -1,6 +1,6 @@
 # App Store Release
 
-Bundle ID `com.example.lifechapters` · iOS 15.1+ · iPhone only, portrait.
+Bundle ID `com.example.paperworks` · iOS 15.1+ · iPhone only, portrait.
 
 - [`listing.md`](listing.md) — step-by-step plan and every App Store Connect field, ready to paste
 - [`privacy-policy.md`](privacy-policy.md) — the policy; its GitHub URL is the Privacy Policy URL

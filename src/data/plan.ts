@@ -68,7 +68,9 @@ export const EMPTY_PLAN: Plan = {
   documents: [],
 };
 
-export const BACKUP_FORMAT = 'life-chapters-backup';
+export const BACKUP_FORMAT = 'paper-works-backup';
+/** Backups exported before the rename to Paper Works. */
+const LEGACY_FORMATS = ['life-chapters-backup'];
 export const BACKUP_VERSION = 2;
 
 export function serializePlan(plan: Plan, now: CivilDate): string {
@@ -92,8 +94,8 @@ export function parseBackup(text: string): ParsedBackup {
     return { ok: false, error: "This file isn't JSON." };
   }
   const o = raw as Record<string, unknown>;
-  if (!o || o.format !== BACKUP_FORMAT) {
-    return { ok: false, error: "This isn't a Life Chapters backup." };
+  if (!o || (o.format !== BACKUP_FORMAT && !LEGACY_FORMATS.includes(o.format as string))) {
+    return { ok: false, error: "This isn't a Paper Works backup." };
   }
   if (typeof o.version !== 'number' || o.version > BACKUP_VERSION) {
     return { ok: false, error: 'This backup is from a newer version of the app.' };

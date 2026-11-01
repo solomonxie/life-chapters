@@ -58,7 +58,7 @@ to read them from. The 64-pending cap makes this a scheduler of its own, not a
 one-line call.
 
 - [x] T4.1 Notifier interface + no-op implementation — see `src/notify/notifier.ts` — depends: none
-- [x] T4.2 Local notifications, hand-rolled `UNUserNotificationCenter` module (no notifee — see `DESIGN.md` Risks) — permission request, deep link into the page / the step — see `src/notify`, `ios/LifeChapters/Native` — depends: T4.1, T3.5
+- [x] T4.2 Local notifications, hand-rolled `UNUserNotificationCenter` module (no notifee — see `DESIGN.md` Risks) — permission request, deep link into the page / the step — see `src/notify`, `ios/PaperWorks/Native` — depends: T4.1, T3.5
 - [x] T4.3 Rolling 64-window queue — register nearest N, refill on foreground and on every reflow, expose the `18/64` counter (drawing: `uiux/settings.md` → Reminders child) — see `src/notify` — depends: T4.2, T2.6
 - [x] T4.4 Weekly digest notification — one summary at the configured day/time — see `src/notify` — depends: T4.2
 - [x] T4.5 Permission-denied banner in Plans and disabled rows in Settings (drawings: `uiux/plans.md`, `uiux/settings.md`) — see `src/screens` — depends: T4.2, T3.9
@@ -73,21 +73,21 @@ is needed for the app to be useful on one device.
 - [x] T5.2 Document scans — camera/photo/Files picker into the app's own Files-visible folder — see `src/screens/DocumentScreen.tsx` — depends: T3.8
 - [x] T5.3 Plan-a-redo action — insert a repeat of a step so its output lands inside the validity window, then reflow (drawing: `uiux/documents.md`) — see `src/domain/schedule.ts` — depends: T1.6, T3.8
 - [x] T5.4 Playbook file import + export via the share sheet — see `src/screens/playbookFiles.ts` — depends: T2.2, T3.7
-- [x] T5.5 Optional calendar mirror of `startBy` dates into a `Life Chapters` calendar, off by default — see `src/integrations` — depends: T3.9
+- [x] T5.5 Optional calendar mirror of `startBy` dates into a `Paper Works` calendar, off by default — see `src/integrations` — depends: T3.9
 
 ## Phase 6: Chapters and the journal
 
-The rebrand to Life Chapters widens the app from plan-ahead to the whole life:
+The rebrand to Paper Works widens the app from plan-ahead to the whole life:
 the intervals between dates become chapters, and past chapters hold stories (since T6.10, notes on each date).
 Stories are text only (photos stay in the photo library — `DESIGN.md`).
 
-- [x] T6.1 Rename to Life Chapters — display name, bundle id, Xcode target, repo, folder; phase → chapter in code and copy — see everything — depends: none
+- [x] T6.1 Rename to Paper Works — display name, bundle id, Xcode target, repo, folder; phase → chapter in code and copy — see everything — depends: none
 - [x] T6.2 (removed in T6.10) `Entry` type, chapter filing, search — pure, tested — see `src/domain/journal.ts` — depends: T1.5
 - [x] T6.3 (removed in T6.10) Journal tab + story entry modal (drawing: `uiux/journal.md`) — see `src/screens/JournalScreen.tsx`, `EntryScreen.tsx` — depends: T6.2, T2.6
 - [x] T6.4 (removed in T6.10) Stories on the Timeline (`✎ n`) and in chapter detail (drawings: `uiux/journal.md`, `uiux/timeline.md`) — depends: T6.3
 - [x] T6.5 (removed in T6.10) Entries in the backup file — see `src/data/plan.ts` — depends: T6.2, T5.1
 
-- [x] T6.6 Auto-backup: a snapshot per change in the app's `Backups` folder (20 a day, 7 days), opt-in iCloud Drive copy per day, restore list (drawing: `uiux/settings.md` → Backups child) — see `src/data/snapshots.ts`, `src/state/autobackup.ts`, `ios/LifeChapters/Native` — depends: T5.1
+- [x] T6.6 Auto-backup: a snapshot per change in the app's `Backups` folder (20 a day, 7 days), opt-in iCloud Drive copy per day, restore list (drawing: `uiux/settings.md` → Backups child) — see `src/data/snapshots.ts`, `src/state/autobackup.ts`, `ios/PaperWorks/Native` — depends: T5.1
 
 ## Phase 6, continued: one page, people, Canada and China
 
@@ -110,7 +110,7 @@ Reasoning in `DESIGN.md` → Product decisions.
 - [x] T6.17 Ages and conditions — `ages` and `conditions` on playbooks and steps, shown by `AppliesIf` on playbook and step detail and in Library rows; Library sorted by life stage, "Fits your events" hides outgrown birth plans, "Coming soon" for the United States and China (China shipped in T6.23) (drawings: `uiux/plans.md`, `uiux/step.md`, `uiux/components.md`) — see `src/ui/AppliesIf.tsx`, `src/screens/LibraryScreen.tsx` — depends: T6.16, T3.2
 - [x] T6.18 Event place — `location` on anchors, searchable offline city list (GeoNames, CC BY 4.0, rebuilt by `scripts/build-cities.mjs`), English and Chinese names, free text for unlisted places; shared by linked events, shown on the stem and chapter detail (drawing: `uiux/anchors.md`) — see `src/domain/places.ts`, `src/ui/PlacePicker.tsx` — depends: T6.16
 - [x] T6.19 Province per person — `province`/`family` on provincial playbooks, British Columbia twins for every Ontario plan, person's province set by hand or inferred from the latest Canadian Place, Library filtered with other provinces collapsed, wrong-province plans flagged with a one-undo switch to the twin; renamed ids migrate on load (drawings: `uiux/plans.md`, `uiux/people.md`) — see `src/domain/provinces.ts` (now `regions.ts`, T6.21) — depends: T6.17, T6.18
-- [x] T6.20 Backups as a daily copy plus an append-only change log (`changes-YYYY.log`, one line per change); copies kept 30 days, the log never pruned; restores save `…-before-restore` first (drawing: `uiux/settings.md` → Backups child) — see `src/data/snapshots.ts`, `src/state/autobackup.ts`, `ios/LifeChapters/Native/Files.swift` — depends: T6.6
+- [x] T6.20 Backups as a daily copy plus an append-only change log (`changes-YYYY.log`, one line per change); copies kept 30 days, the log never pruned; restores save `…-before-restore` first (drawing: `uiux/settings.md` → Backups child) — see `src/data/snapshots.ts`, `src/state/autobackup.ts`, `ios/PaperWorks/Native/Files.swift` — depends: T6.6
 - [x] T6.21 Countries and regions — `country` on every playbook, `where` = {country, province} per person, set under "Lives in" (From my events · Canada's provinces · China) or inferred from the latest residence date (Born, Relocated, Moved city, Bought a home); Chinese-script places with no country read as China; `whereAt` lets a date's own Place decide (Born follows where they live now); Library by country and province, "Other places" collapsed, Coming soon = United States; flag reads "Ontario rules · Married in British Columbia" with a switch to `twinFor` (drawings: `uiux/plans.md`, `uiux/people.md`) — see `src/domain/regions.ts`, `__tests__/regions.test.ts`, `src/screens/LibraryScreen.tsx`, `PersonScreen.tsx` — depends: T6.19
 - [x] T6.22 Relocation and PR — kinds relabeled (Relocated to a country, Apply for permanent residence, Permit or visa granted; old default labels relabeled on load) and new `pr-landed`; Relocating · work or study for BC and Ontario; Provincial nomination for BC and Ontario; Express Entry with CEC/FSW/FST routes and the +600 nomination; citizenship counts from `pr-landed` (drawing: `uiux/anchors.md`) — see `src/domain/kinds.ts`, `src/state/store.ts`, `src/content/playbooks/relocation-*.ts`, `pnp-*.ts` — depends: T6.21
 - [x] T6.23 China life stages — marriage, expecting, newborn, early years, primary, secondary (中考/高考), growing up, retirement; English with Chinese terms in parentheses; each a `family` twin of the Canadian plans — see `src/content/playbooks/*-cn.ts` — depends: T6.21
@@ -138,7 +138,7 @@ Reasoning in `DESIGN.md` → Product decisions.
 Only meaningful once there's an app to sign. Grouped last because every item
 here is a release chore, not a capability.
 
-- [x] T7.1 App icon and launch screen — see `ios/LifeChapters/Images.xcassets` — depends: none
+- [x] T7.1 App icon and launch screen — see `ios/PaperWorks/Images.xcassets` — depends: none
 - [x] T7.2 Signing without secrets in tracked files — placeholder `DEVELOPMENT_TEAM`, gitignored `Local.xcconfig`, per the `security` skill — see `ios` — depends: none
 - [ ] T7.3 Physical-device QA pass over every drawing in `uiux/`, smallest supported width included — see `docs/uiux` — depends: Phase 3, Phase 4
 - [ ] T7.4 Accessibility pass — Dynamic Type at largest setting, VoiceOver labels on every glyph-only control — see `src/ui` — depends: Phase 3
@@ -150,6 +150,12 @@ Current parallel batch is whatever in the active phase has `depends: none` or
 all-satisfied dependencies. Phase 3's screen tasks are the widest fan-out — nine
 tasks over nine mostly-disjoint files — but they all need T2.6 and T3.2 first, so
 those two are the bottleneck worth doing well rather than fast.
+
+## Phase 8: Paper Works
+
+- [x] T8.1 Home as a plain event list — paperwork summary, Coming up, Past; vertical stem, NOW card and derived birthday dropped from home (drawing: `uiux/timeline.md`) — see `src/screens/TimelineScreen.tsx`
+- [x] T8.2 Rename to Paper Works — Xcode project/target/scheme `PaperWorks`, bundle id `…paperworks`, store names, copy around paperwork prep; old `life-chapters-backup` files still import — see `src/data/plan.ts`
+- [ ] T8.3 Retake screenshots and README images with the new name and home
 
 One agent owns this file and checks the boxes. Agents report done; they don't
 edit the checklist.

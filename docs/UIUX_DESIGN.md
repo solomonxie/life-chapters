@@ -1,4 +1,4 @@
-# Interface: Life Chapters — walking a life as a timeline
+# Interface: Paper Works — walking a life as a timeline
 
 Every screen is drawn in [`uiux/`](uiux/) — this file is the map, the flows, and
 the rules that cross screens. Product reasoning is in [`DESIGN.md`](DESIGN.md).
@@ -30,7 +30,7 @@ Docs, Journal) are gone — Radar and Tracks became the Plans section, expiring
 documents moved into it, and the journal became a Notes field on each date.
 "Tracks" are called **Plans** wherever the user sees them.
 
-The title, `Life Chapters ▾`, switches whose board the page shows.
+The title, `Paper Works ▾`, switches whose board the page shows.
 
 ## Screen map
 
@@ -39,7 +39,7 @@ The title, `Life Chapters ▾`, switches whose board the page shows.
         │
         ▼
   ┌─ Timeline, one page ────────────────────┐
-  │ Life Chapters ▾ ─▶ dropdown ─▶ Person ◆ │
+  │ Paper Works ▾ ─▶ dropdown ─▶ Person ◆ │
   │ NOW card ─────────▶ Chapter detail      │
   │ events ─ past ─▶ Anchor editor ◆        │
   │            ○ / (n) ─▶ Chapter detail    │

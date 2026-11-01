@@ -36,7 +36,7 @@ async function migrate(db: DB) {
 }
 
 /** One row per entity, JSON body. The plan is small; the diff keeps writes smaller. */
-export function createSqliteRepository(name = 'life-chapters.db'): Repository {
+export function createSqliteRepository(name = 'paper-works.db'): Repository {
   let db: DB | null = null;
   let ready: Promise<DB> | null = null;
   const written = new Map<string, string>();

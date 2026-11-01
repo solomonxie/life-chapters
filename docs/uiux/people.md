@@ -10,7 +10,7 @@ Tap the title. It unfolds in place at the top of the page, pushing the life
 line down — not a sheet, per the `uiux` skill (`references/mobile.md`).
 
 ```
-            Life Chapters ▴
+            Paper Works ▴
                  Ava                        ← shown when it isn't Me
  ──────────────────────────────────────────
  ╭────────────────────────────────────────╮

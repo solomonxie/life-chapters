@@ -37,7 +37,7 @@ describe('snapshots', () => {
   });
 
   it('never touches files that are not snapshots, the change log included', () => {
-    expect(snapshotsToPrune(['notes.txt', 'life-chapters-2020-01-01.json', 'changes-2020.log'], TODAY)).toEqual([]);
+    expect(snapshotsToPrune(['notes.txt', 'paper-works-2020-01-01.json', 'changes-2020.log'], TODAY)).toEqual([]);
   });
 
   it('writes one tab-separated change line, newlines flattened', () => {
@@ -53,7 +53,7 @@ describe('snapshots', () => {
   });
 
   it('one iCloud name per day', () => {
-    expect(dailyName(TODAY)).toBe('life-chapters-2026-09-26.json');
+    expect(dailyName(TODAY)).toBe('paper-works-2026-09-26.json');
     expect(dailyDay(dailyName(TODAY))).toBe(TODAY);
     expect(dailyDay('other.json')).toBeNull();
   });

@@ -15,7 +15,7 @@ ones surface in Plans, the rest live on the steps that ask for them.
   issued     Sep 26, 2026             ›
   expires    Dec 26, 2026             ›
   number     ••••••••  👁              ›     ← masked by default
-  kept in    Files › Life Chapters      ›
+  kept in    Files › Paper Works      ›
  ──────────────────────────────────────────
   ⚠ Expires 17 days before "Submit
     application" needs it.               ›

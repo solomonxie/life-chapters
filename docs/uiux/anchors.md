@@ -16,8 +16,8 @@ and the whole of first run. It edits the board on screen.
  ╰────────────────────────────────────────╯
   NOTES
  ╭────────────────────────────────────────╮
- │ What happened, who was there, what it  │  ← multi-line, grows with text
- │ meant                                  │
+ │ Case numbers, who to call, what was    │  ← multi-line, grows with text
+ │ sent                                   │
  ╰────────────────────────────────────────╯
 
   PLANS THIS UNLOCKS                        ← live, follows What and Place
@@ -195,7 +195,7 @@ Three screens, no skip, because one anchor draws nothing.
 ```
   ①                      ②                      ③
  ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
- │ Life Chapters │      │ One more.    │      │ Pick a plan  │
+ │ Paper Works │      │ One more.    │      │ Pick a plan  │
  │              │      │              │      │              │
  │ When were    │      │ Anything big │      │ Skilled      │
  │ you born?    │      │ already      │      │ migration ›  │
@@ -273,7 +273,7 @@ precision open     Precision  to the day         ⌄
 | `anchor.field.precision` | Precision |
 | `anchor.field.who` | Who |
 | `anchor.notes` | NOTES |
-| `anchor.notes.placeholder` | What happened, who was there, what it meant |
+| `anchor.notes.placeholder` | Case numbers, who to call, what was sent |
 | `anchor.unlocks` | PLANS THIS UNLOCKS |
 | `anchor.unlocks.detail` | {n} steps · attaches on Save |
 | `anchor.delete` | {n} plans lose their date and detach. |

@@ -2,4 +2,4 @@
 
 | Folder | Feature |
 |---|---|
-| [`lifeline/`](lifeline/) | Rename to Life Line; import events from JSON/CSV made by the desktop kit |
+| [`lifeline/`](lifeline/) | Import events from JSON/CSV made by the desktop kit. Its rename to "Life Line" is superseded: the app is now Paper Works |

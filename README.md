@@ -1,30 +1,23 @@
-# Life Chapters
+# Paper Works
 
-The life behind you and the plan ahead, on one line. Past dates hold your
-notes; future chapters hold the steps to get there — and the plan reschedules
-itself.
-
-Enter the dates that actually matter — born, graduated, relocated, a child's
-birth — and the app works out the rest: the chapter you're in, what's coming, and
-every step you need to start *now* for something years away to land on time.
+Paperwork prep for life's big moves. Add the event (a move, a visa, a
+marriage, a new baby, a trip) and every form and document it needs is laid
+out in order, with the date to start each one so nothing lands late.
 
 Mark one step done and the whole downstream series moves with it.
 
 ```
-  1991  ● Born · Xi'an                    ›
-        │
-  2013  ◍ Graduated · BSc                 ›
-        │
-  2024  ● Relocated to Canada             ›
-        ┃
-  ══════ TODAY · Sep 26, 2026 ═════════════
-        ┃
-  2027  ○ Mom and Dad arrive         (14) ›
-        ┃
-  2028  ○ Apply for permanent resid… (19) ›
-        │
-  2031  ○ Turns 40                        ›
-        ⋮
+  PAPERWORK
+  ⚠ 2 steps are late                     ›
+  4 steps running · next starts in 12d   ›
+  COMING UP
+  Mom and Dad arrive            14 to do ›
+  Jun 12, 2027 · Vancouver · 30 days
+  Apply for permanent resid…    19 to do ›
+  Apr 2028
+  PAST
+  Relocated to Canada                    ›
+  Sep 14, 2024 · Toronto
 ```
 
 ## Why it isn't a to-do app
@@ -49,9 +42,9 @@ real date, not the estimate.
 
 One page, no tabs:
 
-- **Timeline** — the life line, dates behind you and events ahead, cut into
-  chapters; visits and trips sit on it without starting a chapter; notes on
-  any date
+- **Paperwork** — late steps and what's running, at the top
+- **Events** — a plain list, coming up then past; each shows how many steps
+  it still needs; notes on any event
 - **People** — a board each for you, a partner, a child; a shared birth or
   wedding sits on both boards and moves as one
 - **Plans** — playbooks you attach, turned into dated steps; each shows its
@@ -110,12 +103,12 @@ reminders, calendar and backups are untouched. Reset demo data restores it.
 Releasing: [`docs/release/`](docs/release/) — every App Store Connect field ready to
 paste, the privacy policy, and `make release` to archive and upload.
 
-`ios/LifeChapters.xcworkspace` for Xcode. Signing is not committed — put your
+`ios/PaperWorks.xcworkspace` for Xcode. Signing is not committed — put your
 team and bundle id in a gitignored `ios/Local.xcconfig`:
 
 ```
 DEVELOPMENT_TEAM = ABCDE12345
-PRODUCT_BUNDLE_IDENTIFIER = com.yourname.lifechapters
+PRODUCT_BUNDLE_IDENTIFIER = com.yourname.paperworks
 ```
 
 ### Physical device only
@@ -125,10 +118,11 @@ compile check.
 
 ## Screenshots
 
-Sample data on an iPhone 14 (`scripts/device-shots.sh`).
+Sample data on an iPhone 14 (`scripts/device-shots.sh`). Taken before the rename and the
+event-list home page; due for a retake.
 
-### Timeline
-Your life line: chapters behind you, today, and the events ahead.
+### Home
+Your paperwork at the top, then events coming up and past.
 
 <img src="docs/screenshots/01-timeline.png" width="260">
 
@@ -158,7 +152,7 @@ Plans by country and province, with the ones that fit your events first.
 <img src="docs/screenshots/06-library.png" width="260">
 
 ### A child's board
-Every person gets their own life line and plans; names link between boards.
+Every person gets their own events and plans.
 
 <img src="docs/screenshots/07-child-board.png" width="260">
 

@@ -26,12 +26,12 @@ page ([`timeline.md`](timeline.md)), under Plans — no ⚙. Its children
   Check review dates        all current ›
  ──────────────────────────────────────────
   Calendar export                     ○─
-  Start-by dates in a "Life Chapters"
+  Start-by dates in a "Paper Works"
   calendar
   Haptics                             ─●
  ──────────────────────────────────────────
   About                                ›
-  Life Chapters 1.0 · not advice
+  Paper Works 1.0 · not advice
  ──────────────────────────────────────────
   DEMO  ⓘ
   Demo data                           ○─
@@ -127,7 +127,7 @@ to press.
 kept 30 days. What changed, and when, goes into a change log that is only ever
 added to." `ⓘ` change log: "Every change, one line each: when, whose board,
 what happened. Added to, never rewritten or cleared — one file a year." `ⓘ` iCloud: "One
-file a day in iCloud Drive › Life Chapters, replaced on every change that day.
+file a day in iCloud Drive › Paper Works, replaced on every change that day.
 Survives losing the phone."
 
 Tap a row → confirm, then the plan is replaced with that copy — after the plan
@@ -204,7 +204,7 @@ your plan left them. Turn it off to come straight back."
 | `Export…` | tap | writes JSON, then `[ share sheet ]` |
 | `Import…` | tap | `[ document picker ]` → confirm → reflow |
 | `Rebuild the queue` | tap | clears and re-registers the nearest 64 |
-| `Calendar export` | toggle on | asks calendar permission, then mirrors start-by dates into a `Life Chapters` calendar |
+| `Calendar export` | toggle on | asks calendar permission, then mirrors start-by dates into a `Paper Works` calendar |
 | `Sources` / `Check review dates` | tap | → Playbooks child: bundled and imported playbooks, review dates |
 | `Demo data` | toggle | swaps the plan on screen for the demo store, or back |
 | `Reset demo data` | tap | confirm → the demo store reseeded from `demo/plan.ts` |
@@ -222,7 +222,7 @@ your plan left them. Turn it off to come straight back."
 | `settings.backup.never` | Nothing is backed up. |
 | `settings.import.replace` | This file has {n} dates and {m} plans. Your current {n2} dates and {m2} plans are overwritten. |
 | `settings.restore` | It has {n} dates, {m} plans. What you have now stays in Backups. |
-| `settings.about.tagline` | Life Chapters {version} · not advice |
+| `settings.about.tagline` | Paper Works {version} · not advice |
 
 ## Notes
 

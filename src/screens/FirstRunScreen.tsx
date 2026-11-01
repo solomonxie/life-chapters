@@ -62,11 +62,12 @@ export function FirstRunScreen() {
 
       {step === 1 ? (
         <>
-          <Text style={[type.title, styles.center, { color: p.text }]}>Life Chapters</Text>
+          <Text style={[type.title, styles.center, { color: p.text }]}>Paper Works</Text>
           <Text style={[type.body, styles.center, { color: p.dim }]}>
-            Two events and it starts drawing.
+            Paperwork for life's big moves, laid out in order.
           </Text>
           <Text style={[type.headline, styles.q, { color: p.text }]}>When were you born?</Text>
+          <Text style={[type.caption, styles.center, { color: p.dim }]}>Some forms depend on your age.</Text>
           <Card style={styles.card}>
             <DateWheel value={born} onChange={setBorn} minYear={1920} maxYear={thisYear} />
           </Card>
@@ -78,7 +79,7 @@ export function FirstRunScreen() {
         <>
           <Text style={[type.title, styles.center, { color: p.text }]}>One more.</Text>
           <Text style={[type.headline, styles.q, { color: p.text }]}>
-            Anything big already behind you?
+            Anything recent that still has forms to file?
           </Text>
           <Card>
             <Rows>
@@ -115,7 +116,7 @@ export function FirstRunScreen() {
         <>
           <Text style={[type.title, styles.center, { color: p.text }]}>Pick a plan</Text>
           <Text style={[type.body, styles.center, { color: p.dim }]}>
-            A plan turns a date into dated steps. It's guidance, not advice.
+            A plan turns an event into dated paperwork steps. It's guidance, not advice.
           </Text>
           <Card>
             <Rows>

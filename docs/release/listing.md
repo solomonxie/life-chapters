@@ -1,18 +1,18 @@
-# Publishing Life Chapters — step by step
+# Publishing Paper Works — step by step
 
 Every field below is ready to paste. `TODO` = only you can supply it.
-App Store Connect paths start at **Apps → Life Chapters → Distribution →**.
+App Store Connect paths start at **Apps → Paper Works → Distribution →**.
 
 | | |
 |---|---|
-| Bundle ID | `com.example.lifechapters` |
-| SKU | `lifechapters-ios` |
+| Bundle ID | `com.example.paperworks` |
+| SKU | `paperworks-ios` |
 | Version | `1.0` (`MARKETING_VERSION`) |
 | Build | timestamp, set by `make release` |
 | Devices | iPhone only (`TARGETED_DEVICE_FAMILY = 1`) — no iPad screenshots needed |
 | Min iOS | 15.1 |
-| Privacy Policy URL | `https://github.com/solomonxie/life-chapters/blob/master/docs/release/privacy-policy.md` |
-| Support URL | `https://github.com/solomonxie/life-chapters/issues` |
+| Privacy Policy URL | `https://github.com/solomonxie/paper-works/blob/master/docs/release/privacy-policy.md` |
+| Support URL | `https://github.com/solomonxie/paper-works/issues` |
 
 ---
 
@@ -31,9 +31,9 @@ App Store Connect paths start at **Apps → Life Chapters → Distribution →**
 
 Created by automatic signing on the first device build. Verify at
 developer.apple.com → Certificates, Identifiers & Profiles → Identifiers →
-`com.example.lifechapters`:
+`com.example.paperworks`:
 
-- [ ] **iCloud** checked (iCloud Documents), container `iCloud.com.example.lifechapters`
+- [ ] **iCloud** checked (iCloud Documents), container `iCloud.com.example.paperworks`
   assigned. Automatic signing created both on the first device build; this is a check,
   not a step. Nothing else to tick — notifications, calendar and pickers need no
   capability.
@@ -42,15 +42,15 @@ developer.apple.com → Certificates, Identifiers & Profiles → Identifiers →
 
 - [ ] `make ios` → Release build on the paired iPhone. Smoke test:
   - first run: born date → one more date → pick a plan
-  - Plans (below the timeline): swipe a step left → **Done**; the toast says what moved; **Undo** puts it back
+  - Plans (below the events): swipe a step left → **Done**; the toast says what moved; **Undo** puts it back
   - Step: long-press **Mark done** → pick a past date; then **Change ›** on the done date, and on **due by** → move it → **Reset**
   - add **Moved city** with Place Nanchang → the Library leads with **China**; delete it → back to Canada
-  - add **Visitors arrive** (Detail: who) → it sits on the stem, the chapter doesn't change, **Visitors to Canada** is offered
-  - a date → Notes: write some; the chapter shows them and the stem gets a ✎
-  - title **Life Chapters ▾** → **Link a person to me** → Child, a name, a date; her board opens with "Born"; move the date on either board and both move
+  - add **Visitors arrive** (Detail: who) → it shows under Coming up with its steps to do, **Visitors to Canada** is offered
+  - a date → Notes: write some; the chapter shows them and the event row gets a ✎
+  - title **Paper Works ▾** → **Link a person to me** → Child, a name, a date; her board opens with "Born"; move the date on either board and both move
   - a step's document → add a scan from Photos; **kept in** opens Files at the app's folder
   - make any change → Settings (bottom of the page) → Backup → **On this iPhone** lists today's copy and **Change log** has a line for it; tap the copy → Restore; a **before restore** copy appears
-  - turn **iCloud Drive** on → Files → iCloud Drive → **Life Chapters** holds today's file
+  - turn **iCloud Drive** on → Files → iCloud Drive → **Paper Works** holds today's file
   - Settings → Backup → **Export…** → save to Files → **Import…** the same file
   - allow notifications; Settings → Reminders shows `n/64` queued
 
@@ -61,10 +61,10 @@ developer.apple.com → Certificates, Identifiers & Profiles → Identifiers →
 | Field | Value |
 |---|---|
 | Platforms | iOS |
-| Name | `Life Chapters: Story & Plan` |
+| Name | `Paper Works: Paperwork Plan` |
 | Primary Language | English (U.S.) |
-| Bundle ID | `com.example.lifechapters` (dropdown) |
-| SKU | `lifechapters-ios` |
+| Bundle ID | `com.example.paperworks` (dropdown) |
+| SKU | `paperworks-ios` |
 | User Access | Full Access |
 
 If the name is taken, the runner-up list is in [App Store Connect pages](#app-store-connect-pages).
@@ -89,13 +89,13 @@ for credentials in a terminal, add an App Store Connect API key instead: downloa
 -authenticationKeyIssuerID <issuer>` to the `-exportArchive` call in `scripts/release-ios.sh`.
 Processing in App Store Connect: 15–60 min, then an email "build has completed processing".
 
-Fallback, Xcode GUI: open `ios/LifeChapters.xcworkspace` → destination **Any iOS Device (arm64)** → Product → **Archive** → Organizer → **Distribute App** → App Store Connect → Upload.
+Fallback, Xcode GUI: open `ios/PaperWorks.xcworkspace` → destination **Any iOS Device (arm64)** → Product → **Archive** → Organizer → **Distribute App** → App Store Connect → Upload.
 
 ## 8. TestFlight
 
 - [ ] App Store Connect → **TestFlight** → the build shows no "Missing Compliance" (see [Export compliance](#export-compliance)).
 - [ ] Internal Testing → **+** group `Me` → add your Apple ID → install via the TestFlight app on the iPhone.
-- [ ] Same smoke test as step 4, on the TestFlight build (this is the exact binary Apple reviews). iCloud is the production environment now: turn it on, confirm the Life Chapters folder appears in iCloud Drive, delete and reinstall, restore today's file from Settings › Backup › On this iPhone › iCloud Drive. Check reminders specifically: set lead time to **same day** on a step starting tomorrow and confirm the notification opens that step.
+- [ ] Same smoke test as step 4, on the TestFlight build (this is the exact binary Apple reviews). iCloud is the production environment now: turn it on, confirm the Paper Works folder appears in iCloud Drive, delete and reinstall, restore today's file from Settings › Backup › On this iPhone › iCloud Drive. Check reminders specifically: set lead time to **same day** on a step starting tomorrow and confirm the notification opens that step.
 
 ## 9. Submit
 
@@ -125,8 +125,8 @@ The paired iPhone 14 (`1170 × 2532`) captures them directly — the aspect rati
 0.4%, which is invisible:
 
 ```
-make device-shots SHOTS=/tmp/lifechapters-shots     # sample plan in a throwaway qa.db
-make screenshots  SHOTS=/tmp/lifechapters-shots     # → docs/release/screenshots/
+make device-shots SHOTS=/tmp/paperworks-shots     # sample plan in a throwaway qa.db
+make screenshots  SHOTS=/tmp/paperworks-shots     # → docs/release/screenshots/
 ```
 
 `device-shots` relaunches the app once per shot with the `LC_QA` hook — a sample life
@@ -135,21 +135,21 @@ her early-years and school plans, notes on two dates) in `qa.db`. Your real plan
 opened. Keep the phone unlocked and untouched while it runs; check the
 status bar (battery, no banners) and re-run any shot that caught a notification.
 
-**Stale:** what sits in `docs/release/screenshots/` now was captured before the one-page
-redesign — `02-radar` and `04-journal` show removed tabs, and the rest show Australian
-content. Re-run `make device-shots` + `make screenshots` before uploading, and drop the
+**Stale:** what sits in `docs/release/screenshots/` now was captured before the rename to
+Paper Works and the event-list home page — `02-radar` and `04-journal` show removed tabs,
+and the rest show the old name, the life line and Australian content. Re-run `make device-shots` + `make screenshots` before uploading, and drop the
 old `02-radar.jpg` / `04-journal.jpg`.
 
 Upload order (3 minimum, 10 maximum — the first two are what people actually see):
 
-1. **Timeline** (`01-timeline`) — the life line, chapters, TODAY, what's ahead
+1. **Home** (`01-timeline`) — paperwork summary, events coming up and past
 2. **Plan** (`02-plan`) — first and last step, next steps, every step
 3. **Step** (`03-step`) — start-by / due-by / valid, documents, prep, how-to
 4. **Chapter** (`04-chapter`) — a chapter, the plans it opens, its steps
 5. **Event** (`05-event`) — place, notes, plans this unlocks
 6. **Library** (`06-library`) — plans by country and province, fits your events
-7. **A child's board** (`07-child-board`) — her own life line and plans
-8. **Timeline, dark** (`08-timeline-dark`) — the same line at night
+7. **A child's board** (`07-child-board`) — her own events and plans
+8. **Home, dark** (`08-timeline-dark`) — the same page at night
 
 App Preview video: skip for 1.0.
 
@@ -165,7 +165,7 @@ App Preview video: skip for 1.0.
 | Promotional Text | below |
 | Description | below |
 | Keywords | below |
-| Support URL | `https://github.com/solomonxie/life-chapters/issues` |
+| Support URL | `https://github.com/solomonxie/paper-works/issues` |
 | Marketing URL | leave blank |
 | Version | `1.0` |
 | Copyright | `2026 solomonxie` |
@@ -179,29 +179,30 @@ App Preview video: skip for 1.0.
 | App Review → Attachment | none |
 | Version Release | **Manually release this version** |
 
-Promotional Text (155/170):
+Promotional Text (148/170):
 
 ```
-Your past and your plans on one timeline. Notes on the dates behind you; paperwork ahead, for Canada and China, scheduled backward from the date it serves.
+Paperwork for life's big moves: visas, relocation, marriage, a new baby, travel. Every form in order, timed backward from the date it serves.
 ```
 
 Description:
 
 ```
-Life Chapters puts your whole life on one line. The dates that matter — born, married, relocated, a child's birth — cut it into chapters. Behind today, dates hold your notes. Ahead of today, chapters hold the steps to get where you're going.
+Paper Works gets the paperwork for life's big moves ready on time. Add the event (a move abroad, a visa, a wedding, a new baby, visitors arriving, a trip) and every form, document and appointment it needs is laid out in order, each with the date you must start it.
 
 No account. No subscription. Nothing leaves your iPhone unless you choose to: export a file, or turn on the iCloud Drive backup or the calendar mirror.
 
-YOUR LIFE, IN CHAPTERS
-• A timeline you can walk: every date you enter, the chapter you're in now, and what's coming
-• Notes on any date — what happened, who was there, what it meant
-• Dates as precise as your memory: "2013" is enough; nothing pretends to know the day
+WHAT TO START NOW
+• The home page opens on your paperwork: what's late, what's running, what starts next
+• Then your events, coming up and past, each with how many steps it still needs
+• Calm by default: red only for a step past its due date or a document that expires before it's needed
+• Swipe to mark done, snooze, or set aside a step that isn't for you
 
 YOUR FAMILY
-• A timeline each for you, your partner, your children — switch with one tap
-• A wedding or a birth sits on both timelines; move the date on one and both move
-• A child's plans count from the child's own birthday
-• Visits and trips sit on the line with their own plans, without starting a new chapter
+• A board each for you, your partner, your children: switch with one tap
+• A wedding or a birth sits on both boards; move the date on one and both move
+• A child's paperwork counts from the child's own birthday
+• Visits and trips carry their own plans: visas, insurance, border prep
 
 A PLAN THAT RESCHEDULES ITSELF
 • Pick a plan — relocating on a work or study permit, Express Entry, provincial nomination, citizenship, getting married, a new baby, school, graduating, a new job, moving, buying a home, retirement — and it becomes dated steps
@@ -213,7 +214,7 @@ A PLAN THAT RESCHEDULES ITSELF
 • Results that expire — a police certificate, a language test — are timed so they're still valid when needed
 
 WHAT TO START NOW
-• Right under your timeline: your plans, each with its next step; on each plan, what to start now and next — by when you must start, not when it's due
+• Right under your events: your plans, each with its next step; on each plan, what to start now and next — by when you must start, not when it's due
 • Calm by default: red only for a step past its due date or a document that expires before it's needed
 • Swipe to mark done, snooze, or set aside a step that isn't for you
 
@@ -232,20 +233,20 @@ Plans describe paperwork for Canada and China. China plans are in English, with 
 Backed up on your iPhone: a copy each day, updated on every change, and a change log with a line for each change. Optionally, a daily copy in your own iCloud Drive. Free, with no ads and no analytics.
 ```
 
-Keywords (97/100 — "life", "story", "plan" are in the name and subtitle already):
+Keywords (99/100; "paper", "works", "paperwork", "plan" are in the name and subtitle already):
 
 ```
-timeline,family,memoir,visa,immigration,canada,china,relocation,visitor,paperwork,deadline,expiry
+visa,immigration,forms,documents,canada,china,relocation,visitor,deadline,expiry,checklist,family
 ```
 
 App Review Notes:
 
 ```
-No account or login is needed. On first launch the app asks for a birth date, optionally one more past date, and offers a plan; "Later" skips it.
+No account or login is needed. On first launch the app asks for a birth date (some forms depend on age), optionally one recent event that still has forms, and offers a plan; "Later" skips it.
 
-The app is one scrolling page: the timeline, then Plans, then Settings at the bottom. To see the planning side quickly: on the "Pick a plan" screen choose "Skilled migration · CA", pick a date about a year ahead, and Attach. Plans, below the timeline, then shows dated steps; swipe one left to mark it done and a message states which later steps moved.
+The app is one scrolling page: a paperwork summary, the list of events, then Plans, then Settings at the bottom. To see the planning side quickly: on the "Pick a plan" screen choose "Skilled migration · CA", pick a date about a year ahead, and Attach. Plans, below the events, then shows dated steps; swipe one left to mark it done and a message states which later steps moved.
 
-Tapping the "Life Chapters" title switches between people (for example a partner or a child); each has their own timeline, stored on the device like everything else.
+Tapping the "Paper Works" title switches between people (for example a partner or a child); each has their own events and plans, stored on the device like everything else.
 
 The bundled plans describe common paperwork steps: for Canada, relocating on a work or study permit, permanent residence through Express Entry or provincial nomination, citizenship, visitors to Canada, life stages from marriage to retirement for Ontario and British Columbia, graduating, starting a job, moving home, buying and selling a home, buying a car, a job ending, starting a business, separation, caregiving, a death in the family, life as a permanent resident, permits, travel and leaving Canada; for China, the same life stages and life turns plus 社保, 公积金 and yearly tax, travelling to and from China, leaving China, relocating to China, and a child born in Canada to a Chinese parent. China plans are in English with Chinese terms in parentheses. Plans touching nationality describe the routes and never recommend one. None of it is legal, immigration or medical advice: every plan and step screen shows "Reviewed <month> · not official advice", and each plan lists the official pages it was checked against, which open in Safari.
 
@@ -260,17 +261,17 @@ What's New: not shown for a first version. From 1.1 on, write it here.
 
 | Field | Value |
 |---|---|
-| Name | `Life Chapters: Story & Plan` (27/30) |
-| Subtitle | `Your story, and the plan ahead` (30/30) |
-| Category — Primary | Lifestyle |
-| Category — Secondary | Productivity |
+| Name | `Paper Works: Paperwork Plan` (27/30) |
+| Subtitle | `Visas, moves, family forms` (26/30) |
+| Category — Primary | Productivity |
+| Category — Secondary | Lifestyle |
 | Content Rights | **No**, it does not contain, show, or access third-party content — bundled plans are written for the app; source links open in Safari |
 | Age Rating | **Edit** → answers below → result **4+** |
 | License Agreement | Apple standard EULA (default) |
-| Privacy Policy URL | `https://github.com/solomonxie/life-chapters/blob/master/docs/release/privacy-policy.md` |
+| Privacy Policy URL | `https://github.com/solomonxie/paper-works/blob/master/docs/release/privacy-policy.md` |
 
-If `Life Chapters: Story & Plan` is taken, in order of preference:
-`Life Chapters: Notes & Plan` (27), `Life Chapters — Life Timeline` (29), `Life Chapters`.
+If `Paper Works: Paperwork Plan` is taken, in order of preference:
+`Paper Works: Forms on Time` (26), `Paper Works — Visa & Forms` (26), `Paper Works`.
 The name is what gets indexed; the subtitle can absorb whatever the name loses.
 
 Age rating questionnaire — every answer:

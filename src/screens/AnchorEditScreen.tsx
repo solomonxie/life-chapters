@@ -350,7 +350,7 @@ export function AnchorEditScreen({ route, navigation }: NativeStackScreenProps<R
           value={note}
           onChangeText={setNote}
           onFocus={() => setOpen(null)}
-          placeholder="What happened, who was there, what it meant"
+          placeholder="Case numbers, who to call, what was sent"
           placeholderTextColor={p.faint}
           multiline
           scrollEnabled={false}

@@ -166,7 +166,7 @@ export function timelineNodes(
   return nodes.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
 }
 
-export const lifeChapters = (nodes: TimelineNode[], now: CivilDate): Chapter[] =>
+export const eventChapters = (nodes: TimelineNode[], now: CivilDate): Chapter[] =>
   deriveChapters(
     nodes.filter(n => n.source === 'anchor' && !n.moment),
     now,
