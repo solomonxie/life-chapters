@@ -27,11 +27,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window = UIWindow(frame: UIScreen.main.bounds)
 
     // LC_QA opens a throwaway qa.db with a sample plan; the real plan is untouched.
-    let qa = ProcessInfo.processInfo.environment["LC_QA"]
+    var props: [String: Any] = ["store": Bundle.main.object(forInfoDictionaryKey: "AppStoreRegion") as? String ?? "us"]
+    props["qa"] = ProcessInfo.processInfo.environment["LC_QA"]
     factory.startReactNative(
       withModuleName: "LifeChapters",
       in: window,
-      initialProperties: qa.map { ["qa": $0] },
+      initialProperties: props,
       launchOptions: launchOptions
     )
 

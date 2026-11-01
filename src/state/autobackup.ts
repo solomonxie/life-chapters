@@ -26,6 +26,9 @@ const SETTLE_MS = 1500;
 
 let writing: Promise<void> = Promise.resolve();
 
+/** Resolves once every queued backup write has landed. */
+export const backupsSettled = () => writing;
+
 /**
  * One backup pass: today's copy on the phone replaced (older days kept 30
  * days) and, if on, today's iCloud file replaced.
@@ -76,14 +79,20 @@ function logChange(who: string, what: string) {
   );
 }
 
-/** Backs up after every plan change; call once the store has loaded. */
-export function startAutoBackup() {
-  let timer: ReturnType<typeof setTimeout> | null = null;
+/** Re-reads what's on disk, e.g. after switching between the real and the demo plan. */
+export function refreshBackupState() {
+  useBackups.setState({ lastICloud: null, error: null });
   icloud.status().then(s => useBackups.setState({ icloudStatus: s }));
   files.listBackups().then(names => {
     const sorted = names.filter(isSnapshot).sort();
     useBackups.setState({ localCount: sorted.length, lastLocal: sorted[sorted.length - 1] ?? null });
   });
+}
+
+/** Backs up after every plan change; call once the store has loaded. */
+export function startAutoBackup() {
+  let timer: ReturnType<typeof setTimeout> | null = null;
+  refreshBackupState();
 
   return useStore.subscribe((s, prev) => {
     const turnedOn = s.settings.icloudBackup && !prev.settings.icloudBackup;

@@ -1,0 +1,3 @@
+// App Store region the build targets: us (Canada/US) or cn. `make <target> STORE=cn`
+// overrides it on the xcodebuild line; JS reads it via storeRegion() in src/platform.
+APP_STORE_REGION = us

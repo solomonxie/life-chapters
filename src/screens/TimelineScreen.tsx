@@ -6,12 +6,12 @@ import { ME, menuPeople } from '../domain/people';
 import { placeShort } from '../domain/places';
 import { ageOn, lateSteps, lifeChapters, openSteps, timelineNodes } from '../domain/plan';
 import { useNav } from '../navigation/routes';
+import { useDemo } from '../state/demo';
 import { actions, useStore } from '../state/store';
 import { Button, Card, EmptyState, ListRow, Rows, TimelineStem, space, type, usePalette } from '../ui';
 import { PlansSection } from './PlansSection';
-import { SettingsSection } from './SettingsSection';
 
-/** The whole app on one page: whose board, their life line, their plans, then settings. */
+/** The whole app on one page: whose board, their life line, their plans, then a link to Settings. */
 export function TimelineScreen() {
   const p = usePalette();
   const nav = useNav();
@@ -20,6 +20,7 @@ export function TimelineScreen() {
   const people = useStore(s => s.plan.people);
   const allAnchors = useStore(s => s.plan.anchors);
   const now = useStore(s => s.now);
+  const demo = useDemo(s => s.on);
   const [menu, setMenu] = useState(false);
   const scroll = useRef<React.ComponentRef<typeof ScrollView>>(null);
   const plansY = useRef(0);
@@ -183,7 +184,9 @@ export function TimelineScreen() {
         </>
       )}
 
-      <SettingsSection navigation={nav} />
+      <Card style={styles.settings}>
+        <ListRow label="Settings" value={demo ? 'demo data' : undefined} onPress={() => nav.navigate('Settings')} />
+      </Card>
     </ScrollView>
   );
 }
@@ -221,6 +224,7 @@ const styles = StyleSheet.create({
   stem: { paddingTop: space.lg },
   title: { alignItems: 'center' },
   menu: { marginTop: space.sm },
+  settings: { marginTop: space.xl },
   add: { alignSelf: 'flex-start', marginLeft: space.lg + 44 + space.sm, marginTop: space.md },
   bar: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   track: { flex: 1, height: 14, justifyContent: 'center' },

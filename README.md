@@ -34,7 +34,7 @@ how long its result stays valid, and what it depends on — then it's scheduled
 **backward** from the event it serves:
 
 ```
-dueBy    = anchorDate + offsetDays
+dueBy    = anchorDate + offsetDays     (anchorEnd + endOffsetDays once the event has an end)
 latest   = dueBy − durationDays
 earliest = dueBy − validForDays − durationDays
 startBy  = max(latest, when every dependency actually finishes)
@@ -98,7 +98,14 @@ npm test              # engine, store, reminder queue, content
 npm run typecheck
 npm run ios           # physical device
 make help             # release build, App Store upload, screenshots
+make ios STORE=cn     # any install/release: STORE=us (Canada/US, default) | cn
 ```
+
+`STORE` → Info.plist `AppStoreRegion` → `storeRegion()` in `src/platform`.
+
+Demo data for screenshots and video: Settings › Demo data swaps in
+`demo/plan.ts` from a separate store (`demo.db`), and back; the real plan,
+reminders, calendar and backups are untouched. Reset demo data restores it.
 
 Releasing: [`docs/release/`](docs/release/) — every App Store Connect field ready to
 paste, the privacy policy, and `make release` to archive and upload.

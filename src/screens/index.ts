@@ -8,6 +8,7 @@ export { ChapterScreen } from './ChapterScreen';
 export { PersonScreen } from './PersonScreen';
 export { PlaybookScreen } from './PlaybookScreen';
 export { RemindersScreen } from './RemindersScreen';
+export { SettingsScreen } from './SettingsScreen';
 export { SourcesScreen } from './SourcesScreen';
 export { StepScreen } from './StepScreen';
 export { TimelineScreen } from './TimelineScreen';

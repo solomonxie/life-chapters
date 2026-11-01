@@ -121,3 +121,23 @@ const split = (key: string): [Table | 'meta', string] => {
 };
 
 const structuredCloneSafe = <T>(v: T): T => JSON.parse(JSON.stringify(v));
+
+/** Switches kept outside every plan, e.g. which store the app opens on. */
+export function createSqliteFlags(name = 'flags.db') {
+  let ready: Promise<DB> | null = null;
+  const conn = () =>
+    (ready ??= (async () => {
+      const d = open({ name });
+      await d.execute('CREATE TABLE IF NOT EXISTS flags (key TEXT PRIMARY KEY, value TEXT NOT NULL)');
+      return d;
+    })());
+  return {
+    async get(key: string): Promise<string | null> {
+      const { rows } = await (await conn()).execute('SELECT value FROM flags WHERE key = ?', [key]);
+      return rows[0] ? String(rows[0].value) : null;
+    },
+    async set(key: string, value: string) {
+      await (await conn()).execute('INSERT OR REPLACE INTO flags (key, value) VALUES (?, ?)', [key, value]);
+    },
+  };
+}

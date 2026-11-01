@@ -14,7 +14,7 @@ gestures, in-place pickers, and the ⓘ rule.
 | Timeline — the one page | root, home | [`uiux/timeline.md`](uiux/timeline.md) |
 | Person dropdown | unfolds under the title | [`uiux/people.md`](uiux/people.md) |
 | Plans | section of the page | [`uiux/plans.md`](uiux/plans.md) |
-| Settings | section of the page, at the bottom | [`uiux/settings.md`](uiux/settings.md) |
+| Settings | pushed page, from the link at the bottom of the page | [`uiux/settings.md`](uiux/settings.md) |
 | Anchor editor | modal | [`uiux/anchors.md`](uiux/anchors.md) |
 | Person (new / link / rename / lives in) | modal | [`uiux/people.md`](uiux/people.md) |
 | Chapter detail | pushed page | [`uiux/timeline.md`](uiux/timeline.md) |
@@ -24,8 +24,8 @@ gestures, in-place pickers, and the ⓘ rule.
 | Reminders / Backups / Playbooks / About | pushed from Settings | [`uiux/settings.md`](uiux/settings.md) |
 | Components | reused parts | [`uiux/components.md`](uiux/components.md) |
 
-One page, no tab bar, no ⚙: life line, then Plans, then Settings, in one
-scroll. Everything else pushes on one stack. The old tabs (Radar, Tracks,
+One page, no tab bar, no ⚙: life line, then Plans, then a Settings link, in
+one scroll. Everything else pushes on one stack. The old tabs (Radar, Tracks,
 Docs, Journal) are gone — Radar and Tracks became the Plans section, expiring
 documents moved into it, and the journal became a Notes field on each date.
 "Tracks" are called **Plans** wherever the user sees them.
@@ -48,9 +48,9 @@ The title, `Life Chapters ▾`, switches whose board the page shows.
   │       ─ expiring ─▶ Document ◀───┘      │
   │       ─ plan row ─▶ Playbook detail     │
   │       ─ + Add a plan ─▶ Library ─▶ …    │
-  │ Settings ─▶ Reminders · Backups         │
-  │          ─▶ Playbooks · About           │
-  │          ─▶ [share sheet] [doc picker]  │
+  │ Settings › ─▶ Reminders · Backups       │
+  │            ─▶ Playbooks · About · Demo  │
+  │            ─▶ [share sheet] [doc picker]│
   └─────────────────────────────────────────┘
 
   ◆ = modal    [brackets] = OS-owned surface

@@ -195,7 +195,9 @@ export function SettingsSection({ navigation }: { navigation: Nav }) {
 
       <View style={styles.gap} />
       <Card>
-        <ListRow label="About" onPress={() => navigation.navigate('About')} />
+        <Rows>
+          <ListRow label="About" onPress={() => navigation.navigate('About')} />
+        </Rows>
       </Card>
       <Text style={[type.caption, styles.tagline, { color: p.dim }]}>
         Life Chapters {VERSION} · not advice

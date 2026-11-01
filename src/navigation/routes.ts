@@ -6,6 +6,7 @@ export type Routes = {
   Timeline: undefined;
   Chapter: { eventId: string };
   AnchorEdit: { anchorId?: string; kind?: string } | undefined;
+  Settings: undefined;
   Reminders: undefined;
   Backups: undefined;
   Sources: undefined;

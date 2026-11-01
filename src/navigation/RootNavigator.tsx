@@ -72,6 +72,7 @@ function MainStack() {
   return (
     <Stack.Navigator screenOptions={stackOptions(p)}>
       <Stack.Screen name="Timeline" component={S.TimelineScreen} />
+      <Stack.Screen name="Settings" component={S.SettingsScreen} options={{ title: '' }} />
       <Stack.Screen name="Reminders" component={S.RemindersScreen} />
       <Stack.Screen name="Backups" component={S.BackupsScreen} />
       <Stack.Screen name="Sources" component={S.SourcesScreen} options={{ title: 'Playbooks' }} />

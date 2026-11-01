@@ -1,12 +1,12 @@
 # Settings
 
-The bottom of the one page ([`timeline.md`](timeline.md)), under Plans — not a
-screen of its own, and no ⚙. Its children (Reminders, Backups, Playbooks,
-About) still push. Explanations sit behind ⓘ popovers, per the `uiux` skill
+A page of its own, pushed from the `Settings ›` link at the bottom of the one
+page ([`timeline.md`](timeline.md)), under Plans — no ⚙. Its children
+(Reminders, Backups, Playbooks, About) push from it. Explanations sit behind ⓘ popovers, per the `uiux` skill
 (`references/mobile.md`) — the controls stay above the fold.
 
 ```
-  ⋮  (Plans above)
+ ‹
   Settings
   REMINDERS  ⓘ                              ← ⓘ = the 64-cap explainer
   Only the steps you haven't started.        ← the one sentence that stays out
@@ -32,6 +32,11 @@ About) still push. Explanations sit behind ⓘ popovers, per the `uiux` skill
  ──────────────────────────────────────────
   About                                ›
   Life Chapters 1.0 · not advice
+ ──────────────────────────────────────────
+  DEMO  ⓘ
+  Demo data                           ○─
+  Show a sample plan instead of yours
+  Reset demo data                          ← only while on, confirms first
 ```
 
 Settings are app-wide, not per person. Reminders and backups cover every
@@ -172,6 +177,25 @@ stale playbooks
   Check review dates             2 old  ›
 ```
 
+## Demo data
+
+A sample family's plan (`demo/plan.ts`) in its own store (`demo.db`), for
+App Store screenshots and video. Switching is instant and in place; the choice
+survives a relaunch (`flags.db`). While it's on, the real plan isn't read or
+written, reminders and the calendar stay as the real plan left them, and
+backups and iCloud copies go to memory. The `Settings ›` link reads
+`demo data` so it's never mistaken for the real plan.
+
+```
+on          Demo data                           ─●
+            Showing a sample plan, not yours.
+            Reset demo data
+```
+
+`ⓘ`: "A sample family's plan, in a store of its own: your plan isn't read,
+changed or backed up while it's on screen, and reminders and calendar stay as
+your plan left them. Turn it off to come straight back."
+
 ## Interactions
 
 | Target | Action | Result |
@@ -182,6 +206,8 @@ stale playbooks
 | `Rebuild the queue` | tap | clears and re-registers the nearest 64 |
 | `Calendar export` | toggle on | asks calendar permission, then mirrors start-by dates into a `Life Chapters` calendar |
 | `Sources` / `Check review dates` | tap | → Playbooks child: bundled and imported playbooks, review dates |
+| `Demo data` | toggle | swaps the plan on screen for the demo store, or back |
+| `Reset demo data` | tap | confirm → the demo store reseeded from `demo/plan.ts` |
 
 ## Copy
 
@@ -205,8 +231,9 @@ stale playbooks
 the app silently does less than the user assumes, and a counter is cheaper than
 a support conversation.
 
-Settings sit at the bottom because nobody navigates to them twice a month; a
-tab or a ⚙ gave them more weight than they earn.
+Settings sit behind a link at the bottom because nobody navigates to them
+twice a month; a tab or a ⚙ gave them more weight than they earn, and a whole
+section under Plans made the one page longer than it earns.
 
 A backup file carries every person's board. An old file (from before people)
 imports with everything on Me; its journal stories are ignored.

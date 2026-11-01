@@ -72,3 +72,46 @@ describe('moving a step', () => {
     expect(v.find(x => x.instanceId === step.instanceId)!.dueBy).toBe(step.dueBy);
   });
 });
+
+describe('a trip with an end and a purpose', () => {
+  const stepIds = () => {
+    const s = useStore.getState();
+    const t = s.plan.tracks.find(x => x.playbookId === 'visa-us-ph')!;
+    return new Map(s.view.steps.filter(x => x.trackId === t.id).map(x => [x.stepId, x]));
+  };
+
+  it('follows the return date and drops other purposes', () => {
+    const id = actions.saveAnchor(
+      { kind: 'trip', label: 'Trip abroad', location: 'New York, New York, United States', date: '2027-08-01', precision: 'day', purpose: 'leisure' },
+      ['visa-us-ph'],
+    );
+    let steps = stepIds();
+    expect(steps.has('business-letter')).toBe(false);
+    expect(steps.has('host-invitation')).toBe(false);
+    expect(steps.get('return')!.dueBy).toBe('2027-08-31');
+
+    const trip = useStore.getState().plan.anchors.find(a => a.id === id)!;
+    actions.saveAnchor({ ...trip, end: '2027-08-20', purpose: 'business' });
+    steps = stepIds();
+    expect(steps.get('return')!.dueBy).toBe('2027-08-20');
+    expect(steps.get('i94-check')!.dueBy).toBe('2027-08-27');
+    expect(steps.has('business-letter')).toBe(true);
+    expect(useStore.getState().toast?.message).toMatch(/rescheduled\.$/);
+  });
+});
+
+describe('a shipped plan that gained steps', () => {
+  it('gives an attached track instances for the new steps on load', async () => {
+    const before = useStore.getState().plan;
+    const track = before.tracks.find(t => t.playbookId === 'visa-us-ph')!;
+    const stored = {
+      ...before,
+      settings: useStore.getState().settings,
+      moves: {},
+      instances: before.instances.filter(i => !(i.trackId === track.id && i.stepId === 'insurance-check')),
+    };
+    await actions.load(createMemoryRepository(stored));
+    const step = useStore.getState().view.steps.find(s => s.trackId === track.id && s.stepId === 'insurance-check')!;
+    expect(step.instanceId.startsWith('unbound:')).toBe(false);
+  });
+});

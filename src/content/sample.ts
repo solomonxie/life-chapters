@@ -1,31 +1,40 @@
+import {
+  DEMO_DOCUMENTS,
+  DEMO_DONE,
+  DEMO_EVENTS,
+  DEMO_GATHERED,
+  DEMO_PERSON_PLANS,
+  type DemoDate,
+} from '../../demo/plan';
 import { addDays } from '../domain/dates';
+import type { CivilDate } from '../domain/types';
+import { ME } from '../domain/people';
 import { actions, useStore } from '../state/store';
 
+export const demoDate = (d: DemoDate, now: CivilDate): CivilDate => {
+  if (typeof d === 'string') return d;
+  if ('days' in d) return addDays(now, d.days);
+  return `${Number(now.slice(0, 4)) + d.years}-${d.on}`;
+};
+
 /**
- * A plausible plan for QA screenshots: a few dates, a partner and a child with
- * boards of their own, some steps done, one expiring document. Only ever loaded into the throwaway qa.db.
+ * Loads `demo/plan.ts` into whatever store is open — the demo store or the
+ * throwaway qa.db, never the real plan.
  */
 export function seedSample() {
   const now = useStore.getState().now;
-  const year = Number(now.slice(0, 4));
-  actions.saveAnchor({ kind: 'born', label: 'Born', location: "Xi'an, Shaanxi, China", date: '1991-04-12', precision: 'day' });
-  actions.saveAnchor({ kind: 'graduated', label: 'Graduated', place: 'BSc', date: '2013-07-01', precision: 'year', note: 'Rain all morning, sun for the photo. Nobody could find the gowns.' });
-  actions.saveAnchor(
-    { kind: 'migrated', label: 'Relocated to a country', place: 'Canada', location: 'Vancouver, British Columbia, Canada', date: `${year - 2}-09-14`, precision: 'day', note: 'Two suitcases and a borrowed car. The first night we slept on the floor of an empty flat.' },
-    ['relocation-bc'],
-  );
-  actions.saveAnchor(
-    { kind: 'visa-lodge', label: 'Apply for permanent residence', place: 'Express Entry', date: addDays(now, 560), precision: 'day' },
-    ['skilled-migration-ca'],
-  );
-  actions.saveAnchor({ kind: 'married', label: 'Married', date: '2019-06-01', precision: 'day' }, [], 'Sam');
-  actions.saveAnchor({ kind: 'child-born', label: 'Child born', date: `${year - 2}-03-18`, precision: 'day' }, [], 'Ava');
-  const { plan } = useStore.getState();
-  const ava = plan.people.find(p => p.name === 'Ava');
-  const avaBorn = plan.anchors.find(a => a.personId === ava?.id && a.kind === 'born');
-  if (avaBorn) {
-    actions.attachTrack('early-years-bc', avaBorn.id);
-    actions.attachTrack('school-years-bc', avaBorn.id);
+  const at = (d: DemoDate) => demoDate(d, now);
+
+  for (const e of DEMO_EVENTS) {
+    const { date, plans = [], with: withName, ...rest } = e;
+    actions.saveAnchor({ ...rest, date: at(date), personId: ME }, plans, withName);
+  }
+
+  for (const { person, plans } of DEMO_PERSON_PLANS) {
+    const { plan } = useStore.getState();
+    const id = plan.people.find(p => p.name === person)?.id;
+    const born = plan.anchors.find(a => a.personId === id && a.kind === 'born');
+    if (born) plans.forEach(pb => actions.attachTrack(pb, born.id));
   }
 
   for (const s of useStore.getState().view.steps.filter(x => x.dueBy < now && x.status === 'pending')) {
@@ -33,19 +42,25 @@ export function seedSample() {
   }
 
   const steps = useStore.getState().view.steps;
-  const byTitle = (re: RegExp) => steps.find(s => re.test(s.title));
-  const doneOn = (re: RegExp, on: string) => {
-    const s = byTitle(re);
-    if (s) actions.markDone(s.instanceId, on);
-  };
-  doneOn(/eligibility and the CRS/i, addDays(now, -120));
-  doneOn(/passport validity/i, addDays(now, -90));
-  doneOn(/absences|days spent outside/i, `${year - 2}-10-01`);
-
-  const language = byTitle(/language test/i);
-  if (language) {
-    actions.toggleDocument(language.instanceId, language.template.documents[0]);
+  for (const { title, on } of DEMO_DONE) {
+    const s = steps.find(x => title.test(x.title) && x.status === 'pending');
+    if (s) actions.markDone(s.instanceId, at(on));
   }
-  actions.saveDocument({ id: 'passport', name: 'Passport', issuedOn: '2016-08-02', expiresOn: addDays(now, 150), number: 'E12345678' });
+  for (const title of DEMO_GATHERED) {
+    const s = steps.find(x => title.test(x.title));
+    if (s?.template.documents[0]) actions.toggleDocument(s.instanceId, s.template.documents[0]);
+  }
+
+  for (const { person, issuedOn, expiresOn, ...doc } of DEMO_DOCUMENTS) {
+    const owner = person ? useStore.getState().plan.people.find(p => p.name === person)?.id : ME;
+    if (!owner) continue;
+    if (useStore.getState().mine.person.id !== owner) actions.switchPerson(owner);
+    actions.saveDocument({
+      ...doc,
+      issuedOn: issuedOn && at(issuedOn),
+      expiresOn: expiresOn && at(expiresOn),
+    });
+  }
+  actions.switchPerson(ME);
   actions.dismissToast();
 }

@@ -3,8 +3,10 @@ import { Appearance, StatusBar, View, useColorScheme } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { seedSample } from './src/content/sample';
 import { EMPTY_PLAN } from './src/data/plan';
-import { createSqliteRepository } from './src/data/sqlite';
+import { createSqliteFlags, createSqliteRepository } from './src/data/sqlite';
 import type { Repository } from './src/data/repository';
+import { setStoreRegion } from './src/platform';
+import { openData } from './src/state/demo';
 import { RootNavigator, navRef } from './src/navigation';
 import { startAutoBackup } from './src/state/autobackup';
 import { startSync } from './src/state/sync';
@@ -39,18 +41,18 @@ function qaJump(target: string) {
     Chapter: { eventId: mine.anchors.find(a => a.kind === (arg ?? 'migrated'))?.id },
     AnchorEdit: arg ? { anchorId: mine.anchors.find(a => a.kind === arg)?.id } : undefined,
   };
-  const known = ['Chapter', 'AnchorEdit', 'Reminders', 'Backups', 'Sources', 'About', 'Step', 'Library', 'Playbook', 'Document'];
+  const known = ['Chapter', 'AnchorEdit', 'Settings', 'Reminders', 'Backups', 'Sources', 'About', 'Step', 'Library', 'Playbook', 'Document'];
   navRef.navigate('Main', known.includes(screen) ? { screen, params: params[screen] } : { screen: 'Timeline' });
 }
 
-function Shell({ repository, qa }: { repository: Repository; qa?: string }) {
+function Shell({ open, qa }: { open: () => Promise<void>; qa?: string }) {
   const p = usePalette();
   const insets = useSafeAreaInsets();
   const ready = useStore(s => s.ready);
   const [navReady, setNavReady] = useState(false);
 
   useEffect(() => {
-    actions.load(repository).then(() => {
+    open().then(() => {
       if (!qa) return;
       const [spec, scheme] = qa.split('@');
       if (scheme === 'light' || scheme === 'dark') Appearance.setColorScheme(scheme);
@@ -65,13 +67,13 @@ function Shell({ repository, qa }: { repository: Repository; qa?: string }) {
       }
       if (jump) setTimeout(() => qaJump(jump), 300);
     });
-  }, [repository, qa]);
+  }, [open, qa]);
 
   useEffect(() => {
     if (ready && navReady) return startSync(openTarget);
   }, [ready, navReady]);
 
-  // QA runs write sample data; keep it out of the real Backups folder.
+  // QA runs write sample data; keep it out of the real Backups folder. Demo data is kept out by src/platform.
   useEffect(() => {
     if (ready && !qa) return startAutoBackup();
   }, [ready, qa]);
@@ -86,15 +88,24 @@ function Shell({ repository, qa }: { repository: Repository; qa?: string }) {
   );
 }
 
-export default function App({ repository, qa }: { repository?: Repository; qa?: string }) {
+/** `store`: Info.plist AppStoreRegion, passed in by AppDelegate. */
+export default function App({ repository, qa, store }: { repository?: Repository; qa?: string; store?: string }) {
   const dark = useColorScheme() === 'dark';
-  const [repo] = useState(
-    () => repository ?? (qa ? createSqliteRepository('qa.db') : createSqliteRepository()),
-  );
+  const [open] = useState(() => {
+    setStoreRegion(store);
+    if (repository) return () => actions.load(repository);
+    if (qa) return () => actions.load(createSqliteRepository('qa.db'));
+    const stores = {
+      real: () => createSqliteRepository(),
+      demo: () => createSqliteRepository('demo.db'),
+      flags: createSqliteFlags(),
+    };
+    return () => openData(stores);
+  });
   return (
     <SafeAreaProvider>
       <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
-      <Shell repository={repo} qa={qa} />
+      <Shell open={open} qa={qa} />
     </SafeAreaProvider>
   );
 }
