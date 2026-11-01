@@ -138,7 +138,7 @@ Reasoning in `DESIGN.md` → Product decisions.
 Only meaningful once there's an app to sign. Grouped last because every item
 here is a release chore, not a capability.
 
-- [x] T7.1 App icon and launch screen — see `ios/PaperWorks/Images.xcassets` — depends: none
+- [x] T7.1 App icon and launch screen — see `ios/PaperWorks/Images.xcassets` (icon drawn by `scripts/app-icon.swift`) — depends: none
 - [x] T7.2 Signing without secrets in tracked files — placeholder `DEVELOPMENT_TEAM`, gitignored `Local.xcconfig`, per the `security` skill — see `ios` — depends: none
 - [ ] T7.3 Physical-device QA pass over every drawing in `uiux/`, smallest supported width included — see `docs/uiux` — depends: Phase 3, Phase 4
 - [ ] T7.4 Accessibility pass — Dynamic Type at largest setting, VoiceOver labels on every glyph-only control — see `src/ui` — depends: Phase 3
