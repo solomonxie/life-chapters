@@ -4,7 +4,7 @@ Bundle ID `com.example.lifechapters` · iOS 15.1+ · iPhone only, portrait.
 
 - [`listing.md`](listing.md) — step-by-step plan and every App Store Connect field, ready to paste
 - [`privacy-policy.md`](privacy-policy.md) — the policy; its GitHub URL is the Privacy Policy URL
-- `screenshots/6.9`, `screenshots/6.5` — upload-ready, from `make device-shots` + `make screenshots`
+- `screenshots/` — upload-ready, from `make device-shots` + `make screenshots`
 
 Before the first build: `cp ios/Local.xcconfig.example ios/Local.xcconfig` and put your
 Apple Developer Team ID in it. It is gitignored — this repo is public and an account

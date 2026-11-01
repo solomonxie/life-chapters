@@ -119,15 +119,14 @@ Fallback, Xcode GUI: open `ios/LifeChapters.xcworkspace` → destination **Any i
 ## Screenshots
 
 Apple requires one set: **iPhone 6.9" Display**, exactly `1320 × 2868` (or `1290 × 2796`).
-App Store Connect scales it down for every smaller phone. The 6.5" slot (`1284 × 2778`) is
-optional and generated anyway.
+App Store Connect scales it down for every smaller phone.
 
 The paired iPhone 14 (`1170 × 2532`) captures them directly — the aspect ratios differ by
 0.4%, which is invisible:
 
 ```
 make device-shots SHOTS=/tmp/lifechapters-shots     # sample plan in a throwaway qa.db
-make screenshots  SHOTS=/tmp/lifechapters-shots     # → docs/release/screenshots/{6.9,6.5}
+make screenshots  SHOTS=/tmp/lifechapters-shots     # → docs/release/screenshots/
 ```
 
 `device-shots` relaunches the app once per shot with the `LC_QA` hook — a sample life
