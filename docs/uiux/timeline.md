@@ -1,38 +1,32 @@
-# Timeline — the one page
+# Home — the one page
 
-The whole app is one scrolling page for whoever is on screen: header, life
-line, Plans, then a Settings link. No tab bar, no ⚙. Everything else pushes on top.
+The whole app is one scrolling page for whoever is on screen: header,
+paperwork summary, events as a plain list, Plans, then a Settings link. No tab
+bar, no ⚙. Everything else pushes on top.
 
 ```
-            Life Chapters ▾                     ← person dropdown, people.md
+            Paper Works ▾                       ← person dropdown, people.md
  ──────────────────────────────────────────
-  NOW · AGE 35                              ← computed from the Born date
+  PAPERWORK
  ╭────────────────────────────────────────╮
- │ Settling in                            │
- │ Sep 2024 ───────●────────────  Apr 2028│  ← ● = today's position in chapter
- │ 4 steps running · next starts in 12d  ›│
+ │ ⚠ 2 steps are late                    ›│  ← only when late; scrolls to Plans
+ │ 4 steps running · next starts in 12d  ›│  ← scrolls to Plans
  ╰────────────────────────────────────────╯
-
-  1991  ● Born · Xi'an                    ›
-        │
-  2013  ◍ Graduated · BSc               ✎ ›  ← ✎ = the date has notes
-        │
-  2019  ● Married · Sam                   ›
-        │
-  2024  ● Ava born                        ›
-        │
-  2024  ● Relocated to Canada           ✎ ›
-        ┃                                    ← thick stem = current chapter
-  ══════ TODAY · Sep 26, 2026 ═════════════
-        ┃  ⚠ 2 steps are late             ›  ← scrolls down to Plans
-        ┃
-  2027  ○ Mom and Dad arrive · 3… (14) ›  ← a moment: the ┃ runs on; "· 30 days" once it has an end
-        ┃
-  2028  ○ Apply for permanent resid… (19) ›
-        │
-  2031  ○ Turns 40                        ›
-        ⋮
-        ( + Add an event )
+  COMING UP                                 ← soonest first
+ ╭────────────────────────────────────────╮
+ │ Mom and Dad arrive          14 to do  ›│
+ │ Jun 12, 2027 · Vancouver · 30 days     │  ← date · place · length
+ │ Apply for permanent resid…  19 to do  ›│
+ │ Apr 2028                               │
+ ╰────────────────────────────────────────╯
+  PAST                                      ← newest first
+ ╭────────────────────────────────────────╮
+ │ Relocated to Canada ✎                 ›│  ← ✎ = the event has notes
+ │ Sep 14, 2024 · Toronto                 │
+ │ Ava born                              ›│  ← dim: nothing left to do
+ │ Mar 2024                               │
+ ╰────────────────────────────────────────╯
+  ( + Add an event )
  ──────────────────────────────────────────
   PLANS                                     → plans.md
   ⚠ Expiring · plans, each with its next
@@ -51,42 +45,36 @@ switching to that step's owner)
 
 ```
 first run  ┌────────────────────────────────────────┐
-           │            Life Chapters                │
+           │             Paper Works                 │
            │                                        │
-           │   Two events and it starts drawing.     │
+           │  Add the event your paperwork is for — │
+           │  a move, a trip, a new baby, a visa —  │
+           │  and the forms it needs line up in     │
+           │  order.                                │
            │                                        │
-           │        [[ When were you born? ]]       │
+           │           [[ Add an event ]]           │
            └────────────────────────────────────────┘
                                           → anchors.md
 
-new person ┌────────────────────────────────────────┐
- (empty)   │                 Ava                    │
-           │   Two events and it starts drawing.     │
-           │        [[ When was Ava born? ]]        │
-           └────────────────────────────────────────┘
-             the Settings link still sits below it
+new person   same, titled with their name; the Settings link still sits below it
 
-someone     Life Chapters ▾
+someone     Paper Works ▾
 else             Ava                        ← whose board, under the title
 
-dates only  1991  ● Born · Xi'an                  ›
- (no plan)        ⋮
-            NOW card foot: No plans yet
+no plan     PAPERWORK
+            No paperwork plans yet           ← dim
             PLANS
             [[ Browse plans ]]             → plans.md
 
-late        2024  ● Relocated to Canada           ›
-                  ┃
-            ══════ TODAY ═══════════════════════════
-                  ┃  ⚠ 2 steps are late          ›
+no future   COMING UP section is left out; PAST alone
 
-long label  2028  ○ Apply for permanent re…  (19) ›
-                                                    ← truncate, never wrap
+long label  Apply for permanent re…  19 to do ›
+                                                    ← truncate at two lines
 ```
 
 ## Chapter detail
 
-Pushed from the NOW card, any future event, or a node's `(n)` badge.
+Pushed from any upcoming event on the home list.
 
 ```
  ‹              Settling in
@@ -138,48 +126,36 @@ nothing     Nothing to start in this stretch.
 
 | Target | Action | Result |
 |---|---|---|
-| `Life Chapters ▾` | tap | unfolds the person dropdown in place — [`people.md`](people.md) |
-| NOW card | tap | → chapter detail |
-| past date `●` | tap | → [`anchors.md`](anchors.md) editor |
-| future event `○` | tap | → chapter detail for that event; a moment's page has no chapter bar |
-| `(15)` badge | tap | → that event's chapter detail |
-| `⚠ 2 steps are late` | tap | scrolls the page down to Plans |
+| `Paper Works ▾` | tap | unfolds the person dropdown in place — [`people.md`](people.md) |
+| paperwork rows | tap | scrolls the page down to Plans |
+| past event | tap | → [`anchors.md`](anchors.md) editor |
+| upcoming event | tap | → chapter detail for that event; a moment's page has no chapter bar |
 | `+ Add an event` | tap | → anchor editor, blank |
 | list | flick, then touch | page stops, row does **not** open — `uiux` skill, mobile: brake-not-tap |
 
-**Moments** (`Visitors arrive`, `Trip abroad`) sit on the stem like any date
-and carry their plans' `(n)`, but don't cut the line: the chapter before them
-runs on through, with the same stem, and the NOW card doesn't change. Their
-page is the event and its plans, with no chapter bar
-([`anchors.md`](anchors.md#moments)).
-
-Derived events: only the next round birthday (`Turns 40`) from the Born date.
-Every other row is a date the user entered, or the linked copy of one
-([`people.md`](people.md)).
+Only events the user entered (or the linked copy of one, [`people.md`](people.md))
+are listed; the derived round birthday is left off.
 
 ## Copy
 
 | Key | String |
 |---|---|
-| `timeline.now` | NOW · AGE {n} |
-| `timeline.today` | TODAY · {Mon d, yyyy} |
-| `timeline.chapter.progress` | year {n} of {total} |
-| `timeline.firstRun.body` | Two events and it starts drawing. |
-| `timeline.firstRun.cta` | When were you born? · When was {name} born? |
-| `timeline.noPlan` | No plans yet |
-| `timeline.addEvent` | + Add an event |
-| `timeline.stepsRunning` | {n} steps running · next starts in {n}d |
-| `timeline.late` | ⚠ {n} steps are late |
+| `home.paperwork` | PAPERWORK |
+| `home.upcoming` | COMING UP |
+| `home.past` | PAST |
+| `home.event.todo` | {n} to do |
+| `home.firstRun.body` | Add the event your paperwork is for — a move, a trip, a new baby, a visa — and the forms it needs line up in order. |
+| `home.firstRun.cta` | Add an event |
+| `home.noPlan` | No paperwork plans yet |
+| `home.addEvent` | + Add an event |
+| `home.stepsRunning` | {n} steps running · next starts in {n}d |
+| `home.late` | ⚠ {n} steps are late |
+| `chapter.timeline.progress` | year {n} of {total} |
 | `chapter.notes.add` | + Add notes |
 | `chapter.nothing` | Nothing to start in this stretch. |
 
 ## Notes
 
-The stem is the design. A list of dated rows would read as a table; the
-continuous `│`/`┃` line is what makes a 40-year span feel like one object you're
-standing inside. `┃` is the only place the current chapter is marked — no badge,
-no colour needed.
-
-One page because the life line and the plan are the same thing at two zoom
-levels. Tabs made them look like separate apps; one scroll keeps each step
-under the date it serves.
+Events are only there to hang paperwork on, so they read as a plain dated
+list: what's coming up first, with how much is left to do, then what's
+behind. The vertical life line went with the life-recording framing.

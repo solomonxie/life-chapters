@@ -52,7 +52,7 @@ their Chinese name (`南昌`).
 ```
 
 Empty field with a place set shows `Remove the place`. Linked events share it.
-The stem row shows the town dim after the label (`Relocated to Canada · Toronto`);
+The home list row shows the town after the date (`Sep 14, 2024 · Toronto`);
 chapter detail shows the full place.
 
 ## Kinds
@@ -156,7 +156,7 @@ Kinds that last get an optional end row, named for the kind: Trip abroad
 - Changing end or purpose on an event with steps asks `Update "{label}"?` with
   the same reschedule count as a move.
 
-On the stem: `Mom and Dad arrive`, `Trip to China` — drawn in
+On the home list: `Mom and Dad arrive`, `Trip to China` — drawn in
 [`timeline.md`](timeline.md).
 
 ## The `What` picker unfolds in place
@@ -251,7 +251,7 @@ precision open     Precision  to the day         ⌄
 | any row | tap | unfolds its options in place, folds whichever was open |
 | `What` | type | filters the kind list; a kind not in the list is kept as free text |
 | `Who` chip | tap | fills `Who` with that person |
-| `Notes` | type | free text; shows on the chapter screen, `✎` on the stem |
+| `Notes` | type | free text; shows on the chapter screen, `✎` on the home list |
 | unlocked plan `[ ]` | tap | attaches it on Save, no second trip to the library |
 | `Save` | tap | reflow (linked copies too), then back to the page |
 | `Delete this event` | tap | confirm naming the plans that detach; linked copies go too |

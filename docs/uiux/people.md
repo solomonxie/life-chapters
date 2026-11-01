@@ -139,9 +139,8 @@ their board gets the same event.
   `Eva born`).
 - A child's plans (newborn, early years, school) attach to **her** `Born`, on
   her board, so they count from her birth and fit her age.
-- **Tap a name** → their board. On the stem the other person's name is a link
-  (`Ava born`, `Married · Sam`, `Born · parent Sam`); a linked event's page has
-  a `Sam's life ›` row. Adding an event on their board puts them in the menu.
+- **Tap a name** → their board. A linked event's page has a `Sam's life ›` row;
+  the person menu switches boards too. Adding an event on their board puts them in the menu.
 
 ## Reminders
 

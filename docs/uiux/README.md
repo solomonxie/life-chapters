@@ -6,7 +6,7 @@ level up in [`../UIUX_DESIGN.md`](../UIUX_DESIGN.md).
 ```
   ┌─ one page, no tab bar ──────────────────┐
   │ Life Chapters ▾ ─▶ dropdown ─▶ person   │
-  │ life line       ─▶ anchor editor        │
+  │ event list      ─▶ anchor editor        │
   │                 ─▶ chapter              │
   │ Plans           ─▶ step ─▶ document     │
   │                 ─▶ library ─▶ playbook  │

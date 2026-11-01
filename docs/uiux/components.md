@@ -50,19 +50,17 @@ highlight band on the chosen row. Columns follow precision.
  year                             ░ 2024 ░
 ```
 
-## Timeline stem
+## Event row
 
 ```
- past      1991  ● Born                     ›
- past      2013  ● Graduated                ›
- noted     2024  ● Relocated to Canada    ✎ ›   ← the date has notes
- current         ┃
- today     ══════ TODAY · Sep 26, 2026 ══════
- late            ┃  ⚠ 2 steps are late     ›   ← scrolls to Plans
- moment    2027  ○ Mom and Dad arrive (14) ›   ← same row; cuts no chapter
- future    2028  ○ Apply for perma…  (19) ›   ← (19) opens the chapter
- more            ⋮
- fuzzy     2013  ◍ Graduated · 2013         ›   ← year-precision anchor
+ upcoming  Mom and Dad arrive           14 to do ›
+           Jun 12, 2027 · Vancouver · 30 days
+ noted     Relocated to Canada ✎                 ›   ← the event has notes
+           Sep 14, 2024 · Toronto
+ done      Ava born                              ›   ← dim: nothing left to do
+           Mar 2024
+ fuzzy     Graduated · BSc                       ›   ← year-precision anchor
+           2013
 ```
 
 ## Progress bar

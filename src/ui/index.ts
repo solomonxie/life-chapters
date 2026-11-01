@@ -11,7 +11,6 @@ export { ProgressBar } from './ProgressBar';
 export { Card, Divider, Rows, SectionHeader } from './Section';
 export { StepRow } from './StepRow';
 export { SwipeRow, type SwipeAction } from './SwipeRow';
-export { TimelineStem, type StemNode } from './TimelineStem';
 export { ToastHost } from './ToastHost';
 export { UnfoldingPicker, type Option } from './UnfoldingPicker';
 export { dark, light, radius, space, type, type Palette } from './theme';

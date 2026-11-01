@@ -11,7 +11,7 @@ gestures, in-place pickers, and the ⓘ rule.
 
 | Surface | Kind | Drawing |
 |---|---|---|
-| Timeline — the one page | root, home | [`uiux/timeline.md`](uiux/timeline.md) |
+| Home — the one page | root, home | [`uiux/timeline.md`](uiux/timeline.md) |
 | Person dropdown | unfolds under the title | [`uiux/people.md`](uiux/people.md) |
 | Plans | section of the page | [`uiux/plans.md`](uiux/plans.md) |
 | Settings | pushed page, from the link at the bottom of the page | [`uiux/settings.md`](uiux/settings.md) |
@@ -24,7 +24,7 @@ gestures, in-place pickers, and the ⓘ rule.
 | Reminders / Backups / Playbooks / About | pushed from Settings | [`uiux/settings.md`](uiux/settings.md) |
 | Components | reused parts | [`uiux/components.md`](uiux/components.md) |
 
-One page, no tab bar, no ⚙: life line, then Plans, then a Settings link, in
+One page, no tab bar, no ⚙: paperwork summary, events, then Plans, then a Settings link, in
 one scroll. Everything else pushes on one stack. The old tabs (Radar, Tracks,
 Docs, Journal) are gone — Radar and Tracks became the Plans section, expiring
 documents moved into it, and the journal became a Notes field on each date.
@@ -41,7 +41,7 @@ The title, `Life Chapters ▾`, switches whose board the page shows.
   ┌─ Timeline, one page ────────────────────┐
   │ Life Chapters ▾ ─▶ dropdown ─▶ Person ◆ │
   │ NOW card ─────────▶ Chapter detail      │
-  │ life line ─● past ─▶ Anchor editor ◆    │
+  │ events ─ past ─▶ Anchor editor ◆        │
   │            ○ / (n) ─▶ Chapter detail    │
   │ + Add an event ─────▶ Anchor editor ◆     │
   │ Plans ─ step row ─▶ Step detail ─┐      │
@@ -119,10 +119,10 @@ partial     stale playbook  → "reviewed Mar 2026" badge, never hidden
             wrong place     → plan's rules ≠ its date's place: red line
                               "Ontario rules · Married in British
                               Columbia", switch to the twin on detail
-moment      visit, trip     → on the stem with its plans; cuts no chapter
+moment      visit, trip     → on the home list with its plans; cuts no chapter
 start now   past start-by   → Act now in Plans, calm: "start now", no red
 overdue     past due-by     → the only red: ⚠ on the row, "n days late",
-                              and one "⚠ n steps are late" line on the stem
+                              and one "⚠ n steps are late" row in Paperwork
 ```
 
 ## Copy rules

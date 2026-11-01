@@ -2,7 +2,7 @@
 
 The plans of the person on screen, each with its next step; the steps
 themselves, grouped by when you must *start* them, live on each plan's page.
-A section of the one page, under the life line
+A section of the one page, under the event list
 ([`timeline.md`](timeline.md)); the library and playbook detail push from it.
 Code calls a plan a *track*; the user never sees that word.
 
